@@ -24,3 +24,6 @@ hs_err_pid*
 
 # temporary office files 
 ~$*.*
+
+# temporary looping files
+*.lo1
