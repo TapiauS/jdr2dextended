@@ -21,8 +21,6 @@ CREATE TABLE etat_personnage
 					description_etat VARCHAR(255)
 				);
 
-
-
 CREATE TABLE type_aptitude 
 				(
 					id_type_aptitude SERIAL PRIMARY KEY,
@@ -111,6 +109,11 @@ CREATE TABLE role_quete
 CREATE TABLE position_s
 				(
 					coordonnee POINT PRIMARY KEY
+				);
+
+CREATE TABLE instance_commerce
+				(
+					id_instance_commerce SERIAL PRIMARY KEY
 				);
 
 
@@ -279,6 +282,25 @@ CREATE TABLE mene
 					choix TEXT,
 					PRIMARY KEY(id_dialogue_suivant,id_dialogue_precedent)
 				);
+
+CREATE TABLE achete
+				(
+					id_personnage INT FOREIGN KEY REFERENCES personnage(id_personnage),
+					id_objet INT FOREIGN KEY REFERENCES objet(id_objet),
+					id_instance_commerce INT FOREIGN KEY REFERENCES instance_commerce(id_instance_commerce),
+					quantite INT,
+					PRIMARY KEY(id_personnage,id_objet,id_instance_commerce)
+				);
+
+CREATE TABLE vend
+				(
+					id_personnage INT FOREIGN KEY REFERENCES personnage(id_personnage),
+					id_objet INT FOREIGN KEY REFERENCES objet(id_objet),
+					id_instance_commerce INT FOREIGN KEY instance_commerce(id_instance_commerce),
+					quantite INT,
+					PRIMARY KEY(id_personnage,id_objet,id_instance_commerce)
+				);
+
 
 /*TABLE NIVEAU 6  , pas un niveau 6 en réalité car les tables ont des origines communes (mais ce n'est pas grave)
 
