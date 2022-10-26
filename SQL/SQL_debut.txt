@@ -21,6 +21,8 @@ CREATE TABLE etat_personnage
 					description_etat VARCHAR(255)
 				);
 
+
+
 CREATE TABLE type_aptitude 
 				(
 					id_type_aptitude SERIAL PRIMARY KEY,
@@ -92,18 +94,18 @@ CREATE TABLE caracteristique
 					description_caracteristique TEXT
 				);
 
-CREATE TABLE quete
+CREATE TABLE interaction
 				(
-					id_quete SERIAL PRIMARY KEY,
-					prerequis_quete VARCHAR(255),
-					nom_quete VARCHAR(255),
-					description_quete VARCHAR(255)
+					id_interaction SERIAL PRIMARY KEY,
+					prerequis_interaction VARCHAR(255),
+					nom_interaction VARCHAR(255),
+					description_interaction VARCHAR(255)
 				);
 
-CREATE TABLE role_quete
+CREATE TABLE role_interaction
 				(
-					code_role_quete CHAR(2) PRIMARY KEY,
-					nom_role_quete VARCHAR(255)
+					code_role_interaction CHAR(2) PRIMARY KEY,
+					nom_role_interaction VARCHAR(255)
 				);
 
 CREATE TABLE position_s
@@ -111,10 +113,7 @@ CREATE TABLE position_s
 					coordonnee POINT PRIMARY KEY
 				);
 
-CREATE TABLE instance_commerce
-				(
-					id_instance_commerce SERIAL PRIMARY KEY
-				);
+
 
 
 /* Tables niveau 1 
@@ -132,10 +131,10 @@ CREATE TABLE aptitude
 
 CREATE TABLE constitue
 				(
-					id_quete INT FOREIGN KEY REFERENCES quete(id_quete),
+					id_interaction INT FOREIGN KEY REFERENCES interaction(id_interaction),
 					id_objectif INT FOREIGN KEY REFERENCES objectif(id_objectif),
 					parametre VARCHAR(255),
-					PRIMARY KEY(id_quete,id_objectif)
+					PRIMARY KEY(id_interaction,id_objectif)
 				);
 
 CREATE TABLE contient
@@ -188,17 +187,17 @@ CREATE TABLE personnage
 CREATE TABLE active
 				(
 					id_objet INT FOREIGN KEY REFERENCES objet(id_objet),
-					id_quete INT FOREIGN KEY REFERENCES quete(id_quete),
-					code_role_quete CHAR(2) FOREIGN KEY REFERENCES quete(id_quete),
-					PRIMARY KEY(id_objet,id_quete,code_role_quete)
+					id_interaction INT FOREIGN KEY REFERENCES interaction(id_interaction),
+					code_role_interaction CHAR(2) FOREIGN KEY REFERENCES interaction(id_interaction),
+					PRIMARY KEY(id_objet,id_interaction,code_role_interaction)
 				);
 
 CREATE TABLE declenche
 				(
-					id_quete INT FOREIGN KEY REFERENCES quete(id_quete),
+					id_interaction INT FOREIGN KEY REFERENCES interaction(id_interaction),
 					id_recompense INT FOREIGN KEY REFERENCES recompense(id_recompense),
 					id_objectif INT FOREIGN KEY REFERENCES objectif(id_objectif),
-					PRIMARY KEY(id_quete,id_recompense,id_objectif)
+					PRIMARY KEY(id_interaction,id_recompense,id_objectif)
 				);
 
 CREATE TABLE instance
@@ -283,31 +282,16 @@ CREATE TABLE mene
 					PRIMARY KEY(id_dialogue_suivant,id_dialogue_precedent)
 				);
 
-CREATE TABLE achete
-				(
-					id_personnage INT FOREIGN KEY REFERENCES personnage(id_personnage),
-					id_objet INT FOREIGN KEY REFERENCES objet(id_objet),
-					id_instance_commerce INT FOREIGN KEY REFERENCES instance_commerce(id_instance_commerce),
-					quantite INT,
-					PRIMARY KEY(id_personnage,id_objet,id_instance_commerce)
-				);
 
-CREATE TABLE vend
-				(
-					id_personnage INT FOREIGN KEY REFERENCES personnage(id_personnage),
-					id_objet INT FOREIGN KEY REFERENCES objet(id_objet),
-					id_instance_commerce INT FOREIGN KEY instance_commerce(id_instance_commerce),
-					quantite INT,
-					PRIMARY KEY(id_personnage,id_objet,id_instance_commerce)
-				);
+
 
 
 /*TABLE NIVEAU 6  , pas un niveau 6 en réalité car les tables ont des origines communes (mais ce n'est pas grave)
 
 CREATE TABLE donne 
 				(
-					id_quete INT FOREIGN KEY REFERENCES quete(id_quete),
+					id_interaction INT FOREIGN KEY REFERENCES interaction(id_interaction),
 					id_dialogue INT FOREIGN KEY REFERENCES dialogue(id_dialogue),
-					code_role_quete CHAR(2) INT FOREIGN KEY REFERENCES role_quete(code_role_quete),
-					PRIMARY KEY(id_quete,id_dialogue,code_role_quete)
+					code_role_interaction CHAR(2) INT FOREIGN KEY REFERENCES role_interaction(code_role_interaction),
+					PRIMARY KEY(id_interaction,id_dialogue,code_role_interaction)
 				);
