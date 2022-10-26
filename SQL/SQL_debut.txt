@@ -23,7 +23,6 @@ CREATE TABLE etat_personnage
 
 
 
-
 CREATE TABLE type_aptitude 
 				(
 					id_type_aptitude SERIAL PRIMARY KEY,
@@ -122,23 +121,23 @@ CREATE TABLE aptitude
 					nom_aptitude VARCHAR(50),
 					effet_aptitude VARCHAR(255),
 					prerequis_aptitude VARCHAR(255),
-					id_type_aptitude INTEGER REFERENCESS type_aptitude (id_type_aptitude) FOREIGN KEY 
+					id_type_aptitude INTEGER REFERENCES type_aptitude(id_type_aptitude) FOREIGN KEY 
 				);
 
 /* TABLES niveau 2 */
 
 CREATE TABLE constitue
 				(
-					id_quete INT FOREIGN KEY REFERENCES quete (id_quete),
-					id_objectif INT FOREIGN KEY REFERENCES objectif (id_objectif),
+					id_quete INT FOREIGN KEY REFERENCES quete(id_quete),
+					id_objectif INT FOREIGN KEY REFERENCES objectif(id_objectif),
 					parametre VARCHAR(255),
 					PRIMARY KEY(id_quete,id_objectif)
 				);
 
 CREATE TABLE contient
 				(
-					contenant INT FOREIGN KEY REFERENCES objet (id_objet),
-					id_objet_contenu INT FOREIGN KEY REFERENCES (id_objet),
+					contenant INT FOREIGN KEY REFERENCES objet(id_objet),
+					id_objet_contenu INT FOREIGN KEY REFERENCES(id_objet),
 					quantite INT,
 					PRIMARY KEY(contenant,id_objet_contenu)
 				);
@@ -215,7 +214,7 @@ CREATE TABLE instance
 CREATE TABLE definit
 				(
 					id_personnage INT FOREIGN KEY REFERENCES personnage(id_personnage),
-					id_statistique INT FOREIGN KEY REFERENCES statistique(id_statistique),   /*penser a enlever majuscule MCD */
+					id_statistique INT FOREIGN KEY REFERENCES statistique(id_statistique),   /*penser à enlever majuscule MCD */
 					valeur INT,
 					valeur_max INT,
 					PRIMARY KEY(id_personnage,id_statistique)
@@ -278,7 +277,7 @@ CREATE TABLE mene
 					PRIMARY KEY(id_dialogue_suivant,id_dialogue_precedent)
 				);
 
-/*TABLE NIVEAU 6 */
+/*TABLE NIVEAU 6 */ //pas un niveau 6 en réalité car les tables ont des origines communes
 
 CREATE TABLE donne 
 				(
