@@ -1,6 +1,6 @@
 
 
-/* Tables niveau 0 */
+/* Tables niveau 0 
 
 
 CREATE TABLE compte_utilisateur 
@@ -8,7 +8,7 @@ CREATE TABLE compte_utilisateur
 					id_compte_utilisateur SERIAL PRIMARY KEY,
 					pseudo_compte NOT NULL UNIQUE VARCHAR(255),
 					couriel_compte NOT NULL UNIQUE VARCHAR(255),
-					mdp_compte VARCHAR(255),
+					mdp_compte NOT NULL VARCHAR(255),
 					valide BOOLEAN NOT NULL DEFAULT FALSE
 				);
 
@@ -17,7 +17,7 @@ CREATE TABLE etat_personnage
 				(
 					id_etat_personnage SERIAL PRIMARY KEY,
 					nom_etat VARCHAR(255) UNIQUE NOT NULL,
-					effet_etat VARCHAR(255),
+					effet_etat VARCHAR(255) NOT NULL,
 					description_etat VARCHAR(255)
 				);
 
@@ -35,7 +35,7 @@ CREATE TABLE classe
 					id_class SERIAL PRIMARY KEY,
 					description_classe TEXT,
 					nom_classe VARCHAR UNIQUE NOT NULL,
-					jouable BOOLEAN
+					jouable BOOLEAN NOT NULL
 				);
 
 
@@ -43,7 +43,8 @@ CREATE TABLE type_objet
 				(
 					id_type_objet SERIAL PRIMARY KEY,
 					nom_type_objet VARCHAR(255) UNIQUE NOT NULL,
-					emplacement_objet VARCHAR(255)
+					emplacement_objet VARCHAR(255) NOT NULL 
+					poids_objet INT NOT NULL
 				);
 
 CREATE TABLE race
@@ -64,14 +65,14 @@ CREATE TABLE lieu
 CREATE TABLE recompense
 				(
 					id_recompense SERIAL PRIMARY KEY,
-					nom_recompense VARCHAR(255),
+					nom_recompense VARCHAR(255) NOT NULL,
 					description_recompense VARCHAR(255)
 				);
 
 CREATE TABLE objet 
 				(
 					id_objet SERIAL PRIMARY KEY,
-					nom_objet VARCHAR(255),
+					nom_objet VARCHAR(255) NOT NULL,
 					statistique_objet VARCHAR(255),
 					equipe BOOLEAN,
 					ouvert BOOLEAN,
@@ -83,7 +84,7 @@ CREATE TABLE objectif
 					id_objectif SERIAL PRIMARY KEY,
 					nom_objectif VARCHAR(255) NOT NULL UNIQUE,
 					description_objectif TEXT,
-					validation BOOLEEN NOT NULL /*Modifier le MCD*/ 
+					validation_ BOOLEEN NOT NULL /*Modifier le MCD
 				);
 
 CREATE TABLE caracteristique
@@ -113,7 +114,7 @@ CREATE TABLE position_s
 				);
 
 
-/* Tables niveau 1 */
+/* Tables niveau 1 
 
 CREATE TABLE aptitude
 				(
@@ -124,7 +125,7 @@ CREATE TABLE aptitude
 					id_type_aptitude INTEGER REFERENCES type_aptitude(id_type_aptitude) FOREIGN KEY 
 				);
 
-/* TABLES niveau 2 */
+/* TABLES niveau 2 
 
 CREATE TABLE constitue
 				(
@@ -165,14 +166,14 @@ CREATE TABLE caracterise
 				);
 
 
-/* TABLE NIVEAU 3 */
+/* TABLE NIVEAU 3 
 
 CREATE TABLE personnage 
 				(
 					id_personnage SERIAL PRIMARY KEY,
-					nom_personnage VARCHAR(255),
-					niveau_personnage INT,
-					direction CHAR(10),
+					nom_personnage VARCHAR(255) NOT NULL,
+					niveau_personnage INT NOT NULL ,
+					direction CHAR(10) NOT NULL,
 					alignement VARCHAR(255),
 					monnaie BIGINT,
 					vivant BOOLEAN NOT NULL,
@@ -209,21 +210,21 @@ CREATE TABLE instance
 
 
 
-/* TABLE NIVEAU 4 */
+/* TABLE NIVEAU 4 
 
 CREATE TABLE definit
 				(
 					id_personnage INT FOREIGN KEY REFERENCES personnage(id_personnage),
-					id_statistique INT FOREIGN KEY REFERENCES statistique(id_statistique),   /*penser à enlever majuscule MCD */
+					id_statistique INT FOREIGN KEY REFERENCES statistique(id_statistique),   /*penser à enlever majuscule MCD 
 					valeur INT,
 					valeur_max INT,
 					PRIMARY KEY(id_personnage,id_statistique)
 				);
 
-CREATE TABLE dialogue /*LES MAJUSCULES !!!!!!!!*/
+CREATE TABLE dialogue /*LES MAJUSCULES !!!!!!!!
 				(
 					id_dialogue SERIAL PRIMARY KEY,
-					contenu_dialogue,
+					contenu_dialogue TEXT NOT NULL,
 					id_personnage FOREIGN KEY REFERENCES personnage(id_personnage)
 				);
 
@@ -232,6 +233,7 @@ CREATE TABLE considere
 					id_personnage_jugee INT FOREIGN KEY REFERENCES personnage(id_personnage),
 					id_personnage_juge INT FOREIGN KEY REFERENCES personnage(id_personnage),
 					valeur_attitude INT
+					PRIMARY KEY(id_personnage_jugee,id_personnage_juge)
 				);
 
 CREATE TABLE possede 
@@ -260,12 +262,13 @@ CREATE TABLE affecte
 					PRIMARY KEY(id_personnage,id_etat_personnage)
 				);
 
-/* TABLE NIVEAU 5 */
+/* TABLE NIVEAU 5 
 
 CREATE TABLE maitrise 
 				(
 					id_personnage INT FOREIGN KEY REFERENCES personnage(id_personnage),
 					id_aptitude INT FOREIGN KEY REFERENCES aptitude(id_aptitude),
+					pourcentage_maitrise INT NOT NULL,
 					PRIMARY KEY(id_personnage,id_aptitude)
 				);
 
@@ -277,7 +280,7 @@ CREATE TABLE mene
 					PRIMARY KEY(id_dialogue_suivant,id_dialogue_precedent)
 				);
 
-/*TABLE NIVEAU 6 */ //pas un niveau 6 en réalité car les tables ont des origines communes
+/*TABLE NIVEAU 6  , pas un niveau 6 en réalité car les tables ont des origines communes (mais ce n'est pas grave)
 
 CREATE TABLE donne 
 				(
