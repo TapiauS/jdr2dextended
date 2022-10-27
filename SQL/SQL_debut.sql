@@ -18,7 +18,11 @@ CREATE TABLE etat_personnage
 					id_etat_personnage SERIAL PRIMARY KEY,
 					nom_etat VARCHAR(255) UNIQUE NOT NULL,
 					effet_etat VARCHAR(255) NOT NULL,
+<<<<<<< HEAD
 					description_etat VARCHAR(255) NOT NULL
+=======
+					description_etat VARCHAR(255)
+>>>>>>> 2a2ff08f7e74009d86a17bbc8213d9bdc270b49e
 				);
 
 
@@ -33,7 +37,11 @@ CREATE TABLE type_aptitude
 CREATE TABLE classe 
 				(
 					id_class SERIAL PRIMARY KEY,
+<<<<<<< HEAD
 					description_classe TEXT ,
+=======
+					description_classe TEXT,
+>>>>>>> 2a2ff08f7e74009d86a17bbc8213d9bdc270b49e
 					nom_classe VARCHAR UNIQUE NOT NULL,
 					jouable BOOLEAN NOT NULL
 				);
@@ -43,7 +51,11 @@ CREATE TABLE type_objet
 				(
 					id_type_objet SERIAL PRIMARY KEY,
 					nom_type_objet VARCHAR(255) UNIQUE NOT NULL,
+<<<<<<< HEAD
 					emplacement_objet VARCHAR(255) ,
+=======
+					emplacement_objet VARCHAR(255) NOT NULL 
+>>>>>>> 2a2ff08f7e74009d86a17bbc8213d9bdc270b49e
 					poids_objet INT NOT NULL
 				);
 
@@ -84,16 +96,25 @@ CREATE TABLE objectif
 					id_objectif SERIAL PRIMARY KEY,
 					nom_objectif VARCHAR(255) NOT NULL UNIQUE,
 					description_objectif TEXT,
+<<<<<<< HEAD
 					validation_ BOOLEAN NOT NULL /*Modifier le MCD*/
+=======
+					validation_ BOOLEEN NOT NULL /*Modifier le MCD*/
+>>>>>>> 2a2ff08f7e74009d86a17bbc8213d9bdc270b49e
 				);
 
 CREATE TABLE caracteristique
 				(
+<<<<<<< HEAD
 					id_statistique SERIAL PRIMARY KEY, /* incoherent avec le nom de la table*/
+=======
+					id_statistique SERIAL PRIMARY KEY,
+>>>>>>> 2a2ff08f7e74009d86a17bbc8213d9bdc270b49e
 					nom_caracteristique VARCHAR(255),
 					description_caracteristique TEXT
 				);
 
+<<<<<<< HEAD
 CREATE TABLE interactions
 				(
 					id_interactions SERIAL PRIMARY KEY,
@@ -101,6 +122,14 @@ CREATE TABLE interactions
 					nom_interactions VARCHAR(255),
 					description_interactions VARCHAR(255),
 					completion_interaction INT CHECK (completion_interaction>0 AND completion_interaction<101)					
+=======
+CREATE TABLE interaction
+				(
+					id_interaction SERIAL PRIMARY KEY,
+					prerequis_interaction VARCHAR(255),
+					nom_interaction VARCHAR(255),
+					description_interaction VARCHAR(255)
+>>>>>>> 2a2ff08f7e74009d86a17bbc8213d9bdc270b49e
 				);
 
 CREATE TABLE role_interaction
@@ -235,7 +264,11 @@ CREATE TABLE considere
 				(
 					id_personnage_jugee INT FOREIGN KEY REFERENCES personnage(id_personnage),
 					id_personnage_juge INT FOREIGN KEY REFERENCES personnage(id_personnage),
+<<<<<<< HEAD
 					agressif BOOLEAN NOT NULL,
+=======
+					valeur_attitude INT
+>>>>>>> 2a2ff08f7e74009d86a17bbc8213d9bdc270b49e
 					PRIMARY KEY(id_personnage_jugee,id_personnage_juge)
 				);
 
@@ -271,7 +304,11 @@ CREATE TABLE maitrise
 				(
 					id_personnage INT FOREIGN KEY REFERENCES personnage(id_personnage),
 					id_aptitude INT FOREIGN KEY REFERENCES aptitude(id_aptitude),
+<<<<<<< HEAD
 					pourcentage_maitrise INT NOT NULL CHECK (pourcentage_maitrise>0 AND pourcentage_maitrise <101),
+=======
+					pourcentage_maitrise INT NOT NULL,
+>>>>>>> 2a2ff08f7e74009d86a17bbc8213d9bdc270b49e
 					PRIMARY KEY(id_personnage,id_aptitude)
 				);
 
@@ -283,6 +320,11 @@ CREATE TABLE mene
 					PRIMARY KEY(id_dialogue_suivant,id_dialogue_precedent)
 				);
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 2a2ff08f7e74009d86a17bbc8213d9bdc270b49e
 /*TABLE NIVEAU 6  , pas un niveau 6 en réalité car les tables ont des origines communes (mais ce n'est pas grave) */
 
 CREATE TABLE donne 
