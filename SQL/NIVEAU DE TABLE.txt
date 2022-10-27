@@ -1,0 +1,8 @@
+                                                                                            NIVEAU DE TABLE
+
+Pour éviter de créer les tables dans un ordre créant des incohérences j'ai pensé à un systéme de niveau de table. Le niveau d'une table correspond au nombres de clés
+étrangéres différentes nécessaires pour définire une table et toute ses tables parentes. Par exemple dans le MLD du RPG la table dialogue dépend de la clé etrangére de la table 
+personnage et la table personnage dépend de trois cle etrangéres différentes donc le niveau de la table dialogue est 3+1=4 .
+Remarque : comme on compte les clés étrangéres différentes les associations recursives comptent une seule fois la clé étrangére de la table d'origine
+L'intérêt d'un tel systéme de classement est que une table ne peut dépendre que des tables de niveau inférieur. Ainsi si toute les tables des niveaux 0 à 3 on été réalisées 
+alors on peut créer toutes les tables de niveau 4 sans se soucier de leur ordre.
