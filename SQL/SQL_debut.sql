@@ -6,9 +6,9 @@
 CREATE TABLE compte_utilisateur 
 				(
 					id_compte_utilisateur SERIAL PRIMARY KEY,
-					pseudo_compte NOT NULL UNIQUE VARCHAR(255),
-					couriel_compte NOT NULL UNIQUE VARCHAR(255),
-					mdp_compte NOT NULL VARCHAR(255),
+					pseudo_compte  VARCHAR(255) NOT NULL UNIQUE,
+					couriel_compte  VARCHAR(255) NOT NULL UNIQUE,
+					mdp_compte VARCHAR(255)NOT NULL,
 					valide BOOLEAN NOT NULL DEFAULT 'f'
 				);
 
@@ -22,11 +22,10 @@ CREATE TABLE etat_personnage
 				);
 
 
-
 CREATE TABLE type_aptitude 
 				(
 					id_type_aptitude SERIAL PRIMARY KEY,
-					nom_type_aptitude VARCHAR(255) UNIQUE NOT NULL,
+					nom_type_aptitude VARCHAR(255) UNIQUE NOT NULL
 				);
 
 
@@ -43,7 +42,7 @@ CREATE TABLE type_objet
 				(
 					id_type_objet SERIAL PRIMARY KEY,
 					nom_type_objet VARCHAR(255) UNIQUE NOT NULL,
-					emplacement_objet VARCHAR(255) NOT NULL 
+					emplacement_objet VARCHAR(255) NOT NULL,
 					poids_objet INT NOT NULL
 				);
 
@@ -69,22 +68,13 @@ CREATE TABLE recompense
 					description_recompense VARCHAR(255)
 				);
 
-CREATE TABLE objet 
-				(
-					id_objet SERIAL PRIMARY KEY,
-					nom_objet VARCHAR(255) NOT NULL,
-					statistique_objet VARCHAR(255),
-					equipe BOOLEAN,
-					ouvert BOOLEAN,
-					description_objet TEXT
-				);
 
 CREATE TABLE objectif 
 				(
 					id_objectif SERIAL PRIMARY KEY,
 					nom_objectif VARCHAR(255) NOT NULL UNIQUE,
 					description_objectif TEXT,
-					validation_ BOOLEAN NOT NULL /*Modifier le MCD*/
+					validation_ BOOLEAN NOT NULL 
 				);
 
 CREATE TABLE caracteristique
@@ -110,7 +100,9 @@ CREATE TABLE role_interaction
 
 CREATE TABLE position_s
 				(
-					coordonnee POINT PRIMARY KEY
+					x INT,
+					y INT,
+					PRIMARY KEY(x,y)
 				);
 
 
@@ -120,12 +112,24 @@ CREATE TABLE position_s
 
 CREATE TABLE aptitude
 				(
-					id_aptitude COUNTER PRIMARY KEY,
+					id_aptitude SERIAL PRIMARY KEY,
 					nom_aptitude VARCHAR(50),
 					effet_aptitude VARCHAR(255),
 					prerequis_aptitude VARCHAR(255),
-					id_type_aptitude INTEGER REFERENCES type_aptitude(id_type_aptitude) FOREIGN KEY 
+					id_type_aptitude INTEGER ,
+					FOREIGN KEY (id_type_aptitude) REFERENCES type_aptitude(id_type_aptitude)
 				);
+
+CREATE TABLE objet 
+				(
+					id_objet SERIAL PRIMARY KEY,
+					nom_objet VARCHAR(255) NOT NULL,
+					statistique_objet VARCHAR(255),
+					equipe BOOLEAN,
+					ouvert BOOLEAN,
+					description_objet TEXT
+				);
+
 
 /* TABLES niveau 2 */
 
@@ -137,35 +141,6 @@ CREATE TABLE constitue
 					PRIMARY KEY(id_interaction,id_objectif)
 				);
 
-CREATE TABLE contient
-				(
-					contenant INT FOREIGN KEY REFERENCES objet(id_objet),
-					id_objet_contenu INT FOREIGN KEY REFERENCES(id_objet),
-					quantite INT,
-					PRIMARY KEY(contenant,id_objet_contenu)
-				);
-
-CREATE TABLE relie
-				(
-					id_objet_porte_entre INT FOREIGN KEY REFERENCES objet(id_objet),
-					id_objet_porte_sortie INT FOREIGN KEY REFERENCES objet(id_objet),
-					PRIMARY KEY(id_objet_porte_entre,id_objet_porte_sortie)
-				);
-
-CREATE TABLE accorde 
-				(
-					id_objet INT FOREIGN KEY REFERENCES objet(id_objet),
-					id_recompense INT FOREIGN KEY REFERENCES recompense(id_recompense),
-					quantite INT,
-					PRIMARY KEY(id_objet,id_recompense)
-				);
-
-CREATE TABLE caracterise 
-				(
-					id_objet INT FOREIGN KEY REFERENCES objet(id_objet),
-					id_type_objet INT FOREIGN KEY REFERENCES type_objet(id_type_objet),
-					PRIMARY KEY(id_objet,id_type_objet)
-				);
 
 
 /* TABLE NIVEAU 3 */
@@ -184,13 +159,30 @@ CREATE TABLE personnage
 					id_lieu INT FOREIGN KEY REFERENCES lieu(id_lieu)
 				);
 
-CREATE TABLE active
+CREATE TABLE accorde 
 				(
 					id_objet INT FOREIGN KEY REFERENCES objet(id_objet),
-					id_interaction INT FOREIGN KEY REFERENCES interaction(id_interaction),
-					code_role_interaction CHAR(2) FOREIGN KEY REFERENCES interaction(id_interaction),
-					PRIMARY KEY(id_objet,id_interaction,code_role_interaction)
+					id_recompense INT FOREIGN KEY REFERENCES recompense(id_recompense),
+					quantite INT,
+					PRIMARY KEY(id_objet,id_recompense)
 				);
+
+
+CREATE TABLE relie
+				(
+					id_objet_porte_entre INT FOREIGN KEY REFERENCES objet(id_objet),
+					id_objet_porte_sortie INT FOREIGN KEY REFERENCES objet(id_objet),
+					PRIMARY KEY(id_objet_porte_entre,id_objet_porte_sortie)
+				);
+
+CREATE TABLE contient
+				(
+					contenant INT FOREIGN KEY REFERENCES objet(id_objet),
+					id_objet_contenu INT FOREIGN KEY REFERENCES(id_objet),
+					quantite INT,
+					PRIMARY KEY(contenant,id_objet_contenu)
+				);
+
 
 CREATE TABLE declenche
 				(
@@ -198,6 +190,18 @@ CREATE TABLE declenche
 					id_recompense INT FOREIGN KEY REFERENCES recompense(id_recompense),
 					id_objectif INT FOREIGN KEY REFERENCES objectif(id_objectif),
 					PRIMARY KEY(id_interaction,id_recompense,id_objectif)
+				);
+
+
+
+/* TABLE NIVEAU 4 */
+
+CREATE TABLE active
+				(
+					id_objet INT FOREIGN KEY REFERENCES objet(id_objet),
+					id_interaction INT FOREIGN KEY REFERENCES interaction(id_interaction),
+					code_role_interaction CHAR(2) FOREIGN KEY REFERENCES interaction(id_interaction),
+					PRIMARY KEY(id_objet,id_interaction,code_role_interaction)
 				);
 
 CREATE TABLE instance
@@ -208,11 +212,6 @@ CREATE TABLE instance
 					quantite INT,
 					PRIMARY KEY(id_objet,id_lieu,coordonee)
 				);
-
-
-
-
-/* TABLE NIVEAU 4 */
 
 CREATE TABLE definit
 				(
@@ -238,12 +237,7 @@ CREATE TABLE considere
 					PRIMARY KEY(id_personnage_jugee,id_personnage_juge)
 				);
 
-CREATE TABLE possede 
-				(
-					id_personnage INT FOREIGN KEY REFERENCES personnage(id_personnage),
-					id_objet INT FOREIGN KEY REFERENCES objet(id_objet),
-					PRIMARY KEY(id_personnage,id_objet)
-				);
+
 CREATE TABLE positionne 
 				(
 					id_personnage INT FOREIGN KEY REFERENCES personnage(id_personnage),
@@ -256,7 +250,8 @@ CREATE TABLE appartient
 					id_personnage INT FOREIGN KEY REFERENCES personnage(id_personnage),
 					id_classe INT FOREIGN KEY REFERENCES classe(id_classe),
 					PRIMARY KEY(id_personnage,id_classe)
-				)
+				);
+
 CREATE TABLE affecte
 				(
 					id_personnage INT FOREIGN KEY REFERENCES personnage(id_personnage),
@@ -265,6 +260,13 @@ CREATE TABLE affecte
 				);
 
 /* TABLE NIVEAU 5 */
+
+CREATE TABLE possede 
+				(
+					id_personnage INT FOREIGN KEY REFERENCES personnage(id_personnage),
+					id_objet INT FOREIGN KEY REFERENCES objet(id_objet),
+					PRIMARY KEY(id_personnage,id_objet)
+				);
 
 CREATE TABLE maitrise 
 				(
