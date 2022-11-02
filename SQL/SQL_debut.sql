@@ -100,8 +100,8 @@ CREATE TABLE role_interaction
 
 CREATE TABLE position_s
 				(
-					x INT,
-					y INT,
+					x INT UNIQUE,
+					y INT UNIQUE,
 					PRIMARY KEY(x,y)
 				);
 
@@ -158,18 +158,19 @@ CREATE TABLE personnage
 					vivant BOOLEAN NOT NULL,
 					id_race INT,
 					id_lieu INT,
+					id_compte_utilisateur INT,
 					FOREIGN KEY(id_race) REFERENCES race(id_race),
-					FOREIGN KEY(compte_utilisateur) REFERENCES compte_utilisateur(id_compte_utilisateur),
+					FOREIGN KEY(id_compte_utilisateur) REFERENCES compte_utilisateur(id_compte_utilisateur),
 					FOREIGN KEY(id_lieu) REFERENCES lieu(id_lieu)
 				);
 
 CREATE TABLE accorde 
 				(
-					id_objet INT FOREIGN KEY REFERENCES objet(id_objet),
-					id_recompense INT+,
+					id_objet INT,
+					id_recompense INT,
 					quantite INT,
 					PRIMARY KEY(id_objet,id_recompense),
-					FOREIGN KEY(id_recompense) REFERENCES recompense(id_recompense),
+					FOREIGN KEY(id_recompense) REFERENCES recompense(id_recompense)
 				);
 
 
@@ -189,7 +190,7 @@ CREATE TABLE contient
 					quantite INT,
 					PRIMARY KEY(contenant,id_objet_contenu),
 					FOREIGN KEY(contenant) REFERENCES objet(id_objet),
-					FOREIGN KEY(id_objet_contenu) REFERENCES(id_objet)
+					FOREIGN KEY(id_objet_contenu) REFERENCES objet(id_objet)
 				);
 
 
@@ -198,7 +199,7 @@ CREATE TABLE declenche
 					id_interaction INT,
 					id_recompense INT,
 					id_objectif INT,
-					PRIMARY KEY(id_interaction,id_recompense,id_objectif)
+					PRIMARY KEY(id_interaction,id_recompense,id_objectif),
 					FOREIGN KEY(id_interaction) REFERENCES interaction(id_interaction),
 					FOREIGN KEY(id_recompense) REFERENCES recompense(id_recompense),
 					FOREIGN KEY(id_objectif) REFERENCES objectif(id_objectif)
@@ -222,11 +223,11 @@ CREATE TABLE active
 CREATE TABLE instance
 				(
 					id_objet INT,
-					id_lieu INT FOREIGN KEY REFERENCES lieu(id_lieu),
+					id_lieu INT,
 					x INT,
 					y INT,
 					quantite INT,
-					PRIMARY KEY(id_objet,id_lieu,coordonee,x,y),
+					PRIMARY KEY(id_objet,id_lieu,x,y),
 					FOREIGN KEY(id_objet) REFERENCES objet(id_objet),
 					FOREIGN KEY(id_lieu) REFERENCES lieu(id_lieu),
 					FOREIGN KEY(x) REFERENCES position_s(x),
@@ -241,7 +242,7 @@ CREATE TABLE definit
 					valeur_max INT,
 					PRIMARY KEY(id_personnage,id_statistique),
 					FOREIGN KEY(id_personnage) REFERENCES personnage(id_personnage),
-					FOREIGN KEY(id_statistique) REFERENCES statistique(id_statistique)
+					FOREIGN KEY(id_statistique) REFERENCES caracteristique(id_statistique)
 				);
 
 CREATE TABLE dialogue /*LES MAJUSCULES !!!!!!!!*/
@@ -265,7 +266,7 @@ CREATE TABLE considere
 
 CREATE TABLE positionne 
 				(
-					id_personnage INT FOREIGN KEY REFERENCES personnage(id_personnage),
+					id_personnage INT,
 					x INT,
 					y INT,
 					PRIMARY KEY(id_personnage,x,y),
