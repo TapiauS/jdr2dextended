@@ -1,4 +1,36 @@
-
+DROP TABLE donne ;
+DROP TABLE mene ; 
+DROP TABLE maitrise ;
+DROP TABLE possede ;
+DROP TABLE affecte ;
+DROP TABLE appartient ;
+DROP TABLE positionne ;
+DROP TABLE considere ;
+DROP TABLE dialogue ;
+DROP TABLE definit ;
+DROP TABLE instance ;
+DROP TABLE active ;
+DROP TABLE declenche ;
+DROP TABLE contient ;
+DROP TABLE relie ;
+DROP TABLE accorde ;
+DROP TABLE personnage ;
+DROP TABLE constitue ;
+DROP TABLE objet ;
+DROP TABLE aptitude ;
+DROP TABLE position_s ;
+DROP TABLE role_interaction ;
+DROP TABLE interaction ;
+DROP TABLE caracteristique ;
+DROP TABLE objectif ;
+DROP TABLE recompense ;
+DROP TABLE lieu ;
+DROP TABLE race ;
+DROP TABLE type_objet ;
+DROP TABLE classe ;
+DROP TABLE type_aptitude ;
+DROP TABLE etat_personnage ;
+DROP TABLE compte_utilisateur ;
 
 /* Tables niveau 0 */
 
@@ -42,14 +74,14 @@ CREATE TABLE type_objet
 				(
 					id_type_objet SERIAL PRIMARY KEY,
 					nom_type_objet VARCHAR(255) UNIQUE NOT NULL,
-					emplacement_objet VARCHAR(255) NOT NULL,
-					poids_objet INT NOT NULL
+					emplacement_objet VARCHAR(255) NOT NULL
 				);
 
 CREATE TABLE race
 				(
 					id_race SERIAL PRIMARY KEY,
 					nom_race VARCHAR(255) UNIQUE NOT NULL,
+					description_race TEXT,
 					jouable BOOLEAN
 				);
 
@@ -125,9 +157,11 @@ CREATE TABLE objet
 					id_objet SERIAL PRIMARY KEY,
 					nom_objet VARCHAR(255) NOT NULL,
 					statistique_objet VARCHAR(255),
-					equipe BOOLEAN,
-					ouvert BOOLEAN,
-					description_objet TEXT
+					id_type_objet INT,
+					equipe BOOLEAN DEFAULT 'true',
+					ouvert BOOLEAN DEFAULT 'false',
+					description_objet TEXT,
+					FOREIGN KEY(id_type_objet) REFERENCES type_objet(id_type_objet)
 				);
 
 
@@ -281,7 +315,7 @@ CREATE TABLE appartient
 					id_classe INT,
 					PRIMARY KEY(id_personnage,id_classe),
 					FOREIGN KEY(id_personnage) REFERENCES personnage(id_personnage),
-					FOREIGN KEY(id_classe) REFERENCES classe(id_classe)
+					FOREIGN KEY(id_classe) REFERENCES classe(id_class)
 				);
 
 CREATE TABLE affecte
