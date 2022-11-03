@@ -50,7 +50,7 @@ CREATE TABLE etat_personnage
 					id_etat_personnage SERIAL PRIMARY KEY,
 					nom_etat VARCHAR(255) UNIQUE NOT NULL,
 					effet_etat VARCHAR(255) NOT NULL,
-					description_etat VARCHAR(255) NOT NULL
+					description_etat VARCHAR(255) 
 				);
 
 
@@ -74,7 +74,7 @@ CREATE TABLE type_objet
 				(
 					id_type_objet SERIAL PRIMARY KEY,
 					nom_type_objet VARCHAR(255) UNIQUE NOT NULL,
-					emplacement_objet VARCHAR(255) NOT NULL
+					emplacement_objet VARCHAR(255) 
 				);
 
 CREATE TABLE race
@@ -104,7 +104,7 @@ CREATE TABLE recompense
 CREATE TABLE objectif 
 				(
 					id_objectif SERIAL PRIMARY KEY,
-					nom_objectif VARCHAR(255) NOT NULL UNIQUE,
+					nom_objectif VARCHAR(255),
 					description_objectif TEXT,
 					validation_ BOOLEAN NOT NULL 
 				);
@@ -132,10 +132,11 @@ CREATE TABLE role_interaction
 
 CREATE TABLE position_s
 				(
-					x INT UNIQUE,
-					y INT UNIQUE,
-					PRIMARY KEY(x,y)
+					Id_position SERIAL PRIMARY KEY,
+					x INT NOT NULL,
+					y INT NOT NULL					
 				);
+
 
 
 
@@ -185,11 +186,11 @@ CREATE TABLE personnage
 				(
 					id_personnage SERIAL PRIMARY KEY,
 					nom_personnage VARCHAR(255) NOT NULL,
-					niveau_personnage SMALLINT NOT NULL ,
-					direction CHAR(10) NOT NULL,
+					niveau_personnage SMALLINT  ,
+					direction CHAR(10) ,
 					alignement VARCHAR(255),
 					monnaie BIGINT,
-					vivant BOOLEAN NOT NULL,
+					vivant BOOLEAN,
 					id_race INT,
 					id_lieu INT,
 					id_compte_utilisateur INT,
@@ -258,14 +259,12 @@ CREATE TABLE instance
 				(
 					id_objet INT,
 					id_lieu INT,
-					x INT,
-					y INT,
+					id_position,
 					quantite INT,
-					PRIMARY KEY(id_objet,id_lieu,x,y),
+					PRIMARY KEY(id_objet,id_lieu,id_position),
 					FOREIGN KEY(id_objet) REFERENCES objet(id_objet),
 					FOREIGN KEY(id_lieu) REFERENCES lieu(id_lieu),
-					FOREIGN KEY(x) REFERENCES position_s(x),
-					FOREIGN KEY(y) REFERENCES position_s(y)
+					FOREIGN KEY(id_position) REFERENCES position_s(id_position)
 				);
 
 CREATE TABLE definit
@@ -301,12 +300,10 @@ CREATE TABLE considere
 CREATE TABLE positionne 
 				(
 					id_personnage INT,
-					x INT,
-					y INT,
-					PRIMARY KEY(id_personnage,x,y),
+					id_position INT,
+					PRIMARY KEY(id_personnage,id_position),
 					FOREIGN KEY(id_personnage) REFERENCES personnage(id_personnage),
-					FOREIGN KEY(x) REFERENCES position_s(x),
-					FOREIGN KEY(y) REFERENCES position_s(y)
+					FOREIGN KEY(id_position) REFERENCES position_s(id_position)
 				);
 
 CREATE TABLE appartient
@@ -361,6 +358,7 @@ CREATE TABLE mene
 
 
 /*TABLE NIVEAU 6  , pas un niveau 6 en réalité car les tables ont des origines communes (mais ce n'est pas grave) */
+
 
 CREATE TABLE donne 
 				(

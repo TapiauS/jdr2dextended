@@ -1,0 +1,88 @@
+/*Ce script sert a remplir les tables SQL du script SQL_debut */
+
+/*Tables de niveau 0*/
+
+/*INSERT INTO compte_utilisateur*/
+
+INSERT INTO etat_personnage(id_etat_personnage,nom_etat,effet_etat) VALUES 
+    ('1','empoisonnement','incidence sur PV'),
+    ('2','Endormi','empêche d’agir'),
+    ('3','aveuglé','baisse la précision'),
+    ('4','paralisé','empêche de se deplacer'),
+    ('5','bénie','plus fort, plus résistant');
+
+/*INSERT INTO type_aptitude */
+
+/*INSERT INTO classe*/
+
+INSERT INTO type_objet(nom_type_objet) VALUES
+('arme distance'),
+('arme à 2 mains'),
+('arme cac'),
+('casque'),
+('armure'),
+('gants'),
+('pantalons'),
+('chaussures'),
+('potions'),
+('Monnaies'),
+('objet de quetes'),
+('Décor');
+
+INSERT INTO race VALUES
+('1', 'Humains','Ambitieux, parfois héroïques, mais toujours confiants, les humains sont capables de travailler ensemble pour atteindre des objectifs communs, ce qui fait d’eux une puissance à ne pas négliger. Ils ont une espérance de vie réduite par rapport aux autres races, mais leur énergie sans limites et leurs passions leur permettent d’accomplir beaucoup de choses malgré leur brève existence.',true),
+('2', 'Nains','On pense souvent que ces défenseurs des villes montagneuses petits et râblés sont sévères et dépourvus de tout sens de l’humour. Ils sont connus pour être des grand industriels dont les produit sont toujours d’une grande qualité et pour avoir une affinité particulière avec les richesses cachées dans les entrailles de la terre. Les nains ont aussi tendance à s’isoler et à se replier sur leurs traditions, au point de sombrer parfois dans la xénophobie.',true),
+('3', 'Elfes','Grands, nobles et souvent hautains, les elfes à la longue espérance de vie sont les maîtres subtils de la nature. Ils excellent dans les arts magiques et utilisent souvent leur lien inné avec la nature pour inventer de nouveaux sorts et fabriquer de merveilleux objets qui, comme leurs créateurs, semblent presque hors d’atteinte des ravages du temps. Les elfes forment une race secrète et souvent introvertie, qui donne parfois l’impression d’être imperméable aux suppliques d’autrui.',false),
+('4', 'Orques','Sauvages, brutaux et résistants, les orques sont souvent le fléau des lointaines étendues naturelles et des grottes profondes. Beaucoup deviennent de redoutables mercenaires, du fait de leur stature musculeuse et de leur tendance à entrer dans des rages sanglantes. Les quelques rares qui parviennent à contrôler leur soif de sang font d’excellents aventuriers.',true),
+('5', 'Rat','',false),
+('6', 'Chauve souris','',false);
+
+INSERT INTO lieu VALUES 
+('1','Bad town','',''),
+('2','la reine','',''),
+('3','la bête','',''),
+('4','scissor palace','',''),
+('5','lennybar','',''),
+('6','Profit-city','',''),
+('7','black market','',''),
+('8','lehman sisters','',''),
+('9','place-2-B','',''),
+('10','treump shop','',''),
+('11','nainportnawak','',''),
+('12','maxilase','',''),
+('13','flunchbar','',''),
+('14','park in son','',''),
+('15','in & out','',''),
+('16','ELF village','',''),
+('17','msncircus','',''),
+('18','pirate search','',''),
+('19','daddy awards','',''),
+('20','potatoe valley','','');
+
+/*INSERT INTO recompense*/
+
+
+INSERT INTO objectif(nom_objectif,validation_) VALUES 
+('recuperer du houblon (Alain Chichon)',0),
+('recuperer un fut (Maitre Kanter)',0),
+('recuperer un élement secret (Chie mi Hendrix)',0),
+('Aller tuer 4 chauves souris',0),
+('Aller recuperer l''arme chez Durdur',0),
+('Tuer Dracula (Jean Marie le PNJ)',0),
+('Aller voir Hippique-sous pour avoir des infos',0),
+('Donner des sousous à Durdur pour avoir une casquette à pointe afin de récupérer une boubourse à son concours de lancer de pommes',0),
+('Retourner voir Benard Tappir et lui donner la boubourse gagner au concours de lancer de pomme',0),
+('Combattre à l''arene',0),
+('Choisir de tuer ou non Bours-La',0),
+('Aller voir Nana Moule Curry pour récuperer la potion() a vendu la derniere potion au casino) elle lui donne une musse tongue à la place',0),
+('rejoindre Lost Vegas au Scissor Palace',0),
+('visiter le tunnel du pont en musse tongue avec Die Anna',0);
+
+/*INSERT INTO caracteristique*/
+
+/*INSERT INTO role_interaction */
+
+/*INSERT INTO position_s*/
+
+
+
