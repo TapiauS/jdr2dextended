@@ -1,5 +1,6 @@
 DROP TABLE donne ;
-DROP TABLE mene ; 
+DROP TABLE precede ;
+DROP TABLE embranchement ; 
 DROP TABLE maitrise ;
 DROP TABLE possede ;
 DROP TABLE affecte ;
@@ -15,7 +16,6 @@ DROP TABLE contient ;
 DROP TABLE relie ;
 DROP TABLE accorde ;
 DROP TABLE personnage ;
-DROP TABLE constitue ;
 DROP TABLE objet ;
 DROP TABLE aptitude ;
 DROP TABLE position_s ;
@@ -167,18 +167,6 @@ CREATE TABLE objet
 
 
 /* TABLES niveau 2 */
-
-CREATE TABLE constitue
-				(
-					id_interaction INT,
-					id_objectif INT,
-					parametre VARCHAR(255),
-					PRIMARY KEY(id_interaction,id_objectif),
-					FOREIGN KEY(id_interaction) REFERENCES interaction(id_interaction),
-					FOREIGN KEY(id_objectif) REFERENCES objectif(id_objectif)
-				);
-
-
 
 /* TABLE NIVEAU 3 */
 
@@ -345,14 +333,13 @@ CREATE TABLE maitrise
 					FOREIGN KEY(id_aptitude) REFERENCES aptitude(id_aptitude)
 				);
 
-CREATE TABLE mene
+CREATE TABLE embranchement
 				(
-					id_dialogue_suivant INT,
-					id_dialogue_precedent INT,
+					id_embranchement SERIAL,
+					id_dialogue INT,
 					choix TEXT NOT NULL UNIQUE,
-					PRIMARY KEY(id_dialogue_suivant,id_dialogue_precedent),
-					FOREIGN KEY(id_dialogue_suivant) REFERENCES dialogue(id_dialogue),
-					FOREIGN KEY(id_dialogue_precedent) REFERENCES dialogue(id_dialogue)
+					PRIMARY KEY(id_embranchement),
+					FOREIGN KEY(id_dialogue) REFERENCES dialogue(id_dialogue)
 				);
 
 
@@ -369,4 +356,14 @@ CREATE TABLE donne
 					FOREIGN KEY(id_interaction) REFERENCES interaction(id_interaction),
 					FOREIGN KEY(id_dialogue) REFERENCES dialogue(id_dialogue),
 					FOREIGN KEY(code_role_interaction) REFERENCES role_interaction(code_role_interaction)
+				);
+
+
+CREATE TABLE precede 
+				(
+					id_dialogue INT,
+					id_embranchement INT,
+					PRIMARY KEY(id_embranchement,id_dialogue),
+					FOREIGN KEY(id_embranchement) REFERENCES embranchement(id_embranchement),
+					FOREIGN KEY(id_dialogue) REFERENCES dialogue(id_dialogue)
 				);
