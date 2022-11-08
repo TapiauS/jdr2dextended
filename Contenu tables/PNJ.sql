@@ -1,4 +1,4 @@
---(nom_personnage)
+--(nom_personnage,id_race)
 
 ('Bours-La'),
 ('Bernard Tappir'),
