@@ -1,3 +1,5 @@
+--(id_objet,nom_objet,statistique_objet,equipe,description_objet,ouvert,id_type_objet)
+
 ('1','fusil Lorrain','+1 force','TRUE','Fusil légendaire de Lorraine, capable d envoyer des fuseaux a 50 km/h','TRUE',(SELECT id_type_objet FROM type_objet WHERE nom_type_objet='arme distance' )),
 ('2','paprik arme','+2 force','TRUE','Le piment le plus fort de tous les héros','TRUE',(SELECT id_type_objet FROM type_objet WHERE nom_type_objet='arme distance' )),
 ('3','lance saucisse','+3 force','TRUE','De son vrai nom große würst','TRUE',(SELECT id_type_objet FROM type_objet WHERE nom_type_objet='arme distance' )),

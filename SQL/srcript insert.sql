@@ -1,8 +1,8 @@
-/*Ce script sert a remplir les tables SQL du script SQL_debut */
+--Ce script sert a remplir les tables SQL du script SQL_debut 
 
-/*Tables de niveau 0*/
+--Tables de niveau 0
 
-/*INSERT INTO compte_utilisateur*/
+--INSERT INTO compte_utilisateur
 
 INSERT INTO etat_personnage(id_etat_personnage,nom_etat,effet_etat) VALUES 
     ('1','empoisonnement','incidence sur PV'),
@@ -11,9 +11,14 @@ INSERT INTO etat_personnage(id_etat_personnage,nom_etat,effet_etat) VALUES
     ('4','paralisé','empêche de se deplacer'),
     ('5','bénie','plus fort, plus résistant');
 
-/*INSERT INTO type_aptitude */
+INSERT INTO type_aptitude(nom_type_aptitude) VALUES
+('aptitude de base'),
+('habilité'),
+('maitrise des montures'),
+('sort');
 
-/*INSERT INTO classe*/
+
+--INSERT INTO classe
 
 INSERT INTO type_objet(nom_type_objet) VALUES
 ('arme distance'),
@@ -59,7 +64,7 @@ INSERT INTO lieu VALUES
 ('19','daddy awards','',''),
 ('20','potatoe valley','','');
 
-/*INSERT INTO recompense*/
+--INSERT INTO recompense
 
 
 INSERT INTO objectif(nom_objectif,validation_) VALUES 
@@ -78,15 +83,36 @@ INSERT INTO objectif(nom_objectif,validation_) VALUES
 ('rejoindre Lost Vegas au Scissor Palace',0),
 ('visiter le tunnel du pont en musse tongue avec Die Anna',0);
 
-/*INSERT INTO caracteristique*/
+--INSERT INTO caracteristique
 
-/*INSERT INTO role_interaction */
+INSERT INTO interaction(prerequis_interaction,nom_interaction,description_interaction) VALUES
+('','Bonne brune','Mr Ohbar vous a demandé de faire de la bière brune'),
+('avoir la batte ail','','Un vampire terrorise les habitants de la ville (Iggy Pope)'),
+('','','Bernard Tappir vous demande de ramener une boubourse volée par les nains'),
+('','Victoria secret','Victoria-Big-B vous demande d''aller chercher ses objets fétiches chez la reine Bours-La'),
+('','Un carrosse dans le tunnel','Die Anna se sent lente, elle vous demande d''aller chercher le bipbip ');
 
-/*INSERT INTO position_s*/
 
-/*Tables de niveau 1*/
+INSERT INTO role_interaction VALUES 
+('Q','questeur'),
+('D','donneur'),
+('R','recompenseur');
 
-/* INSERT INTO aptitude */
+
+
+INSERT INTO position_s(x,y)
+    SELECT x AS x,y AS y
+        FROM
+            GENERATE_SERIES(1,50) x
+        CROSS JOIN 
+            GENERATE_SERIES(1,50) y
+;
+
+
+
+--Tables de niveau 1
+
+-- INSERT INTO aptitude 
 
 INSERT INTO objet(id_objet,nom_objet,statistique_objet,equipe,description_objet,ouvert,id_type_objet) VALUES
 ('1','fusil Lorrain','+1 force','TRUE','Fusil légendaire de Lorraine, capable d envoyer des fuseaux a 50 km/h','TRUE',(SELECT id_type_objet FROM type_objet WHERE nom_type_objet='arme distance' )),
@@ -178,11 +204,11 @@ INSERT INTO objet(id_objet,nom_objet,statistique_objet,equipe,description_objet,
 ('87','seau','','FALSE','','TRUE',(SELECT id_type_objet FROM type_objet WHERE nom_type_objet='Décor')),
 ('88','clôture','','FALSE','','TRUE',(SELECT id_type_objet FROM type_objet WHERE nom_type_objet='Décor'));
 
-/*Tables de niveaux 2*/
+--Tables de niveaux 2
 
-/*INSERT INTO constitue */
+--INSERT INTO constitue 
 
-/*TABLES de niveaux 3*/
+--TABLES de niveaux 3
 
 INSERT INTO personnage(nom_personnage) VALUES 
 ('Bours-La'),
@@ -201,19 +227,19 @@ INSERT INTO personnage(nom_personnage) VALUES
 
 --INSERT INTO accorde
 
-/*INSERT INTO relie*/
+--INSERT INTO relie
 
-/*INSERT INTO contient*/
+--INSERT INTO contient
 
-/*INSERT INTO declenche*/
+--INSERT INTO declenche
 
-/*TABLE NIVEAU 4*/
+--TABLE NIVEAU 4
 
-/*INSERT INTO active*/
+--INSERT INTO active
 
-/*INSERT INTO instance */
+--INSERT INTO instance 
 
-/*INSERT INTO definit*/
+--INSERT INTO definit
 
 INSERT INTO dialogue(contenu_dialogue,id_personnage) VALUES
 
@@ -254,10 +280,14 @@ Ensuite, tu devras combattre le terrible Jean Marie le PNJ, vivant dans le noir.
 ('Tu as pu récupérer ma potion pour ma vitesse?',(SELECT id_personnage FROM personnage WHERE nom_personnage='Die Anna')),
 ('Super on va pouvoir aller visiter le tunnel en Musse Tongue maintenant !',(SELECT id_personnage FROM personnage WHERE nom_personnage='Die Anna'));
 
---INSERT INTO considere
+--SCRIPT permettant de fixer l'attitude de tout les PNJ entre eux en "non agressif"
+
+INSERT INTO considere(id_personnage_jugee,id_personnage_juge,agressif)
+    SELECT a.id_personnage,b.id_personnage,FALSE 
+        FROM personnage as a,personnage as b WHERE a.id_personnage != b.id_personnage
+            ORDER BY a.id_personnage;
 
 
---INSERT INTO positionne
 
 --INSERT INTO appartient
 
@@ -311,6 +341,8 @@ INSERT INTO embranchement(choix,id_dialogue) VALUES
 --Tables de niveau 6
 
 --INSERT INTO donne
+
+
 --Script d'insertion dans precede, probablement à perfectionner 
 
 
@@ -319,8 +351,7 @@ INSERT INTO precede(id_dialogue,id_embranchement)
         FROM dialogue 
             JOIN embranchement
                 ON choix='M''fois biensur, et tu me mettras la petite sœur avec !' AND contenu_dialogue='Bonjour mon bon monsieur, je vous mettrais bien une petite bière ?'
-;
-       
+;      
 INSERT INTO precede(id_dialogue,id_embranchement) 
     SELECT dialogue.id_dialogue,id_embranchement 
         FROM dialogue 

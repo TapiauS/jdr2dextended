@@ -1,3 +1,5 @@
+--(description_objectif,validation)
+
 ('recuperer du houblon (Alain Chichon)',0),
 ('recuperer un fut (Maitre Kanter)',0),
 ('recuperer un élement secret (Chie mi Hendrix)',0),

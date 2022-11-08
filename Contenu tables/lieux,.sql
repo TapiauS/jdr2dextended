@@ -1,3 +1,5 @@
+--(id_lieu,nom_lieu,description_lieu,carte_lieu)
+
 ('1','Bad town','',''),
 ('2','la reine','',''),
 ('3','la bête','',''),

@@ -1,3 +1,5 @@
+--(nom_personnage)
+
 ('Bours-La'),
 ('Bernard Tappir'),
 ('Lost Vegas'),

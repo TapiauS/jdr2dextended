@@ -106,7 +106,7 @@ CREATE TABLE objectif
 					id_objectif SERIAL PRIMARY KEY,
 					nom_objectif VARCHAR(255),
 					description_objectif TEXT,
-					validation_ BOOLEAN NOT NULL 
+					validation_ BOOLEAN NOT NULL DEFAULT VALUE FALSE
 				);
 
 CREATE TABLE caracteristique
@@ -159,6 +159,7 @@ CREATE TABLE objet
 					nom_objet VARCHAR(255) NOT NULL,
 					statistique_objet VARCHAR(255),
 					id_type_objet INT,
+					prix INT,
 					equipe BOOLEAN DEFAULT 'true',
 					ouvert BOOLEAN DEFAULT 'false',
 					description_objet TEXT,

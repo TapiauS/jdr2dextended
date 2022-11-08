@@ -1,3 +1,6 @@
+--(Contenu_dialogue,id_personnage)
+
+
 ('A votre santé !',(SELECT id_personnage FROM personnage WHERE nom_personnage='Ohbar')),
 ('Effectivement j''ai besoin d''aide, Toi l''amateur de bière j''ai besoin que tu ailles récupérer du bon houblon chez "Alain-Chichon", un fut chez "Maitre Kanter", et le dernier élement secret chez "Chie mi Hendrix"',(SELECT id_personnage FROM personnage WHERE nom_personnage='Ohbar')),
 ('Merci mon brave, voilà une bonne brune bien relevée. Bon chance !',(SELECT id_personnage FROM personnage WHERE nom_personnage='Ohbar')),

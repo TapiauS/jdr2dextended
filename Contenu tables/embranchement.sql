@@ -1,3 +1,5 @@
+--(choix,id_dialogue)
+
 
 ('M''fois biensur, et tu me mettras la petite sœur avec !',(SELECT id_dialogue FROM dialogue WHERE contenu_dialogue='A votre santé !')),
 ('Tu m''as pris pour qui, un alcoolique? Je déconne tu m''en mettras 3',(SELECT id_dialogue FROM dialogue WHERE contenu_dialogue='A votre santé !')),

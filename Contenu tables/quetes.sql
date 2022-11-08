@@ -1,3 +1,5 @@
+--(prerequis_interaction,nom_interaction,description_interaction)
+
 ('','Bonne brune','Mr Ohbar vous a demandé de faire de la bière brune'),
 ('avoir la batte ail','','Un vampire terrorise les habitants de la ville (Iggy Pope)'),
 ('','','Bernard Tappir vous demande de ramener une boubourse volée par les nains'),
