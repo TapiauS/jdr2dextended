@@ -3,7 +3,7 @@ DROP TABLE precede ;
 DROP TABLE embranchement ; 
 DROP TABLE maitrise ;
 DROP TABLE possede ;
-DROP TABLE affecte ;
+DROP TABLE subit ;
 DROP TABLE appartient ;
 DROP TABLE positionne ;
 DROP TABLE considere ;
@@ -106,12 +106,12 @@ CREATE TABLE objectif
 					id_objectif SERIAL PRIMARY KEY,
 					nom_objectif VARCHAR(255),
 					description_objectif TEXT,
-					validation_ BOOLEAN NOT NULL DEFAULT VALUE FALSE
+					validation_ BOOLEAN NOT NULL DEFAULT 'f'
 				);
 
 CREATE TABLE caracteristique
 				(
-					id_statistique SERIAL PRIMARY KEY,
+					id_caracteristique SERIAL PRIMARY KEY,
 					nom_caracteristique VARCHAR(255),
 					description_caracteristique TEXT
 				);
@@ -168,8 +168,27 @@ CREATE TABLE objet
 
 
 /* TABLES niveau 2 */
+CREATE TABLE modifie
+				(
+					id_etat_personnage INT NOT NULL,
+					id_caracteristique INT NOT NULL,
+					valeur INT,
+					FOREIGN KEY id_caracteristique REFERENCES caracteristique(id_caracteristique),
+					FOREIGN KEY id_etat_personnage REFERENCES etat_personnage(id_etat_personnage),
+					PRIMARY KEY(id_caracteristique,id_etat_personnage)
+				);
 
 /* TABLE NIVEAU 3 */
+
+CREATE TABLE altere
+				(
+					id_objet INT NOT NULL,
+					id_caracteristique INT NOT NULL,
+					valeur INT,
+					FOREIGN KEY (id_objet) REFERENCES objet(id_objet),
+					FOREIGN KEY (id_caracteristique) REFERENCES caracteristique(id_caracteristique),
+					PRIMARY KEY (id_objet,id_caracteristique) 
+				);
 
 CREATE TABLE personnage 
 				(
@@ -248,7 +267,7 @@ CREATE TABLE instance
 				(
 					id_objet INT,
 					id_lieu INT,
-					id_position,
+					id_position INT,
 					quantite INT,
 					PRIMARY KEY(id_objet,id_lieu,id_position),
 					FOREIGN KEY(id_objet) REFERENCES objet(id_objet),
@@ -259,12 +278,12 @@ CREATE TABLE instance
 CREATE TABLE definit
 				(
 					id_personnage INT,
-					id_statistique INT,   /*penser à enlever majuscule MCD */
+					id_caracteristique INT,   /*penser à enlever majuscule MCD */
 					valeur INT,
 					valeur_max INT,
-					PRIMARY KEY(id_personnage,id_statistique),
+					PRIMARY KEY(id_personnage,id_caracteristique),
 					FOREIGN KEY(id_personnage) REFERENCES personnage(id_personnage),
-					FOREIGN KEY(id_statistique) REFERENCES caracteristique(id_statistique)
+					FOREIGN KEY(id_caracteristique) REFERENCES caracteristique(id_caracteristique)
 				);
 
 CREATE TABLE dialogue /*LES MAJUSCULES !!!!!!!!*/
@@ -304,7 +323,7 @@ CREATE TABLE appartient
 					FOREIGN KEY(id_classe) REFERENCES classe(id_class)
 				);
 
-CREATE TABLE affecte
+CREATE TABLE subit
 				(
 					id_personnage INT,
 					id_etat_personnage INT,
@@ -315,10 +334,25 @@ CREATE TABLE affecte
 
 /* TABLE NIVEAU 5 */
 
+CREATE TABLE joue_un_role
+						(
+							id_personnage INT,
+							id_interaction INT,
+							code_role_interaction VARCHAR,
+							FOREIGN KEY(id_personnage) REFERENCES personnage(id_personnage),
+							FOREIGN KEY(id_interaction) REFERENCES interaction(id_interaction),
+							FOREIGN KEY(code_role_interaction) REFERENCES role_interaction(code_role_interaction),
+							PRIMARY KEY(id_personnage,code_role_interaction,id_interaction)
+						);
+
+
+
+
 CREATE TABLE possede 
 				(
 					id_personnage INT,
 					id_objet INT,
+					quantite INT,
 					PRIMARY KEY(id_personnage,id_objet),
 					FOREIGN KEY(id_personnage) REFERENCES personnage(id_personnage),
 					FOREIGN KEY(id_objet) REFERENCES objet(id_objet)

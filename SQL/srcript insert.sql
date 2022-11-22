@@ -1,3 +1,42 @@
+DELETE FROM precede;
+DELETE FROM donne;
+DELETE FROM embranchement;
+DELETE FROM maitrise ;
+DELETE FROM possede ;
+DELETE FROM affecte;
+DELETE FROM appartient;
+DELETE FROM considere;
+DELETE FROM dialogue;
+DELETE FROM definit ;
+DELETE FROM instance ;
+DELETE FROM active;
+DELETE FROM declenche ;
+DELETE FROM contient ;
+DELETE FROM relie ;
+DELETE FROM accorde ;
+DELETE FROM personnage ;
+DELETE FROM constitue ;
+DELETE FROM objet ;
+DELETE FROM aptitude ;
+DELETE FROM position_s
+DELETE FROM role_interaction ;
+DELETE FROM interaction ;
+DELETE FROM caracteristique ;
+DELETE FROM objectifs ;
+DELETE FROM recompense ;
+DELETE FROM lieu ;
+DELETE FROM race ;
+DELETE FROM type_objet ;
+DELETE FROM classe ;
+DELETE FROM type_aptitude ;
+DELETE FROM etat_personnage;
+DELETE FROM compte_utilisateur;
+
+
+
+
+
+
 
 --Ce script sert a remplir les tables SQL du script SQL_debut 
 
@@ -285,7 +324,7 @@ Ensuite, tu devras combattre le terrible Jean Marie le PNJ, vivant dans le noir.
 
 INSERT INTO considere(id_personnage_jugee,id_personnage_juge,agressif)
     SELECT a.id_personnage,b.id_personnage,FALSE 
-        FROM personnage as a,personnage as b WHERE a.id_personnage != b.id_personnage
+        FROM personnage as a,personnage as b WHERE a.id_personnage != b.id_personnage AND a.id_compte_utilisateur IS NULL AND b.id_compte_utilisateur IS NULL
             ORDER BY a.id_personnage;
 
 
