@@ -7,12 +7,12 @@ CREATE VIEW perso_compte(pseudo_compte,id_compte,liste_personnage) AS
 
 --inventaire/equipement des personnage
 
-CREATE VIEW possession(nom_perso,id_perso,nom_objet_possede,nom_objet_equipe,quantite) AS
+CREATE VIEW possession(nom_perso,id_perso,nom_objet_possede,nom_objet_equipe) AS
     SELECT nom_personnage,personnage.id_personnage,o1.nom_objet,o2.nom_objet
         FROM personnage
         JOIN possede ON personnage.id_personnage=possede.id_personnage 
-        JOIN objet AS o1 ON o1.id_personnage_possesseur=personnage.id_personnage
-        JOIN objet AS o2 ON o2.id_personnage_equipeur=personnage.id_personnage;
+        JOIN objet AS o1 ON o1.id_personnage_possede=personnage.id_personnage
+        JOIN objet AS o2 ON o2.id_personnage_equipe=personnage.id_personnage;
 
 --journal de quêtes
 
@@ -38,7 +38,7 @@ CREATE VIEW option_dialogues(dialogue_initiateur,options) AS
 
 --View donnant les coffres et leurs contenu
 
-CREATE VIEW coffres(id_coffre,nom_coffre,objet_contenu)
+CREATE VIEW coffres(id_coffre,nom_coffre,objet_contenu) AS
     SELECT o1.id_objet,o1.nom_objet,o2.nom_objet
     FROM objet AS o1
     JOIN contient ON o1.id_objet=contient.contenant
@@ -46,7 +46,13 @@ CREATE VIEW coffres(id_coffre,nom_coffre,objet_contenu)
 
 --View donnant la carte et la postion de chaque personnage
 
-CREATE VIEW map(nom_perso,coordonnee,map)
-    SELECT nom_personnage,personnage.coordonnee,carte
+CREATE VIEW map(nom_perso,coordonnee,map) AS
+    SELECT nom_personnage,personnage.coordonnee,carte_lieu
     FROM personnage
     JOIN lieu ON personnage.id_lieu=lieu.id_lieu;
+
+--liste de PNJS avec leur localisation
+
+CREATE VIEW pnj(nom,position) AS
+    SELECT nom_personnage,personnage.coordonnee
+    FROM personnage WHERE personnage.id_compte_utilisateur IS NULL;

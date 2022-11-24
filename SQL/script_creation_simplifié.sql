@@ -38,7 +38,7 @@ CREATE TABLE lieu
 CREATE TABLE recompense
 				(
 					id_recompense SERIAL PRIMARY KEY,
-					nom_recompense VARCHAR(255) NOT NULL,
+					nom_recompense VARCHAR(255) NOT NULL UNIQUE,
 					description_recompense VARCHAR(255)
 				);
 
@@ -75,7 +75,7 @@ CREATE TABLE role_interaction
 CREATE TABLE personnage 
 				(
 					id_personnage SERIAL PRIMARY KEY,
-					nom_personnage VARCHAR(255) NOT NULL,
+					nom_personnage VARCHAR(255) NOT NULL UNIQUE,
 					direction CHAR(10) ,
                     xp INT,
                     pv INT,
@@ -108,8 +108,8 @@ CREATE TABLE objet
 					description_objet TEXT,
                     id_personnage_possede INT,
                     id_personnage_equipe INT,
-                    FOREIGN KEY id_personnage_possede REFERENCES personnage(id_personnage),
-                    FOREIGN KEY id_personnage_equipe REFERENCES personnage(id_personnage)
+                    FOREIGN KEY (id_personnage_possede) REFERENCES personnage(id_personnage),
+                    FOREIGN KEY (id_personnage_equipe) REFERENCES personnage(id_personnage)
 				);
 
 
@@ -124,6 +124,15 @@ CREATE TABLE declenche
 					FOREIGN KEY(id_objectif) REFERENCES objectif(id_objectif)
 				);
 
+CREATE TABLE valide 
+				(
+					id_personnage INT,
+					id_objectif INT,
+					validation BOOLEAN NOT NULL,
+					FOREIGN KEY(id_personnage) REFERENCES personnage(id_personnage),
+					FOREIGN KEY(id_objectif) REFERENCES objectif(id_objectif),
+					PRIMARY KEY(id_personnage,id_objectif)
+				);
 
 
 
@@ -173,7 +182,7 @@ CREATE TABLE joue_un_role
 							id_personnage INT,
 							id_interaction INT,
 							code_role_interaction VARCHAR,
-							FOREIGN KEY(id_personnage) REFERENCES personnage(id_personnage),
+							FOREIGN KEY(id_personnage) REFERENCES personnage(id_personnage) CASCADE,
 							FOREIGN KEY(id_interaction) REFERENCES interaction(id_interaction),
 							FOREIGN KEY(code_role_interaction) REFERENCES role_interaction(code_role_interaction),
 							PRIMARY KEY(id_personnage,code_role_interaction,id_interaction)
