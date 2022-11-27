@@ -17,17 +17,21 @@ CREATE TRIGGER mise_a_jour_perso
 CREATE OR REPLACE FUNCTION pos_objet() RETURNS TRIGGER AS $$
 BEGIN
 CASE
-    WHEN OLD.id_personnage_possede IS NULL THEN
+    WHEN OLD.id_personnage_possede IS NULL AND OLD.contenant IS NULL AND NEW.id_personnage_possede IS NOT NULL THEN
         UPDATE objet SET x=NULL,y=NULL WHERE id_personnage_possede=NEW.id_personnage_possede;
+        RETURN NEW;
+    WHEN OLD.id_personnage_possede IS NULL AND OLD.contenant IS NOT NULL AND NEW.id_personnage_possede IS NOT NULL THEN
         UPDATE objet SET contenant=NULL WHERE id_personnage_possede=NEW.id_personnage_possede;
-    WHEN NEW.id_personnage_possede IS NULL THEN
-         UPDATE objet SET x=(SELECT x FROM personnage WHERE id_personnage=OLD.id_personnage_possede),y=(SELECT y FROM personnage WHERE id_personnage=OLD.id_personnage_possede) WHERE NEW.id_personnage_possede IS NULL;
+        RETURN NEW;
+    WHEN NEW.id_personnage_possede IS NULL AND OLD.id_personnage_possede IS NOT NULL THEN
+         UPDATE objet SET x=(SELECT x FROM personnage WHERE id_personnage=OLD.id_personnage_possede),y=(SELECT y FROM personnage WHERE id_personnage=OLD.id_personnage_possede) WHERE id_personnage_possede=OLD.id_personnage_possede;
+         RETURN NEW;
+    ELSE 
+    RETURN NULL;
 END CASE;
-RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER prendep_obj
-    AFTER UPDATE ON objet 
+CREATE OR REPLACE TRIGGER prendep_obj
+    BEFORE UPDATE ON objet 
     FOR EACH ROW EXECUTE PROCEDURE pos_objet();
-    
