@@ -4,7 +4,16 @@ public class Objet {
     private int redu;
     private String emplacement;
 
+    private Point pos;
+
+    private Map lieux;
+
     //getters
+
+
+    public Map getLieux() {
+        return lieux;
+    }
 
     public String getNomObjet(){
         return nomObjet;
@@ -22,7 +31,16 @@ public class Objet {
         return emplacement;
     }
 
+    public Point getPos(){
+        return pos;
+    }
+
     //setters
+
+
+    public void setLieux(Map lieux) {
+        this.lieux = lieux;
+    }
 
     public void setNomObjet(String nomObjet){
         this.nomObjet=nomObjet;
@@ -38,6 +56,10 @@ public class Objet {
 
     public void setEmplacement(String emplacement) {
         this.emplacement=emplacement;
+    }
+
+    public void setPos(Point pos){
+        this.pos=pos;
     }
 
     //methodes

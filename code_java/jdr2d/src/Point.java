@@ -31,4 +31,14 @@ public class Point {
         dist=Math.abs(x-x1)+Math.abs(y-y1);
         return dist;
     }
+
+    public void depl(char dir){
+        switch(dir){
+            case 'E': this.x=this.x+1;
+            case 'N': this.y=this.y+1;
+            case 'O': this.x=this.x-1;
+            case 'S': this.y=this.y-1;
+            default: throw new IllegalArgumentException("Direction invalide!!!, choix possibles : E,N,S,O");
+        }
+    }
 }
