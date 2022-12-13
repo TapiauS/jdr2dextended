@@ -2,7 +2,9 @@ public class Quete {
     private String nomQuete;
     private String descriptionQuete;
     private String[] objectifs;
-    private Boolean[] validations;
+    private boolean[] validations;
+    
+    private Dialogue declencheur;
 
     //getters
 
@@ -19,7 +21,7 @@ public class Quete {
         return objectifs;
     }
 
-    public Boolean[] getValidations() {
+    public boolean[] getValidations() {
         return validations;
     }
 
@@ -38,7 +40,7 @@ public class Quete {
         this.objectifs = objectifs;
     }
 
-    public void setValidations(Boolean[] validations) {
+    public void setValidations(boolean[] validations) {
         if(validations.length==this.objectifs.length) {
             this.validations = validations;
         }

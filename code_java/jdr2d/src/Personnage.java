@@ -69,13 +69,17 @@ public class Personnage {
     public void setQueteValide(Quete[] queteValide){
         for(Quete q :queteValide)
         {
-            Boolean[] v=q.getValidations();
-            for(boolean t:v){
-              t=true;
+            boolean [] v=q.getValidations();
+            boolean [] val=new boolean[v.length];
+            for(int i=0;i<v.length;i++) {
+              val[i]=true;
             }
+            q.setValidations(val);
         }
         this.queteValide=queteValide;
     }
+
+
 
     public void setLieux(Map lieux) {
         this.lieux = lieux;
@@ -129,5 +133,4 @@ public class Personnage {
             return (this.deg-reduopp);
         }
     }
-
 }
