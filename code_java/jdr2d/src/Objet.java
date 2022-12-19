@@ -3,17 +3,11 @@ public class Objet {
     private int deg;
     private int redu;
     private String emplacement;
-
     private Point pos;
 
-    private Map lieux;
 
     //getters
 
-
-    public Map getLieux() {
-        return lieux;
-    }
 
     public String getNomObjet(){
         return nomObjet;
@@ -37,10 +31,6 @@ public class Objet {
 
     //setters
 
-
-    public void setLieux(Map lieux) {
-        this.lieux = lieux;
-    }
 
     public void setNomObjet(String nomObjet){
         this.nomObjet=nomObjet;

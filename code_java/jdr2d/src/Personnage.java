@@ -9,7 +9,7 @@ public class Personnage {
     private Objet[] equipement;
     private Quete[] queteSuivie;
     private Quete[] queteValide;
-    private Map lieux;
+
 
 
     //getters
@@ -23,9 +23,6 @@ public class Personnage {
         return queteValide;
     }
 
-    public Map getLieux() {
-        return lieux;
-    }
 
     public String getNomPersonnage(){
         return nomPersonnage;
@@ -81,10 +78,6 @@ public class Personnage {
 
 
 
-    public void setLieux(Map lieux) {
-        this.lieux = lieux;
-    }
-
     public void setDeg(int deg) {
         this.deg = deg;
     }
@@ -130,7 +123,13 @@ public class Personnage {
             return 1;
         }
         else{
-            return (this.deg-reduopp);
+            return this.deg-reduopp;
         }
     }
+
+
+
+
+
+
 }

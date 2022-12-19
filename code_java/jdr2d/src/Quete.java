@@ -3,7 +3,6 @@ public class Quete {
     private String descriptionQuete;
     private String[] objectifs;
     private boolean[] validations;
-    
     private Dialogue declencheur;
 
     //getters
@@ -39,6 +38,14 @@ public class Quete {
     public void setObjectifs(String[] objectifs) {
         this.objectifs = objectifs;
     }
+
+    public void setDeclencheur(Dialogue declencheur) {
+        this.declencheur = declencheur;
+    }
+
+
+
+    //methodes
 
     public void setValidations(boolean[] validations) {
         if(validations.length==this.objectifs.length) {

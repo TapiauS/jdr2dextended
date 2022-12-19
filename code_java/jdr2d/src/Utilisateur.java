@@ -9,25 +9,21 @@ public class Utilisateur {
         return nomUtilisateur;
     }
 
-    public String getMailUtilisateur()
-    {
+    public String getMailUtilisateur() {
         return mailUtilisateur;
     }
 
-    public boolean getValidation()
-    {
+    public boolean getValidation() {
         return Validation;
     }
 
     // setters
 
-    public void setNomUtilisateur(String nomUtilisateur)
-    {
+    public void setNomUtilisateur(String nomUtilisateur) {
         this.nomUtilisateur=nomUtilisateur;
     }
 
-    public void setMdpUtilisateur(String mdpUtilisateur)
-    {
+    public void setMdpUtilisateur(String mdpUtilisateur) {
         this.mdpUtilisateur=mdpUtilisateur;
     }
 

@@ -2,6 +2,8 @@ public class Point {
     private int x;
     private int y;
 
+    private Map lieux;
+
     //getters
 
     public int getX(){
