@@ -1,12 +1,12 @@
-public class Personnage {
+public class Personnage extends Point{
     private String nomPersonnage;
     private int deg;
     private int pV;
     private int pvmax;
     private String race;
-    private Point pos;
-    private Objet[] inventaire;
-    private Objet[] equipement;
+    private Coffre inventaire;
+    private Arme[] armes;
+    private Armure [] armure;
     private Quete[] queteSuivie;
     private Quete[] queteValide;
 
@@ -44,26 +44,27 @@ public class Personnage {
         return race;
     }
 
-    public Point getPos(){
-        return pos;
-    }
-
-    public Objet[] getInventaire(){
+    public Coffre getInventaire(){
         return inventaire;
     }
 
-    public Objet[] getEquipement(){
-        return equipement;
+    public Arme[] getArme(){
+        return armes;
+    }
+
+    public Armure[] getArmure() {
+        return armure;
     }
 
     //setters
 
 
-    public void setQueteSuivie(Quete[] queteSuivie) {
+    public Personnage setQueteSuivie(Quete[] queteSuivie) {
         this.queteSuivie = queteSuivie;
+        return this;
     }
 
-    public void setQueteValide(Quete[] queteValide){
+    public Personnage setQueteValide(Quete[] queteValide){
         for(Quete q :queteValide)
         {
             boolean [] v=q.getValidations();
@@ -74,50 +75,93 @@ public class Personnage {
             q.setValidations(val);
         }
         this.queteValide=queteValide;
+        return this;
     }
 
 
 
-    public void setDeg(int deg) {
+    public Personnage setDeg(int deg) {
         this.deg = deg;
+        return this;
     }
 
-    public void setEquipement(Objet[] equipement) {
-        this.equipement = equipement;
+    public Personnage setArmes(Arme[] armes) {
+        this.armes = armes;
+        return this;
     }
 
-    public void setPos(Point pos) {
-        this.pos = pos;
-    }
 
-    public void setRace(String race) {
+
+
+    public Personnage setRace(String race) {
         this.race = race;
+        return this;
     }
 
-    public void setpV(int pV) {
+    public Personnage setpV(int pV) {
         this.pV = pV;
+        return this;
     }
 
-    public void setPvmax(int pvmax) {
+    public Personnage setPvmax(int pvmax) {
         this.pvmax = pvmax;
+        return this;
     }
 
-    public void setNomPersonnage(String nomPersonnage) {
+    public Personnage setNomPersonnage(String nomPersonnage) {
         this.nomPersonnage = nomPersonnage;
+        return this;
     }
 
-    public void setInventaire(Objet[] inventaire) {
+    public Personnage setInventaire(Coffre inventaire) {
         this.inventaire = inventaire;
+        return this;
     }
+
+    public Personnage setArmure(Armure[] armure) {
+        this.armure = armure;
+        return this;
+    }
+
+    //Builders
+
+    public Personnage(){
+        super();
+        this.setArmes(new Arme[] {new Arme()})
+                .setArmure(new Armure[] {new Armure()})
+                .setDeg(0)
+                .setNomPersonnage("tki")
+                .setpV(1)
+                .setInventaire(null)
+                .setPvmax(1)
+                .setQueteSuivie(null)
+                .setQueteValide(new Quete[]{new Quete()})
+                .setRace(null);
+    }
+
+    public Personnage(int x, int y, Map lieux, Arme[] arme,Armure[] armure,int deg,String nomPersonnage,int pV,Coffre inventaire,int pVmax,Quete[] quetesuivie,Quete[] queteValide,String race){
+        super(x,y,lieux);
+        this.setArmes(arme)
+                .setArmure(armure)
+                .setDeg(deg)
+                .setNomPersonnage(nomPersonnage)
+                .setpV(pV)
+                .setInventaire(inventaire)
+                .setPvmax(pVmax)
+                .setQueteSuivie(quetesuivie)
+                .setQueteValide(queteValide)
+                .setRace(race);
+    }
+
 
     //methodes
 
     public int bagarre(Personnage opposant){
         int reduopp=0;
-        Objet[] equipopp;
-        equipopp=opposant.getEquipement();
-        for (Objet o:equipopp){
-            reduopp=o.getRedu()+reduopp;
+        Armure[] equipopp;
+        equipopp=opposant.getArmure();
+        for (Armure a:equipopp){
+            reduopp=a.getReduDeg()+reduopp;
         }
         if(this.deg-reduopp<=0){
             return 1;

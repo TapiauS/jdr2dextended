@@ -1,10 +1,6 @@
-public class Objet {
-    private String nomObjet;
-    private int deg;
-    private int redu;
-    private String emplacement;
-    private Point pos;
-
+public class Objet extends Point{
+    protected String nomObjet;
+    protected int Poid;
 
     //getters
 
@@ -13,47 +9,36 @@ public class Objet {
         return nomObjet;
     }
 
-    public int getDeg(){
-        return deg;
-    }
-
-    public int getRedu(){
-        return redu;
-    }
-
-    public String getEmplacement(){
-        return emplacement;
-    }
-
-    public Point getPos(){
-        return pos;
+    public int getPoid() {
+        return Poid;
     }
 
     //setters
 
-
-    public void setNomObjet(String nomObjet){
+    public Objet setNomObjet(String nomObjet){
         this.nomObjet=nomObjet;
+        return this;
     }
 
-    public void setDeg(int deg){
-        this.deg=deg;
+    public Objet setPoid(int poid) {
+        Poid = poid;
+        return this;
     }
 
-    public void setRedu(int redu) {
-        this.redu=redu;
+    //builder
+
+    public Objet(){
+        super();
+        this.setNomObjet("neant").setPoid(1);
     }
 
-    public void setEmplacement(String emplacement) {
-        this.emplacement=emplacement;
+    public Objet(int x,int y,Map lieux,String nomObjet,int poid){
+        super(x,y,lieux);
+        this.setPoid(poid).setNomObjet(nomObjet);
     }
 
-    public void setPos(Point pos){
-        this.pos=pos;
-    }
 
     //methodes
-
 
 
 

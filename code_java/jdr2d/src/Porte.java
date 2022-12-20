@@ -1,41 +1,34 @@
 public class Porte {
-    private Porte[] porteArriv;
-
-    private Porte[] porteSortie;
-
-    private boolean entree;
+    private Porte portelie;
 
     private Point pos;
 
     //getters
 
 
-    public Porte[] getPorteArriv() {
-        return porteArriv;
-    }
-
-    public Porte[] getPorteSortie() {
-        return porteSortie;
+    public Porte getPortelie() {
+        return portelie;
     }
 
     public Point getPos() {
         return pos;
     }
 
-    public boolean isentree(){
-        return entree;
-    }
+
+
+
 
     //setters
 
 
-    public void setPos(Point pos) {
+    public Porte setPos(Point pos) {
         this.pos = pos;
+        return this;
     }
 
-    public void setEntree(boolean entree) {
-        this.entree = entree;
+    public Porte setPortelie(Porte portelie) {
+        this.portelie = portelie;
+        return this;
     }
-
 
 }

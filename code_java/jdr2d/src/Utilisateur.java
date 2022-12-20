@@ -19,20 +19,24 @@ public class Utilisateur {
 
     // setters
 
-    public void setNomUtilisateur(String nomUtilisateur) {
+    public Utilisateur setNomUtilisateur(String nomUtilisateur) {
         this.nomUtilisateur=nomUtilisateur;
+        return this;
     }
 
-    public void setMdpUtilisateur(String mdpUtilisateur) {
+    public Utilisateur setMdpUtilisateur(String mdpUtilisateur) {
         this.mdpUtilisateur=mdpUtilisateur;
+        return this;
     }
 
-    public void setmailUtilisateur(String mailUtilisateur){
+    public Utilisateur setmailUtilisateur(String mailUtilisateur){
         this.mailUtilisateur=mailUtilisateur;
+        return this;
     }
 
-    public void setValidation(boolean Validation){
+    public Utilisateur setValidation(boolean Validation){
         this.Validation=Validation;
+        return this;
     }
 
     //methodes
@@ -42,5 +46,19 @@ public class Utilisateur {
             return true;
         }
         return false;
+    }
+
+    public Utilisateur(){
+        this.setmailUtilisateur("");
+        this.setMdpUtilisateur("");
+        this.setNomUtilisateur("");
+        this.setValidation(false);
+    }
+
+    public Utilisateur(String mailUtilisateur,String mdpUtilisateur,String nomUtilisateur,Boolean validation){
+        this.setmailUtilisateur(mailUtilisateur);
+        this.setValidation(validation);
+        this.setNomUtilisateur(nomUtilisateur);
+        this.setMdpUtilisateur(mailUtilisateur);
     }
 }
