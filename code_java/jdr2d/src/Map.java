@@ -1,7 +1,9 @@
 public class Map {
     private String nomLieu ;
-    private char[][] carte=new char[this.getDimensions()[0]][this.getDimensions()[1]];
-    private int[] dimensions=new int[2];
+    private char[][] carte;
+    private int[] dimensions;
+
+    protected Point position;
 
     //getters
 
@@ -14,14 +16,21 @@ public class Map {
     }
 
     public int[] getDimensions(){
-        return dimensions;
+        return this.dimensions;
+    }
+
+    public Point getPosition() {
+        return position;
     }
 
     //setters
 
     public Map setCarte(char[][] carte) {
-        this.carte = carte;
-        return this;
+        if(carte.length==dimensions[0] && carte[0].length==dimensions[1]) {
+            this.carte = carte;
+            return this;
+        }
+    else throw new IllegalArgumentException("Une carte ne peut pas dépasser ses dimensions");
     }
 
     public Map setNomLieu(String nomLieu) {
@@ -34,14 +43,23 @@ public class Map {
         return this;
     }
 
+    public Map setPosition(Point p){
+        this.position=p;
+        return this;
+    }
+
     //constructeurs
 
     public Map(){
-        this.setDimensions(new int[]{1, 1}).setCarte(new char[][]{{'#'}}).setNomLieu("neant");
+        this.setDimensions(new int[]{1, 1}).setCarte(new char[][]{{'#'}}).setNomLieu("neant").setPosition(null);
     }
 
     public Map(int[] dimensions,char[][] carte,String nomLieu){
-        this.setDimensions(dimensions).setCarte(carte).setNomLieu(nomLieu);
+        this.setDimensions(dimensions).setCarte(carte).setNomLieu(nomLieu).setPosition(null);
+    }
+
+    public Map(int[] dimensions,char[][] carte,String nomLieu,Point p){
+        this.setDimensions(dimensions).setCarte(carte).setNomLieu(nomLieu).setPosition(p);
     }
 
 }

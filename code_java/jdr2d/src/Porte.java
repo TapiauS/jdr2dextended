@@ -1,7 +1,5 @@
-public class Porte {
+public class Porte extends Point{
     private Porte portelie;
-
-    private Point pos;
 
     //getters
 
@@ -10,21 +8,9 @@ public class Porte {
         return portelie;
     }
 
-    public Point getPos() {
-        return pos;
-    }
-
-
-
-
 
     //setters
 
-
-    public Porte setPos(Point pos) {
-        this.pos = pos;
-        return this;
-    }
 
     public Porte setPortelie(Porte portelie) {
         this.portelie = portelie;

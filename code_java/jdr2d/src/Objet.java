@@ -32,6 +32,10 @@ public class Objet extends Point{
         this.setNomObjet("neant").setPoid(1);
     }
 
+    public Objet(String nomObjet,int poid){
+        this.setPoid(poid).setNomObjet(nomObjet);
+    }
+
     public Objet(int x,int y,Map lieux,String nomObjet,int poid){
         super(x,y,lieux);
         this.setPoid(poid).setNomObjet(nomObjet);

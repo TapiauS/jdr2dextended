@@ -20,6 +20,11 @@ public class Armure extends  Objet{
         super();
         this.setReduDeg(0);
     }
+    public Armure(String nomObjet,int poid,int reduDeg){
+        super(nomObjet,poid);
+        this.setReduDeg(reduDeg);
+    }
+
 
     public Armure(int x,int y,Map lieux,String nomObjet,int poid,int reduDeg){
         super(x,y,lieux,nomObjet,poid);
