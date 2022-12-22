@@ -3,11 +3,9 @@ public class Porte extends Point{
 
     //getters
 
-
     public Porte getPortelie() {
         return portelie;
     }
-
 
     //setters
 

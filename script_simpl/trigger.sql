@@ -46,21 +46,25 @@ BEGIN
 
 CASE 
     WHEN OLD.id_personnage_possede IS NULL AND NEW.id_personnage_possede IS NOT NULL THEN
+        NEW.x = NULL ;
+        NEW.y = NULL ;
+        NEW.contenant=NULL;
+        RETURN NEW ;
+        /*
         UPDATE objet SET x=NULL,y=NULL WHERE id_personnage_possede=NEW.id_personnage_possede;
         UPDATE objet SET contenant=NULL WHERE id_personnage_possede=NEW.id_personnage_possede;
-
-
+        */
         -- a partir d'ici ca ne fonctionne pas , au dessus si !
-
     WHEN OLD.id_personnage_possede IS NOT NULL AND NEW.id_personnage_possede IS NULL THEN
+
         SELECT x FROM personnage WHERE id_personnage=OLD.id_personnage_possede INTO xt;
         SELECT y FROM personnage WHERE id_personnage=OLD.id_personnage_possede INTO yt;
-        -- UPDATE objet SET x=xt,y=yt WHERE OLD.id_personnage_possede IS NOT NULL AND NEW.id_personnage_possede IS NULL;
         SELECT id_objet FROM objet WHERE OLD.id_personnage_possede IS NOT NULL AND NEW.id_personnage_possede IS NULL INTO x0;
-        UPDATE objet SET x=xt,y=yt WHERE id_objet=x0;
-        RAISE NOTICE 'x= %',xt ;
-        RAISE NOTICE 'y= %',yt ;
-        RAISE NOTICE 'x0= %',x0 ;
+        NEW.x=xt,NEW.y=yt WHERE id_objet=x0;
+        RETURN NEW;
+        -- RAISE NOTICE 'x= %',xt ;
+        -- RAISE NOTICE 'y= %',yt ;
+        -- RAISE NOTICE 'x0= %',x0 ;
         -- RETURN NEW;
 ELSE
     RETURN NULL;
@@ -70,10 +74,28 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE TRIGGER prendep_obj
-    AFTER UPDATE ON objet 
+    BEFORE UPDATE ON objet 
     FOR EACH ROW EXECUTE PROCEDURE pos_objet();
 
 
+--trigger pour la gestion de la mort d'un personnage joueur
+
+CREATE OR REPLACE FUNCTION mort() RETURNS TRIGGER AS $$
+BEGIN
+IF NEW.pv=0 AND id_compte_utilisateur IS NOT NULL THEN
+    SELECT pg_sleep(10);
+    NEW.x=0;
+    NEW.y=0;
+    RETURN NEW;
+ELSE
+    RETURN NEW;
+END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER gestion_deces
+    AFTER UPDATE ON personnage
+    FOR EACH ROW EXECUTE PROCEDURE mort();
 
 
 

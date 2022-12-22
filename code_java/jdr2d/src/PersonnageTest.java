@@ -1,15 +1,14 @@
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class PersonnageTest {
     private Armure gantelet=new Armure("Gantelet",1,2);
     private Armure plastron=new Armure("Plastron",3,7);
 
-    private Arme epee=new Arme("Epée",2,8);
-    private Personnage joueur=new Personnage(new ArrayList<Arme>(List.of(epee)),new ArrayList<Armure>(List.of(new Armure("peau",0,0))),"Virgile",10,null,10,null,null,"Humain");
-    private Personnage adversaire=new Personnage(new ArrayList<Arme>(List.of(epee,epee)),new ArrayList<Armure>(List.of(plastron,gantelet)),"Virgile",10,null,10,null,null,"Humain");
+    private Arme epee=new Arme("Epée",2,8,1);
+    private Personnage joueur=new Personnage(new ArrayList<Arme>(List.of(epee)),new ArrayList<Armure>(List.of(new Armure("peau",0,0))),"Virgile",10,null,10,null,null,null);
+    private Personnage adversaire=new Personnage(new ArrayList<Arme>(List.of(epee,epee)),new ArrayList<Armure>(List.of(plastron,gantelet)),"Virgile",10,null,10,null,null,null);
     @org.junit.jupiter.api.Test
     void getQueteSuivie() {
     }
