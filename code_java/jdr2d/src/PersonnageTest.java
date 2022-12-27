@@ -3,11 +3,11 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PersonnageTest {
-    private Armure gantelet=new Armure("Gantelet",1,2);
-    private Armure plastron=new Armure("Plastron",3,7);
+    private Armure gantelet=new Armure("Gantelet",1,1,2,"Torse");
+    private Armure plastron=new Armure("Plastron",3,0,7,"Gant");
 
-    private Arme epee=new Arme("Epée",2,8,1);
-    private Personnage joueur=new Personnage(new ArrayList<Arme>(List.of(epee)),new ArrayList<Armure>(List.of(new Armure("peau",0,0))),"Virgile",10,null,10,null,null,null);
+    private Arme epee=new Arme("Epée",2,8,2,1);
+    private Personnage joueur=new Personnage(new ArrayList<Arme>(List.of(epee,epee)),new ArrayList<Armure>(List.of(gantelet)),"Virgile",10,null,10,null,null,null);
     private Personnage adversaire=new Personnage(new ArrayList<Arme>(List.of(epee,epee)),new ArrayList<Armure>(List.of(plastron,gantelet)),"Virgile",10,null,10,null,null,null);
     @org.junit.jupiter.api.Test
     void getQueteSuivie() {
@@ -91,6 +91,7 @@ class PersonnageTest {
 
     @org.junit.jupiter.api.Test
     void bagarre() {
-        assertEquals(1,joueur.bagarre(adversaire));
+        System.out.println("La reduction de dégat d'une épée est :"+epee.getRedudeg());
+        assertEquals(15,adversaire.bagarre(joueur));
     }
 }

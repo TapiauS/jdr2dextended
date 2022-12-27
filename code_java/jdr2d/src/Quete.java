@@ -1,10 +1,8 @@
 public class Quete {
-    private String nomQuete;
-    private String descriptionQuete;
-    private String[] objectifs;
-    private boolean[] validations;
-    private Echange declencheur;
-
+    protected String nomQuete;
+    protected String descriptionQuete;
+    protected Objectifs[] objectifs;
+    protected Echange declencheur;
     protected Objet[] recompenses;
 
     //getters
@@ -18,13 +16,10 @@ public class Quete {
         return descriptionQuete;
     }
 
-    public String[] getObjectifs() {
+    public Objectifs[] getObjectifs() {
         return objectifs;
     }
 
-    public boolean[] getValidations() {
-        return validations;
-    }
 
     public Echange getDeclencheur() {
         return declencheur;
@@ -47,7 +42,7 @@ public class Quete {
         return this;
     }
 
-    public Quete setObjectifs(String[] objectifs) {
+    public Quete setObjectifs(Objectifs[] objectifs) {
         this.objectifs = objectifs;
         return this;
     }
@@ -55,16 +50,6 @@ public class Quete {
     public Quete setDeclencheur(Echange declencheur) {
         this.declencheur = declencheur;
         return this;
-    }
-
-    public Quete setValidations(boolean[] validations) {
-        if(validations.length==this.objectifs.length) {
-            this.validations = validations;
-            return this;
-        }
-        else{
-            throw new IllegalArgumentException("Il doit y avoir autant de validations que d'objectifs !");
-        }
     }
 
     public Quete setRecompenses(Objet[] recompenses) {
@@ -82,17 +67,15 @@ public class Quete {
     public Quete(){
         this.setNomQuete("r")
                 .setDescriptionQuete("r")
-                .setObjectifs(new String[]{"r"})
-                .setValidations(new boolean[]{false})
+                .setObjectifs(new Objectifs[] {new ObjectifT()})
                 .setDeclencheur(new Echange())
                 .setRecompenses(new Objet[]{new Objet()});
 
     }
 
-    public Quete(String nomQuete,String descriptionQuete,String[] objectifs,Echange declencheur,boolean[] validations,Objet[] recompense){
+    public Quete(String nomQuete,String descriptionQuete,Objectifs[] objectifs,Echange declencheur,Objet[] recompense){
         this.setNomQuete(nomQuete)
                 .setDescriptionQuete(descriptionQuete)
-                .setValidations(validations)
                 .setObjectifs(objectifs)
                 .setDeclencheur(declencheur)
                 .setRecompenses(recompense);

@@ -8,13 +8,23 @@ public class Coffre extends Objet{
         return contenu;
     }
 
+
+    //setters
+
+    public Coffre setContenu(ArrayList<Objet> contenu){
+        this.contenu=contenu;
+        return this;
+    }
+
     //methodes
 
     public Coffre(){
+        super();
         this.contenu=new ArrayList<Objet>();
     }
 
     public Coffre(Objet o){
+        super();
         this.contenu = new ArrayList<Objet>();
         this.add(o);
     }
@@ -23,6 +33,7 @@ public class Coffre extends Objet{
         this.contenu.add(o);
         return this ;
     }
+
     public Coffre remove(Objet o){
         this.contenu.remove(o);
         return this;

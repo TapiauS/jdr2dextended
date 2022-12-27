@@ -75,7 +75,7 @@ public class Personnage extends Point{
 
     public Personnage setQueteValide(ArrayList<Quete> queteValide){
         if (queteValide!=null){
-        for(Quete q :queteValide)
+        /*for(Quete q :queteValide)
         {
             boolean [] v=q.getValidations();
             boolean [] val=new boolean[v.length];
@@ -83,7 +83,7 @@ public class Personnage extends Point{
               val[i]=true;
             }
             q.setValidations(val);
-        }
+        }*/
         this.queteValide=queteValide;
         return this;
         }
@@ -151,13 +151,13 @@ public class Personnage extends Point{
     }
 
     public Personnage addvQuete(Quete quetev){
-        this.removesQuete(quetev);
+        /*this.removesQuete(quetev);
         boolean [] v=quetev.getValidations();
         boolean [] val=new boolean[v.length];
         for(int i=0;i<v.length;i++) {
             val[i]=true;
         }
-        quetev.setValidations(val);
+        quetev.setValidations(val);*/
         this.queteValide.add(quetev);
         return this;
     }
@@ -176,16 +176,30 @@ public class Personnage extends Point{
         }
         if(compteurmain==2){
             if(arme.getNbrmain()==2){
-                this.setArmes(new ArrayList<>(List.of(new Arme("Poing",0,0,0))));
+                for (Arme a:this.getArme()) {
+                    if(a.nbrmain!=0){
+                        this.removeArme(a);
+                        this.inventaire.add(a);
+                    }
+                }
+                this.setArmes(new ArrayList<>(List.of(new Arme("Poing",0,0,0,0))));
                 this.armes.add(arme);
             }
             else{
-                this.armes.remove(0);
+                Arme a=this.armes.get(2);
+                this.armes.remove(2);
                 this.armes.add(arme);
+                this.setInventaire(this.getInventaire().add(a));
             }
         } else if (compteurmain==1 || compteurmain==0) {
             if(arme.getNbrmain()==2){
-                this.setArmes(new ArrayList<>(List.of(new Arme("Poing",0,0,0))));
+                for (Arme a:this.getArme()) {
+                    if(a.nbrmain!=0){
+                        this.removeArme(a);
+                        this.inventaire.add(a);
+                    }
+                }
+                this.setArmes(new ArrayList<>(List.of(new Arme("Poing",0,0,0,0))));
                 this.armes.add(arme);
             }
             else{
@@ -198,6 +212,7 @@ public class Personnage extends Point{
 
     public Personnage removeArme(Arme arme){
         this.armes.remove(arme);
+        this.inventaire.add(arme);
         return this;
     }
 
@@ -223,6 +238,7 @@ public class Personnage extends Point{
 
     public Personnage removArmure(Armure armure){
         this.armure.remove(armure);
+        this.inventaire.add(armure);
         return this;
     }
 
@@ -245,8 +261,8 @@ public class Personnage extends Point{
 
     public Personnage(){
         super();
-        ArrayList<Arme> armedefault=new ArrayList<>(List.of(new Arme("Poing",0,0,0)));
-        ArrayList<Armure> armuredefault=new ArrayList<Armure>(List.of(new Armure("Peau",0,0)));
+        ArrayList<Arme> armedefault=new ArrayList<>(List.of(new Arme("Poing",0,0,0,0)));
+        ArrayList<Armure> armuredefault=new ArrayList<Armure>(List.of(new Armure("Peau",0,0,0)));
         this.setArmes(armedefault)
                 .setArmure(armuredefault)
                 .setNomPersonnage("tki")
@@ -272,7 +288,7 @@ public class Personnage extends Point{
                 .setQueteValide(queteValide)
                 .setRace(race)
                 .setdateFin(new ArrayList<LocalDateTime>())
-                .setEffetpotion(new ArrayList<Potion>(List.of(new Potion("Systeme digestif",0, new int[]{0, 0, 0, 0} , Duration.of(1000, ChronoUnit.YEARS)))));
+                .setEffetpotion(new ArrayList<Potion>(List.of(new Potion("Systeme digestif",0, new int[]{0, 0, 0, 0} , Duration.of(10000000, ChronoUnit.HOURS)))));
     }
 
     public Personnage( ArrayList<Arme> arme,ArrayList<Armure> armure,String nomPersonnage,int pV,Coffre inventaire,int pVmax,ArrayList<Quete>  quetesuivie,ArrayList<Quete>  queteValide,Race race)
@@ -298,15 +314,18 @@ public class Personnage extends Point{
         int reduopp=0;
         ArrayList<Armure> equipopp;
         int deg=0;
-        for (Armure a:opposant.getArmure()){
-            for(Potion p:opposant.getEffetpotion()) {
-                reduopp = a.getReduDeg() + reduopp + p.getEffets()[1];
-            }
+        //il faudra revenir sur les potions
+        for (Armure a:opposant.getArmure()) {
+            reduopp = a.getRedudeg()+ reduopp;
         }
-        for (Arme a: this.getArme()){
-            for(Potion p:this.getEffetpotion()) {
-                deg = deg + a.getDegat() + p.getEffets()[0];
-            }
+        for (Armure ap : this.getArmure()) {
+            deg =  ap.getDeg() + deg;
+        }
+        for (Arme ar : opposant.getArme()) {
+            reduopp = ar.getRedudeg() + reduopp;
+        }
+        for(Arme arp:this.getArme()) {
+            deg = arp.getDeg() + deg;
         }
         if(deg-reduopp<=0){
             return 1;
