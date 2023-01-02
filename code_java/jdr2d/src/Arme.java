@@ -3,7 +3,6 @@ public class Arme extends Equipement{
 
     //getters
 
-
     public int getNbrmain(){return nbrmain;}
 
     //setters

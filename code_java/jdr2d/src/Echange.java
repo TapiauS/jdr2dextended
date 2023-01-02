@@ -1,8 +1,12 @@
-public class Echange extends Interaction{
-    private String question;
-    private String reponse;
-    private Echange[] dialogueSuivant;
-    private boolean quete;
+public class Echange {
+
+    protected PNJ parleur;
+    protected String question;
+    protected String reponse;
+    protected Echange[] dialogueSuivant;
+
+    protected boolean donnequete;
+    protected Quete quete;
 
     //getters
 
@@ -17,6 +21,14 @@ public class Echange extends Interaction{
     }
 
     public boolean isQuete() {
+        return donnequete;
+    }
+
+    public PNJ getParleur() {
+        return parleur;
+    }
+
+    public Quete getQuete() {
         return quete;
     }
 
@@ -27,48 +39,71 @@ public class Echange extends Interaction{
         return this;
     }
 
-    public Echange setQuete(boolean quete) {
-        this.quete = quete;
+    public Echange setdonneQuete(boolean donnequete) {
+        this.donnequete = donnequete;
         return this;
     }
-
-    public Echange setDialogueSuivant(Echange[] dialogueSuivant) {
-        int compteur = 0;
-        for (Echange e : dialogueSuivant) {
-            if (e.getJoueur() == this.getJoueur() && e.getOpposant() == this.getOpposant()) {
-                compteur = compteur + 1;
-            }
-        }
-            if(compteur==dialogueSuivant.length) {
-                this.dialogueSuivant = dialogueSuivant;
-                return this;
-            }
-            else throw new IllegalArgumentException("Les dialogues suivants sont forcement entre les mêmes personnages");
-        }
-
 
     public Echange setReponse(String reponse) {
         this.reponse = reponse;
         return this;
     }
 
+    public Echange setParleur(PNJ parleur){
+        this.parleur=parleur;
+        return this;
+    }
+
+    public Echange setDialogueSuivant(Echange[] dialogueSuivant){
+        this.dialogueSuivant=dialogueSuivant;
+        return this;
+    }
+
+    public Echange setQuete(Quete quete) {
+        if(this.isQuete()) {
+            this.quete = quete;
+            return this;
+        }
+        else {
+            System.err.println("Ce dialogue ne donne pas de quete");
+            return this;
+        }
+    }
+
     //builders
 
     public Echange(){
-        super();
         Echange echansuiv = null;
-        echansuiv.setquestion(null);
-        echansuiv.setReponse(null);
-        echansuiv.setJoueur(this.getJoueur());
-        echansuiv.setOpposant(this.getOpposant());
         this.setquestion("Bonjour").setReponse("Bonjour").setDialogueSuivant(new Echange[]{echansuiv});
     }
 
-    public Echange(Personnage joueur,Personnage opposant,String question,String reponse,Echange[] dialogueSuivant){
-        super(joueur,opposant);
+    public Echange(PNJ parleur,String question,String reponse,Echange[] dialogueSuivant){
         this.setquestion(question)
                 .setReponse(reponse)
-                .setDialogueSuivant(dialogueSuivant);
+                .setDialogueSuivant(dialogueSuivant)
+                .setParleur(parleur);
+    }
+
+    public Echange(PNJ parleur,String question,String reponse,Echange[] dialogueSuivant,boolean donnequete,Quete quete){
+        this.setquestion(question)
+                .setReponse(reponse)
+                .setDialogueSuivant(dialogueSuivant)
+                .setdonneQuete(donnequete)
+                .setQuete(quete)
+                .setParleur(parleur);
+    }
+
+    //fonctions
+
+    public void dialogue(){
+        int i=0;
+        if(this.getDialogueSuivant()!=null) {
+            for (Echange e : this.getDialogueSuivant()) {
+                System.out.println(i + ": " + e.getQuestion());
+                i++;
+            }
+        }
+        else {System.out.println("Fin de la conversation");}
     }
 
 }

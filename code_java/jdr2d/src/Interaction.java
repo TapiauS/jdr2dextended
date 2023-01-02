@@ -2,7 +2,12 @@ import java.util.concurrent.TimeUnit;
 
 public class Interaction {
     protected Personnage joueur;
-    protected Personnage opposant;
+    protected PNJ opposant;
+
+    protected Echange dialogue;
+
+    protected boolean agressif;
+
 
     //getters
 
@@ -15,6 +20,12 @@ public class Interaction {
         return opposant;
     }
 
+    public Echange getDialogue(){return dialogue;}
+
+    public boolean getAgressif() {
+        return agressif;
+    }
+
     //setters
 
 
@@ -23,8 +34,21 @@ public class Interaction {
         return this;
     }
 
-    public Interaction setOpposant(Personnage opposant){
+    public Interaction setOpposant(PNJ opposant){
         this.opposant=opposant;
+        return this;
+    }
+
+    public Interaction setDialogue(Echange dialogue) {
+        if(dialogue.getQuestion()==null) {
+            this.dialogue = dialogue;
+            return this;
+        }
+        else throw new IllegalArgumentException("On doit avoir un dialogue de début de conversation");
+    }
+
+    public Interaction setAgressif(boolean agressif) {
+        this.agressif = agressif;
         return this;
     }
 
@@ -35,9 +59,16 @@ public class Interaction {
         this.setOpposant(null);
     }
 
-    public Interaction(Personnage joueur,Personnage opposant){
+    public Interaction(Personnage joueur,PNJ opposant) {
         this.setJoueur(joueur)
-            .setOpposant(opposant);
+                .setOpposant(opposant);
+    }
+
+    public Interaction(Personnage joueur,PNJ opposant,Echange dialogue,boolean agressif){
+        this.setJoueur(joueur)
+            .setOpposant(opposant)
+                .setDialogue(dialogue)
+                .setAgressif(agressif);
     }
 
     //methode

@@ -1,3 +1,5 @@
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -5,6 +7,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        //declaration de la map de test et tout ses protagonistes
         char[][] labytest=new char[][] {{'J',' ',' ',' ',' '},{' ',' ',' ',' ',' '},{' ',' ',' ',' ',' '},{' ',' ',' ',' ',' '},{'C',' ',' ',' ','E'}};
         Map maptest=new Map(new int[] {5,5},labytest,"Arcanum");
         Coffre coftest=new Coffre();
@@ -14,6 +17,7 @@ public class Main {
         ArrayList<Arme> armevampire=new ArrayList<>(List.of(new Arme("Griffe Vampirique",0,10,0,0)));
         ArrayList<Armure> armuredefault=new ArrayList<Armure>(List.of(new Armure("Peau",0,0,0)));
         ArrayList<Armure> armurevampire=new ArrayList<Armure>(List.of(new Armure("Peau Vampirique",0,0,4)));
+        PNJ jeanluc=new PNJ(1,0,maptest,armedefault,armuredefault,"Jean Luc le rouge",5,new Coffre(),5,null,null,new Race("Humain",null),null,true);
         PNJ jeanma=new PNJ(4,4,maptest,armevampire,armurevampire,"Jean Marie Le PNJ",30,new Coffre(),30,null,null,new Race("Vampire",null),null,true);
         Personnage joueur=new Personnage(0,0,maptest,armedefault,armuredefault,"Donatien",30,new Coffre(),30,null,null,new Race("Humain",null));
         coftest.setLieux(maptest).setX(0).setY(4);
@@ -21,7 +25,13 @@ public class Main {
         Scanner scanner=new Scanner(System.in);
         String input="Rien";
         Input gameloop = new Input();
-        
+        Echange dialognegatif=new Echange(jeanluc,"C'est non !","A 600 000 voix prés !!",null,false,null);
+        Echange dialogueconcl=new Echange(jeanluc,"C'est bien normal","Merci beaucoup, tu pourra trouver de l'équipement au sud",null,false,null);
+        Echange dialoguepos=new Echange(jeanluc,"Oui bien sur","Enfin un brave prés a lutter contre cette peste vampirique",new Echange[] {dialogueconcl},false,null);
+        Echange dialogueintro=new Echange(jeanluc,null,"Bonjour voulez vous m'aidez à purger ce lieux ?",new Echange[] {dialognegatif,dialoguepos},false,null);
+        Echange []  listedialogue=new Echange[] {dialognegatif,dialogueintro,dialoguepos,dialogueconcl};
+        Potion ptest=new Potion("Potion de Force",1,new int[] {5,0,0,0}, Duration.of(15, ChronoUnit.SECONDS));
+        joueur.setInventaire(joueur.getInventaire().add(ptest));
         System.out.println("Vous devez tuer Jean Marie le PNJ, attention il vous faudra peut être vous équiper");
         
         while(!Objects.equals(input, "Quit") && jeanma.getpV()>0 && joueur.getpV()>0){
@@ -33,7 +43,7 @@ public class Main {
             }
             System.out.println("Tapez une commande pour votre personnage, tapez \"Help\" pour la liste des commandes");
             input=scanner.next();
-            gameloop.playerinput(input,joueur,new PNJ[] {jeanma},new Coffre[] {coftest});
+            gameloop.playerinput(input,joueur,new PNJ[] {jeanma,jeanluc},new Coffre[] {coftest},listedialogue);
             if(jeanma.getpV()<=0){
                 System.out.println("Felicitation pour votre victoire");
             } else if (joueur.getpV()<=0) {

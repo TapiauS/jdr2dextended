@@ -98,7 +98,12 @@ public class Personnage extends Point{
     }
 
     public Personnage setpV(int pV) {
-        this.pV = pV;
+        if(pV>=this.getpVmax()){
+            this.pV=pvmax;
+        }
+        else {
+            this.pV = pV;
+        }
         return this;
     }
 
@@ -136,7 +141,7 @@ public class Personnage extends Point{
         int i=this.effetpotion.indexOf(p);
         this.effetpotion.remove(p);
         this.setPvmax(this.getpVmax()-p.getEffets()[3]);
-        this.datefin.remove(i);
+        this.datefin.remove(i-1);
         return this;
     }
 
@@ -157,7 +162,7 @@ public class Personnage extends Point{
         for(int i=0;i<v.length;i++) {
             val[i]=true;
         }
-        quetev.setValidations(val);*/
+        quetev.setValidations(val);/**/
         this.queteValide.add(quetev);
         return this;
     }
@@ -266,9 +271,9 @@ public class Personnage extends Point{
         this.setArmes(armedefault)
                 .setArmure(armuredefault)
                 .setNomPersonnage("tki")
+                .setPvmax(1)
                 .setpV(1)
                 .setInventaire(null)
-                .setPvmax(1)
                 .setQueteSuivie(null)
                 .setQueteValide(null)
                 .setRace(null)
@@ -281,9 +286,9 @@ public class Personnage extends Point{
         this.setArmes(arme)
                 .setArmure(armure)
                 .setNomPersonnage(nomPersonnage)
+                .setPvmax(pVmax)
                 .setpV(pV)
                 .setInventaire(inventaire)
-                .setPvmax(pVmax)
                 .setQueteSuivie(quetesuivie)
                 .setQueteValide(queteValide)
                 .setRace(race)
@@ -296,9 +301,9 @@ public class Personnage extends Point{
         this.setArmes(arme)
                 .setArmure(armure)
                 .setNomPersonnage(nomPersonnage)
+                .setPvmax(pVmax)
                 .setpV(pV)
                 .setInventaire(inventaire)
-                .setPvmax(pVmax)
                 .setQueteSuivie(quetesuivie)
                 .setQueteValide(queteValide)
                 .setRace(race)
