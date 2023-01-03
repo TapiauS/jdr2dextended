@@ -25,8 +25,8 @@ public class ObjectifF extends Objectifs{
         this.setObjetquete(new Objet());
     }
 
-    public ObjectifF(boolean valide,Objet objetquete){
-        super(valide);
+    public ObjectifF(Objet objetquete){
+        super();
         this.setObjetquete(objetquete);
     }
 }

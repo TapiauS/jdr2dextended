@@ -25,8 +25,8 @@ public class ObjectifK extends Objectifs{
         this.setTarget(new PNJ());
     }
 
-    public ObjectifK(boolean valide,PNJ target){
-        super(valide);
+    public ObjectifK(PNJ target){
+        super();
         this.setTarget(target);
     }
 }

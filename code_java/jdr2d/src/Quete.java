@@ -2,7 +2,7 @@ public class Quete {
     protected String nomQuete;
     protected String descriptionQuete;
     protected Objectifs[] objectifs;
-    protected Echange declencheur;
+    /*protected Echange declencheur;*/
     protected Objet[] recompenses;
 
     //getters
@@ -21,9 +21,9 @@ public class Quete {
     }
 
 
-    public Echange getDeclencheur() {
+   /* public Echange getDeclencheur() {
         return declencheur;
-    }
+    }*/
 
     public Objet[] getRecompenses() {
         return recompenses;
@@ -47,19 +47,16 @@ public class Quete {
         return this;
     }
 
-    public Quete setDeclencheur(Echange declencheur) {
+   /* public Quete setDeclencheur(Echange declencheur) {
         this.declencheur = declencheur;
         return this;
     }
+    */
+
 
     public Quete setRecompenses(Objet[] recompenses) {
-        if(recompenses.length==this.objectifs.length) {
             this.recompenses = recompenses;
             return this;
-        }
-        else{
-            throw new IllegalArgumentException("Il doit y avoir autant de validations que d'objectifs !");
-        }
     }
 
     //builders
@@ -68,16 +65,16 @@ public class Quete {
         this.setNomQuete("r")
                 .setDescriptionQuete("r")
                 .setObjectifs(new Objectifs[] {new ObjectifT()})
-                .setDeclencheur(new Echange())
+                /*.setDeclencheur(new Echange())*/
                 .setRecompenses(new Objet[]{new Objet()});
 
     }
 
-    public Quete(String nomQuete,String descriptionQuete,Objectifs[] objectifs,Echange declencheur,Objet[] recompense){
+    public Quete(String nomQuete,String descriptionQuete,Objectifs[] objectifs,Objet[] recompense){
         this.setNomQuete(nomQuete)
                 .setDescriptionQuete(descriptionQuete)
                 .setObjectifs(objectifs)
-                .setDeclencheur(declencheur)
+               /* .setDeclencheur(declencheur)*/
                 .setRecompenses(recompense);
     }
 

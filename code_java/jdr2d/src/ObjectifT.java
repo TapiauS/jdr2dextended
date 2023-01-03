@@ -22,4 +22,9 @@ public class ObjectifT extends Objectifs{
         super();
         this.setConvaincre(new Echange());
     }
+
+    public ObjectifT(Echange convaincre){
+        super();
+        this.setConvaincre(convaincre);
+    }
 }
