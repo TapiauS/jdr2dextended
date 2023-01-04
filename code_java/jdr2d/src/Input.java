@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Input {
-    public void deplacement(Personnage player){
+    public static void deplacement(Personnage player){
 
         Scanner scanner=new Scanner(System.in);
         System.out.println("Choose a direction");
@@ -11,11 +11,11 @@ public class Input {
         }
         catch (IllegalArgumentException e){
             System.out.println("Direction invalide!!!, choix possibles : E,N,S,O");
-            this.deplacement(player);
+            deplacement(player);
         }
     }
 
-    public void pick(Personnage player,Coffre[] coffres){
+    public static void pick(Personnage player,Coffre[] coffres){
         Scanner scanner=new Scanner(System.in);
         int compteur=0;
         try {
@@ -50,9 +50,10 @@ public class Input {
                                     }
                                 }
                                 if (compteur0==q.getObjectifs().length){
-                                    for(Objet ob:q.getRecompenses())
-                                    player.setInventaire(player.getInventaire().add(ob));
-                                    player.removesQuete(q);
+                                    for(Objet ob:q.getRecompenses()) {
+                                        player.setInventaire(player.getInventaire().add(ob));
+                                        player.removesQuete(q);
+                                    }
                                 }
                             }
                         }
@@ -64,11 +65,11 @@ public class Input {
             }
         catch (Exception e){
             System.out.println("Entrée invalide");
-            this.pick(player,coffres);
+            pick(player,coffres);
         }
     }
 
-    public void drink(Personnage player){
+    public static void drink(Personnage player){
         int inputs3 = 0;
         Scanner scanner=new Scanner(System.in);
         try{
@@ -91,20 +92,19 @@ public class Input {
                 if (inputs3 >= 0) {
                     Potion p = buvable.get(inputs3);
                     buvable.remove(inputs3);
-                    Time t = new Time();
                     player.setInventaire(player.getInventaire().remove(indexglob[inputs3]));
-                    t.drinkpotion(p, player);
+                    Time.drinkpotion(p, player);
                 }
 
             }
         }
         catch (Exception e) {
             System.out.println("Entrée invalide");
-            this.drink(player);
+            drink(player);
         }
     }
 
-    public void talk(Personnage player,PNJ[] pnjs,Echange[] dialogue) {
+    public static void talk(Personnage player,PNJ[] pnjs,Echange[] dialogue) {
         int compteur = 0;
         Scanner scanner = new Scanner(System.in);
         try {
@@ -141,7 +141,7 @@ public class Input {
         }
     }
 
-    public void weapon(Personnage player) {
+    public static void weapon(Personnage player) {
         Scanner scanner = new Scanner(System.in);
         int inputs = 0;
         try {
@@ -178,7 +178,7 @@ public class Input {
         }
 
 
-    public void armure(Personnage player) {
+    public static void armure(Personnage player) {
         int inputs2 = 0;
         Scanner scanner = new Scanner(System.in);
         try {
@@ -205,7 +205,6 @@ public class Input {
                     player.setInventaire(player.getInventaire().remove(indexglob[inputs2]));
                     player.addArmure(a);
                 }
-
             }
         } catch (Exception e) {
             System.out.println("Entrée invalide");
@@ -213,7 +212,7 @@ public class Input {
         }
     }
 
-    public void playerinput(String input, Personnage player, PNJ[] pnjs, Coffre[] coffres,Echange[] dialogue) {
+    public static void playerinput(String input, Personnage player, PNJ[] pnjs, Coffre[] coffres,Echange[] dialogue) {
         Scanner scanner = new Scanner(System.in);
         int compteur = 0;
         switch (input) {
@@ -228,7 +227,7 @@ public class Input {
                     }
                 }
                 //bidouillage!!!! a changer plus tard !
-                this.deplacement(player);
+                deplacement(player);
                 for (int i=0 ; i<player.getLieux().getDimensions()[0] ; i++){
                     for (int j=0 ;j<player.getLieux().getDimensions()[1];j++){
                         if(i==player.getX() && j==player.getY()){
@@ -261,31 +260,31 @@ public class Input {
                 //la discussion
 
             case "Talk":
-                this.talk(player,pnjs,dialogue);
+                talk(player,pnjs,dialogue);
                 break;
 
                 //ramasser un objet dans un coffre
 
             case "Open":
-                this.pick(player,coffres);
+                pick(player,coffres);
                 break;
 
                 //equiper une arme
 
             case "EquipWeapon":
-                this.weapon(player);
+                weapon(player);
                 break;
 
                 //equiper une armure
 
             case "EquipArmure" :
-                this.armure(player);
+                armure(player);
                 break;
 
                 //boire une potion
 
             case "Drink":
-                this.drink(player);
+                drink(player);
                 break;
 
                 //liste des taches

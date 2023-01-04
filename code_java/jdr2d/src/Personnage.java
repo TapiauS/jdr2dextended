@@ -20,7 +20,6 @@ public class Personnage extends Point{
     protected ArrayList<LocalDateTime> datefin;
 
 
-
     //getters
 
 

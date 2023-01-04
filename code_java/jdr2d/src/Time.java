@@ -2,7 +2,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.concurrent.TimeUnit;
 
 public class Time{
-    public void drinkpotion(Potion p,Personnage joueur){
+    public static void drinkpotion(Potion p,Personnage joueur){
         Thread t =new Thread(){
             @Override
             public void run() {

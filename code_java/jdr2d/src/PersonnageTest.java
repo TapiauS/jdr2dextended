@@ -91,7 +91,6 @@ class PersonnageTest {
 
     @org.junit.jupiter.api.Test
     void bagarre() {
-        System.out.println("La reduction de dégat d'une épée est :"+epee.getRedudeg());
         assertEquals(15,adversaire.bagarre(joueur));
     }
 }

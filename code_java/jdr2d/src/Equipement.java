@@ -4,7 +4,6 @@ public class Equipement extends Objet{
 
     //getters
 
-
     public int getDeg() {
         return deg;
     }

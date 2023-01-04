@@ -79,18 +79,30 @@ public class Point {
         switch (dir) {
             case 'E' -> {
                 this.setX(this.getX() + 1);
+                if (this.getLieux().getCarte()[this.getY()][this.getX()] == '#') {
+                    this.depl('O');
+                }
                 return this;
             }
             case 'N' -> {
                 this.setY(this.getY() - 1);
+                if (this.getLieux().getCarte()[this.getY()][this.getX()] == '#') {
+                    this.depl('S');
+                }
                 return this;
             }
             case 'O' -> {
                 this.setX(this.getX() - 1);
+                if (this.getLieux().getCarte()[this.getY()][this.getX()] == '#') {
+                    this.depl('E');
+                }
                 return this;
             }
             case 'S' -> {
                 this.setY(this.getY() + 1);
+                if (this.getLieux().getCarte()[this.getY()][this.getX()] == '#') {
+                    this.depl('N');
+                }
                 return this;
             }
             default -> throw new IllegalArgumentException("Direction invalide!!!, choix possibles : E,N,S,O");

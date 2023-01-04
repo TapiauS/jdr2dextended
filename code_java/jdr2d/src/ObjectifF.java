@@ -29,4 +29,5 @@ public class ObjectifF extends Objectifs{
         super();
         this.setObjetquete(objetquete);
     }
+
 }

@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         //declaration de la map de test et tout ses protagonistes
-        char[][] labytest=new char[][] {{'J',' ',' ',' ',' '},{' ',' ',' ',' ',' '},{' ',' ',' ',' ',' '},{' ',' ',' ',' ',' '},{'C',' ',' ',' ','E'}};
+        char[][] labytest=new char[][] {{'J',' ','#',' ',' '},{' ',' ','#',' ',' '},{' ',' ',' ',' ',' '},{' ',' ',' ',' ',' '},{'C',' ',' ',' ','E'}};
         Map maptest=new Map(new int[] {5,5},labytest,"Arcanum");
         Coffre coftest=new Coffre();
         Arme bataille =new Arme("Bat'aille",1,7,3,2);
@@ -24,7 +24,6 @@ public class Main {
         coftest.add(bataille).add(plastraille);
         Scanner scanner=new Scanner(System.in);
         String input="Rien";
-        Input gameloop = new Input();
         ObjectifF batte=new ObjectifF(bataille);
         Quete quete=new Quete("La mort de jeanmarie","flemme",new Objectifs[] {batte},new Objet[] {plastraille});
         Echange dialognegatif=new Echange(jeanluc,"C'est non !","A 600 000 voix prés !!",null);
@@ -46,7 +45,7 @@ public class Main {
             }
             System.out.println("Tapez une commande pour votre personnage, tapez \"Help\" pour la liste des commandes");
             input=scanner.next();
-            gameloop.playerinput(input,joueur,new PNJ[] {jeanma,jeanluc},new Coffre[] {coftest},listedialogue);
+            Input.playerinput(input,joueur,new PNJ[] {jeanma,jeanluc},new Coffre[] {coftest},listedialogue);
             if(jeanma.getpV()<=0){
                 System.out.println("Felicitation pour votre victoire");
             } else if (joueur.getpV()<=0) {
