@@ -1,6 +1,6 @@
 //les objectifs ou il faut trouver un objet
 
-public class ObjectifF extends Objectifs{
+public class ObjectifF extends Objectifs implements EventListenerF{
     Objet objetquete;
 
     //getters
@@ -29,5 +29,11 @@ public class ObjectifF extends Objectifs{
         super();
         this.setObjetquete(objetquete);
     }
+
+    @Override
+    public void update(Personnage player) {
+        this.setValide(true);
+    }
+
 
 }

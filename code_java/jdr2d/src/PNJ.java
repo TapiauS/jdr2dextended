@@ -38,13 +38,13 @@ public class PNJ extends Personnage{
         this.setnomme(false).setposinit(new Point());
     }
 
-    public PNJ(ArrayList<Arme> arme, ArrayList<Armure> armure, String nomPersonnage, int pV, Coffre inventaire, int pVmax, ArrayList<Quete>  quetesuivie, ArrayList<Quete>  queteValide, Race race,Point posinit,Boolean nomme){
-        super(arme, armure, nomPersonnage, pV, inventaire, pVmax, quetesuivie, queteValide, race);
+    public PNJ(ArrayList<Arme> arme, ArrayList<Armure> armure, String nomPersonnage, int pV, Coffre inventaire, int pVmax, ArrayList<Quete>  quetesuivie, Race race,Point posinit,Boolean nomme){
+        super(arme, armure, nomPersonnage, pV, inventaire, pVmax, quetesuivie, race);
         this.setnomme(nomme).setposinit(posinit);
     }
 
-    public PNJ(int x, int y, Map lieux, ArrayList<Arme> arme,ArrayList<Armure> armure,String nomPersonnage,int pV,Coffre inventaire,int pVmax,ArrayList<Quete> quetesuivie,ArrayList<Quete>  queteValide,Race race,Point posinit,Boolean nomme){
-        super(x, y, lieux, arme, armure, nomPersonnage, pV, inventaire, pVmax, quetesuivie, queteValide, race);
+    public PNJ(int x, int y, Map lieux, ArrayList<Arme> arme,ArrayList<Armure> armure,String nomPersonnage,int pV,Coffre inventaire,int pVmax,ArrayList<Quete> quetesuivie,Race race,Point posinit,Boolean nomme){
+        super(x, y, lieux, arme, armure, nomPersonnage, pV, inventaire, pVmax, quetesuivie, race);
         this.setnomme(nomme).setposinit(posinit);
     }
 

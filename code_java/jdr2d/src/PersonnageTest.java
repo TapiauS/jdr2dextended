@@ -7,8 +7,8 @@ class PersonnageTest {
     private Armure plastron=new Armure("Plastron",3,0,7,"Gant");
 
     private Arme epee=new Arme("Epée",2,8,2,1);
-    private Personnage joueur=new Personnage(new ArrayList<Arme>(List.of(epee,epee)),new ArrayList<Armure>(List.of(gantelet)),"Virgile",10,null,10,null,null,null);
-    private Personnage adversaire=new Personnage(new ArrayList<Arme>(List.of(epee,epee)),new ArrayList<Armure>(List.of(plastron,gantelet)),"Virgile",10,null,10,null,null,null);
+    private Personnage joueur=new Personnage(new ArrayList<Arme>(List.of(epee,epee)),new ArrayList<Armure>(List.of(gantelet)),"Virgile",10,null,10,null,null);
+    private Personnage adversaire=new Personnage(new ArrayList<Arme>(List.of(epee,epee)),new ArrayList<Armure>(List.of(plastron,gantelet)),"Virgile",10,null,10,null,null);
     @org.junit.jupiter.api.Test
     void getQueteSuivie() {
     }

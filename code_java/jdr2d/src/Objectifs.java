@@ -1,4 +1,4 @@
-public abstract class Objectifs {
+public abstract class Objectifs implements EventListenerO{
     protected boolean valide;
 
     //getters
@@ -22,4 +22,6 @@ public abstract class Objectifs {
     public Objectifs(boolean valide){
         this.setValide(valide);
     }
+
+
 }

@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class Interaction {
@@ -8,6 +9,8 @@ public class Interaction {
 
     protected boolean agressif;
 
+    protected ArrayList<EventListenerK> observerK;
+
 
     //getters
 
@@ -16,7 +19,7 @@ public class Interaction {
         return joueur;
     }
 
-    public Personnage getOpposant() {
+    public PNJ getOpposant() {
         return opposant;
     }
 
@@ -26,11 +29,22 @@ public class Interaction {
         return agressif;
     }
 
+    public ArrayList<EventListenerK> getObserverK() {
+        return observerK;
+    }
+
     //setters
 
 
     public Interaction setJoueur(Personnage joueur) {
         this.joueur = joueur;
+        for (Quete q:joueur.getQueteSuivie()) {
+            for (Objectifs o: q.getObjectifs()) {
+                if(o instanceof ObjectifK){
+                    this.addObserverK((EventListenerK) o);
+                }
+            }
+        }
         return this;
     }
 
@@ -51,6 +65,12 @@ public class Interaction {
         this.agressif = agressif;
         return this;
     }
+
+    public Interaction setObserverK(ArrayList<EventListenerK> observerK) {
+        this.observerK = observerK;
+        return this;
+    }
+
 
     //builders
 
@@ -73,6 +93,20 @@ public class Interaction {
 
     //methode
 
+    public void notifyOneobs(EventListenerK ev){
+        ev.update(this.getOpposant());
+    }
+
+    public Interaction addObserverK(EventListenerK ev){
+        this.observerK.add(ev);
+        return this;
+    }
+
+    public Interaction removeObserK(EventListenerK ev){
+        this.observerK.remove(ev);
+        return this;
+    }
+
     public Boolean combat(){
         while(this.getJoueur().getpV()>0 && this.getOpposant().getpV()>0){
             this.getOpposant().setpV(this.getOpposant().getpV()-this.getJoueur().bagarre(this.getOpposant()));
@@ -83,7 +117,15 @@ public class Interaction {
                 throw new RuntimeException(e);
             }
         }
-        if(this.getOpposant().getpV()<=0) return true;
+        if(this.getOpposant().getpV()<=0) {
+            for (EventListenerK e: this.getObserverK()) {
+                if (e instanceof ObjectifK){
+                    this.notifyOneobs(e);
+                    this.removeObserK(e);
+                }
+            }
+            return true;
+        }
         else return false;
     }
 

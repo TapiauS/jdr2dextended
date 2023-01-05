@@ -3,7 +3,6 @@ import java.util.Scanner;
 
 public class Input {
     public static void deplacement(Personnage player){
-
         Scanner scanner=new Scanner(System.in);
         System.out.println("Choose a direction");
         try {
@@ -30,35 +29,15 @@ public class Input {
                         System.out.println(index + ":" + o.getNomObjet());
                         index = index + 1;
                     }
-
                         System.out.println("Tapez le numero de l'objet que vous voulez prendre ou -1 si vous voulez quitter");
                         inputs = scanner.nextInt();
                         if (inputs >= 0 ) {
                             Objet o = c.getContenu().get(inputs);
                             c.remove(inputs);
-                            player.setInventaire(player.getInventaire().add(o));
-                            for(Quete q: player.getQueteSuivie()){
-                                int compteur0=0;
-                                for(Objectifs ob: q.getObjectifs()){
-                                    if(ob instanceof ObjectifF){
-                                        if(((ObjectifF) ob).getObjetquete()==o){
-                                            ob.setValide(true);
-                                        }
-                                        if(ob.isValide()){
-                                            compteur0++;
-                                        }
-                                    }
+                            player.addObjet(o);
                                 }
-                                if (compteur0==q.getObjectifs().length){
-                                    for(Objet ob:q.getRecompenses()) {
-                                        player.setInventaire(player.getInventaire().add(ob));
-                                        player.removesQuete(q);
-                                    }
                                 }
-                            }
-                        }
                         index = 0;
-                    }
                     }
                 }
             if (compteur==0){System.out.println("Aucun coffre a portée");}

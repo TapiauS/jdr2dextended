@@ -17,9 +17,9 @@ public class Main {
         ArrayList<Arme> armevampire=new ArrayList<>(List.of(new Arme("Griffe Vampirique",0,10,0,0)));
         ArrayList<Armure> armuredefault=new ArrayList<Armure>(List.of(new Armure("Peau",0,0,0)));
         ArrayList<Armure> armurevampire=new ArrayList<Armure>(List.of(new Armure("Peau Vampirique",0,0,4)));
-        PNJ jeanluc=new PNJ(1,0,maptest,armedefault,armuredefault,"Jean Luc le rouge",5,new Coffre(),5,null,null,new Race("Humain",null),null,true);
-        PNJ jeanma=new PNJ(4,4,maptest,armevampire,armurevampire,"Jean Marie Le PNJ",30,new Coffre(),30,null,null,new Race("Vampire",null),null,true);
-        Personnage joueur=new Personnage(0,0,maptest,armedefault,armuredefault,"Donatien",30,new Coffre(),30,new ArrayList<>(),new ArrayList<>(),new Race("Humain",null));
+        PNJ jeanluc=new PNJ(1,0,maptest,armedefault,armuredefault,"Jean Luc le rouge",5,new Coffre(),5,null,new Race("Humain",null),null,true);
+        PNJ jeanma=new PNJ(4,4,maptest,armevampire,armurevampire,"Jean Marie Le PNJ",30,new Coffre(),30,null,new Race("Vampire",null),null,true);
+        Personnage joueur=new Personnage(0,0,maptest,armedefault,armuredefault,"Donatien",30,new Coffre(),30,new ArrayList<>(),new Race("Humain",null));
         coftest.setLieux(maptest).setX(0).setY(4);
         coftest.add(bataille).add(plastraille);
         Scanner scanner=new Scanner(System.in);
