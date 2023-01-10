@@ -25,7 +25,9 @@ public class Main {
         Scanner scanner=new Scanner(System.in);
         String input="Rien";
         ObjectifF batte=new ObjectifF(bataille);
-        Quete quete=new Quete("La mort de jeanmarie","flemme",new Objectifs[] {batte},new Objet[] {plastraille});
+
+        Quete quete=new Quete("La mort de jeanmarie","flemme",new ArrayList<Objectifs>(),new Objet[] {plastraille});
+        quete.addObjectifs(batte);
         Echange dialognegatif=new Echange(jeanluc,"C'est non !","A 600 000 voix prés !!",null);
         Echange dialogueconcl=new Echange(jeanluc,"C'est bien normal","Merci beaucoup, tu pourra trouver de l'équipement au sud",null);
         Echange dialoguepos=new Echange(jeanluc,"Oui bien sur","Enfin un brave prés a lutter contre cette peste vampirique",new Echange[] {dialogueconcl},true,quete);
@@ -33,6 +35,8 @@ public class Main {
         Echange []  listedialogue=new Echange[] {dialognegatif,dialogueintro,dialoguepos,dialogueconcl};
         Potion ptest=new Potion("Potion de Force",1,new int[] {5,0,0,0}, Duration.of(15, ChronoUnit.SECONDS));
         joueur.setInventaire(joueur.getInventaire().add(ptest));
+        ObjectifT obvious=new ObjectifT(dialogueconcl);
+        quete.addObjectifs(obvious);
 
 
         System.out.println("Vous devez tuer Jean Marie le PNJ, attention il vous faudra peut être vous équiper");

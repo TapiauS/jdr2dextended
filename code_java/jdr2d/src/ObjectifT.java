@@ -1,6 +1,6 @@
 //les objectif ou il faut dire quelquechose de precis a un personnage précis
 
-public class ObjectifT extends Objectifs{
+public class ObjectifT extends Objectifs implements EventListenerTalk{
     Echange convaincre;
 
     //getters
@@ -27,4 +27,11 @@ public class ObjectifT extends Objectifs{
         super();
         this.setConvaincre(convaincre);
     }
+
+    @Override
+    public void update() {
+        System.out.println("J'update");
+        this.setValide(true);
+    }
+
 }

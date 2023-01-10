@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Personnage extends Point{
+public class Personnage extends Point implements EventListenerQuete{
     protected String nomPersonnage;
     protected int pV;
     protected int pvmax;
@@ -139,6 +139,7 @@ public class Personnage extends Point{
 
     public Personnage addsQuete(Quete queteaf){
         this.queteSuivie.add(queteaf);
+        queteaf.addPersonnage(this);
         for (Objectifs o: queteaf.getObjectifs()) {
             if(o instanceof ObjectifF ){
                 this.addObserver((ObjectifF) o);
@@ -229,11 +230,11 @@ public class Personnage extends Point{
 
     public Personnage addObjet(Objet objet){
         this.inventaire.add(objet);
-        for (EventListenerF of: this.observerF) {
-            if(of instanceof ObjectifF){
-                if(objet==((ObjectifF) of).getObjetquete()) {
-                    notifyoneEventF(of);
-                    this.removeObserver(of);
+        for (int j=0;j<this.observerF.size();j++) {
+            if(observerF.get(j) instanceof ObjectifF){
+                if(objet==((ObjectifF) observerF.get(j)).getObjetquete()) {
+                    notifyoneEventF(observerF.get(j));
+                    this.removeObserver(observerF.get(j));
                 }
             }
         }
@@ -282,7 +283,8 @@ public class Personnage extends Point{
                 .setQueteSuivie(null)
                 .setRace(null)
                 .setdateFin(new ArrayList<LocalDateTime>())
-                .setEffetpotion(new ArrayList<Potion>(List.of(new Potion("Systeme digestif",0, new int[]{0, 0, 0, 0} , Duration.of(1000, ChronoUnit.YEARS)))));
+                .setEffetpotion(new ArrayList<Potion>(List.of(new Potion("Systeme digestif",0, new int[]{0, 0, 0, 0} , Duration.of(1000, ChronoUnit.YEARS)))))
+                .setObserverF(new ArrayList<>());
     }
 
     public Personnage(int x, int y, Map lieux, ArrayList<Arme> arme,ArrayList<Armure> armure,String nomPersonnage,int pV,Coffre inventaire,int pVmax,ArrayList<Quete> quetesuivie,Race race){
@@ -296,7 +298,8 @@ public class Personnage extends Point{
                 .setQueteSuivie(quetesuivie)
                 .setRace(race)
                 .setdateFin(new ArrayList<LocalDateTime>())
-                .setEffetpotion(new ArrayList<Potion>(List.of(new Potion("Systeme digestif",0, new int[]{0, 0, 0, 0} , Duration.of(10000000, ChronoUnit.HOURS)))));
+                .setEffetpotion(new ArrayList<Potion>(List.of(new Potion("Systeme digestif",0, new int[]{0, 0, 0, 0} , Duration.of(10000000, ChronoUnit.HOURS)))))
+                .setObserverF(new ArrayList<>());
     }
 
     public Personnage( ArrayList<Arme> arme,ArrayList<Armure> armure,String nomPersonnage,int pV,Coffre inventaire,int pVmax,ArrayList<Quete>  quetesuivie,Race race)
@@ -310,7 +313,8 @@ public class Personnage extends Point{
                 .setQueteSuivie(quetesuivie)
                 .setRace(race)
                 .setdateFin(new ArrayList<LocalDateTime>())
-                .setEffetpotion(new ArrayList<Potion>(List.of(new Potion("Systeme digestif",0, new int[]{0, 0, 0, 0} , Duration.of(100000, ChronoUnit.DAYS)))));
+                .setEffetpotion(new ArrayList<Potion>(List.of(new Potion("Systeme digestif",0, new int[]{0, 0, 0, 0} , Duration.of(100000, ChronoUnit.DAYS)))))
+                .setObserverF(new ArrayList<>());
     }
 
 
@@ -343,7 +347,16 @@ public class Personnage extends Point{
     }
 
     public void notifyoneEventF(EventListenerF ef){
-        ef.update(this);
+        ef.update();
     }
 
+    @Override
+    public void update(Quete q) {
+        this.removesQuete(q);
+        System.out.println("Felicitation vous avez accompli la quete : "+q.getNomQuete()+"et obtenu les récompenses");
+        for (Objet o: q.getRecompenses()) {
+            this.addObjet(o);
+           System.out.println(o.getNomObjet());
+        }
+    }
 }

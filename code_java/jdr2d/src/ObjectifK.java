@@ -29,12 +29,8 @@ public class ObjectifK extends Objectifs implements EventListenerK{
     }
 
     @Override
-    public void update(PNJ opposant) {
+    public void update() {
         this.setValide(true);
     }
 
-    @Override
-    public void update(Objectifs o) {
-
-    }
 }

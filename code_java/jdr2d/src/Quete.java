@@ -1,9 +1,13 @@
-public class Quete {
+import java.util.ArrayList;
+
+public class Quete implements EventListenerO{
     protected String nomQuete;
     protected String descriptionQuete;
-    protected Objectifs[] objectifs;
+    protected ArrayList<Objectifs> objectifs;
     /*protected Echange declencheur;*/
     protected Objet[] recompenses;
+
+    protected ArrayList<EventListenerQuete> observer;
 
     //getters
 
@@ -16,14 +20,10 @@ public class Quete {
         return descriptionQuete;
     }
 
-    public Objectifs[] getObjectifs() {
+    public ArrayList<Objectifs> getObjectifs() {
         return objectifs;
     }
 
-
-   /* public Echange getDeclencheur() {
-        return declencheur;
-    }*/
 
     public Objet[] getRecompenses() {
         return recompenses;
@@ -42,16 +42,11 @@ public class Quete {
         return this;
     }
 
-    public Quete setObjectifs(Objectifs[] objectifs) {
+    public Quete setObjectifs(ArrayList<Objectifs> objectifs) {
         this.objectifs = objectifs;
         return this;
     }
 
-   /* public Quete setDeclencheur(Echange declencheur) {
-        this.declencheur = declencheur;
-        return this;
-    }
-    */
 
 
     public Quete setRecompenses(Objet[] recompenses) {
@@ -59,23 +54,67 @@ public class Quete {
             return this;
     }
 
+    public Quete setObserver(ArrayList<EventListenerQuete> observer) {
+        this.observer = observer;
+        return this;
+    }
+
     //builders
 
     public Quete(){
         this.setNomQuete("r")
                 .setDescriptionQuete("r")
-                .setObjectifs(new Objectifs[] {new ObjectifT()})
                 /*.setDeclencheur(new Echange())*/
-                .setRecompenses(new Objet[]{new Objet()});
-
+                .setRecompenses(new Objet[]{new Objet()})
+                .setObserver(new ArrayList<EventListenerQuete>());
     }
 
-    public Quete(String nomQuete,String descriptionQuete,Objectifs[] objectifs,Objet[] recompense){
+    public Quete(String nomQuete,String descriptionQuete,ArrayList<Objectifs> objectifs,Objet[] recompense){
         this.setNomQuete(nomQuete)
                 .setDescriptionQuete(descriptionQuete)
                 .setObjectifs(objectifs)
-               /* .setDeclencheur(declencheur)*/
-                .setRecompenses(recompense);
+                .setRecompenses(recompense)
+                .setObserver(new ArrayList<EventListenerQuete>());
+    }
+
+    //methodes
+
+
+    public Quete addPersonnage(EventListenerQuete p){
+        this.observer.add(p);
+        return this;
+    }
+
+    public Quete removePersonnage(EventListenerQuete p){
+        this.observer.remove(p);
+        return this;
+    }
+
+    public void notifyAllp(){
+        for (EventListenerQuete q: observer) {
+            q.update(this);
+        }
+    }
+
+    public Quete removeObjectif(Objectifs o){
+        this.objectifs.remove(o);
+        System.out.println("Longueur liste obj="+objectifs.size());
+        if(objectifs.size()<1){
+            notifyAllp();
+        }
+        return this;
+    }
+
+    public Quete addObjectifs(Objectifs o){
+        this.objectifs.add(o);
+        o.addQuete(this);
+        return this;
+    }
+
+
+    @Override
+    public void update(Objectifs o) {
+        this.removeObjectif(o);
     }
 
     //methodes

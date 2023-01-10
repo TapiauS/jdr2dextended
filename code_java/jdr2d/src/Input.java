@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Input {
@@ -36,13 +37,13 @@ public class Input {
                             c.remove(inputs);
                             player.addObjet(o);
                                 }
+                    index = 0;
                                 }
-                        index = 0;
                     }
                 }
             if (compteur==0){System.out.println("Aucun coffre a portée");}
             }
-        catch (Exception e){
+        catch (InputMismatchException e){
             System.out.println("Entrée invalide");
             pick(player,coffres);
         }
@@ -77,7 +78,7 @@ public class Input {
 
             }
         }
-        catch (Exception e) {
+        catch (InputMismatchException e) {
             System.out.println("Entrée invalide");
             drink(player);
         }
@@ -85,28 +86,14 @@ public class Input {
 
     public static void talk(Personnage player,PNJ[] pnjs,Echange[] dialogue) {
         int compteur = 0;
-        Scanner scanner = new Scanner(System.in);
         try {
             for (PNJ p : pnjs) {
                 if (p.distance(player) <= 1) {
                     compteur = compteur + 1;
                     for (Echange e : dialogue) {
                         if (e.getParleur() == p && e.getQuestion() == null) {
-                            System.out.println(p.getNomPersonnage() + " :" + e.getReponse());
-                            Echange nextechange = e;
-                            do {
-                                int entre = 0;
-                                //pour l'instant on peut avoir plusieur fois la même quête , il faudrait probablement faire de echange suivant un array list pour éviter ce probléme
-                                if (nextechange.isQuete()) {
-                                    player.addsQuete(nextechange.getQuete());
-                                }
-                                nextechange.dialogue();
-                                System.out.println("Choisissez le numero de votre réponse :");
-                                entre = scanner.nextInt();
-                                nextechange = nextechange.getDialogueSuivant()[entre];
-                                System.out.println(p.getNomPersonnage() + " : " + nextechange.getReponse());
-
-                            } while (nextechange.getDialogueSuivant() != null);
+                            Interaction parlote = new Interaction(player, p, e, false);
+                            parlote.dialogue();
                         }
                     }
                 }
@@ -114,7 +101,7 @@ public class Input {
             if (compteur == 0) {
                 System.out.println("Personne n'est assez proche pour parler");
             }
-        } catch (Exception ex) {
+        } catch (InputMismatchException ex) {
             System.out.println("Entrée invalide");
             talk(player, pnjs, dialogue);
         }
