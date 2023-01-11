@@ -15,8 +15,8 @@ public class Main {
         Armure plastraille=new Armure("Plastr'aille",3,0,8,"Torse");
         ArrayList<Arme> armedefault=new ArrayList<>(List.of(new Arme("Poing",0,0,0,0)));
         ArrayList<Arme> armevampire=new ArrayList<>(List.of(new Arme("Griffe Vampirique",0,10,0,0)));
-        ArrayList<Armure> armuredefault=new ArrayList<Armure>(List.of(new Armure("Peau",0,0,0)));
-        ArrayList<Armure> armurevampire=new ArrayList<Armure>(List.of(new Armure("Peau Vampirique",0,0,4)));
+        ArrayList<Armure> armuredefault=new ArrayList<Armure>(List.of(new Armure("Peau",0,0,0,"Natif")));
+        ArrayList<Armure> armurevampire=new ArrayList<Armure>(List.of(new Armure("Peau Vampirique",0,0,4,"Natif")));
         PNJ jeanluc=new PNJ(1,0,maptest,armedefault,armuredefault,"Jean Luc le rouge",5,new Coffre(),5,null,new Race("Humain",null),null,true);
         PNJ jeanma=new PNJ(4,4,maptest,armevampire,armurevampire,"Jean Marie Le PNJ",30,new Coffre(),30,null,new Race("Vampire",null),null,true);
         Personnage joueur=new Personnage(0,0,maptest,armedefault,armuredefault,"Donatien",30,new Coffre(),30,new ArrayList<>(),new Race("Humain",null));
@@ -32,6 +32,7 @@ public class Main {
         Echange dialogueconcl=new Echange(jeanluc,"C'est bien normal","Merci beaucoup, tu pourra trouver de l'équipement au sud",null);
         Echange dialoguepos=new Echange(jeanluc,"Oui bien sur","Enfin un brave prés a lutter contre cette peste vampirique",new Echange[] {dialogueconcl},true,quete);
         Echange dialogueintro=new Echange(jeanluc,null,"Bonjour voulez vous m'aidez à purger ce lieux ?",new Echange[] {dialognegatif,dialoguepos});
+        Echange dialoguequete=new Echange(jeanluc,null,"Bravo vous avez trouver l'equipement!",null,)
         Echange []  listedialogue=new Echange[] {dialognegatif,dialogueintro,dialoguepos,dialogueconcl};
         Potion ptest=new Potion("Potion de Force",1,new int[] {5,0,0,0}, Duration.of(15, ChronoUnit.SECONDS));
         joueur.setInventaire(joueur.getInventaire().add(ptest));

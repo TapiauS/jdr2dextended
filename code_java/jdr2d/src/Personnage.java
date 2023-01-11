@@ -217,7 +217,8 @@ public class Personnage extends Point implements EventListenerQuete{
             }
         }
         if(emplacementlibre) {
-            this.addObjet(armure);
+            this.removObjet(armure);
+            this.armure.add(armure);
         }
         else{
             this.armure.remove(armurer);

@@ -1,5 +1,7 @@
-public class Armure extends Equipement{
+import java.util.Objects;
 
+public class Armure extends Equipement{
+    protected static String[] typearmures= {"CASQUE","TORSE","GANT","BOTTE","JAMBIERE","NATIF"};
     protected String typearmure;
 
     //getters
@@ -9,8 +11,19 @@ public class Armure extends Equipement{
     //setters
 
     public Armure setTypearmure(String typearmure){
-        this.typearmure=typearmure;
-        return this;
+        typearmure.toUpperCase();
+        boolean contient=false;
+        for (String s: typearmures) {
+            if(Objects.equals(s, typearmure)){
+                contient=true;
+            }
+        }
+        if(contient)
+        {
+            this.typearmure = typearmure;
+            return this;
+        }
+        return null;
     }
 
     //builder

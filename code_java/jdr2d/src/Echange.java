@@ -1,12 +1,19 @@
+import java.util.Arrays;
+
 public class Echange {
 
     protected PNJ parleur;
     protected String question;
     protected String reponse;
     protected Echange[] dialogueSuivant;
-
     protected boolean donnequete;
+
+    protected boolean objectifquete;
+
+    protected ObjectifT objectifT;
     protected Quete quete;
+
+    protected Echange dialoguealternatif;
 
     //getters
 
@@ -30,6 +37,18 @@ public class Echange {
 
     public Quete getQuete() {
         return quete;
+    }
+
+    public Echange getDialoguealternatif() {
+        return dialoguealternatif;
+    }
+
+    public boolean isObjectifquete() {
+        return objectifquete;
+    }
+
+    public ObjectifT getObjectifT() {
+        return objectifT;
     }
 
     //setters
@@ -70,6 +89,24 @@ public class Echange {
         }
     }
 
+    public Echange setObjectifs(Boolean b){
+        if(b&&this.dialoguealternatif==null){
+                this.setdialoguealternatif(new Echange(this.getParleur(),"Je ne suit pas encore cette quête","Au revoir",null));
+        }
+        this.objectifquete=b;
+        return this;
+    }
+
+    public Echange setdialoguealternatif(Echange e){
+        this.dialoguealternatif=e;
+        return this;
+    }
+
+    public Echange setObjectifsT(ObjectifT objectifT){
+        this.objectifT=objectifT;
+        return this;
+    }
+
     //builders
 
     public Echange(){
@@ -81,7 +118,9 @@ public class Echange {
         this.setquestion(question)
                 .setReponse(reponse)
                 .setDialogueSuivant(dialogueSuivant)
-                .setParleur(parleur);
+                .setParleur(parleur)
+                .setdonneQuete(false)
+        .setObjectifs(false);
     }
 
     public Echange(PNJ parleur,String question,String reponse,Echange[] dialogueSuivant,boolean donnequete,Quete quete){
@@ -90,20 +129,39 @@ public class Echange {
                 .setDialogueSuivant(dialogueSuivant)
                 .setdonneQuete(donnequete)
                 .setQuete(quete)
-                .setParleur(parleur);
+                .setParleur(parleur)
+                .setObjectifs(false);
+    }
+
+    public Echange(PNJ parleur,String question,String reponse,Echange[] dialogueSuivant,boolean donnequete,Quete quete,Boolean obj,ObjectifT objectifT,Echange dialoguealternatif){
+        this.setquestion(question)
+                .setReponse(reponse)
+                .setDialogueSuivant(dialogueSuivant)
+                .setdonneQuete(donnequete)
+                .setQuete(quete)
+                .setParleur(parleur)
+                .setdialoguealternatif(dialoguealternatif)
+                .setObjectifs(obj)
+                .setObjectifsT(objectifT);
     }
 
     //fonctions
 
-    public void dialogue(){
+    public void dialogue(ObjectifT[] objectifs){
         int i=0;
         if(this.getDialogueSuivant()!=null) {
             for (Echange e : this.getDialogueSuivant()) {
-                System.out.println(i + ": " + e.getQuestion());
+                if(e.isObjectifquete() && Arrays.asList(objectifs).contains(e.getObjectifT())) {
+                    System.out.println(i + ": " + e.getDialoguealternatif().getQuestion());
+                }
+                else{
+                    System.out.println(i + ": " + e.getQuestion());
+                }
                 i++;
             }
         }
         else {System.out.println("Fin de la conversation");}
     }
+
 
 }

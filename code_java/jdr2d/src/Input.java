@@ -168,7 +168,6 @@ public class Input {
                 if (inputs2 >= 0) {
                     Armure a = equipable.get(inputs2);
                     equipable.remove(inputs2);
-                    player.setInventaire(player.getInventaire().remove(indexglob[inputs2]));
                     player.addArmure(a);
                 }
             }

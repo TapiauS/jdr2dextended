@@ -12,8 +12,10 @@ public class ObjectifT extends Objectifs implements EventListenerTalk{
     //setters
 
     public ObjectifT setConvaincre(Echange convaincre) {
-        this.convaincre = convaincre;
-        return this;
+            this.convaincre = convaincre;
+            convaincre.setObjectifs(true);
+            convaincre.setObjectifsT(this);
+            return this;
     }
 
     //builders
