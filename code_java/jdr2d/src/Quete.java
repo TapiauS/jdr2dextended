@@ -3,6 +3,7 @@ import java.util.ArrayList;
 public class Quete implements EventListenerO{
     protected String nomQuete;
     protected String descriptionQuete;
+
     protected ArrayList<Objectifs> objectifs;
     /*protected Echange declencheur;*/
     protected Objet[] recompenses;
@@ -98,7 +99,6 @@ public class Quete implements EventListenerO{
 
     public Quete removeObjectif(Objectifs o){
         this.objectifs.remove(o);
-        System.out.println("Longueur liste obj="+objectifs.size());
         if(objectifs.size()<1){
             notifyAllp();
         }
@@ -118,6 +118,5 @@ public class Quete implements EventListenerO{
     }
 
     //methodes
-
 
 }

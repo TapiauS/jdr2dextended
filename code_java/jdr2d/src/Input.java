@@ -57,14 +57,15 @@ public class Input {
             int[] indexglob = new int[player.getInventaire().getContenu().size()];
             ArrayList<Potion> buvable = new ArrayList<>();
             System.out.println("Votre inventaire contient les potions:");
+            int index = 0;
             for (Objet o : player.getInventaire().getContenu()) {
                 // attention il va y avoir un probléme avec les coffres dans l'inventaire !
-                int index = 0;
+
                 if (o instanceof Potion) {
                     System.out.println(index + " : " + o.getNomObjet() + " deg=" + ((Potion) o).getEffets()[0] + " redudegat=" + ((Potion) o).getEffets()[1] + " Pv=  " + ((Potion) o).getEffets()[2] + " Pvmax= " + ((Potion) o).getEffets()[3]);
                     buvable.add((Potion) o);
                     indexglob[index] = player.getInventaire().getContenu().indexOf(o);
-                    index = index + 1;
+                    index++;
                 }
             }
             System.out.println("Tapez le numero de la potion que vous voulez boire ou -1 si vous voulez quitter");
@@ -92,8 +93,23 @@ public class Input {
                     compteur = compteur + 1;
                     for (Echange e : dialogue) {
                         if (e.getParleur() == p && e.getQuestion() == null) {
-                            Interaction parlote = new Interaction(player, p, e, false);
-                            parlote.dialogue();
+                            boolean quisq=false;
+                            if(!e.isObjectifquete()){
+                                quisq=true;
+                            }
+                            for (Quete q: player.getQueteSuivie()) {
+                                for (Objectifs o: q.getObjectifs()) {
+                                    if(o instanceof ObjectifT){
+                                        if(e.isObjectifquete()&&e.getObjectifT()==o){
+                                            quisq=true;
+                                        }
+                                    }
+                                }
+                            }
+                            if(quisq) {
+                                Interaction parlote = new Interaction(player, p, e, false);
+                                parlote.dialogue();
+                            }
                         }
                     }
                 }
@@ -115,9 +131,9 @@ public class Input {
                 int[] indexglob = new int[player.getInventaire().getContenu().size()];
                 ArrayList<Arme> equipable = new ArrayList<>();
                 System.out.println("Votre inventaire contient les armes:");
+                int index = 0;
                 for (Objet o : player.getInventaire().getContenu()) {
                     // attention il va y avoir un probléme avec les coffres dans l'inventaire !
-                    int index = 0;
                     if (o instanceof Arme) {
                         System.out.println(index + " : " + o.getNomObjet() + " deg=" + ((Arme) o).getDeg() + " redudegat=" + ((Arme) o).getRedudeg() + " arme a " + ((Arme) o).getNbrmain() + " mains");
                         equipable.add((Arme) o);
@@ -152,9 +168,9 @@ public class Input {
                 int[] indexglob = new int[player.getInventaire().getContenu().size()];
                 ArrayList<Armure> equipable = new ArrayList<>();
                 System.out.println("Votre inventaire contient les armures:");
+                int index = 0;
                 for (Objet o : player.getInventaire().getContenu()) {
                     // attention il va y avoir un probléme avec les coffres dans l'inventaire !
-                    int index = 0;
                     if (o instanceof Armure) {
                         System.out.println(index + " : " + o.getNomObjet() + " deg=" + ((Armure) o).getDeg() + " redudegat=" + ((Armure) o).getRedudeg() + " armure de type  " + ((Armure) o).getTypearmure());
                         equipable.add((Armure) o);

@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Echange {
@@ -91,7 +92,11 @@ public class Echange {
 
     public Echange setObjectifs(Boolean b){
         if(b&&this.dialoguealternatif==null){
-                this.setdialoguealternatif(new Echange(this.getParleur(),"Je ne suit pas encore cette quête","Au revoir",null));
+            System.out.println("Je passe bien par le dialogue alternatif par défaut");
+                this.setdialoguealternatif(new Echange(this.getParleur(),null,"Au revoir",null));
+        }
+        if(this.getDialoguealternatif()!=null) {
+            System.out.println("On a bien set le dialogue alternatif qui dit :" + this.dialoguealternatif.getQuestion());
         }
         this.objectifquete=b;
         return this;
@@ -133,7 +138,7 @@ public class Echange {
                 .setObjectifs(false);
     }
 
-    public Echange(PNJ parleur,String question,String reponse,Echange[] dialogueSuivant,boolean donnequete,Quete quete,Boolean obj,ObjectifT objectifT,Echange dialoguealternatif){
+    public Echange(PNJ parleur,String question,String reponse,Echange[] dialogueSuivant,boolean donnequete,Quete quete,Boolean obj,Echange dialoguealternatif){
         this.setquestion(question)
                 .setReponse(reponse)
                 .setDialogueSuivant(dialogueSuivant)
@@ -141,22 +146,17 @@ public class Echange {
                 .setQuete(quete)
                 .setParleur(parleur)
                 .setdialoguealternatif(dialoguealternatif)
-                .setObjectifs(obj)
-                .setObjectifsT(objectifT);
+                .setObjectifs(obj);
+
     }
 
     //fonctions
 
-    public void dialogue(ObjectifT[] objectifs){
+    public void dialogue(){
         int i=0;
         if(this.getDialogueSuivant()!=null) {
             for (Echange e : this.getDialogueSuivant()) {
-                if(e.isObjectifquete() && Arrays.asList(objectifs).contains(e.getObjectifT())) {
-                    System.out.println(i + ": " + e.getDialoguealternatif().getQuestion());
-                }
-                else{
                     System.out.println(i + ": " + e.getQuestion());
-                }
                 i++;
             }
         }

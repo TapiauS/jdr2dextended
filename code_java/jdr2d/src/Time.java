@@ -8,12 +8,14 @@ public class Time{
             public void run() {
                 super.run();
                 joueur.addPotion(p);
+                System.out.println("Le joueur a bu "+p.getNomObjet());
                 try {
                     TimeUnit.SECONDS.sleep(p.getDuree().get(ChronoUnit.SECONDS));
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
                 joueur.removePotion(p);
+                System.out.println("Le joueur n'est plus sous l'effet de la potion "+p.getNomObjet());
             }
         };
         t.start();

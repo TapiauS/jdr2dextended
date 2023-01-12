@@ -170,14 +170,16 @@ public class Interaction {
     }
 
     public void dialogue() {
+        // Attention ! quand on crée un arbre de dialgue la position des dialogues donneurs de quete et des dialogues objectifs d'une quete doit être bien reflechie.
+        //le point d'acces
         Scanner scanner = new Scanner(System.in);
         System.out.println(this.getOpposant().getNomPersonnage() + " :" + this.getDialogue().getReponse());
         Echange nextechange = this.getDialogue();
         do {
             int entre = 0;
-            //pour l'instant on peut avoir plusieur fois la même quête , il faudrait probablement faire de echange suivant un array list pour éviter ce probléme
             if (nextechange.isQuete()) {
                 if(!joueur.getQueteSuivie().contains(nextechange.getQuete())) {
+                    System.out.println("J'ai bien recu la quete "+nextechange.getQuete().getNomQuete());
                     this.joueur.addsQuete(nextechange.getQuete());
                 }
                 else {
@@ -189,15 +191,12 @@ public class Interaction {
             nextechange.dialogue();
             System.out.println("Choisissez le numero de votre réponse :");
             entre = scanner.nextInt();
-            nextechange = nextechange.getDialogueSuivant()[entre];
             for (int i=0;i<this.getObserverT().size();i++) {
-                if(this.getObserverT().get(i) instanceof ObjectifT){
-                    if(((ObjectifT) this.getObserverT().get(i)).getConvaincre()==nextechange){
-                        this.notifyOneobsT(this.getObserverT().get(i));
-                        this.removeObserT(this.getObserverT().get(i));
-                    }
-                    if(nextechange.isObjectifquete()&&nextechange.getObjectifT()!=this.getObserverT().get(i)){
-                        nextechange=nextechange.getDialoguealternatif();
+                if (this.getObserverT().get(i) instanceof ObjectifT) {
+                    if (((ObjectifT) this.getObserverT().get(i)).getConvaincre() == nextechange.getDialogueSuivant()[entre]) {
+                        nextechange = nextechange.getDialogueSuivant()[entre].getDialoguealternatif();
+                    } else {
+                        nextechange = nextechange.getDialogueSuivant()[entre];
                     }
                 }
             }
