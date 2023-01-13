@@ -51,21 +51,57 @@ public class Coffre extends Objet{
 
     public Objet findremove(String indecxglobal){
         int index=0;
-        StringBuffer reste=new StringBuffer();
-        while (indecxglobal.charAt(index)!='.' || index==indecxglobal.length()-1){
-            reste.append(indecxglobal.charAt(index));
+        String reste="";
+        StringBuffer valeur=new StringBuffer();
+        System.out.println("Je suis dans le coffre : "+this.getNomObjet());
+        while (index<indecxglobal.length() && indecxglobal.charAt(index)!='.'  ){
+            valeur.append(indecxglobal.charAt(index));
             index++;
         }
-        if(index==indecxglobal.length()-1){
-            int i=Integer.parseInt(String.valueOf(reste));
+
+        System.out.println("Valeur ="+valeur);
+        if(index<indecxglobal.length()) {
+            reste = indecxglobal.substring(index + 1);
+        }
+
+        if(index==indecxglobal.length()){
+            int i=Integer.parseInt(String.valueOf(valeur));
             Objet o=this.getContenu().get(i);
-            this.remove(i);
+            this.remove(o);
             return o;
         }
         else{
-            return findremove(String.valueOf(reste));
+            System.out.println("reste= "+reste);
+            Coffre o= (Coffre) this.getContenu().get(index);
+            System.out.println("J'ai trouvé l'arme : " +o.find(reste).getNomObjet());
+            return o.findremove(reste);
         }
     }
+
+    public Objet find(String indecxglobal){
+        int index=0;
+        String reste="";
+        StringBuffer valeur=new StringBuffer();
+
+        while (index<indecxglobal.length() && indecxglobal.charAt(index)!='.'  ){
+            valeur.append(indecxglobal.charAt(index));
+            index++;
+        }
+
+        if(index<indecxglobal.length()) {
+            reste = indecxglobal.substring(index + 1);
+        }
+        if(index==indecxglobal.length()){
+            int i=Integer.parseInt(String.valueOf(valeur));
+            Objet o=this.getContenu().get(i);
+            return o;
+        }
+        else{
+            Coffre o= (Coffre) this.getContenu().get(index);
+            return o.find(reste);
+        }
+    }
+
 
     public LinkedHashMap<Integer,String> findweapon(){
         Integer index=0;
@@ -73,7 +109,53 @@ public class Coffre extends Objet{
         LinkedHashMap<Integer,String> retour=new LinkedHashMap<>();
         for (Objet o: this.getContenu()) {
             if(o instanceof Arme){
-                System.out.println(index + " : " + o.getNomObjet() + " deg=" + ((Arme) o).getDeg() + " redudegat=" + ((Arme) o).getRedudeg() + " arme a " + ((Arme) o).getNbrmain() + " mains");
+                retour.put(index, String.valueOf(indexglobal));
+                index++;
+            }
+            if(o instanceof Coffre){
+                LinkedHashMap<Integer, String> cofreint=((Coffre) o).findweapon();
+                int ajoutindex=cofreint.size();
+                while(cofreint.size()>0){
+                    retour.put(cofreint.keySet().stream().findFirst().get()+index,indexglobal+"."+cofreint.get(cofreint.keySet().stream().findFirst().get()));
+                    cofreint.remove(cofreint.keySet().stream().findFirst().get());
+                }
+                index=index+ajoutindex;
+            }
+            indexglobal++;
+        }
+        return retour;
+    }
+
+    public LinkedHashMap<Integer,String> findarmure(){
+        Integer index=0;
+        int indexglobal = 0;
+        LinkedHashMap<Integer,String> retour=new LinkedHashMap<>();
+        for (Objet o: this.getContenu()) {
+            if(o instanceof Armure){
+                retour.put(index, String.valueOf(indexglobal));
+                index++;
+            }
+            if(o instanceof Coffre){
+                LinkedHashMap<Integer, String> cofreint=((Coffre) o).findweapon();
+                int ajoutindex=cofreint.size();
+                while(cofreint.size()>0){
+                    retour.put(cofreint.keySet().stream().findFirst().get()+index,indexglobal+"."+cofreint.get(cofreint.keySet().stream().findFirst().get()));
+                    cofreint.remove(cofreint.keySet().stream().findFirst().get());
+                }
+                index=index+ajoutindex;
+            }
+            indexglobal++;
+        }
+        return retour;
+    }
+
+
+    public LinkedHashMap<Integer,String> findpotion(){
+        Integer index=0;
+        int indexglobal = 0;
+        LinkedHashMap<Integer,String> retour=new LinkedHashMap<>();
+        for (Objet o: this.getContenu()) {
+            if(o instanceof Potion){
                 retour.put(index, String.valueOf(indexglobal));
                 index++;
             }

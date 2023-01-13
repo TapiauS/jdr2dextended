@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.LinkedHashMap;
 import java.util.Scanner;
 
 public class Input {
@@ -43,7 +44,7 @@ public class Input {
                 }
             if (compteur==0){System.out.println("Aucun coffre a portée");}
             }
-        catch (InputMismatchException e){
+        catch (Exception e){
             System.out.println("Entrée invalide");
             pick(player,coffres);
         }
@@ -54,32 +55,23 @@ public class Input {
         Scanner scanner=new Scanner(System.in);
         try{
         while (inputs3 != -1) {
-            int[] indexglob = new int[player.getInventaire().getContenu().size()];
-            ArrayList<Potion> buvable = new ArrayList<>();
             System.out.println("Votre inventaire contient les potions:");
-            int index = 0;
-            for (Objet o : player.getInventaire().getContenu()) {
-                // attention il va y avoir un probléme avec les coffres dans l'inventaire !
-
-                if (o instanceof Potion) {
-                    System.out.println(index + " : " + o.getNomObjet() + " deg=" + ((Potion) o).getEffets()[0] + " redudegat=" + ((Potion) o).getEffets()[1] + " Pv=  " + ((Potion) o).getEffets()[2] + " Pvmax= " + ((Potion) o).getEffets()[3]);
-                    buvable.add((Potion) o);
-                    indexglob[index] = player.getInventaire().getContenu().indexOf(o);
-                    index++;
-                }
+            LinkedHashMap<Integer, String> listpot=player.getInventaire().findpotion();
+            for(int i=0;i<listpot.size();i++) {
+                Potion p = (Potion) player.getInventaire().find(listpot.get(i));
+                System.out.println(i + " : " + p.getNomObjet() + " deg=" + p.getEffets()[0] + " redudegat=" + p.getEffets()[1] + " Pv=  " + p.getEffets()[2] + " Pvmax= " + p.getEffets()[3]);
             }
+
             System.out.println("Tapez le numero de la potion que vous voulez boire ou -1 si vous voulez quitter");
                 inputs3 = scanner.nextInt();
                 if (inputs3 >= 0) {
-                    Potion p = buvable.get(inputs3);
-                    buvable.remove(inputs3);
-                    player.setInventaire(player.getInventaire().remove(indexglob[inputs3]));
+                    Potion p = (Potion) player.getInventaire().findremove(listpot.get(inputs3));
                     Time.drinkpotion(p, player);
                 }
 
             }
         }
-        catch (InputMismatchException e) {
+        catch (Exception e) {
             System.out.println("Entrée invalide");
             drink(player);
         }
@@ -117,7 +109,7 @@ public class Input {
             if (compteur == 0) {
                 System.out.println("Personne n'est assez proche pour parler");
             }
-        } catch (InputMismatchException ex) {
+        } catch (Exception ex) {
             System.out.println("Je passe par le catch");
             System.out.println("Entrée invalide");
             talk(player, pnjs, dialogue);
