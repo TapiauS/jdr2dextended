@@ -93,7 +93,7 @@ public class Echange {
     public Echange setObjectifs(Boolean b){
         if(b&&this.dialoguealternatif==null){
             System.out.println("Je passe bien par le dialogue alternatif par défaut");
-                this.setdialoguealternatif(new Echange(this.getParleur(),null,"Au revoir",null));
+                this.setdialoguealternatif(new Echange(this.getParleur(),null,"Vous n'avez pas encore cette quete,au revoir",null));
         }
         if(this.getDialoguealternatif()!=null) {
             System.out.println("On a bien set le dialogue alternatif qui dit :" + this.dialoguealternatif.getQuestion());

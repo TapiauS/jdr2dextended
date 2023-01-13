@@ -48,11 +48,11 @@ public class Interaction {
     public Interaction setJoueur(Personnage joueur) {
         this.joueur = joueur;
         for (Quete q : joueur.getQueteSuivie()) {
-            for (Objectifs o : q.getObjectifs()) {
-                if (o instanceof ObjectifK) {
+            for (Objectifs o : q.getObjectifs() ) {
+                if (o instanceof ObjectifK && q.getObjectifs().indexOf(o)==0) {
                     this.addObserverK((EventListenerK) o);
                 }
-                if(o instanceof ObjectifT) {
+                if(o instanceof ObjectifT && q.getObjectifs().indexOf(o)==0) {
                     this.addObserverT((EventListenerTalk) o);
                 }
             }
@@ -175,37 +175,49 @@ public class Interaction {
         Scanner scanner = new Scanner(System.in);
         System.out.println(this.getOpposant().getNomPersonnage() + " :" + this.getDialogue().getReponse());
         Echange nextechange = this.getDialogue();
+
+        if (nextechange.isQuete()) {
+            if(!joueur.getQueteSuivie().contains(nextechange.getQuete())) {
+                System.out.println("J'ai bien recu la quete "+nextechange.getQuete().getNomQuete());
+                this.joueur.addsQuete(nextechange.getQuete());
+            }
+            else {
+                nextechange=new Echange(this.opposant,nextechange.getQuestion()," Vous avez déja recu ce travail ",null);
+                System.out.println(this.opposant.getNomPersonnage() + " : " + nextechange.getReponse());
+                return;
+            }
+        }
+
         do {
             int entre = 0;
-            if (nextechange.isQuete()) {
-                if(!joueur.getQueteSuivie().contains(nextechange.getQuete())) {
-                    System.out.println("J'ai bien recu la quete "+nextechange.getQuete().getNomQuete());
-                    this.joueur.addsQuete(nextechange.getQuete());
-                }
-                else {
-                    nextechange=new Echange(this.opposant,nextechange.getQuestion(),"Vous avez déja recu ce travail",null);
-                    System.out.println(this.opposant.getNomPersonnage() + " : " + nextechange.getReponse());
-                    return;
-                }
-            }
             nextechange.dialogue();
             System.out.println("Choisissez le numero de votre réponse :");
             entre = scanner.nextInt();
             for (int i=0;i<this.getObserverT().size();i++) {
                 if (this.getObserverT().get(i) instanceof ObjectifT) {
                     if (((ObjectifT) this.getObserverT().get(i)).getConvaincre() == nextechange.getDialogueSuivant()[entre]) {
-                        nextechange = nextechange.getDialogueSuivant()[entre].getDialoguealternatif();
-                    } else {
-                        nextechange = nextechange.getDialogueSuivant()[entre];
+                        this.getObserverT().get(i).update();
                     }
                 }
             }
-            if(nextechange.isQuete()&&joueur.getQueteSuivie().contains(nextechange.getQuete())){
-                nextechange=new Echange(this.opposant,nextechange.getQuestion(),"Vous avez déja recu ce travail",null);
-                System.out.println(this.opposant.getNomPersonnage() + " : " + nextechange.getReponse());
-                return;
+            nextechange = nextechange.getDialogueSuivant()[entre];
+            if(nextechange.isObjectifquete()&&!this.getObserverT().contains(nextechange.getObjectifT())) {
+                System.out.println("Je passe par le cas ou on a pas encore la quete");
+                nextechange = nextechange.getDialoguealternatif();
+            }
+            if (nextechange.isQuete()) {
+                if(!joueur.getQueteSuivie().contains(nextechange.getQuete())) {
+                    System.out.println("J'ai bien recu la quete "+nextechange.getQuete().getNomQuete());
+                    this.joueur.addsQuete(nextechange.getQuete());
+                }
+                else {
+                    nextechange=new Echange(this.opposant,nextechange.getQuestion()," Vous avez déja recu ce travail ",null);
+                    System.out.println(this.opposant.getNomPersonnage() + " : " + nextechange.getReponse());
+                    return;
+                }
             }
             System.out.println(this.opposant.getNomPersonnage() + " : " + nextechange.getReponse());
         } while (nextechange.getDialogueSuivant() != null);
+        System.out.println("Je sors de la boucle de dialogue");
     }
 }

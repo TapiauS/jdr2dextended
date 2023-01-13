@@ -32,11 +32,11 @@ public class Main {
         Echange dialogueconcl = new Echange(jeanluc, "C'est bien normal", "Merci beaucoup, tu pourra trouver de l'équipement au sud", null);
         Echange dialoguequete = new Echange(jeanluc, "C'est fait", "Bravo vous avez trouver l'equipement!", null);
         Echange dialoguepos = new Echange(jeanluc, "Oui bien sur", "Enfin un brave prés a lutter contre cette peste vampirique", new Echange[]{dialogueconcl}, true, quete);
-        Echange dialogueintro = new Echange(jeanluc, null, "Bonjour voulez vous m'aidez à purger ce lieux ?", new Echange[]{dialognegatif, dialoguepos});
-        Echange dialogue_r=new Echange(jeanluc, null, "Avez vous récupéré l'equipement?", new Echange[] {dialoguequete}, false, null, false, null);
+        Echange dialogue_r=new Echange(jeanluc, "A propos du travail que vous proposez", "Avez vous récupéré l'equipement?", new Echange[] {dialoguequete}, false, null, true, null);
+        Echange dialogueintro = new Echange(jeanluc, null, "Bonjour voulez vous m'aidez à purger ce lieux ?", new Echange[]{dialognegatif, dialoguepos,dialogue_r});
 
-        ObjectifT obvious = new ObjectifT();
-        Echange[] listedialogue = new Echange[]{ dialogueintro,dialoguequete,dialognegatif,dialogue_r, dialogueintro, dialoguepos, dialogueconcl};
+        ObjectifT obvious = new ObjectifT(dialogue_r);
+        Echange[] listedialogue = new Echange[]{ dialogueintro,dialoguequete,dialognegatif,dialogue_r, dialoguepos, dialogueconcl};
         Potion ptest = new Potion("Potion de Force", 1, new int[]{5, 0, 0, 0}, Duration.of(15, ChronoUnit.SECONDS));
         Potion ptest1= new Potion("Potion de Force", 1, new int[]{5, 0, 0, 0}, Duration.of(15, ChronoUnit.SECONDS));
         joueur.addObjet(ptest).addObjet(ptest1);

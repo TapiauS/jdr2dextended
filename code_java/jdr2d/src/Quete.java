@@ -114,7 +114,12 @@ public class Quete implements EventListenerO{
 
     @Override
     public void update(Objectifs o) {
-        this.removeObjectif(o);
+        if(this.getObjectifs().indexOf(o)==0) {
+            this.removeObjectif(o);
+        }
+        else{
+            o.setValide(false);
+        }
     }
 
     //methodes

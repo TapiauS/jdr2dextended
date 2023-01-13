@@ -118,6 +118,7 @@ public class Input {
                 System.out.println("Personne n'est assez proche pour parler");
             }
         } catch (InputMismatchException ex) {
+            System.out.println("Je passe par le catch");
             System.out.println("Entrée invalide");
             talk(player, pnjs, dialogue);
         }
@@ -137,7 +138,6 @@ public class Input {
                     if (o instanceof Arme) {
                         System.out.println(index + " : " + o.getNomObjet() + " deg=" + ((Arme) o).getDeg() + " redudegat=" + ((Arme) o).getRedudeg() + " arme a " + ((Arme) o).getNbrmain() + " mains");
                         equipable.add((Arme) o);
-                        System.out.println("Test de index of " + player.getInventaire().getContenu().indexOf(o));
                         indexglob[index] = player.getInventaire().getContenu().indexOf(o);
                         index = index + 1;
                     }
