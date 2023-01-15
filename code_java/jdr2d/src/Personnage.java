@@ -65,6 +65,8 @@ public class Personnage extends Point implements EventListenerQuete{
         return observerF;
     }
 
+    
+
     //setters
 
 
@@ -217,7 +219,6 @@ public class Personnage extends Point implements EventListenerQuete{
             }
         }
         if(emplacementlibre) {
-            this.removObjet(armure);
             this.armure.add(armure);
         }
         else{
@@ -335,6 +336,12 @@ public class Personnage extends Point implements EventListenerQuete{
         }
         for (Arme ar : opposant.getArme()) {
             reduopp = ar.getRedudeg() + reduopp;
+        }
+        for (Potion p: this.getEffetpotion()) {
+            deg=deg+p.getEffets()[0];
+        }
+        for (Potion p : opposant.getEffetpotion()) {
+            reduopp=reduopp+p.getEffets()[1];
         }
         for(Arme arp:this.getArme()) {
             deg = arp.getDeg() + deg;

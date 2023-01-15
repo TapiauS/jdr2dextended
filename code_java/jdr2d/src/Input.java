@@ -6,12 +6,41 @@ import java.util.Scanner;
 public class Input {
     public static void deplacement(Personnage player){
         Scanner scanner=new Scanner(System.in);
-        System.out.println("Choose a direction");
+        char input='f';
         try {
-            player.depl(scanner.next().charAt(0));
+            while (input!='J') {
+                System.out.println("Choisir une direction, taper J pour sortir du deplacement ");
+                input=scanner.next().toUpperCase().charAt(0);
+                char[][] carte=player.getLieux().getCarte();
+                for (int i=0 ; i<player.getLieux().getDimensions()[0] ; i++) {
+                    for (int j = 0; j < player.getLieux().getDimensions()[1]; j++) {
+                        if (i == player.getX() && j == player.getY()) {
+                            carte[j][i] = ' ';
+                        }
+                    }
+                }
+                if(input!='J') {
+                    player.depl(input);
+                }
+                    //bidouillage!!!! a changer plus tard !
+                    for (int i=0 ; i<player.getLieux().getDimensions()[0] ; i++){
+                        for (int j=0 ;j<player.getLieux().getDimensions()[1];j++){
+                            if(i==player.getX() && j==player.getY()){
+                                carte[j][i]='J';
+                            }
+                        }
+                    }
+                    player.setLieux(player.getLieux().setCarte(carte));
+                for (int i = 0; i < 5; i++) {
+                    for (int j = 0; j < 5; j++) {
+                        System.out.print(player.getLieux().getCarte()[i][j]);
+                    }
+                    System.out.print('\n');
+                }
+            }
         }
         catch (IllegalArgumentException e){
-            System.out.println("Direction invalide!!!, choix possibles : E,N,S,O");
+            System.out.println("Direction invalide!!!, choix possibles : E,N,S,O pour se déplacer , J pour sortir");
             deplacement(player);
         }
     }
@@ -121,26 +150,16 @@ public class Input {
         int inputs = 0;
         try {
             while (inputs != -1) {
-                int[] indexglob = new int[player.getInventaire().getContenu().size()];
-                ArrayList<Arme> equipable = new ArrayList<>();
                 System.out.println("Votre inventaire contient les armes:");
-                int index = 0;
-                for (Objet o : player.getInventaire().getContenu()) {
-                    // attention il va y avoir un probléme avec les coffres dans l'inventaire !
-                    if (o instanceof Arme) {
-                        System.out.println(index + " : " + o.getNomObjet() + " deg=" + ((Arme) o).getDeg() + " redudegat=" + ((Arme) o).getRedudeg() + " arme a " + ((Arme) o).getNbrmain() + " mains");
-                        equipable.add((Arme) o);
-                        indexglob[index] = player.getInventaire().getContenu().indexOf(o);
-                        index = index + 1;
-                    }
+                LinkedHashMap<Integer, String> listarme=player.getInventaire().findweapon();
+                for(int i=0;i<listarme.size();i++) {
+                    Arme a = (Arme) player.getInventaire().find(listarme.get(i));
+                    System.out.println(i + " : " + a.getNomObjet() + " deg=" + a.getDeg() + " redudegat=" + a.getRedudeg() + " Arme à  " + a.getNbrmain() + " mains ");
                 }
                 System.out.println("Tapez le numero de l'objet que vous voulez equiper ou -1 si vous voulez quitter");
                 inputs = scanner.nextInt();
                 if (inputs >= 0) {
-                    Arme a = equipable.get(inputs);
-                    equipable.remove(inputs);
-                    System.out.println("Test indexglob " + indexglob[inputs]);
-                    player.setInventaire(player.getInventaire().remove(indexglob[inputs]));
+                    Arme a= (Arme) player.getInventaire().findremove(listarme.get(inputs));
                     player.addArme(a);
                 }
                 }
@@ -157,25 +176,16 @@ public class Input {
         Scanner scanner = new Scanner(System.in);
         try {
             while (inputs2 != -1) {
-                int[] indexglob = new int[player.getInventaire().getContenu().size()];
-                ArrayList<Armure> equipable = new ArrayList<>();
-                System.out.println("Votre inventaire contient les armures:");
-                int index = 0;
-                for (Objet o : player.getInventaire().getContenu()) {
-                    // attention il va y avoir un probléme avec les coffres dans l'inventaire !
-                    if (o instanceof Armure) {
-                        System.out.println(index + " : " + o.getNomObjet() + " deg=" + ((Armure) o).getDeg() + " redudegat=" + ((Armure) o).getRedudeg() + " armure de type  " + ((Armure) o).getTypearmure());
-                        equipable.add((Armure) o);
-                        System.out.println("Test de index of" + player.getInventaire().getContenu().indexOf(o));
-                        indexglob[index] = player.getInventaire().getContenu().indexOf(o);
-                        index = index + 1;
-                    }
+                System.out.println("Votre inventaire contient les armes:");
+                LinkedHashMap<Integer, String> listarmure=player.getInventaire().findarmure();
+                for(int i=0;i<listarmure.size();i++) {
+                    Armure a = (Armure) player.getInventaire().find(listarmure.get(i));
+                    System.out.println(i + " : " + a.getNomObjet() + " deg=" + a.getDeg() + " redudegat=" + a.getRedudeg() + " armure de type : "+a.getTypearmure());
                 }
                 System.out.println("Tapez le numero de l'objet que vous voulez equiper ou -1 si vous voulez quitter");
                 inputs2 = scanner.nextInt();
                 if (inputs2 >= 0) {
-                    Armure a = equipable.get(inputs2);
-                    equipable.remove(inputs2);
+                    Armure a= (Armure) player.getInventaire().findremove(listarmure.get(inputs2));
                     player.addArmure(a);
                 }
             }
@@ -190,29 +200,12 @@ public class Input {
         int compteur = 0;
         switch (input) {
             //le deplacement
-            case "Move":
-                char[][] carte=player.getLieux().getCarte();
-                for (int i=0 ; i<player.getLieux().getDimensions()[0] ; i++){
-                    for (int j=0 ;j<player.getLieux().getDimensions()[1];j++){
-                        if(i==player.getX() && j==player.getY()){
-                            carte[j][i]=' ';
-                        }
-                    }
-                }
-                //bidouillage!!!! a changer plus tard !
+            case "MOVE":
                 deplacement(player);
-                for (int i=0 ; i<player.getLieux().getDimensions()[0] ; i++){
-                    for (int j=0 ;j<player.getLieux().getDimensions()[1];j++){
-                        if(i==player.getX() && j==player.getY()){
-                            carte[j][i]='J';
-                        }
-                    }
-                }
-                player.setLieux(player.getLieux().setCarte(carte));
                 break;
 
             // la baston
-            case "Figth":
+            case "FIGTH":
                 for (PNJ p : pnjs) {
                     if (p.distance(player) <= 1) {
                         compteur = compteur + 1;
@@ -232,37 +225,51 @@ public class Input {
 
                 //la discussion
 
-            case "Talk":
+            case "TALK":
                 talk(player,pnjs,dialogue);
                 break;
 
                 //ramasser un objet dans un coffre
 
-            case "Open":
+            case "OPEN":
                 pick(player,coffres);
                 break;
 
                 //equiper une arme
 
-            case "EquipWeapon":
+            case "EQUIPWEAPON":
                 weapon(player);
                 break;
 
                 //equiper une armure
 
-            case "EquipArmure" :
+            case "EQUIPARMURE" :
                 armure(player);
                 break;
 
                 //boire une potion
 
-            case "Drink":
+            case "DRINK":
                 drink(player);
                 break;
 
                 //liste des taches
+            case "QUETE":
+                for (Quete q:player.getQueteSuivie()) {
+                    Objectifs o=q.getObjectifs().get(0);
+                    if(o instanceof ObjectifT) {
+                        System.out.println("Vous suivez la quete " + q.getNomQuete() + " dont l'objectif suivant est de parler a " + ((ObjectifT) o).getConvaincre().getParleur());
+                    }
+                    if(o instanceof ObjectifF){
+                        System.out.println("Vous suivez la quete " + q.getNomQuete() + " dont l'objectif suivant est de trouver l'objet " + ((ObjectifF) o).getObjetquete().getNomObjet());
+                    }
+                    if(o instanceof ObjectifK){
+                        System.out.println("Vous suivez la quete " + q.getNomQuete() + " dont l'objectif suivant est de tuer " + ((ObjectifK) o).getTarget().getNomPersonnage());
+                    }
+                }
+                break;
 
-            case "Help":
+            case "HELP":
                 System.out.println("""
                         Pour se déplacer : Move
                         Pour se battre : Figth
@@ -270,11 +277,12 @@ public class Input {
                         Pour equiper une arme : EquipWeapon
                         Pour equiper une armure : EquipArmure
                         Pour parler : Talk
+                        Pour consulter la liste des quêtes: Quete
                         Pour boire une potion : Drink
                         Pour quitter le jeu : Quit""");
                 break;
 
-            case "Quit":
+            case "QUIT":
                 break;
         }
     }
