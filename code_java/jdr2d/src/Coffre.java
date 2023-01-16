@@ -5,13 +5,12 @@ import java.util.LinkedHashMap;
 
 public class Coffre extends Objet{
     protected ArrayList<Objet> contenu;
+    protected boolean tas;
 //getters
 
     public ArrayList<Objet> getContenu(){
         return contenu;
     }
-
-
     //setters
 
     public Coffre setContenu(ArrayList<Objet> contenu){

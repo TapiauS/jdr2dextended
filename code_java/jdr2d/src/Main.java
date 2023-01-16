@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -8,8 +9,13 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         //declaration de la map de test et tout ses protagonistes
-        char[][] labytest = new char[][]{{'J', ' ', '#', ' ', ' '}, {' ', ' ', '#', ' ', ' '}, {' ', ' ', ' ', ' ', ' '}, {' ', ' ', ' ', ' ', ' '}, {'C', ' ', ' ', ' ', 'E'}};
+        char[][] labytest = new char[][]{{' ', ' ', '#', ' ', ' '}, {' ', ' ', '#', ' ', ' '}, {' ', ' ', ' ', ' ', ' '}, {' ', ' ', ' ', ' ', ' '}, {'C', ' ', ' ', ' ', 'E'}};
+        char[][] labytest1=new char[][]{{' ','#',' '},{' ','#',' '},{' ',' ',' '}};
         Map maptest = new Map(new int[]{5, 5}, labytest, "Arcanum");
+        Map maptest1=new Map(new int[]{3,3},labytest1,"Tarante");
+        Porte porte1=new Porte(maptest1,0,0);
+        Porte porte0=new Porte(maptest,4,0,porte1);
+        Porte [] portes=new Porte[] {porte0,porte1};
         Coffre coftest = new Coffre();
         Arme bataille = new Arme("Bat'aille", 1, 7, 3, 2);
         Armure plastraille = new Armure("Plastr'aille", 3, 0, 8, "Torse");
@@ -19,12 +25,14 @@ public class Main {
         ArrayList<Armure> armurevampire = new ArrayList<Armure>(List.of(new Armure("Peau Vampirique", 0, 0, 4, "Natif")));
         PNJ jeanluc = new PNJ(1, 0, maptest, armedefault, armuredefault, "Jean Luc le rouge", 5, new Coffre(), 5, null, new Race("Humain", null), null, true);
         PNJ jeanma = new PNJ(4, 4, maptest, armevampire, armurevampire, "Jean Marie Le PNJ", 30, new Coffre(), 30, null, new Race("Vampire", null), null, true);
-        Personnage joueur = new Personnage(0, 0, maptest, armedefault, armuredefault, "Donatien", 30, new Coffre(), 30, new ArrayList<>(), new Race("Humain", null));
+        Personnage joueur = new Personnage(1, 0, maptest, armedefault, armuredefault, "Donatien", 30, new Coffre(), 30, new ArrayList<>(), new Race("Humain", null));
         coftest.setLieux(maptest).setX(0).setY(4);
         coftest.add(bataille).add(plastraille);
         Scanner scanner = new Scanner(System.in);
         String input = "Rien";
         ObjectifF batte = new ObjectifF(bataille);
+
+        JOptionPane.showMessageDialog(null,new JList<>());
 
         Quete quete = new Quete("La mort de jeanmarie", "flemme", new ArrayList<Objectifs>(), new Objet[]{plastraille});
         quete.addObjectifs(batte);
@@ -46,16 +54,21 @@ public class Main {
 
         System.out.println("Vous devez tuer Jean Marie le PNJ, attention il vous faudra peut être vous équiper");
         while (!Objects.equals(input, "Quit") && jeanma.getpV() > 0 && joueur.getpV() > 0) {
-            for (int i = 0; i < 5; i++) {
-                for (int j = 0; j < 5; j++) {
-                    System.out.print(labytest[i][j]);
+            for (int i = 0; i < joueur.getLieux().getDimensions()[0]; i++) {
+                for (int j = 0; j < joueur.getLieux().getDimensions()[1]; j++) {
+                    if(j!= joueur.getX() || i!=joueur.getY()) {
+                        System.out.print(joueur.getLieux().getCarte()[i][j]);
+                    }
+                    else{
+                        System.out.print('J');
+                    }
                 }
                 System.out.print('\n');
             }
 
             System.out.println("Tapez une commande pour votre personnage, tapez \"Help\" pour la liste des commandes");
             input = scanner.next().toUpperCase();
-            Input.playerinput(input, joueur, new PNJ[]{jeanma, jeanluc}, new Coffre[]{coftest}, listedialogue);
+            Input.playerinput(input, joueur, new PNJ[]{jeanma, jeanluc}, new Coffre[]{coftest}, listedialogue,portes);
             if (jeanma.getpV() <= 0) {
                 System.out.println("Felicitation pour votre victoire");
             } else if (joueur.getpV() <= 0) {

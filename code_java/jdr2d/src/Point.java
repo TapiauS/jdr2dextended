@@ -72,7 +72,9 @@ public class Point {
             dist = Math.abs(x - x1) + Math.abs(y - y1);
             return dist;
         }
-        else throw new IllegalArgumentException("On ne peut comparer que des distances dans le même lieu");
+        else {
+            return 1000000000;
+        }
     }
 
     public Point depl(char dir){

@@ -4,44 +4,43 @@ import java.util.LinkedHashMap;
 import java.util.Scanner;
 
 public class Input {
-    public static void deplacement(Personnage player){
+
+    public static void deplacement(Personnage player,Porte[] portes){
         Scanner scanner=new Scanner(System.in);
         char input='f';
         try {
-            while (input!='J') {
-                System.out.println("Choisir une direction, taper J pour sortir du deplacement ");
-                input=scanner.next().toUpperCase().charAt(0);
-                char[][] carte=player.getLieux().getCarte();
-                for (int i=0 ; i<player.getLieux().getDimensions()[0] ; i++) {
-                    for (int j = 0; j < player.getLieux().getDimensions()[1]; j++) {
-                        if (i == player.getX() && j == player.getY()) {
-                            carte[j][i] = ' ';
+            while (input != 'J') {
+                for (Porte p : portes) {
+                    if (p.distance(player) < 1) {
+                        System.out.println("Il y a une porte à proximité voulez vous la traverser ? y/n");
+                        String inputs = scanner.next().toUpperCase();
+                        if (inputs.equals("Y")) {
+                            p.traverse(player);
+                            System.out.println("Vous venez d'arriver à " + player.getLieux().getNomLieu());
+                            return;
                         }
                     }
                 }
-                if(input!='J') {
+                System.out.println("Choisir une direction, taper J pour sortir du deplacement ");
+                input = scanner.next().toUpperCase().charAt(0);
+                if (input != 'J') {
                     player.depl(input);
                 }
-                    //bidouillage!!!! a changer plus tard !
-                    for (int i=0 ; i<player.getLieux().getDimensions()[0] ; i++){
-                        for (int j=0 ;j<player.getLieux().getDimensions()[1];j++){
-                            if(i==player.getX() && j==player.getY()){
-                                carte[j][i]='J';
-                            }
+                for (int i = 0; i < player.getLieux().getDimensions()[0]; i++) {
+                    for (int j = 0; j < player.getLieux().getDimensions()[1]; j++) {
+                        if (j != player.getX() || i != player.getY()) {
+                            System.out.print(player.getLieux().getCarte()[i][j]);
+                        } else {
+                            System.out.print('J');
                         }
-                    }
-                    player.setLieux(player.getLieux().setCarte(carte));
-                for (int i = 0; i < 5; i++) {
-                    for (int j = 0; j < 5; j++) {
-                        System.out.print(player.getLieux().getCarte()[i][j]);
                     }
                     System.out.print('\n');
                 }
             }
         }
-        catch (IllegalArgumentException e){
+        catch (Exception e){
             System.out.println("Direction invalide!!!, choix possibles : E,N,S,O pour se déplacer , J pour sortir");
-            deplacement(player);
+            deplacement(player,portes);
         }
     }
 
@@ -195,13 +194,13 @@ public class Input {
         }
     }
 
-    public static void playerinput(String input, Personnage player, PNJ[] pnjs, Coffre[] coffres,Echange[] dialogue) {
+    public static void playerinput(String input, Personnage player, PNJ[] pnjs, Coffre[] coffres,Echange[] dialogue,Porte[] portes) {
         Scanner scanner = new Scanner(System.in);
         int compteur = 0;
         switch (input) {
             //le deplacement
             case "MOVE":
-                deplacement(player);
+                deplacement(player,portes);
                 break;
 
             // la baston
