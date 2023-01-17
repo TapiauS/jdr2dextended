@@ -1,12 +1,12 @@
-import java.util.ArrayList;
-import java.util.InputMismatchException;
+import java.sql.*;
 import java.util.LinkedHashMap;
 import java.util.Scanner;
 
 public class Input {
 
-    public static void deplacement(Personnage player,Porte[] portes){
+    public static void deplacement(Personnage player,Porte[] portes) throws SQLException {
         Scanner scanner=new Scanner(System.in);
+
         char input='f';
         try {
             while (input != 'J') {
@@ -194,8 +194,13 @@ public class Input {
         }
     }
 
-    public static void playerinput(String input, Personnage player, PNJ[] pnjs, Coffre[] coffres,Echange[] dialogue,Porte[] portes) {
+    public static void playerinput(String input, Personnage player, PNJ[] pnjs, Coffre[] coffres,Echange[] dialogue,Porte[] portes) throws SQLException {
         Scanner scanner = new Scanner(System.in);
+        String playername=player.getNomPersonnage();
+        Connection conn= DriverManager.getConnection("jdbc:postgresql://10.113.28.39:5432/jdr2d_simon","stapiau","Afpa54*");
+        Statement st0=conn.createStatement();
+        ResultSet rs0= st0.executeQuery("SELECT id_personnage FROM personnage WHERE nom_personnage="+playername);
+        PreparedStatement st=conn.prepareStatement("SELECT id_personnage FROM map WHERE ");
         int compteur = 0;
         switch (input) {
             //le deplacement

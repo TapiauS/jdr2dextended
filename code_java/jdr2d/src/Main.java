@@ -1,13 +1,13 @@
 import javax.swing.*;
+import java.awt.*;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
-import java.util.Scanner;
+import java.sql.*;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         //declaration de la map de test et tout ses protagonistes
         char[][] labytest = new char[][]{{' ', ' ', '#', ' ', ' '}, {' ', ' ', '#', ' ', ' '}, {' ', ' ', ' ', ' ', ' '}, {' ', ' ', ' ', ' ', ' '}, {'C', ' ', ' ', ' ', 'E'}};
         char[][] labytest1=new char[][]{{' ','#',' '},{' ','#',' '},{' ',' ',' '}};
@@ -31,8 +31,27 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         String input = "Rien";
         ObjectifF batte = new ObjectifF(bataille);
+        String outputest=new String();
+        for(int i=0;i<labytest.length;i++){
+            for(int j=0;j<labytest[i].length;j++) {
+                int n=labytest[i].length;
+                switch (j) {
+                    case(0):
+                        outputest += "|" + labytest[i][j];
+                        break;
+                    case(4) :
+                        outputest += labytest[i][j] + "|";
+                        break;
+                    default:
+                        outputest += " " + labytest[i][j];
+                        break;
+                    }
+                }
+            outputest+='\n';
+            }
 
-        JOptionPane.showMessageDialog(null,new JList<>());
+
+        JOptionPane.showMessageDialog(null,outputest,"Carte",JOptionPane.PLAIN_MESSAGE);
 
         Quete quete = new Quete("La mort de jeanmarie", "flemme", new ArrayList<Objectifs>(), new Objet[]{plastraille});
         quete.addObjectifs(batte);
