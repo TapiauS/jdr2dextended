@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Personnage extends Point implements EventListenerQuete{
+    protected int id;
     protected String nomPersonnage;
     protected int pV;
     protected int pvmax;
@@ -23,6 +24,10 @@ public class Personnage extends Point implements EventListenerQuete{
 
     //getters
 
+
+    public int getId() {
+        return id;
+    }
 
     public ArrayList<Quete> getQueteSuivie() {
         return queteSuivie;
@@ -70,6 +75,10 @@ public class Personnage extends Point implements EventListenerQuete{
     //setters
 
 
+    public Personnage setId(int id) {
+        this.id = id;
+        return this;
+    }
 
     public Personnage setQueteSuivie(ArrayList<Quete> queteSuivie) {
         this.queteSuivie = queteSuivie;

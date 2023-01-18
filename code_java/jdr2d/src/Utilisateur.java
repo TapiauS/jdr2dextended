@@ -2,6 +2,7 @@ import java.sql.*;
 import java.util.Hashtable;
 
 public class Utilisateur {
+    private int id;
     private String nomUtilisateur;
     private String mdpUtilisateur;
     private String mailUtilisateur;
@@ -18,6 +19,10 @@ public class Utilisateur {
 
     public boolean getValidation() {
         return Validation;
+    }
+
+    public int getId() {
+        return id;
     }
 
     // setters
@@ -42,6 +47,11 @@ public class Utilisateur {
         return this;
     }
 
+    public Utilisateur setId(int id) {
+        this.id = id;
+        return this;
+    }
+
     //methodes
 
     public boolean verifiemdp(String mdptest) {
@@ -58,11 +68,12 @@ public class Utilisateur {
         this.setValidation(false);
     }
 
-    public Utilisateur(String mailUtilisateur, String mdpUtilisateur, String nomUtilisateur, Boolean validation) {
+    public Utilisateur(String mailUtilisateur, String mdpUtilisateur, String nomUtilisateur, boolean validation,int id) {
         this.setmailUtilisateur(mailUtilisateur);
         this.setValidation(validation);
         this.setNomUtilisateur(nomUtilisateur);
         this.setMdpUtilisateur(mailUtilisateur);
+        this.setId(id);
     }
 
     //methodes

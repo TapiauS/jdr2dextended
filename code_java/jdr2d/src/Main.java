@@ -11,8 +11,8 @@ public class Main {
         //declaration de la map de test et tout ses protagonistes
         char[][] labytest = new char[][]{{' ', ' ', '#', ' ', ' '}, {' ', ' ', '#', ' ', ' '}, {' ', ' ', ' ', ' ', ' '}, {' ', ' ', ' ', ' ', ' '}, {'C', ' ', ' ', ' ', 'E'}};
         char[][] labytest1=new char[][]{{' ','#',' '},{' ','#',' '},{' ',' ',' '}};
-        Map maptest = new Map(new int[]{5, 5}, labytest, "Arcanum");
-        Map maptest1=new Map(new int[]{3,3},labytest1,"Tarante");
+        Map maptest = new Map(new int[]{5, 5}, labytest, "Arcanum",0);
+        Map maptest1=new Map(new int[]{3,3},labytest1,"Tarante",0);
         Porte porte1=new Porte(maptest1,0,0);
         Porte porte0=new Porte(maptest,4,0,porte1);
         Porte [] portes=new Porte[] {porte0,porte1};

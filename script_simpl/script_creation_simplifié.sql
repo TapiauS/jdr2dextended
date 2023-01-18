@@ -32,7 +32,7 @@ CREATE TABLE lieu
 					id_lieu SERIAL PRIMARY KEY ,
 					nom_lieu VARCHAR(255),
 					description_lieu VARCHAR(255),
-					carte_lieu TEXT
+					carte_lieu CHAR[][]
 				);
 
 CREATE TABLE recompense

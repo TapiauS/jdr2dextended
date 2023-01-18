@@ -1,4 +1,5 @@
 public class Map {
+    private int id;
     private String nomLieu ;
     private char[][] carte;
     private int[] dimensions;
@@ -6,6 +7,11 @@ public class Map {
     protected Point position;
 
     //getters
+
+
+    public int getId() {
+        return id;
+    }
 
     public String getNomLieu(){
         return nomLieu;
@@ -48,18 +54,23 @@ public class Map {
         return this;
     }
 
+    public Map setId(int id) {
+        this.id = id;
+        return this;
+    }
+
     //constructeurs
 
     public Map(){
         this.setDimensions(new int[]{1, 1}).setCarte(new char[][]{{'#'}}).setNomLieu("neant").setPosition(null);
     }
 
-    public Map(int[] dimensions,char[][] carte,String nomLieu){
-        this.setDimensions(dimensions).setCarte(carte).setNomLieu(nomLieu).setPosition(null);
+    public Map(int[] dimensions,char[][] carte,String nomLieu,int id){
+        this.setDimensions(dimensions).setCarte(carte).setNomLieu(nomLieu).setPosition(null).setId(id);
     }
 
-    public Map(int[] dimensions,char[][] carte,String nomLieu,Point p){
-        this.setDimensions(dimensions).setCarte(carte).setNomLieu(nomLieu).setPosition(p);
+    public Map(int[] dimensions,char[][] carte,String nomLieu,Point p,int id){
+        this.setDimensions(dimensions).setCarte(carte).setNomLieu(nomLieu).setPosition(p).setId(id);
     }
 
 }

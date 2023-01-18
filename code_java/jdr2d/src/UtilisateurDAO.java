@@ -4,21 +4,23 @@ import java.util.Hashtable;
 public abstract class UtilisateurDAO {
 
     public static Utilisateur connectcompte(String nom,String mdp) throws SQLException {
-        Connection conn= Connect.conn;
+        Connection conn =  DriverManager.getConnection("jdbc:postgresql://10.113.28.39:5432/jdr2d_simon", "stapiau", "Afpa54*");
         PreparedStatement st=conn.prepareStatement("SELECT * FROM compte_utilisateur WHERE pseudo_compte=? AND mdp_compte=?");
         st.setString(1,nom);
         st.setString(2,mdp);
         ResultSet rs=st.executeQuery();
         Utilisateur retour=new Utilisateur();
         if(rs.next()){
-            retour=new Utilisateur(rs.getString("couriel_compte"),rs.getString("mdp_compte"),rs.getString("pseudo_compte"),true);
+            retour=new Utilisateur(rs.getString("couriel_compte"),rs.getString("mdp_compte"),rs.getString("pseudo_compte"),true,rs.getInt("id_compte_utilisateur"));
         }
         else {
             retour=null;
         }
         rs.close();
         st.close();
+        conn.close();
         return retour;
+
     }
 
     public static void createcompte(String nom, String mdp,String mail) throws SQLException {
