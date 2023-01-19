@@ -2,6 +2,8 @@ public class Objet extends Point{
     protected String nomObjet;
     protected int Poid;
 
+    protected int id;
+
     //getters
 
 
@@ -13,6 +15,10 @@ public class Objet extends Point{
         return Poid;
     }
 
+    public int getId() {
+        return id;
+    }
+
     //setters
 
     public Objet setNomObjet(String nomObjet){
@@ -22,6 +28,11 @@ public class Objet extends Point{
 
     public Objet setPoid(int poid) {
         Poid = poid;
+        return this;
+    }
+
+    public Objet setId(int id) {
+        this.id = id;
         return this;
     }
 

@@ -19,7 +19,7 @@ class MapDAOTest {
     void getmap() throws SQLException {
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
-                assertEquals(map[i][j],MapDAO.getmap("Tarante").getCarte()[i][j]);
+                assertEquals(map[i][j],MapDAO.getmap(1).getCarte()[i][j]);
             }
         }
     }

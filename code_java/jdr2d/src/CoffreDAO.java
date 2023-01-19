@@ -1,2 +1,3 @@
-public abstract class CoffreDAO {
+public abstract class CoffreDAO extends DAOObject{
+
 }

@@ -1,3 +1,4 @@
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
@@ -20,6 +21,12 @@ class PersonnageDAOTest {
 
     @Test
     void createchar() throws SQLException {
-        PersonnageDAO.createchar("Virgile",humain,ut);
+        PersonnageDAO.createchar("Preste",humain,ut);
+    }
+
+    @Test
+
+    void getchar() throws SQLException{
+        assertEquals("Virgile",PersonnageDAO.getchar(1).getNomPersonnage());
     }
 }

@@ -1,14 +1,14 @@
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.Objects;
 
-public abstract class UtilisateurDAO {
+public abstract class UtilisateurDAO extends DAOObject{
 
     public static Utilisateur connectcompte(String nom,String mdp) throws SQLException {
-        Connection conn =  DriverManager.getConnection("jdbc:postgresql://10.113.28.39:5432/jdr2d_simon", "stapiau", "Afpa54*");
-        PreparedStatement st=conn.prepareStatement("SELECT * FROM compte_utilisateur WHERE pseudo_compte=? AND mdp_compte=?");
-        st.setString(1,nom);
-        st.setString(2,mdp);
-        ResultSet rs=st.executeQuery();
+        ArrayList<Object> args=new ArrayList<>(List.of(nom,mdp));
+        ResultSet rs=query("SELECT * FROM compte_utilisateur WHERE pseudo_compte=? AND mdp_compte=?",args);
         Utilisateur retour=new Utilisateur();
         if(rs.next()){
             retour=new Utilisateur(rs.getString("couriel_compte"),rs.getString("mdp_compte"),rs.getString("pseudo_compte"),true,rs.getInt("id_compte_utilisateur"));
@@ -16,45 +16,31 @@ public abstract class UtilisateurDAO {
         else {
             retour=null;
         }
-        rs.close();
-        st.close();
-        conn.close();
+        rs.getStatement().close();
+        close();
         return retour;
-
     }
 
     public static void createcompte(String nom, String mdp,String mail) throws SQLException {
-        Connection conn =  DriverManager.getConnection("jdbc:postgresql://10.113.28.39:5432/jdr2d_simon", "stapiau", "Afpa54*");
-        PreparedStatement st=conn.prepareStatement("CALL add_user(?,?,?);");
-        st.setString(2,nom);
-        st.setString(1,mail);
-        st.setString(3,mdp);
-        st.executeUpdate();
-        st.close();
-        conn.close();
+        ArrayList<Object> args=new ArrayList<>(List.of(mail,mdp,nom));
+        queryUDC("CALL add_user(?,?,?);",args);
+        close();
     }
 
     public static Hashtable<Integer, Integer> displaypersonnage(Utilisateur util) throws SQLException {
-        Connection conn = DriverManager.getConnection("jdbc:postgresql://10.113.28.39:5432/jdr2d_simon", "stapiau", "Afpa54*");
-        PreparedStatement st0 = conn.prepareStatement("SELECT id_compte_utilisateur FROM compte_utilisateur WHERE pseudo_compte=?;");
-        st0.setString(1, util.getNomUtilisateur());
-        ResultSet rs0 = st0.executeQuery();
-        rs0.next();
-        int id_compte = rs0.getInt("id_compte_utilisateur");
-        PreparedStatement st = conn.prepareStatement("SELECT id_personnage FROM personnage WHERE id_compte_utilisateur=?;");
-        st.setInt(1, id_compte);
-        ResultSet rs = st.executeQuery();
+        ArrayList<Object> args=new ArrayList<>(List.of(util.getId()));
+
+        ResultSet rs = query("SELECT id_personnage FROM personnage WHERE id_compte_utilisateur=?;",args);
         Hashtable<Integer,Integer> retour=new Hashtable<>();
         int i=0;
         while (rs.next()){
             retour.put(i,rs.getInt(1));
             i++;
         }
-        rs.close();
-        st.close();
-        rs0.close();
-        st0.close();
-        conn.close();
+
+        rs.getStatement().close();
+        close();
+
         return retour;
     }
 
