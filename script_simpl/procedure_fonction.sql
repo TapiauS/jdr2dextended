@@ -8,6 +8,7 @@ INSERT INTO compte_utilisateur(couriel_compte,pseudo_compte,mdp_compte,valide) V
 END;
 $$;
 
+
 --fonction ajoutant un personnage pour un utilisateur
 
 CREATE OR REPLACE PROCEDURE create_char(nom VARCHAR,nom_compte VARCHAR)

@@ -32,7 +32,7 @@ CREATE TABLE lieu
 					id_lieu SERIAL PRIMARY KEY ,
 					nom_lieu VARCHAR(255),
 					description_lieu VARCHAR(255),
-					carte_lieu CHAR[][]
+					carte_lieu TEXT
 				);
 
 CREATE TABLE recompense
@@ -79,10 +79,12 @@ CREATE TABLE personnage
 					direction CHAR(10) ,
                     xp INT,
                     pv INT,
+					pvmax INT,
 					vivant BOOLEAN,
                     coordonnee POINT,
 					id_lieu INT,
 					id_compte_utilisateur INT,
+					race VARCHAR,
 					FOREIGN KEY(id_compte_utilisateur) REFERENCES compte_utilisateur(id_compte_utilisateur) ON DELETE CASCADE,
 					FOREIGN KEY(id_lieu) REFERENCES lieu(id_lieu) ON DELETE CASCADE
 				);
@@ -110,9 +112,12 @@ CREATE TABLE objet
                     id_personnage_possede INT,
                     id_personnage_equipe INT,
 					contenant INT,
+					id_lieu INT,
+					poid int,
                     FOREIGN KEY (id_personnage_possede) REFERENCES personnage(id_personnage) ON DELETE CASCADE,
                     FOREIGN KEY (id_personnage_equipe) REFERENCES personnage(id_personnage) ON DELETE CASCADE,
-					FOREIGN KEY (contenant) REFERENCES objet(id_objet) ON DELETE CASCADE
+					FOREIGN KEY (contenant) REFERENCES objet(id_objet) ON DELETE CASCADE,
+					FOREIGN KEY (id_lieu) REFERENCES lieu(id_lieu) ON DELETE CASCADE
 				);
 
 
