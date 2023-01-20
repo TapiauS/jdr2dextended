@@ -25,4 +25,29 @@ public abstract class PersonnageDAO extends DAOObject{
         return retour;
     }
 
+    public static ArrayList<Personnage> getcharclose(Personnage p,int dist) throws SQLException {
+        ArrayList<Object> args=new ArrayList<>(List.of(p.getId(),dist));
+        ResultSet rs=query("SELECT persocomp FROM distperso WHERE persoref=? AND diff<?;",args);
+        ArrayList<Personnage> retour=new ArrayList<>();
+        while (rs.next()){
+                retour.add(PersonnageDAO.getchar(rs.getInt(1)));
+        }
+        rs.getStatement().close();
+        close();
+        return retour;
+    }
+
+    //TODO getPNJCLOSE
+
+    public static ArrayList<Objet> getobjetclose(Personnage p,int dist) throws SQLException{
+        ArrayList<Object> args=new ArrayList<>(List.of(p.getId(),dist));
+        ResultSet rs=query("SELECT id_objet FROM distobjet WHERE id_perso=? AND diff<?;",args);
+        ArrayList<Objet> retour=new ArrayList<>();
+        while (rs.next()){
+                retour.add((ObjetDAO.getObjet(rs.getInt(1))));
+        }
+        rs.getStatement().close();
+        close();
+        return retour;
+    }
 }

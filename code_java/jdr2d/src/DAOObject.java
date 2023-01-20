@@ -13,8 +13,10 @@ import java.lang.reflect.Method;
         private static Connection conn = null;
 
         protected static void close() throws SQLException {
-            conn.close();
-            conn=null;
+            if(conn!=null) {
+                conn.close();
+                conn = null;
+            }
         }
         protected static Properties loadConfig(String fileName){
             Properties prop = new Properties();
@@ -98,7 +100,7 @@ import java.lang.reflect.Method;
 
                 if(func != null){
                     try{
-                        Method m = pst.getClass().getMethod(func, new Class[]{int.class, c});
+                        Method m = pst.getClass().getMethod(func, int.class, c);
                         m.setAccessible(true);
                         m.invoke(pst, i, arg);
                         i++;

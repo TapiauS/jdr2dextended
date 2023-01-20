@@ -29,4 +29,8 @@ class PersonnageDAOTest {
     void getchar() throws SQLException{
         assertEquals("Virgile",PersonnageDAO.getchar(1).getNomPersonnage());
     }
+    @Test
+    void getcharclose() throws SQLException{
+        assertEquals("Sogg Hydromel",PersonnageDAO.getcharclose(PersonnageDAO.getchar(1),5).get(0).getNomPersonnage());
+    }
 }

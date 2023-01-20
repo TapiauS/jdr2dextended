@@ -22,17 +22,7 @@ public abstract class MapDAO extends DAOObject{
     }
 
 
-   // le string en retour est temporaire
-    public static ArrayList<String> getchar(Map m) throws SQLException {
-        ArrayList<Object> args=new ArrayList<>(List.of(m.getId()));
-        ResultSet rs=query("SELECT nom_personnage FROM personnage WHERE id_lieu=?;",args);
-        ArrayList<String> retour=new ArrayList<>();
-        while (rs.next()){
-            retour.add(rs.getString(1));
-        }
-        rs.getStatement().close();
-        close();
-        return retour;
+   // les inventaires et équipements pas encore gérés, ca arrive promis
 
-    }
+
 }

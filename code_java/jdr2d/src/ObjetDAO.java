@@ -23,7 +23,6 @@ public abstract class ObjetDAO extends DAOObject{
         ArrayList<Object> args=new ArrayList<>(List.of(id));
         ResultSet rs=query("SELECT * FROM objet WHERE id_objet=?;",args);
         rs.next();
-
         Objet retour=new Objet(rs.getInt("x"),rs.getInt("y"),MapDAO.getmap(rs.getInt("id_lieu")),rs.getString("nom_objet"),rs.getInt("poid"));
         rs.getStatement().close();
         return retour;

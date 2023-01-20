@@ -24,8 +24,4 @@ class MapDAOTest {
         }
     }
 
-    @Test
-    void getChar() throws SQLException {
-        assertEquals(listeref,MapDAO.getchar(carteref));
-    }
 }
