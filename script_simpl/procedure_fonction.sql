@@ -102,7 +102,26 @@ INSERT INTO declenche VALUES (idinter,idrec,idobj);
 END;
 $$;
 
-
-
+CREATE OR REPLACE FUNCTION dist(idref INT ,idcomp  INT ,tablenameref VARCHAR,tablenamecomp VARCHAR) RETURNS INTEGER
+LANGUAGE plpgsql
+AS $$
+DECLARE
+xref INT;
+yref INT;
+xcomp INT;
+ycomp INT;
+idnameref VARCHAR ;
+idnamecomp VARCHAR;
+requete TEXT;
+BEGIN 
+idnameref=CONCAT('id_',tablenameref);
+idnamecomp=CONCAT('id_',tablenamecomp);
+requete=CONCAT('SELECT t0.x AS refx,t0.y AS refy,t1.x AS compx,t1.y AS compy FROM ',tablenameref,' AS t0 
+    JOIN ',tablenamecomp,' AS t1 ON t0.id_lieu = t1.id_lieu
+WHERE t0.',idnameref,'=',idref,' AND t1.',idnamecomp,'=',idcomp);
+EXECUTE requete INTO xref,yref,xcomp,ycomp;
+RETURN ABS(xref-xcomp)+ABS(yref-ycomp);
+END;
+$$;
 
 

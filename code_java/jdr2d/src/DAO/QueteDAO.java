@@ -19,7 +19,7 @@ import java.util.List;
 public abstract class QueteDAO extends DAOObject {
     public ArrayList<Quete> getqueteSuivie(int id) throws SQLException {
         ArrayList<Object> args=new ArrayList<>(List.of(id,id));
-        ResultSet rs=query("Select id_interaction,nom_interaction,nom_objectif,id_target,id_find,accorde.id_objet,id_objectif,id_talk,valide FROM joue_un_role JOIN" +
+        ResultSet rs=query("SELECT id_interaction,nom_interaction,nom_objectif,id_target,id_find,accorde.id_objet,id_objectif,id_talk,valide FROM joue_un_role JOIN" +
                                     "interaction ON code_role_quete='Q' AND id_personnage=? AND quete.id_quete=joue_un_role.id_quete"+
                                     "JOIN promet ON promet.id_quete=recompense.id_quete"                                             +
                                     "JOIN objet ON quete.id_quete=objet.id_quete"                                                    +

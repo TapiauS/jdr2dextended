@@ -56,3 +56,16 @@ CREATE VIEW map(nom_perso,coordonnee,map) AS
 CREATE VIEW pnj(nom,position) AS
     SELECT nom_personnage,personnage.coordonnee
     FROM personnage WHERE personnage.id_compte_utilisateur IS NULL;
+
+
+CREATE OR REPLACE VIEW distperso(persoref,persocomp,diff) AS
+    SELECT t0.id_personnage AS id1,t1.id_personnage AS id2,(SELECT dist(t0.id_personnage,t1.id_personnage,'personnage','personnage')) AS dist FROM personnage as t0
+    JOIN personnage AS t1 ON t0.id_lieu=t1.id_lieu
+    WHERE (SELECT dist(t0.id_personnage,t1.id_personnage,'personnage'))>0;
+
+CREATE OR REPLACE VIEW distobjet(persoref,objet,diff) AS
+    SELECT id_personnage,id_objet,(SELECT dist(id_personnage,id_objet,'personnage','objet')) AS dist FROM personnage
+    JOIN objet ON personnage.id_lieu=objet.id_lieu
+    WHERE (SELECT dist(id_personnage,id_objet,'personnage','objet'))>0;
+
+    

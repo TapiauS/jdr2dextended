@@ -65,6 +65,11 @@ CREATE TABLE role_interaction
 					nom_role_interaction VARCHAR(255)
 				);
 
+CREATE TABLE type_objet
+				(
+					id_type_objet SERIAL PRIMARY KEY,
+					nom_type VARCHAR(255)
+				);
 
 
 /* Tables niveau 1 */
@@ -105,19 +110,24 @@ CREATE TABLE objet
 				(
 					id_objet SERIAL PRIMARY KEY ,
 					nom_objet VARCHAR(255) NOT NULL,
-					statistique_objet INT,
+					deg INT,
+					redudeg INT,
 					description_objet TEXT,
 					x INT,
 					y INT,
+					nbrmain INT,
+					emplacement VARCHAR UNIQUE,
                     id_personnage_possede INT,
                     id_personnage_equipe INT,
 					contenant INT,
 					id_lieu INT,
-					poid int,
+					poid INT,
+					id_type_objet INT, 
                     FOREIGN KEY (id_personnage_possede) REFERENCES personnage(id_personnage) ON DELETE CASCADE,
                     FOREIGN KEY (id_personnage_equipe) REFERENCES personnage(id_personnage) ON DELETE CASCADE,
 					FOREIGN KEY (contenant) REFERENCES objet(id_objet) ON DELETE CASCADE,
-					FOREIGN KEY (id_lieu) REFERENCES lieu(id_lieu) ON DELETE CASCADE
+					FOREIGN KEY (id_lieu) REFERENCES lieu(id_lieu) ON DELETE CASCADE,
+					FOREIGN KEY (id_type_objet) REFERENCES type_objet(id_type_objet) ON DELETE CASCADE
 				);
 
 
