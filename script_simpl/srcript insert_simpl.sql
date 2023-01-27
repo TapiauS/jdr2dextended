@@ -557,9 +557,8 @@ INSERT INTO precede(id_dialogue,id_embranchement)
 
 
 
-SELECT id_interaction,nom_interaction,nom_objectif,id_target,id_find,accorde.id_objet,id_objectif,id_talk,valide FROM joue_un_role 
-    JOIN interaction ON code_role_interaction='Q' AND id_personnage=1 AND interaction.id_interaction=joue_un_role.id_interaction
-    JOIN promet ON promet.id_interaction=recompense.id_interaction                                             
-    JOIN objet ON interaction.id_interaction=objet.id_interaction                                                    
+SELECT interaction.id_interaction,nom_interaction,nom_objectif,objectif.id_personnage as target,objectif.id_objet as find,objet.id_objet as recompense,objectif.id_objectif,objectif.id_dialogue as talk,validation FROM joue_un_role 
+    JOIN interaction ON code_role_interaction='Q' AND id_personnage=1 AND interaction.id_interaction=joue_un_role.id_interaction                                             
+    JOIN objet ON interaction.id_interaction=objet.id_quete                                                    
     JOIN objectif on objectif.id_interaction=interaction.id_interaction                                              
-    JOIN valide ON objectif.id_objectif=valide.id_objectif and valide.id_personnage=1 ORDER BY ordre_objectif;
+    JOIN valide ON objectif.id_objectif=valide.id_objectif and valide.id_personnage=1 ORDER BY id_interactio,ordre DESC;
