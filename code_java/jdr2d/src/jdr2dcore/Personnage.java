@@ -75,9 +75,8 @@ public class Personnage extends Point implements EventListenerQuete {
     //setters
 
 
-    public Personnage setId(int id) {
+    public void setId(int id) {
         this.id = id;
-        return this;
     }
 
     public Personnage setQueteSuivie(ArrayList<Quete> queteSuivie) {

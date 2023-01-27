@@ -19,10 +19,15 @@ public abstract class PersonnageDAO extends DAOObject {
         ResultSet rs=query("SELECT * FROM personnage WHERE id_personnage=?;",args);
         rs.next();
         //version trés basique a des fin de test, le gros du taf va se jouer sur la récupération des objectifs et des objets associées au personnage
-        Personnage retour= new Personnage(rs.getInt("x"),rs.getInt("y"), MapDAO.getmap(rs.getInt("id_lieu")),null,null,rs.getString("nom_personnage"),rs.getInt("pv"),null,rs.getInt("pvmax"),null,null).setId(rs.getInt("id_personnage"));
-
+        Personnage retour=new Personnage();
+        if(rs.getInt("id_compte_utilisateur")!=0) {
+           retour = new Personnage(rs.getInt("x"), rs.getInt("y"), MapDAO.getmap(rs.getInt("id_lieu")), null, null, rs.getString("nom_personnage"), rs.getInt("pv"), null, rs.getInt("pvmax"), null, null);
+        }
+        else {
+            retour = new PNJ(rs.getInt("x"), rs.getInt("y"), MapDAO.getmap(rs.getInt("id_lieu")), null, null, rs.getString("nom_personnage"), rs.getInt("pv"), null, rs.getInt("pvmax"), null, null,null,null);
+        }
         rs.getStatement().close();
-
+        retour.setId(rs.getInt("id_personnage"));
         return retour;
     }
 

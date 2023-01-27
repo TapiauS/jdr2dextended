@@ -43,13 +43,6 @@ CREATE TABLE recompense
 				);
 
 
-CREATE TABLE objectif 
-				(
-					id_objectif SERIAL PRIMARY KEY ,
-					nom_objectif VARCHAR(255),
-					description_objectif TEXT,
-					validation_ BOOLEAN NOT NULL DEFAULT 'f'
-				);
 
 
 CREATE TABLE interaction
@@ -208,4 +201,20 @@ CREATE TABLE precede
 					PRIMARY KEY(id_embranchement,id_dialogue) ,
 					FOREIGN KEY(id_embranchement) REFERENCES embranchement(id_embranchement) ON DELETE CASCADE,
 					FOREIGN KEY(id_dialogue) REFERENCES dialogue(id_dialogue) ON DELETE CASCADE
+				);
+
+--Tables de niveau 9
+
+CREATE TABLE objectif 
+				(
+					id_objectif SERIAL PRIMARY KEY ,
+					nom_objectif VARCHAR(255),
+					description_objectif TEXT,
+					id_objet INT,
+					id_personnage INT,
+					id_dialogue INT,
+					validation_ BOOLEAN NOT NULL DEFAULT 'f'
+					FOREIGN KEY(id_dialogue) REFERENCES dialogue(id_dialogue),
+					FOREIGN KEY(id_objet) REFERENCES objet(id_objet),
+					FOREIGN KEY(id_personnage) REFERENCES personnage(id_personnage)
 				);
