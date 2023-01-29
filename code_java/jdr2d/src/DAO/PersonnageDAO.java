@@ -24,10 +24,10 @@ public abstract class PersonnageDAO extends DAOObject {
            retour = new Personnage(rs.getInt("x"), rs.getInt("y"), MapDAO.getmap(rs.getInt("id_lieu")), null, null, rs.getString("nom_personnage"), rs.getInt("pv"), null, rs.getInt("pvmax"), null, null);
         }
         else {
-            retour = new PNJ(rs.getInt("x"), rs.getInt("y"), MapDAO.getmap(rs.getInt("id_lieu")), null, null, rs.getString("nom_personnage"), rs.getInt("pv"), null, rs.getInt("pvmax"), null, null,null,null);
+            retour = new PNJ(rs.getInt("x"), rs.getInt("y"), MapDAO.getmap(rs.getInt("id_lieu")), null, null, rs.getString("nom_personnage"), rs.getInt("pv"), null, rs.getInt("pvmax"), null, null,null,true);
         }
-        rs.getStatement().close();
         retour.setId(rs.getInt("id_personnage"));
+        rs.getStatement().close();
         return retour;
     }
 

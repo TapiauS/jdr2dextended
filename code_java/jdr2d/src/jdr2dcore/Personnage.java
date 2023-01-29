@@ -293,7 +293,7 @@ public class Personnage extends Point implements EventListenerQuete {
                 .setQueteSuivie(null)
                 .setRace(null)
                 .setdateFin(new ArrayList<LocalDateTime>())
-                .setEffetpotion(new ArrayList<Potion>(List.of(new Potion("Systeme digestif",0, new int[]{0, 0, 0, 0} , Duration.of(1000, ChronoUnit.YEARS)))))
+                .setEffetpotion(new ArrayList<Potion>(List.of(new Potion("Systeme digestif",0, new int[]{0, 0, 0, 0} , Duration.of(100000000, ChronoUnit.HOURS)))))
                 .setObserverF(new ArrayList<>());
     }
 

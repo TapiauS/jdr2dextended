@@ -16,7 +16,10 @@ public abstract class ObjetDAO extends DAOObject {
     public static String getObjettype(int id) throws SQLException{
         ArrayList<Object> args=new ArrayList<>(List.of(id));
         ResultSet rs=query("SELECT nom_type_objet FROM type_objet JOIN objet ON objet.id_type_objet=type_objet.id_type_objet WHERE id_objet=?",args);
-        String retour=rs.getString(1);
+        String retour="";
+        if(rs.next()) {
+            retour = rs.getString(1);
+        }
         rs.getStatement().close();
         close();
         return retour;
@@ -28,10 +31,10 @@ public abstract class ObjetDAO extends DAOObject {
         Objet retour;
         rs.next();
         switch (ObjetDAO.getObjettype(id)) {
-            case "jdr2dcore.Arme":
+            case "Arme":
                 retour = new Arme(rs.getInt("x"), rs.getInt("y"), MapDAO.getmap(rs.getInt("id_lieu")), rs.getString("nom_objet"), rs.getInt("poid"), rs.getInt("deg"), rs.getInt("deg"), rs.getInt("nbrmain")).setId(rs.getInt("id_objet"));
                 break;
-            case "jdr2dcore.Armure":
+            case "Armure":
                 retour = new Armure(rs.getInt("x"), rs.getInt("y"), MapDAO.getmap(rs.getInt("id_lieu")), rs.getString("nom_objet"), rs.getInt("poid"), rs.getInt("deg"), rs.getInt("deg"), rs.getString("type_armure")).setId(rs.getInt("id_objet"));
                 break;
             /*case "jdr2dcore.Potion":

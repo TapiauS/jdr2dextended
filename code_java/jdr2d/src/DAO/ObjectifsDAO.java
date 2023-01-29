@@ -14,10 +14,14 @@ public abstract class ObjectifsDAO extends DAOObject{
         ResultSet rs=query("SELECT * FROM objectif WHERE id_objectif=?",args);
         rs.next();
         if(rs.getInt("id_personnage")!=0){
-            return new ObjectifK((PNJ) PersonnageDAO.getchar(rs.getInt("id_personnage")));
+            ObjectifK retour=new ObjectifK((PNJ) PersonnageDAO.getchar(rs.getInt("id_personnage")));
+            retour.setId(id);
+            return retour;
         }
         if(rs.getInt("id_objet")!=0){
-            return new ObjectifF(ObjetDAO.getObjet(rs.getInt("id_objet")));
+            ObjectifF retour=new ObjectifF(ObjetDAO.getObjet(rs.getInt("id_objet")));
+            retour.setId(id);
+            return retour;
         }
         /*
         if(rs.getInt("id_dialogue")!=0){

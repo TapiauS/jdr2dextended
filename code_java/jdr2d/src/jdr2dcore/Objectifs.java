@@ -14,6 +14,8 @@ public abstract class Objectifs {
 
     protected ArrayList<EventListenerO> observer;
 
+    protected int id;
+
 
     //getters
 
@@ -21,6 +23,9 @@ public abstract class Objectifs {
         return valide;
     }
 
+    public int getId() {
+        return id;
+    }
 
     //setters
 
@@ -36,6 +41,10 @@ public abstract class Objectifs {
     public Objectifs setObserver(ArrayList<EventListenerO> e){
         this.observer=e;
         return this;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     //builders

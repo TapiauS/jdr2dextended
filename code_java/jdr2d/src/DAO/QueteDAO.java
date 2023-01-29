@@ -19,14 +19,13 @@ import java.util.List;
 public abstract class QueteDAO extends DAOObject {
 
 
-    public ArrayList<Quete> getqueteSuivie(int id) throws SQLException {
+    public static ArrayList<Quete> getqueteSuivie(int id) throws SQLException {
         ArrayList<Object> args=new ArrayList<>(List.of(id,id));
-        ResultSet rs=query("SELECT id_interaction,nom_interaction,nom_objectif,id_target,id_find,accorde.id_objet,id_objectif,id_talk,valide FROM joue_un_role JOIN" +
-                                    "interaction ON code_role_quete='Q' AND id_personnage=? AND quete.id_quete=joue_un_role.id_quete"+
-                                    "JOIN promet ON promet.id_quete=recompense.id_quete"                                             +
-                                    "JOIN objet ON quete.id_quete=objet.id_quete"                                                    +
-                                    "JOIN objectif on objectif.id_quete=quete.id_quete"                                              +
-                                    "JOIN valide ON objectif.id_objectif=valide.id_objectif and valide.id_personnage=? ORDER BY id_interaction,ordre DESC;",args);
+        ResultSet rs=query("SELECT interaction.id_interaction,ordre,nom_interaction,description_interaction,nom_objectif,objectif.id_personnage as target,objectif.id_objet as find,objet.id_objet as recompense,objectif.id_objectif,objectif.id_dialogue as talk,validation FROM joue_un_role \n" +
+                "    JOIN interaction ON code_role_interaction='Q' AND id_personnage=? AND interaction.id_interaction=joue_un_role.id_interaction                                             \n" +
+                "    JOIN objet ON interaction.id_interaction=objet.id_quete                                                    \n" +
+                "    JOIN objectif on objectif.id_interaction=interaction.id_interaction                                              \n" +
+                "    JOIN valide ON objectif.id_objectif=valide.id_objectif and valide.id_personnage=? ORDER BY id_interaction,ordre ;",args);
         ArrayList<Quete> retour=new ArrayList<>();
         String nom = "";
         String descript = "";
@@ -34,19 +33,27 @@ public abstract class QueteDAO extends DAOObject {
         ArrayList<Objectifs> objs=new ArrayList<>();
         ArrayList<Integer> listo=new ArrayList<>();
         ArrayList<Objet> recompense=new ArrayList<>();
+        ArrayList<Integer> listobjo=new ArrayList<>();
         while (rs.next()){
-            if(listid.contains(rs.getInt("id_quete"))||listid.isEmpty()){
+            if(listid.contains(rs.getInt("id_interaction"))||listid.isEmpty()){
                 nom=rs.getString("nom_interaction");
                 descript=rs.getString("description_interaction");
                 if(listid.isEmpty())
-                    listid.add(rs.getInt("id_quete"));
-                if(!rs.getBoolean("valide"))
-                    objs.add(ObjectifsDAO.getObjectif(rs.getInt("id_objectif")));
+                    listid.add(rs.getInt("id_interaction"));
+                if(listobjo.isEmpty()||!listobjo.contains(rs.getInt("id_objectif"))) {
+                    if(listobjo.isEmpty())
+                        listobjo.add(rs.getInt("id_objectif"));
+                    if (!rs.getBoolean("validation")) {
+                        listobjo.add(rs.getInt("id_objectif"));
+                        objs.add(ObjectifsDAO.getObjectif(rs.getInt("id_objectif")));
+                    }
+                }
                 if(listo.isEmpty()){
                     listo.add(rs.getInt("recompense"));
                 }
                 if(!listo.contains(rs.getInt("recompense"))){
                     listo.add(rs.getInt("recompense"));
+                    System.out.println("Je passe par la boucle de controle et la liste d'objectif a pour taille "+listo.size());
                 }
             }
             else {
@@ -54,7 +61,7 @@ public abstract class QueteDAO extends DAOObject {
                 for (int i=0;i<listo.size();i++) {
                     rec[i]=ObjetDAO.getObjet(listo.get(i));
                 }
-                Quete q=new Quete(nom,descript,new ArrayList<>(),rec);
+                Quete q=new Quete(nom,descript,new ArrayList<>(),rec).setId(listid.get(0));
                 for (Objectifs o:objs) {
                     q.addObjectifs(o);
                 }
@@ -71,7 +78,7 @@ public abstract class QueteDAO extends DAOObject {
         for (int i=0;i<listo.size();i++) {
             rec[i]=ObjetDAO.getObjet(listo.get(i));
         }
-        Quete q=new Quete(nom,descript,new ArrayList<>(),rec);
+        Quete q=new Quete(nom,descript,new ArrayList<>(),rec).setId(listid.get(0));
         for (Objectifs o:objs) {
             q.addObjectifs(o);
         }

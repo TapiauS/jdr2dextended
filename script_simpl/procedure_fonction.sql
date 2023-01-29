@@ -124,4 +124,20 @@ RETURN ABS(xref-xcomp)+ABS(yref-ycomp);
 END;
 $$;
 
+--Fonction qui trouve le dialogue d'entré d'un personnage
 
+CREATE OR REPLACE FUNCTION startdialogue(idperso INT) RETURNs INT
+LANGUAGE plpgsql
+AS $$
+DECLARE
+lisid INT [];
+id INT;
+BEGIN 
+SELECT ARRAY_AGG(id_dialogue) FROM dialogue WHERE dialogue.id_personnage=idperso INTO lisid;
+FOREACH id IN ARRAY lisid LOOP 
+    IF (SELECT id_embranchement FROM embranchement WHERE id_dialogue=id) IS NULL THEN
+        RETURN id;
+    END IF;
+END LOOP;
+END;
+$$;

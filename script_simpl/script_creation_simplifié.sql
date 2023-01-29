@@ -14,6 +14,7 @@ DROP TABLE recompense CASCADE;
 DROP TABLE lieu CASCADE;
 DROP TABLE compte_utilisateur CASCADE;
 DROP TABLE objet CASCADE;
+DROP TABLE type_objet CASCADE;
 
 /* Tables niveau 0 */
 

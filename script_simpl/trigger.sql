@@ -68,29 +68,66 @@ CREATE OR REPLACE TRIGGER prendep_obj
 
 --trigger pour la gestion de la mort d'un personnage joueur,elle met le serveur POStgres en pause donc probablement pas la bonne solution ?
 
-CREATE OR REPLACE FUNCTION mort() RETURNS TRIGGER AS $$
+
+
+--TODO : trigger qui set les objectifs d'une quete a false quand il la prend
+
+CREATE OR REPLACE FUNCTION addquete() RETURNS TRIGGER AS $$
+DECLARE
+id_obj INT [];
+id INT;
 BEGIN
-IF NEW.pv=0 AND OLD.id_compte_utilisateur IS NOT NULL THEN
-    NEW.vivant=FALSE;
-    PERFORM pg_sleep(10);
-    NEW.x=0;
-    NEW.y=0;
-    NEW.pv=10;
-    NEW.vivant=FALSE;
-    RETURN NEW;
-ELSE
-    RETURN NEW;
+IF NEW.code_role_interaction='Q' THEN
+    SELECT ARRAY_AGG(id_objectif) FROM objectif WHERE id_interaction=NEW.id_interaction INTO id_obj;
+    FOREACH id IN ARRAY id_obj LOOP
+        INSERT INTO valide(id_objectif,id_personnage,validation) VALUES(id,NEW.id_personnage,false);
+    END LOOP ;
 END IF;
+RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE TRIGGER gestion_deces
-    BEFORE UPDATE ON personnage
-    FOR EACH ROW EXECUTE PROCEDURE mort();
+CREATE OR REPLACE TRIGGER add_quete
+    BEFORE INSERT ON joue_un_role 
+    FOR EACH ROW EXECUTE PROCEDURE addquete();
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- CREATE OR REPLACE FUNCTION mort() RETURNS TRIGGER AS $$
+-- BEGIN
+-- IF NEW.pv=0 AND OLD.id_compte_utilisateur IS NOT NULL THEN
+--     NEW.vivant=FALSE;
+--     PERFORM pg_sleep(10);
+--     NEW.x=0;
+--     NEW.y=0;
+--     NEW.pv=10;
+--     NEW.vivant=FALSE;
+--     RETURN NEW;
+-- ELSE
+--     RETURN NEW;
+-- END IF;
+-- END;
+-- $$ LANGUAGE plpgsql;
+
+-- CREATE OR REPLACE TRIGGER gestion_deces
+--     BEFORE UPDATE ON personnage
+--     FOR EACH ROW EXECUTE PROCEDURE mort();
 
 
 
