@@ -18,7 +18,6 @@ import java.util.List;
 
 public abstract class QueteDAO extends DAOObject {
 
-
     public static ArrayList<Quete> getqueteSuivie(int id) throws SQLException {
         ArrayList<Object> args=new ArrayList<>(List.of(id,id));
         ResultSet rs=query("SELECT interaction.id_interaction,ordre,nom_interaction,description_interaction,nom_objectif,objectif.id_personnage as target,objectif.id_objet as find,objet.id_objet as recompense,objectif.id_objectif,objectif.id_dialogue as talk,validation FROM joue_un_role \n" +
@@ -84,5 +83,8 @@ public abstract class QueteDAO extends DAOObject {
         }
         retour.add(q);
        return retour;
-}
+    }
+    public static Quete getQuete(int id){
+        return new Quete();
+    }
 }
