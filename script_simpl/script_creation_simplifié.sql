@@ -53,11 +53,6 @@ CREATE TABLE interaction
 					description_interaction VARCHAR(255)
 				);
 
-CREATE TABLE role_interaction
-				(
-					code_role_interaction CHAR(2) PRIMARY KEY ,
-					nom_role_interaction VARCHAR(255)
-				);
 
 CREATE TABLE type_objet
 				(
@@ -71,16 +66,27 @@ CREATE TABLE type_objet
 
 /* TABLE NIVEAU 2 */
 
+CREATE TABLE porte
+				(
+					id_porte SERIAL PRIMARY KEY ,
+					x INT,
+					y INT,
+					id_lieu INT,
+					id_porte_relie INT,
+					FOREIGN KEY(id_lieu) REFERENCES lieu(id_lieu),
+					FOREIGN KEY(id_porte_relie) REFERENCES porte(id_porte)
+				);
+
 CREATE TABLE personnage 
 				(
 					id_personnage SERIAL PRIMARY KEY ,
 					nom_personnage VARCHAR(255) NOT NULL UNIQUE,
-					direction CHAR(10) ,
                     xp INT,
                     pv INT,
 					pvmax INT,
 					vivant BOOLEAN,
-                    coordonnee POINT,
+                    x INT,
+					y INT,
 					id_lieu INT,
 					id_compte_utilisateur INT,
 					race VARCHAR,
@@ -110,7 +116,7 @@ CREATE TABLE objet
 					x INT,
 					y INT,
 					nbrmain INT,
-					emplacement VARCHAR UNIQUE,
+					emplacement VARCHAR ,
                     id_personnage_possede INT,
                     id_personnage_equipe INT,
 					contenant INT,
@@ -136,25 +142,13 @@ CREATE TABLE declenche
 					FOREIGN KEY(id_objectif) REFERENCES objectif(id_objectif) ON DELETE CASCADE
 				);
 
-CREATE TABLE valide 
-				(
-					id_personnage INT,
-					id_objectif INT,
-					validation BOOLEAN NOT NULL,
-					FOREIGN KEY(id_personnage) REFERENCES personnage(id_personnage) ON DELETE CASCADE,
-					FOREIGN KEY(id_objectif) REFERENCES objectif(id_objectif) ON DELETE CASCADE,
-					PRIMARY KEY(id_personnage,id_objectif) 
-				);
-
-
 
 --Tables de niveau 4
 
 CREATE TABLE accorde 
 				(
 					id_objet INT,
-					id_recompense INT,
-					quantite INT,
+					id_interaction INT,
 					PRIMARY KEY(id_objet,id_recompense) ,
 					FOREIGN KEY(id_recompense) REFERENCES recompense(id_recompense) ON DELETE CASCADE
 				);
@@ -180,14 +174,12 @@ CREATE TABLE embranchement
 				);
 
 
-CREATE TABLE joue_un_role
+CREATE TABLE queste
 						(
 							id_personnage INT,
 							id_interaction INT,
-							code_role_interaction VARCHAR,
 							FOREIGN KEY(id_personnage) REFERENCES personnage(id_personnage) ON DELETE CASCADE,
 							FOREIGN KEY(id_interaction) REFERENCES interaction(id_interaction) ON DELETE CASCADE,
-							FOREIGN KEY(code_role_interaction) REFERENCES role_interaction(code_role_interaction) ON DELETE CASCADE,
 							PRIMARY KEY(id_personnage,code_role_interaction,id_interaction) 
 						);
 
@@ -210,12 +202,27 @@ CREATE TABLE objectif
 				(
 					id_objectif SERIAL PRIMARY KEY ,
 					nom_objectif VARCHAR(255),
+					id_interaction INT.
 					description_objectif TEXT,
 					id_objet INT,
 					id_personnage INT,
 					id_dialogue INT,
-					validation_ BOOLEAN NOT NULL DEFAULT 'f'
 					FOREIGN KEY(id_dialogue) REFERENCES dialogue(id_dialogue),
 					FOREIGN KEY(id_objet) REFERENCES objet(id_objet),
-					FOREIGN KEY(id_personnage) REFERENCES personnage(id_personnage)
+					FOREIGN KEY(id_personnage) REFERENCES personnage(id_personnage),
+					FOREIGN KEY(id_interaction) REFERENCES interaction(id_interaction)
 				);
+
+--Tables de niveau 11
+
+
+CREATE TABLE valide 
+				(
+					id_personnage INT,
+					id_objectif INT,
+					validation BOOLEAN NOT NULL,
+					FOREIGN KEY(id_personnage) REFERENCES personnage(id_personnage) ON DELETE CASCADE,
+					FOREIGN KEY(id_objectif) REFERENCES objectif(id_objectif) ON DELETE CASCADE,
+					PRIMARY KEY(id_personnage,id_objectif) 
+				);
+

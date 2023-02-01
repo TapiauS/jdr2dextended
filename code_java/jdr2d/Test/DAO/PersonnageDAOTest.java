@@ -6,7 +6,8 @@ import java.sql.SQLException;
 import jdr2dcore.*;
 import tableau.*;
 
-import static org.testng.AssertJUnit.assertEquals;
+import static org.junit.Assert.assertEquals;
+
 
 class PersonnageDAOTest {
     Race humain=new Race("Humain",null);

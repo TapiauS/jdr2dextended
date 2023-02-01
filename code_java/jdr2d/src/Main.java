@@ -57,7 +57,7 @@ import DAO.*;
             }
 
 
-            JOptionPane.showMessageDialog(null,outputest,"Carte",JOptionPane.PLAIN_MESSAGE);
+            //JOptionPane.showMessageDialog(null,outputest,"Carte",JOptionPane.PLAIN_MESSAGE);
 
             Quete quete = new Quete("La mort de jeanmarie", "flemme", new ArrayList<Objectifs>(), new Objet[]{plastraille});
             quete.addObjectifs(batte);

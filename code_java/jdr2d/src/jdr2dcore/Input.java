@@ -201,7 +201,7 @@ public class Input {
         String playername=player.getNomPersonnage();
         Connection conn= DriverManager.getConnection("jdbc:postgresql://10.113.28.39:5432/jdr2d_simon","stapiau","Afpa54*");
         Statement st0=conn.createStatement();
-        ResultSet rs0= st0.executeQuery("SELECT id_personnage FROM personnage WHERE nom_personnage="+playername);
+        //ResultSet rs0= st0.executeQuery("SELECT id_personnage FROM personnage WHERE nom_personnage="+playername);
         PreparedStatement st=conn.prepareStatement("SELECT id_personnage FROM map WHERE ");
         int compteur = 0;
         switch (input) {
