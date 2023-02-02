@@ -32,7 +32,13 @@ public abstract class PersonnageDAO extends DAOObject {
     }
 
     public static Coffre getinv(int id) throws SQLException{
-
+        ArrayList<Object> args=new ArrayList<>(List.of(id));
+        Coffre invent=new Coffre();
+        ResultSet rs=query("SELECT id_objet FROM objet WHERE id_personnage=?;",args);
+        while (rs.next()){
+            invent.add(ObjetDAO.getObjet(rs.getInt("id_objet")));
+        }
+        return invent;
     }
 
     public static ArrayList<Personnage> getcharclose(Personnage p, int dist) throws SQLException {

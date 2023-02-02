@@ -27,9 +27,15 @@ public abstract class ObjetDAO extends DAOObject {
 
     public static Objet getObjet(int id) throws SQLException{
         ArrayList<Object> args=new ArrayList<>(List.of(id));
-        ResultSet rs=query("SELECT * FROM objet WHERE id_objet=?;",args);
+        ResultSet rs=query("SELECT nom_objet,deg,redu_deg,x,y,nbrmain,emplacement,id_lieu,poid,id_type_objet,is_coffre(id_objet) FROM objet WHERE id_objet=?;",args);
         Objet retour=null;
         rs.next();
+        if(rs.getBoolean("is_coffre")) {
+            retour = CoffreDAO.getcoffre(rs.getInt("id_objet"));
+            rs.getStatement().close();
+            close();
+            return retour;
+        }
         if(rs.getInt("id_lieu")!=0) {
             switch (ObjetDAO.getObjettype(id)) {
                 case "Arme":
