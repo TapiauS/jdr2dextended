@@ -126,7 +126,7 @@ $$;
 
 --Fonction qui trouve le dialogue d'entré d'un personnage
 
-CREATE OR REPLACE FUNCTION startdialogue(idperso INT) RETURNs INT
+CREATE OR REPLACE FUNCTION startdialogue(idperso INT) RETURNS INT
 LANGUAGE plpgsql
 AS $$
 DECLARE
@@ -139,5 +139,20 @@ FOREACH id IN ARRAY lisid LOOP
         RETURN id;
     END IF;
 END LOOP;
+END;
+$$;
+
+
+--Fonction qui determine si un objet est ou non un coffre
+
+CREATE OR REPLACE FUNCTION is_coffre(idobjet INT) RETURNS BOOLEAN
+LANGUAGE plpgsql
+AS $$
+BEGIN
+IF (SELECT id_objet FROM objet WHERE contenant=idobjet) IS NOT NULL THEN
+    RETURN true;
+ELSE
+    RETURN false;
+END IF;
 END;
 $$;
