@@ -1,5 +1,7 @@
 package jdr2dcore;
 
+import DAO.EchangeDAO;
+
 import java.sql.*;
 import java.util.LinkedHashMap;
 import java.util.Scanner;
@@ -264,7 +266,7 @@ public class Input {
                 for (Quete q:player.getQueteSuivie()) {
                     Objectifs o=q.getObjectifs().get(0);
                     if(o instanceof ObjectifT) {
-                        System.out.println("Vous suivez la quete " + q.getNomQuete() + " dont l'objectif suivant est de parler a " + ((ObjectifT) o).getConvaincre().getParleur());
+                        System.out.println("Vous suivez la quete " + q.getNomQuete() + " dont l'objectif suivant est de parler a " + EchangeDAO.getparleur(o.getId()));
                     }
                     if(o instanceof ObjectifF){
                         System.out.println("Vous suivez la quete " + q.getNomQuete() + " dont l'objectif suivant est de trouver l'objet " + ((ObjectifF) o).getObjetquete().getNomObjet());

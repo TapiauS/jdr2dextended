@@ -28,20 +28,37 @@ public abstract class ObjetDAO extends DAOObject {
     public static Objet getObjet(int id) throws SQLException{
         ArrayList<Object> args=new ArrayList<>(List.of(id));
         ResultSet rs=query("SELECT * FROM objet WHERE id_objet=?;",args);
-        Objet retour;
+        Objet retour=null;
         rs.next();
-        switch (ObjetDAO.getObjettype(id)) {
-            case "Arme":
-                retour = new Arme(rs.getInt("x"), rs.getInt("y"), MapDAO.getmap(rs.getInt("id_lieu")), rs.getString("nom_objet"), rs.getInt("poid"), rs.getInt("deg"), rs.getInt("deg"), rs.getInt("nbrmain")).setId(rs.getInt("id_objet"));
-                break;
-            case "Armure":
-                retour = new Armure(rs.getInt("x"), rs.getInt("y"), MapDAO.getmap(rs.getInt("id_lieu")), rs.getString("nom_objet"), rs.getInt("poid"), rs.getInt("deg"), rs.getInt("deg"), rs.getString("type_armure")).setId(rs.getInt("id_objet"));
-                break;
+        if(rs.getInt("id_lieu")!=0) {
+            switch (ObjetDAO.getObjettype(id)) {
+                case "Arme":
+                    retour = new Arme(rs.getInt("x"), rs.getInt("y"), MapDAO.getmap(rs.getInt("id_lieu")), rs.getString("nom_objet"), rs.getInt("poid"), rs.getInt("deg"), rs.getInt("deg"), rs.getInt("nbrmain")).setId(rs.getInt("id_objet"));
+                    break;
+                case "Armure":
+                    retour = new Armure(rs.getInt("x"), rs.getInt("y"), MapDAO.getmap(rs.getInt("id_lieu")), rs.getString("nom_objet"), rs.getInt("poid"), rs.getInt("deg"), rs.getInt("deg"), rs.getString("type_armure")).setId(rs.getInt("id_objet"));
+                    break;
             /*case "jdr2dcore.Potion":
                 retour=new jdr2dcore.Potion(rs.getInt("x"),rs.getInt("y"),DAO.MapDAO.getmap(rs.getInt("id_lieu")),rs.getString("nom_objet"),rs.getInt("poid"),rs.getArray("effets"),rs.getObject("duree"));*/
-            default:
-                retour = new Objet(rs.getInt("x"), rs.getInt("y"), MapDAO.getmap(rs.getInt("id_lieu")), rs.getString("nom_objet"), rs.getInt("poid"));
-                break;
+                default:
+                    retour = new Objet(rs.getInt("x"), rs.getInt("y"), MapDAO.getmap(rs.getInt("id_lieu")), rs.getString("nom_objet"), rs.getInt("poid"));
+                    break;
+            }
+        }
+        else{
+            switch (ObjetDAO.getObjettype(id)) {
+                case "Arme":
+                    retour = new Arme( rs.getString("nom_objet"), rs.getInt("poid"), rs.getInt("deg"), rs.getInt("deg"), rs.getInt("nbrmain")).setId(rs.getInt("id_objet"));
+                    break;
+                case "Armure":
+                    retour = new Armure( rs.getString("nom_objet"), rs.getInt("poid"), rs.getInt("deg"), rs.getInt("deg"), rs.getString("type_armure")).setId(rs.getInt("id_objet"));
+                    break;
+            /*case "jdr2dcore.Potion":
+                retour=new jdr2dcore.Potion(rs.getInt("x"),rs.getInt("y"),DAO.MapDAO.getmap(rs.getInt("id_lieu")),rs.getString("nom_objet"),rs.getInt("poid"),rs.getArray("effets"),rs.getObject("duree"));*/
+                default:
+                    retour = new Objet( rs.getString("nom_objet"), rs.getInt("poid"));
+                    break;
+            }
         }
         rs.getStatement().close();
         close();

@@ -8,7 +8,7 @@ import java.util.Map;
 import jdr2dcore.*;
 import tableau.*;
 public abstract class CoffreDAO extends DAOObject {
-    public static Coffre createcoffre(int id) throws SQLException {
+    public static Coffre getcoffre(int id) throws SQLException {
         ArrayList<Object> args=new ArrayList<>(List.of(id,id));
         ResultSet rs= DAOObject.query("SELECT * FROM objet WHERE contenant=? OR id_objet=?;",args);
         ArrayList<Objet> contenu=new ArrayList<>();
@@ -26,4 +26,5 @@ public abstract class CoffreDAO extends DAOObject {
         DAOObject.close();
         return retour;
     }
+
 }

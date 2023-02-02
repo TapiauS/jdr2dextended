@@ -8,11 +8,10 @@ public class Echange {
     protected Echange[] dialogueSuivant;
     protected boolean donnequete;
 
+    protected Quete quete;
     protected boolean objectifquete;
 
     protected ObjectifT objectifT;
-    protected Quete quete;
-
     protected Echange dialoguealternatif;
 
     protected int id;
@@ -144,7 +143,7 @@ public class Echange {
                 .setObjectifs(false);
     }
 
-    public Echange(PNJ parleur, String question, String reponse, Echange[] dialogueSuivant, boolean donnequete, Quete quete, Boolean obj, Echange dialoguealternatif){
+    public Echange(PNJ parleur, String question, String reponse, Echange[] dialogueSuivant, boolean donnequete, Quete quete, Echange dialoguealternatif,ObjectifT o){
         this.setquestion(question)
                 .setReponse(reponse)
                 .setDialogueSuivant(dialogueSuivant)
@@ -152,7 +151,9 @@ public class Echange {
                 .setQuete(quete)
                 .setParleur(parleur)
                 .setdialoguealternatif(dialoguealternatif)
-                .setObjectifs(obj);
+                .setObjectifs(true)
+                .setObjectifsT(o);
+
 
     }
 

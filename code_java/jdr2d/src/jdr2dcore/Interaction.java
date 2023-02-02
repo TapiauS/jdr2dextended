@@ -95,7 +95,7 @@ public class Interaction {
     //builders
 
     public Interaction() {
-        this.setJoueur(null);
+        this.setJoueur(new Personnage());
         this.setOpposant(null)
                 .setObserverK(new ArrayList<EventListenerK>())
                 .setObserverT(new ArrayList<EventListenerTalk>());
@@ -197,7 +197,7 @@ public class Interaction {
             entre = scanner.nextInt();
             for (int i=0;i<this.getObserverT().size();i++) {
                 if (this.getObserverT().get(i) instanceof ObjectifT) {
-                    if (((ObjectifT) this.getObserverT().get(i)).getConvaincre().getId() == nextechange.getDialogueSuivant()[entre].getId()) {
+                    if (((ObjectifT) this.getObserverT().get(i)).getConvaincre() == nextechange.getDialogueSuivant()[entre].getId()) {
                         this.getObserverT().get(i).update();
                     }
                 }

@@ -16,4 +16,10 @@ class QueteDAOTest {
         assertEquals(2,QueteDAO.getqueteSuivie(1).size());
         assertEquals(1,QueteDAO.getqueteSuivie(1).get(1).getObjectifs().size());
     }
+    @Test
+
+    void getQuete() throws SQLException {
+        assertEquals("tuer donatien",QueteDAO.getQuete(1).getNomQuete());
+        assertEquals(2,QueteDAO.getQuete(1).getObjectifs().size());
+    }
 }

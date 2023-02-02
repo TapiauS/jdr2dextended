@@ -1,20 +1,18 @@
 package jdr2dcore;//les objectif ou il faut dire quelquechose de precis a un personnage précis
 
 public class ObjectifT extends Objectifs implements EventListenerTalk {
-    Echange convaincre;
+    int convaincre;
 
     //getters
 
-    public Echange getConvaincre() {
+    public int getConvaincre() {
         return convaincre;
     }
 
     //setters
 
-    public ObjectifT setConvaincre(Echange convaincre) {
+    public ObjectifT setConvaincre(int convaincre) {
             this.convaincre = convaincre;
-            convaincre.setObjectifs(true);
-            convaincre.setObjectifsT(this);
             return this;
     }
 
@@ -22,10 +20,10 @@ public class ObjectifT extends Objectifs implements EventListenerTalk {
 
     public ObjectifT(){
         super();
-        this.setConvaincre(new Echange());
+        this.setConvaincre(new Echange().getId());
     }
 
-    public ObjectifT(Echange convaincre){
+    public ObjectifT(int convaincre){
         super();
         this.setConvaincre(convaincre);
     }

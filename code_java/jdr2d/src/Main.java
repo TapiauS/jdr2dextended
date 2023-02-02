@@ -65,10 +65,13 @@ import DAO.*;
             Echange dialogueconcl = new Echange(jeanluc, "C'est bien normal", "Merci beaucoup, tu pourra trouver de l'équipement au sud", null);
             Echange dialoguequete = new Echange(jeanluc, "C'est fait", "Bravo vous avez trouver l'equipement!", null);
             Echange dialoguepos = new Echange(jeanluc, "Oui bien sur", "Enfin un brave prés a lutter contre cette peste vampirique", new Echange[]{dialogueconcl}, true, quete);
-            Echange dialogue_r=new Echange(jeanluc, "A propos du travail que vous proposez", "Avez vous récupéré l'equipement?", new Echange[] {dialoguequete}, false, null, true, null);
-            Echange dialogueintro = new Echange(jeanluc, null, "Bonjour voulez vous m'aidez à purger ce lieux ?", new Echange[]{dialognegatif, dialoguepos,dialogue_r});
 
-            ObjectifT obvious = new ObjectifT(dialogue_r);
+
+
+            ObjectifT obvious = new ObjectifT(5);
+            Echange dialogue_r=new Echange(jeanluc, "A propos du travail que vous proposez", "Avez vous récupéré l'equipement?", new Echange[] {dialoguequete}, false, null, null, obvious);
+            Echange dialogueintro = new Echange(jeanluc, null, "Bonjour voulez vous m'aidez à purger ce lieux ?", new Echange[]{dialognegatif, dialoguepos,dialogue_r});
+            dialogue_r.setId(5);
             Echange[] listedialogue = new Echange[]{ dialogueintro,dialoguequete,dialognegatif,dialogue_r, dialoguepos, dialogueconcl};
             Potion ptest = new Potion("Potion de Force", 1, new int[]{5, 0, 0, 0}, Duration.of(15, ChronoUnit.SECONDS));
             Potion ptest1= new Potion("Potion de Force", 1, new int[]{5, 0, 0, 0}, Duration.of(15, ChronoUnit.SECONDS));

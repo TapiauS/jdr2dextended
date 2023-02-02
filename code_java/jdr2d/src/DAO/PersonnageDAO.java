@@ -31,6 +31,10 @@ public abstract class PersonnageDAO extends DAOObject {
         return retour;
     }
 
+    public static Coffre getinv(int id) throws SQLException{
+
+    }
+
     public static ArrayList<Personnage> getcharclose(Personnage p, int dist) throws SQLException {
         ArrayList<Object> args=new ArrayList<>(List.of(p.getId(),dist));
         ResultSet rs=query("SELECT persocomp FROM distperso WHERE persoref=? AND diff<?;",args);

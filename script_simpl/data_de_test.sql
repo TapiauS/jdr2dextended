@@ -8,7 +8,7 @@ INSERT INTO compte_utilisateur(pseudo_compte,couriel_compte,mdp_compte) VALUES (
 --ajout de personnage de test
 
 INSERT INTO personnage(nom_personnage,x,y,id_lieu,id_compte_utilisateur) VALUES ('Virgile',0,0,(SELECT id_lieu FROM lieu WHERE nom_lieu='Tarante'),(SELECT id_compte_utilisateur FROM compte_utilisateur WHERE nom_compte_utilisateur='Ahuizolte')),('Donatien',4,2,(SELECT id_lieu FROM lieu WHERE nom_lieu='Tarante'),null);
-
+INSERT INTO personnage(nom_personnage,x,y,id_lieu) VALUES ('Sogg',2,5,(SELECT id_lieu FROM lieu WHERE nom_lieu='Tarante'));
 --ajout d'objet
 
 INSERT INTO objet(nom_objet,x,y,id_lieu) VALUES ('pistolet a silex',2,4,(SELECT id_lieu FROM lieu WHERE nom_lieu='Tarante')),('baton de sorcier',1,3,(SELECT id_lieu FROM lieu WHERE nom_lieu='Tarante'));
@@ -37,3 +37,28 @@ INSERT INTO queste(id_personnage,id_interaction) VALUES ((SELECT id_personnage F
 --ajout de porte
 
 
+
+
+--ajout de dialogues
+
+INSERT INTO dialogue(contenu_dialogue,id_personnage) VALUES ('Bonjour',(SELECT id_personnage FROM personnage WHERE nom_personnage='Sogg'));
+INSERT INTO dialogue(contenu_dialogue,id_personnage) VALUES ('Partez alors',(SELECT id_personnage FROM personnage WHERE nom_personnage='Sogg'));
+INSERT INTO dialogue(contenu_dialogue,id_personnage) VALUES ('Trés bien merci, et vous ?',(SELECT id_personnage FROM personnage WHERE nom_personnage='Sogg'));
+INSERT INTO dialogue(contenu_dialogue,id_personnage) VALUES ('Au revoir',(SELECT id_personnage FROM personnage WHERE nom_personnage='Sogg'));
+
+
+
+INSERT INTO embranchement(choix,id_dialogue) VALUES ('Bonjours comment allez vous ?',( SELECT id_dialogue FROM dialogue WHERE contenu_dialogue='Trés bien merci, et vous ?'));
+INSERT INTO embranchement(choix,id_dialogue) VALUES ('Je n''ai pas envie de parler',( SELECT id_dialogue FROM dialogue WHERE contenu_dialogue='Partez alors'));
+INSERT INTO embranchement(choix,id_dialogue) VALUES ('Trés bien,au revoir',( SELECT id_dialogue FROM dialogue WHERE contenu_dialogue='Au revoir'))
+
+INSERT INTO precede(id_dialogue,id_embranchement) VALUES ((SELECT id_dialogue FROM dialogue WHERE contenu_dialogue='Bonjour'),(SELECT id_embranchement FROM embranchement WHERE choix='Bonjours comment allez vous ?'));
+
+
+INSERT INTO precede(id_dialogue,id_embranchement) VALUES ((SELECT id_dialogue FROM dialogue WHERE contenu_dialogue='Bonjour'),(SELECT id_embranchement FROM embranchement WHERE choix='Je n''ai pas envie de parler'));
+
+INSERT INTO precede(id_dialogue,id_embranchement) VALUES ((SELECT id_dialogue FROM dialogue WHERE contenu_dialogue='Trés bien merci, et vous ?'),(SELECT id_embranchement FROM embranchement WHERE choix='Trés bien,au revoir'));
+
+--ajout d'un lien quete dialogue
+
+INSERT INTO donne(id_dialogue,id_interaction) VALUES ((SELECT id_dialogue FROM dialogue WHERE contenu_dialogue='Trés bien merci, et vous ?'),(SELECT id_interaction FROM interaction WHERE nom_interaction='tuer donatien'));

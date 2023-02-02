@@ -84,7 +84,36 @@ public abstract class QueteDAO extends DAOObject {
         retour.add(q);
        return retour;
     }
-    public static Quete getQuete(int id){
-        return new Quete();
+    public static Quete getQuete(int id) throws SQLException {
+        ArrayList<Object> args=new ArrayList<>(List.of(id));
+        ResultSet rs=query("SELECT nom_interaction,accorde.id_objet,objectif.id_objectif,ordre FROM interaction" +
+                "                   JOIN accorde ON accorde.id_interaction=interaction.id_interaction" +
+                "                   JOIN objectif ON objectif.id_interaction=interaction.id_interaction" +
+                "                   WHERE interaction.id_interaction=? ORDER BY ordre;",args);
+        ArrayList<Integer> idsobjets=new ArrayList<>();
+        ArrayList<Integer> idsobjectif=new ArrayList<>();
+        String nom="";
+        while (rs.next()){
+            if(idsobjets.isEmpty()||!idsobjets.contains(rs.getInt("id_objet")))
+                idsobjets.add(rs.getInt("id_objet"));
+            if(idsobjectif.isEmpty()||!idsobjectif.contains(rs.getInt("id_objectif")))
+                idsobjectif.add(rs.getInt("id_objectif"));
+            nom=rs.getString("nom_interaction");
+        }
+        Objet [] rec=new Objet[idsobjets.size()];
+        for (int i = 0; i < rec.length; i++) {
+            rec[i]=ObjetDAO.getObjet(idsobjets.get(i));
+        }
+        Quete q=new Quete(nom,"descript",new ArrayList<>(),rec).setId(id);
+        for (int i = 0; i < idsobjectif.size(); i++) {
+            q.addObjectifs(ObjectifsDAO.getObjectif(idsobjectif.get(i)));
+        }
+        return q;
     }
+
+    public static void update(Quete q,Personnage player) throws SQLException {
+        ArrayList<Object> args=new ArrayList<>(List.of(q.getId(),player.getId()));
+        queryUDC("INSERT INTO queste(id_interaction,id_quete) VALUES (?,?)",args);
+    }
+
 }

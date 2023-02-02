@@ -1,5 +1,5 @@
 DROP TABLE precede CASCADE;
-DROP TABLE joue_un_role CASCADE;
+DROP TABLE queste CASCADE;
 DROP TABLE embranchement CASCADE;
 DROP TABLE donne CASCADE;
 DROP TABLE dialogue CASCADE;
@@ -7,10 +7,8 @@ DROP TABLE declenche CASCADE;
 DROP TABLE valide CASCADE;
 DROP TABLE accorde CASCADE;
 DROP TABLE personnage CASCADE;
-DROP TABLE role_interaction CASCADE;
 DROP TABLE interaction CASCADE;
 DROP TABLE objectif CASCADE;
-DROP TABLE recompense CASCADE;
 DROP TABLE lieu CASCADE;
 DROP TABLE compte_utilisateur CASCADE;
 DROP TABLE objet CASCADE;
@@ -57,7 +55,7 @@ CREATE TABLE interaction
 CREATE TABLE type_objet
 				(
 					id_type_objet SERIAL PRIMARY KEY,
-					nom_type VARCHAR(255)
+					nom_type_objet VARCHAR(255)
 				);
 
 
@@ -203,6 +201,7 @@ CREATE TABLE objectif
 					id_objectif SERIAL PRIMARY KEY ,
 					nom_objectif VARCHAR(255),
 					id_interaction INT.
+					ordre INT,
 					description_objectif TEXT,
 					id_objet INT,
 					id_personnage INT,

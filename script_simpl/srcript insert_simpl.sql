@@ -555,7 +555,7 @@ INSERT INTO precede(id_dialogue,id_embranchement)
 
 
 
-
+--select de scours (c'est le bordel oui)
 
 SELECT interaction.id_interaction,ordre,nom_interaction,nom_objectif,objectif.id_personnage as target,objectif.id_objet as find,objet.id_objet as recompense,objectif.id_objectif,objectif.id_dialogue as talk,validation FROM joue_un_role 
     JOIN interaction ON code_role_interaction='Q' AND id_personnage=1 AND interaction.id_interaction=joue_un_role.id_interaction                                             
@@ -565,6 +565,10 @@ SELECT interaction.id_interaction,ordre,nom_interaction,nom_objectif,objectif.id
 
 
 
-    SELECT contenu_dialogue,choix,embranchement.id_dialogue FROM dialogue JOIN 
-                precede ON precede.id_dialogue=(SELECT startdialogue(1)) AND precede.id_dialogue=dialogue.id_dialogue JOIN 
-                embranchement ON embranchement.id_embranchement=precede.id_embranchement;
+SELECT dialogue.id_dialogue,eb0.choix,contenu_dialogue,eb1.id_embranchement  as id_suiv,interaction.id_interaction,id_objectif FROM embranchement as eb0 JOIN
+                                 dialogue ON eb0.id_dialogue=dialogue.id_dialogue AND eb0.id_embranchement=1 JOIN precede
+                                          ON precede.id_dialogue=dialogue.id_dialogue LEFT JOIN embranchement as eb1
+                                          ON eb1.id_embranchement=precede.id_embranchement LEFT JOIN donne 
+                                          ON dialogue.id_dialogue=donne.id_dialogue LEFT JOIN interaction 
+                                          ON donne.id_interaction=interaction.id_interaction LEFT JOIN objectif 
+                                          ON dialogue.id_dialogue=objectif.id_dialogue;
