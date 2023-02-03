@@ -4,9 +4,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import jdr2dcore.*;
-import tableau.*;
+
+import jdr2dcore.Coffre;
+import jdr2dcore.Objet;
+
 public abstract class CoffreDAO extends DAOObject {
     public static Coffre getcoffre(int id) throws SQLException {
         ArrayList<Object> args=new ArrayList<>(List.of(id,id));

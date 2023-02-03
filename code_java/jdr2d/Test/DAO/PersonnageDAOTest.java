@@ -1,10 +1,9 @@
 package DAO;
 
-import DAO.PersonnageDAO;
+import jdr2dcore.Race;
+import jdr2dcore.Utilisateur;
 import org.junit.jupiter.api.Test;
 import java.sql.SQLException;
-import jdr2dcore.*;
-import tableau.*;
 
 import static org.junit.Assert.assertEquals;
 

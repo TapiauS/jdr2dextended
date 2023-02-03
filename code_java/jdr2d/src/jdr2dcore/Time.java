@@ -1,7 +1,5 @@
 package jdr2dcore;
 
-import jdr2dcore.Personnage;
-
 import java.time.temporal.ChronoUnit;
 import java.util.concurrent.TimeUnit;
 

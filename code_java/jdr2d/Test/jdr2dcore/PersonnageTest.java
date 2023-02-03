@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions;
 
 import java.util.ArrayList;
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.*;
 
 class PersonnageTest {
     private Armure gantelet=new Armure("Gantelet",1,1,2,"Torse");

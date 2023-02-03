@@ -1,18 +1,16 @@
 
 
-import javax.swing.*;
-import java.awt.*;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.List;
 import java.sql.*;
-import jdr2dcore.*;
-import jdr2dcore.Map;
-import tableau.*;
-import DAO.*;
 
-    public class Main {
+import DAO.jdr2dcore.*;
+import jdr2dcore.Map;
+import jdr2dcore.*;
+
+public class Main {
         public static void main(String[] args) throws SQLException {
             //declaration de la map de test et tout ses protagonistes
             char[][] labytest = new char[][]{{' ', ' ', '#', ' ', ' '}, {' ', ' ', '#', ' ', ' '}, {' ', ' ', ' ', ' ', ' '}, {' ', ' ', ' ', ' ', ' '}, {'C', ' ', ' ', ' ', 'E'}};

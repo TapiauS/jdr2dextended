@@ -1,6 +1,6 @@
 package DAO;
+import DAO.jdr2dcore.*;
 import jdr2dcore.*;
-import tableau.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLDataException;

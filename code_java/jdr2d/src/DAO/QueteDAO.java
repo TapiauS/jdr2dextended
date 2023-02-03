@@ -1,13 +1,12 @@
 package DAO;
-import jdr2dcore.*;
-import tableau.*;
-import DAO.DAOObject;
+import jdr2dcore.Objectifs;
+import jdr2dcore.Objet;
+import jdr2dcore.Personnage;
+import jdr2dcore.Quete;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 
 //il va falloir modifier la base de donnée pour que cette méthode fonctionne mais l'esprit reste le même, faire attention aux noms des colonnes
@@ -111,7 +110,7 @@ public abstract class QueteDAO extends DAOObject {
         return q;
     }
 
-    public static void update(Quete q,Personnage player) throws SQLException {
+    public static void update(Quete q, Personnage player) throws SQLException {
         ArrayList<Object> args=new ArrayList<>(List.of(q.getId(),player.getId()));
         queryUDC("INSERT INTO queste(id_interaction,id_quete) VALUES (?,?)",args);
     }

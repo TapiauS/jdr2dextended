@@ -62,3 +62,7 @@ INSERT INTO precede(id_dialogue,id_embranchement) VALUES ((SELECT id_dialogue FR
 --ajout d'un lien quete dialogue
 
 INSERT INTO donne(id_dialogue,id_interaction) VALUES ((SELECT id_dialogue FROM dialogue WHERE contenu_dialogue='Trés bien merci, et vous ?'),(SELECT id_interaction FROM interaction WHERE nom_interaction='tuer donatien'));
+
+--ajout des statistiques
+
+INSERT INTO statistique(nom_statistique) VALUES ('pV'),('pVmax'),('nbrmain'),('deg'),('redudeg');

@@ -1,6 +1,5 @@
 package jdr2dcore;
 
-import jdr2dcore.Coffre;
 import org.junit.jupiter.api.Test;
 
 import java.util.LinkedHashMap;

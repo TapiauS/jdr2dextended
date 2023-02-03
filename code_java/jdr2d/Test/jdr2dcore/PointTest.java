@@ -1,7 +1,5 @@
 package jdr2dcore;
 
-import jdr2dcore.Map;
-import jdr2dcore.Point;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

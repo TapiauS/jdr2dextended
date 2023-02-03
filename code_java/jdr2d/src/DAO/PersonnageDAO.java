@@ -3,8 +3,10 @@ package DAO;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+
 import jdr2dcore.*;
-import tableau.*;
+
 public abstract class PersonnageDAO extends DAOObject {
 
     public static void createchar(String nom, Race race, Utilisateur util) throws SQLException {
@@ -17,7 +19,7 @@ public abstract class PersonnageDAO extends DAOObject {
 
     public static Personnage getchar(int id) throws SQLException {
         ArrayList<Object> args=new ArrayList<>(List.of(id));
-        ResultSet rs=query("SELECT * FROM personnage WHERE id_personnage=?;",args);
+        ResultSet rs=query("SELECT * FROM fiche_perso WHERE id_personnage=?;",args);
         rs.next();
         //version trés basique a des fin de test, le gros du taf va se jouer sur la récupération des objectifs et des objets associées au personnage
         Personnage retour;

@@ -42,7 +42,11 @@ CREATE TABLE recompense
 				);
 
 
-
+CREATE TABLE statistique
+				(		
+					id_statistique SERIAL PRIMARY KEY,
+					nom_statistique VARCHAR(255)
+				);
 
 CREATE TABLE interaction
 				(
@@ -108,12 +112,9 @@ CREATE TABLE objet
 				(
 					id_objet SERIAL PRIMARY KEY ,
 					nom_objet VARCHAR(255) NOT NULL,
-					deg INT,
-					redudeg INT,
 					description_objet TEXT,
 					x INT,
 					y INT,
-					nbrmain INT,
 					emplacement VARCHAR ,
                     id_personnage_possede INT,
                     id_personnage_equipe INT,
@@ -142,6 +143,26 @@ CREATE TABLE declenche
 
 
 --Tables de niveau 4
+
+CREATE TABLE affecte
+				(
+					id_objet INT,
+					id_statistique INT,
+					valeur INT,
+					PRIMARY KEY(id_objet,id_statistique),
+					FOREIGN KEY(id_objet) REFERENCES objet(id_objet),
+					FOREIGN KEY(id_statistique) REFERENCES statistique(id_statistique)
+				);
+
+CREATE TABLE caracterise 
+				(
+					id_personnage INT,
+					id_statistique INT,
+					valeur INT,
+					PRIMARY KEY(id_statistique,id_personnage),
+					FOREIGN KEY(id_personnage) REFERENCES personnage(id_personnage),
+					FOREIGN KEY(id_statistique) REFERENCES sta(id_statistique)
+				);
 
 CREATE TABLE accorde 
 				(

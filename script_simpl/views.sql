@@ -68,4 +68,22 @@ CREATE OR REPLACE VIEW distobjet(persoref,objet,diff) AS
     JOIN objet ON personnage.id_lieu=objet.id_lieu
     WHERE (SELECT dist(id_personnage,id_objet,'personnage','objet'))>0;
 
-    
+--fiche d'un personnage
+
+CREATE OR REPLACE VIEW fichperso(id_personnage,nom_personnage,id_lieu,id_compte_utilisateur,x,y,pV,pVmax,deg,redudeg) AS
+    SELECT personnage.id_personnage,nom_personnage,id_lieu,id_compte_utilisateur,x,y,p0.valeur AS pV,p1.valeur AS pVmax,p2.valeur AS deg,p3.valeur AS redudeg FROM personnage 
+        LEFT JOIN caracterise AS p0 ON p0.id_personnage=personnage.id_personnage AND p0.id_statistique=(SELECT id_statistique FROM statistique WHERE nom_statistique='pV')
+        LEFT JOIN caracterise AS p1 ON p1.id_personnage=personnage.id_personnage AND p1.id_statistique=(SELECT id_statistique FROM statistique WHERE nom_statistique='pVmax')
+        LEFT JOIN caracterise AS p2 ON p2.id_personnage=personnage.id_personnage AND p1.id_statistique=(SELECT id_statistique FROM statistique WHERE nom_statistique='deg')
+        LEFT JOIN caracterise AS p3 ON p3.id_personnage=personnage.id_personnage AND p1.id_statistique=(SELECT id_statistique FROM statistique WHERE nom_statistique='redudeg');
+
+--fiche d'un objet
+
+CREATE OR REPLACE VIEW fichobjet(id_objet,nom_objet,description_objet,id_personnage_possede,id_personnage_equipe,contenant,nom_type_objet,id_lieu,poid,x,y,deg,redudeg,nbrmain,pv,pvmax,emplacement) AS
+    SELECT objet.id_objet,nom_objet,description_objet,id_personnage_possede,id_personnage_equipe,contenant,x,y,id_lieu,poid,nom_type_objet,p0.valeur AS deg,p1.valeur AS redudeg,p2.valeur AS nbrmain,p3.valeur AS pv,p4.valeur AS pvmax,emplacement FROM objet
+        LEFT JOIN type_objet ON objet.id_type_objet=type_objet.id_type_objet 
+        LEFT JOIN affecte AS p0 ON p0.id_objet=objet.id_objet AND p0.id_statistique=(SELECT id_statistique FROM statistique WHERE nom_statistique='deg')
+        LEFT JOIN affecte AS p1 ON p1.id_objet=objet.id_objet AND p1.id_statistique=(SELECT id_statistique FROM statistique WHERE nom_statistique='redudeg') 
+        LEFT JOIN affecte AS p2 ON p2.id_objet=objet.id_objet AND p2.id_statistique=(SELECT id_statistique FROM statistique WHERE nom_statistique='nbrmain') 
+        LEFT JOIN affecte AS p3 ON p3.id_objet=objet.id_objet AND p3.id_statistique=(SELECT id_statistique FROM statistique WHERE nom_statistique='pv')
+        LEFT JOIN affecte AS p4 ON p4.id_objet=objet.id_objet AND p4.id_statistique=(SELECT id_statistique FROM statistique WHERE nom_statistique='pvmax');

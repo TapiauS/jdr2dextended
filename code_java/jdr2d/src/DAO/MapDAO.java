@@ -1,8 +1,7 @@
 package DAO;
 
 
-import DAO.DAOObject;
-import jdr2dcore.*;
+import jdr2dcore.Map;
 import tableau.*;
 import java.sql.*;
 import java.util.ArrayList;

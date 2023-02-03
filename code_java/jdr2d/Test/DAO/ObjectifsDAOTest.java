@@ -1,9 +1,8 @@
 package DAO;
+import jdr2dcore.ObjectifK;
 import org.junit.jupiter.api.Test;
-import jdr2dcore.*;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 

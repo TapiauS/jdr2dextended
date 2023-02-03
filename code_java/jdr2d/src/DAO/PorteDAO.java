@@ -1,6 +1,6 @@
 package DAO;
-import jdr2dcore.*;
-import tableau.*;
+import jdr2dcore.Map;
+import jdr2dcore.Porte;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

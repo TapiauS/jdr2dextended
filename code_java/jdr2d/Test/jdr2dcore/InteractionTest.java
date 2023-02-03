@@ -1,12 +1,6 @@
 package jdr2dcore;
 
-import jdr2dcore.Arme;
-import jdr2dcore.Armure;
-import jdr2dcore.Personnage;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 

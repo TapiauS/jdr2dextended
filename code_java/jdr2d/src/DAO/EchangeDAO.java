@@ -1,6 +1,8 @@
 package DAO;
-import jdr2dcore.*;
-import tableau.*;
+import jdr2dcore.Echange;
+import jdr2dcore.ObjectifT;
+import jdr2dcore.PNJ;
+import jdr2dcore.Quete;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

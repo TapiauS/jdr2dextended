@@ -2,7 +2,6 @@ package jdr2dcore;
 
 import DAO.EchangeDAO;
 import DAO.ObjetDAO;
-import DAO.PersonnageDAO;
 
 import java.sql.*;
 import java.util.LinkedHashMap;
