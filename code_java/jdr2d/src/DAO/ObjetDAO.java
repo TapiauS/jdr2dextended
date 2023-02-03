@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import jdr2dcore.*;
-import tableau.*;
+
 public abstract class ObjetDAO extends DAOObject {
     public static void create(Objet o) throws SQLException {
         ArrayList<Object> args=new ArrayList<>(List.of(o.getNomObjet(),o.getPoid(),o.getX(),o.getY(),o.getLieux().getId()));
@@ -74,6 +74,18 @@ public abstract class ObjetDAO extends DAOObject {
     public static void pickObjet(Personnage p, Objet o) throws SQLException{
         ArrayList<Object> args=new ArrayList<>(List.of(p.getId(),o.getId()));
         queryUDC("UPDATE objet SET id_personnage_possede=? WHERE id_objet=?",args);
+        close();
+    }
+
+    public static void equip(Personnage p,Objet a) throws SQLException{
+        ArrayList<Object> args=new ArrayList<>(List.of(p.getId(),a.getId()));
+        queryUDC("UPDATE objet SET id_personnage_equipe=? WHERE id_objet=?;",args);
+        close();
+    }
+
+    public static void desequip(Objet o) throws SQLException{
+        ArrayList<Object> args=new ArrayList<>(List.of(o.getId()));
+        queryUDC("UPDATE objet SET id_personnage_equipe=null WHERE id_objet=?;",args);
         close();
     }
 

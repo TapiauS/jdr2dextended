@@ -1,5 +1,8 @@
 package jdr2dcore;
 
+import DAO.QueteDAO;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -152,11 +155,6 @@ public class Interaction {
         while (this.getJoueur().getpV() > 0 && this.getOpposant().getpV() > 0) {
             this.getOpposant().setpV(this.getOpposant().getpV() - this.getJoueur().bagarre(this.getOpposant()));
             this.getJoueur().setpV(this.getJoueur().getpV() - this.getOpposant().bagarre(this.getJoueur()));
-            try {
-                TimeUnit.MILLISECONDS.sleep(500);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
         }
         if (this.getOpposant().getpV() <= 0) {
             for (EventListenerK e : this.getObserverK()) {
@@ -171,7 +169,7 @@ public class Interaction {
         } else return false;
     }
 
-    public void dialogue() {
+    public void dialogue() throws SQLException {
         // Attention ! quand on crée un arbre de dialgue la position des dialogues donneurs de quete et des dialogues objectifs d'une quete doit être bien reflechie.
         //le point d'acces
         Scanner scanner = new Scanner(System.in);
@@ -180,8 +178,8 @@ public class Interaction {
 
         if (nextechange.isQuete()) {
             if(!joueur.getQueteSuivie().contains(nextechange.getQuete())) {
-                System.out.println("J'ai bien recu la quete "+nextechange.getQuete().getNomQuete());
                 this.joueur.addsQuete(nextechange.getQuete());
+                QueteDAO.update(nextechange.getQuete(),this.getJoueur());
             }
             else {
                 nextechange=new Echange(this.opposant,nextechange.getQuestion()," Vous avez déja recu ce travail ",null);

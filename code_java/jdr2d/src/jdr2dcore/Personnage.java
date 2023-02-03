@@ -1,5 +1,8 @@
 package jdr2dcore;
 
+import DAO.ObjetDAO;
+
+import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -170,7 +173,7 @@ public class Personnage extends Point implements EventListenerQuete {
 
     //addition d'une arme en gérant le nombre de mains équipée
 
-    public Personnage addArme(Arme arme){
+    public Personnage addArme(Arme arme) throws SQLException {
         int compteurmain=0;
         for(Arme a:this.getArme()){
             compteurmain=compteurmain+a.getNbrmain();
@@ -188,7 +191,7 @@ public class Personnage extends Point implements EventListenerQuete {
             }
             else{
                 Arme a=this.armes.get(2);
-                this.armes.remove(2);
+                this.removeArme(a);
                 this.armes.add(arme);
                 this.setInventaire(this.getInventaire().add(a));
             }
@@ -211,13 +214,14 @@ public class Personnage extends Point implements EventListenerQuete {
         return this;
     }
 
-    public Personnage removeArme(Arme arme){
+    public Personnage removeArme(Arme arme) throws SQLException {
         this.armes.remove(arme);
+        ObjetDAO.desequip(arme);
         this.addObjet(arme);
         return this;
     }
 
-    public Personnage addArmure(Armure armure) {
+    public Personnage addArmure(Armure armure) throws SQLException {
         boolean emplacementlibre=true;
         Armure armurer=new Armure();
         for(Armure a:this.getArmure()){
@@ -230,7 +234,7 @@ public class Personnage extends Point implements EventListenerQuete {
             this.armure.add(armure);
         }
         else{
-            this.armure.remove(armurer);
+            this.removArmure(armurer);
             this.armure.add(armure);
         }
         return this;
@@ -257,8 +261,9 @@ public class Personnage extends Point implements EventListenerQuete {
     }
 
 
-    public Personnage removArmure(Armure armure){
+    public Personnage removArmure(Armure armure) throws SQLException {
         this.armure.remove(armure);
+        ObjetDAO.desequip(armure);
         this.inventaire.add(armure);
         return this;
     }

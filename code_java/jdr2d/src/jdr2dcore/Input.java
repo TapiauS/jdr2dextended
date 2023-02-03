@@ -1,6 +1,8 @@
 package jdr2dcore;
 
 import DAO.EchangeDAO;
+import DAO.ObjetDAO;
+import DAO.PersonnageDAO;
 
 import java.sql.*;
 import java.util.LinkedHashMap;
@@ -10,7 +12,6 @@ public class Input {
 
     public static void deplacement(Personnage player, Porte[] portes) throws SQLException {
         Scanner scanner=new Scanner(System.in);
-
         char input='f';
         try {
             while (input != 'J') {
@@ -69,6 +70,7 @@ public class Input {
                             Objet o = c.getContenu().get(inputs);
                             c.remove(inputs);
                             player.addObjet(o);
+                            ObjetDAO.pickObjet(player,o);
                                 }
                     index = 0;
                                 }
@@ -142,7 +144,6 @@ public class Input {
                 System.out.println("Personne n'est assez proche pour parler");
             }
         } catch (Exception ex) {
-            System.out.println("Je passe par le catch");
             System.out.println("Entrée invalide");
             talk(player, pnjs, dialogue);
         }
@@ -164,6 +165,7 @@ public class Input {
                 if (inputs >= 0) {
                     Arme a= (Arme) player.getInventaire().findremove(listarme.get(inputs));
                     player.addArme(a);
+                    ObjetDAO.equip(player,a);
                 }
                 }
             }
@@ -190,6 +192,7 @@ public class Input {
                 if (inputs2 >= 0) {
                     Armure a= (Armure) player.getInventaire().findremove(listarmure.get(inputs2));
                     player.addArmure(a);
+                    ObjetDAO.equip(player,a);
                 }
             }
         } catch (Exception e) {
