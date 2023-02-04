@@ -7,7 +7,8 @@ import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class ObjectifsDAOTest {
+class
+ObjectifsDAOTest {
     ObjectifK ref;
 
     {

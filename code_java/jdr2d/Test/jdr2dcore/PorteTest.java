@@ -1,6 +1,5 @@
 package jdr2dcore;
 
-import DAO.jdr2dcore.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

@@ -6,7 +6,6 @@ import java.util.*;
 import java.util.List;
 import java.sql.*;
 
-import DAO.jdr2dcore.*;
 import jdr2dcore.Map;
 import jdr2dcore.*;
 
