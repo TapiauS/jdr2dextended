@@ -148,8 +148,11 @@ $$;
 CREATE OR REPLACE FUNCTION is_coffre(idobjet INT) RETURNS BOOLEAN
 LANGUAGE plpgsql
 AS $$
+DECLARE 
+lisid INT [];
 BEGIN
-IF (SELECT id_objet FROM objet WHERE contenant=idobjet) IS NOT NULL THEN
+SELECT ARRAY_AGG(id_objet) FROM objet WHERE contenant=idobjet INTO lisid; 
+IF array_length(lisid,1)>0 THEN
     RETURN true;
 ELSE
     RETURN false;

@@ -75,8 +75,8 @@ CREATE TABLE porte
 					y INT,
 					id_lieu INT,
 					id_porte_relie INT,
-					FOREIGN KEY(id_lieu) REFERENCES lieu(id_lieu),
-					FOREIGN KEY(id_porte_relie) REFERENCES porte(id_porte)
+					FOREIGN KEY(id_lieu) REFERENCES lieu(id_lieu) ON DELETE CASCADE,
+					FOREIGN KEY(id_porte_relie) REFERENCES porte(id_porte) ON DELETE CASCADE
 				);
 
 CREATE TABLE personnage 
@@ -150,8 +150,8 @@ CREATE TABLE affecte
 					id_statistique INT,
 					valeur INT,
 					PRIMARY KEY(id_objet,id_statistique),
-					FOREIGN KEY(id_objet) REFERENCES objet(id_objet),
-					FOREIGN KEY(id_statistique) REFERENCES statistique(id_statistique)
+					FOREIGN KEY(id_objet) REFERENCES objet(id_objet) ON DELETE CASCADE,
+					FOREIGN KEY(id_statistique) REFERENCES statistique(id_statistique) ON DELETE CASCADE
 				);
 
 CREATE TABLE caracterise 
@@ -160,8 +160,8 @@ CREATE TABLE caracterise
 					id_statistique INT,
 					valeur INT,
 					PRIMARY KEY(id_statistique,id_personnage),
-					FOREIGN KEY(id_personnage) REFERENCES personnage(id_personnage),
-					FOREIGN KEY(id_statistique) REFERENCES sta(id_statistique)
+					FOREIGN KEY(id_personnage) REFERENCES personnage(id_personnage) ON DELETE CASCADE,
+					FOREIGN KEY(id_statistique) REFERENCES sta(id_statistique) ON DELETE CASCADE
 				);
 
 CREATE TABLE accorde 
@@ -227,10 +227,10 @@ CREATE TABLE objectif
 					id_objet INT,
 					id_personnage INT,
 					id_dialogue INT,
-					FOREIGN KEY(id_dialogue) REFERENCES dialogue(id_dialogue),
-					FOREIGN KEY(id_objet) REFERENCES objet(id_objet),
-					FOREIGN KEY(id_personnage) REFERENCES personnage(id_personnage),
-					FOREIGN KEY(id_interaction) REFERENCES interaction(id_interaction)
+					FOREIGN KEY(id_dialogue) REFERENCES dialogue(id_dialogue) ON DELETE CASCADE,
+					FOREIGN KEY(id_objet) REFERENCES objet(id_objet) ON DELETE CASCADE,
+					FOREIGN KEY(id_personnage) REFERENCES personnage(id_personnage) ON DELETE CASCADE,
+					FOREIGN KEY(id_interaction) REFERENCES interaction(id_interaction) ON DELETE CASCADE
 				);
 
 --Tables de niveau 11
