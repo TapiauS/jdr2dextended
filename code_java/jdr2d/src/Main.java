@@ -92,8 +92,7 @@ public class Main {
                 }
 
                 System.out.println("Tapez une commande pour votre personnage, tapez \"Help\" pour la liste des commandes");
-                input = scanner.next().toUpperCase();
-                Input.playerinput(input, joueur, new PNJ[]{jeanma, jeanluc}, new Coffre[]{coftest}, listedialogue,portes);
+                Input.game();
                 if (jeanma.getpV() <= 0) {
                     System.out.println("Felicitation pour votre victoire");
                 } else if (joueur.getpV() <= 0) {

@@ -1,6 +1,7 @@
 package DAO;
 
 
+import jdr2dcore.*;
 import jdr2dcore.Map;
 import tableau.*;
 import java.sql.*;
@@ -32,6 +33,18 @@ public abstract class MapDAO extends DAOObject {
         rs.getStatement().close();
         close();
         throw new IllegalArgumentException("Cette map n'existe pas !");
+    }
+
+    public static ArrayList<Coffre> getcoffres(Map m) throws SQLException {
+        ArrayList<Object> args=new ArrayList<>(List.of(m.getId()));
+        ResultSet rs=query("SELECT id_objet FROM objet WHERE id_lieu=? AND (SELECT is_coffre(objet.id_objet));",args);
+        ArrayList<Coffre> retour=new ArrayList<>();
+        while (rs.next()){
+            retour.add(CoffreDAO.getcoffre(rs.getInt(1)));
+        }
+        rs.getStatement().close();
+        close();
+        return retour;
     }
 
 

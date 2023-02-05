@@ -14,12 +14,21 @@ public abstract class CoffreDAO extends DAOObject {
         ResultSet rs= DAOObject.query("SELECT * FROM objet WHERE contenant=? OR id_objet=?;",args);
         ArrayList<Objet> contenu=new ArrayList<>();
         Coffre retour=new Coffre();
-        while (rs.next()){
-            if(rs.getInt("id_objet")==id) {
-                retour.setNomObjet(rs.getString("nom_objet")).setX(rs.getInt("x")).setY(rs.getInt("y")).setLieux(MapDAO.getmap(rs.getInt("id_lieu")));
-            }
-            else {
-                contenu.add(ObjetDAO.getObjet(rs.getInt("id_objet")));
+
+            while (rs.next()) {
+                if(rs.getInt("id_lieu")!=0) {
+                    if (rs.getInt("id_objet") == id) {
+                        retour.setNomObjet(rs.getString("nom_objet")).setX(rs.getInt("x")).setY(rs.getInt("y")).setLieux(MapDAO.getmap(rs.getInt("id_lieu")));
+                    } else {
+                        contenu.add(ObjetDAO.getObjet(rs.getInt("id_objet")));
+                    }
+                }
+                else{
+                    if (rs.getInt("id_objet") == id) {
+                        retour.setNomObjet(rs.getString("nom_objet"));
+                    } else {
+                        contenu.add(ObjetDAO.getObjet(rs.getInt("id_objet")));
+                    }
             }
         }
         retour.setContenu(contenu);

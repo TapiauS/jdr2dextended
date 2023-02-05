@@ -24,7 +24,7 @@ class PersonnageDAOTest {
 
     @Test
     void createchar() throws SQLException {
-        PersonnageDAO.createchar("Preste",humain,ut);
+        PersonnageDAO.createchar("Preste",ut);
     }
 
     @Test

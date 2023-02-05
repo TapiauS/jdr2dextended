@@ -79,6 +79,7 @@ val BOOLEAN;
 id_obj INT [];
 id INT;
 queteval BOOLEAN;
+id_copie INT;
 BEGIN
 queteval=TRUE;
 IF NEW.validation=TRUE THEN
@@ -101,16 +102,19 @@ ELSE
 
 
     FOREACH id IN ARRAY id_obj LOOP
-        INSERT INTO objet(nom_objet,deg,redudeg,description_objet,nbrmain,emplacement,id_personnage_possede,poid,id_type_objet) VALUES
+        INSERT INTO objet(nom_objet,description_objet,emplacement,id_personnage_possede,id_type_objet) VALUES
             ((SELECT nom_objet FROM objet WHERE id_objet=id),
-             (SELECT deg FROM objet WHERE id_objet=id),
-             (SELECT redudeg FROM objet WHERE id_objet=id),
              (SELECT description_objet FROM objet WHERE id_objet=id),
-             (SELECT nbrmain FROM objet WHERE id_objet=id),
              (SELECT emplacement FROM objet WHERE id_objet=id),
              NEW.id_personnage,
              (SELECT poid FROM objet WHERE id_objet=id),
              (SELECT id_type_objet FROM objet WHERE id_objet=id));
+        SELECT id_objet FROM objet WHERE nom_objet=(SELECT nom_objet FROM objet WHERE id_objet=id) AND id_personnage_possede=NEW.id_personnage INTO id_copie;
+        INSERT INTO affecte(id_objet,id_statistique,valeur) VALUES (id_copie,(SELECT id_statistique FROM statistique WHERE nom_statistique='deg'),(SELECT deg FROM fichobjet WHERE id_objet=id)),
+                                                                    (id_copie,(SELECT id_statistique FROM statistique WHERE nom_statistique='redudeg'),(SELECT redudeg FROM fichobjet WHERE id_objet=id)),
+                                                                    (id_copie,(SELECT id_statistique FROM statistique WHERE nom_statistique='pv'),(SELECT pv FROM fichobjet WHERE id_objet=id)),
+                                                                    (id_objet,(SELECT id_statistique FROM statistique WHERE nom_statistique='pvmax'),(SELECT pvmax FROM fichobjet WHERE id_objet=id)),
+                                                                    (id_objet,(SELECT id_statistique FROM statistique WHERE nom_statistique='duree'),(SELECT duree FROM fichobjet WHERE id_objet=id));                                                                   
     END LOOP;
 END IF;
 RETURN NEW;
@@ -120,6 +124,35 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE TRIGGER add_rec
     BEFORE UPDATE ON valide 
     FOR EACH ROW EXECUTE PROCEDURE getrecomp();
+
+
+
+--trigger d'une création de personnage
+
+CREATE OR REPLACE FUNCTION startchar() RETURNS TRIGGER AS $$
+DECLARE
+idlieu INT;
+BEGIN
+    IF NEW.id_compte_utilisateur IS NOT NULL THEN
+        SELECT id_lieu FROM lieu WHERE nom_lieu='Tarante' INTO idlieu;
+        RAISE NOTICE 'idlieu %',idlieu ;
+        UPDATE personnage SET id_lieu=idlieu,x=0,y=0 WHERE id_personnage=NEW.id_personnage;
+        INSERT INTO caracterise(id_personnage,id_statistique,valeur) VALUES (NEW.id_personnage,(SELECT id_statistique FROM statistique WHERE nom_statistique='pV'),15),
+                                                                            (NEW.id_personnage,(SELECT id_statistique FROM statistique WHERE nom_statistique='pVmax'),15),
+                                                                            (NEW.id_personnage,(SELECT id_statistique FROM statistique WHERE nom_statistique='deg'),0),
+                                                                            (NEW.id_personnage,(SELECT id_statistique FROM statistique WHERE nom_statistique='redudeg'),0);
+        RETURN NEW;
+    ELSE
+        RETURN NEW;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE TRIGGER new_char
+    AFTER INSERT ON personnage 
+    FOR EACH ROW EXECUTE PROCEDURE startchar();
+
 
 
 

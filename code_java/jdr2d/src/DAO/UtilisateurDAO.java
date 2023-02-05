@@ -23,20 +23,53 @@ public abstract class UtilisateurDAO extends DAOObject {
         return retour;
     }
 
+
+
+
+    public static boolean checkmdp(String mdp) throws SQLException {
+        ArrayList<Object> args=new ArrayList<>(List.of(mdp));
+        ResultSet rs=query("SELECT * FROM compte_utilisateur WHERE mdp_compte=?",args);
+        if(rs.next()) {
+            rs.getStatement().close();
+            close();
+            return false;
+        }
+        else {
+            rs.getStatement().close();
+            close();
+            return true;
+        }
+    }
+
+    public static boolean checkpseudo(String pseudo) throws SQLException {
+        ArrayList<Object> args=new ArrayList<>(List.of(pseudo));
+        ResultSet rs=query("SELECT * FROM compte_utilisateur WHERE pseudo_compte=?",args);
+        if(rs.next()) {
+            rs.getStatement().close();
+            close();
+            return false;
+        }
+        else {
+            rs.getStatement().close();
+            close();
+            return true;
+        }
+    }
+
     public static void createcompte(String nom, String mdp,String mail) throws SQLException {
-        ArrayList<Object> args=new ArrayList<>(List.of(mail,mdp,nom));
+        ArrayList<Object> args=new ArrayList<>(List.of(mail,nom,mdp));
         queryUDC("CALL add_user(?,?,?);",args);
         close();
     }
 
-    public static Hashtable<Integer, Integer> displaypersonnage(Utilisateur util) throws SQLException {
+    public static Hashtable<String, Integer> displaypersonnage(Utilisateur util) throws SQLException {
         ArrayList<Object> args=new ArrayList<>(List.of(util.getId()));
 
-        ResultSet rs = query("SELECT id_personnage FROM personnage WHERE id_compte_utilisateur=?;",args);
-        Hashtable<Integer,Integer> retour=new Hashtable<>();
+        ResultSet rs = query("SELECT id_personnage,nom_personnage FROM personnage WHERE id_compte_utilisateur=? ORDER BY id_personnage;",args);
+        Hashtable<String,Integer> retour=new Hashtable<>();
         int i=0;
         while (rs.next()){
-            retour.put(i,rs.getInt(1));
+            retour.put(rs.getString(2), rs.getInt(1));
             i++;
         }
 

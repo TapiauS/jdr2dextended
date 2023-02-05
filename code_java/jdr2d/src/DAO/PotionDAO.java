@@ -16,7 +16,7 @@ public abstract class PotionDAO {
         effets[3]=rs.getInt("pvmax");
 
         Duration d;
-        d=Duration.of(rs.getLong("duree"), ChronoUnit.SECONDS);
+        d=Duration.of(rs.getInt("duree"), ChronoUnit.SECONDS);
         Potion retour=new Potion(rs.getString("nom_objet"),rs.getInt("poid"),effets,d);
         return retour;
     }

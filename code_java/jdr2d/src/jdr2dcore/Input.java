@@ -1,25 +1,200 @@
 package jdr2dcore;
 
-import DAO.EchangeDAO;
-import DAO.ObjetDAO;
+import DAO.*;
 
 import java.sql.*;
-import java.util.LinkedHashMap;
-import java.util.Scanner;
+import java.util.*;
 
-public class Input {
+public abstract class Input {
+    protected static Map carte;
+    protected static ArrayList<Coffre> coffres;
+    protected static ArrayList<PNJ> pnjs;
+    protected static ArrayList<Echange> echanges;
+    protected static ArrayList<Porte> sorties;
+    protected static Personnage player;
+    protected static Scanner scanner;
+    protected static Utilisateur util;
+    public static void game() throws SQLException {
+        String input;
+        scanner=new Scanner(System.in);
+        System.out.println("Bienvenu dans Afpanums, la démo de la révolution du jeu vidéo imaginé à l'Afpa de pompey ");
+        System.out.println("Avez vous déja un compte ? O/N ?");
+        try{
+            launch();
+        }
+        catch (InputMismatchException e){
+            System.out.println("Ecrire O ou N ");
+            launch();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        mapload();
 
-    public static void deplacement(Personnage player, Porte[] portes) throws SQLException {
+
+    }
+
+    //Le but de connectaccount et start account est de récupérer le personnage du joueur, c'est pourquoi dés que celui ci est définit on force la sortie de la fonction
+    private static void connectaccount() throws SQLException {
+        String pseudo;
+        String mdp;
+        boolean sucess = false;
+        while (!sucess) {
+            try {
+                System.out.println("Taper votre pseudo");
+                pseudo = scanner.next();
+                System.out.println("Taper votre mot de passe");
+                mdp = scanner.next();
+                util = UtilisateurDAO.connectcompte(pseudo, mdp);
+                sucess = true;
+            } catch (Exception e) {
+                String retry;
+                while (!sucess) {
+                    try {
+                        System.out.println("pseudo ou mdp incorect,reessayer ? O/N");
+                        retry = scanner.next().toUpperCase();
+                        switch (retry) {
+                            case "O":
+                                sucess = true;
+                                break;
+                            case "N":
+                                startaccount();
+                                return;
+                            default:
+                                break;
+                        }
+                    } catch (Exception e0) {
+                        sucess = false;
+                    }
+                }
+                sucess = false;
+            }
+        }
+        Hashtable<String,Integer> persos=UtilisateurDAO.displaypersonnage(util);
+        if(persos.isEmpty()){
+            sucess=false;
+            while (!sucess) {
+                try {
+                    System.out.println("Ce compte n'a aucun personnage, choisissez un nom pour votre premier perso");
+                    String nomperso = scanner.next();
+                    player=PersonnageDAO.getchar(PersonnageDAO.createchar(nomperso,util));
+                    return;
+                }
+                catch (Exception e){
+                    System.out.println("Nom de personnage déja utilisé, entrer un autre nom");
+                }
+            }
+        }
+        int i=0;
+        Hashtable<Integer,String> posid=new Hashtable<>();
+        for (String s: persos.keySet()) {
+            posid.put(i,s);
+            i++;
+        }
+        sucess=false;
+        while (!sucess) {
+            try {
+                System.out.println("Vos personnages disponibles sont:");
+                for (int j : posid.keySet()) {
+                    System.out.println(j + ": " + posid.get(j));
+                }
+                System.out.println("Choisissez le numéro du personnage que vous voulez jouer");
+                int num=scanner.nextInt();
+                player=PersonnageDAO.getchar(persos.get(posid.get(num)));
+                sucess=true;
+            }
+            catch (InputMismatchException e){
+                System.out.println("Taper le numero du personnage que vous souhaitez jouer");
+            }
+            catch (Exception e){
+                System.out.println("Une erreur inconnu c'est produite, veuillez recommencer");
+            }
+        }
+    }
+
+    private static void startaccount() throws SQLException {
+        String pseudo;
+        String mdp;
+        String mail;
+        String nom_perso;
+
+        System.out.println("Choisir un pseudo");
+        pseudo= scanner.next();
+        while(!UtilisateurDAO.checkpseudo(pseudo)){
+            System.out.println("Pseudo non disponible,choisir un autre pseudo");
+            pseudo=scanner.next();
+        }
+        System.out.println("Choisir un mot de passe");
+        mdp=scanner.next();
+        while (!UtilisateurDAO.checkmdp(mdp)){
+            System.out.println("Mot de passe non disponible,choisir un autre pseudo");
+            mdp=scanner.next();
+        }
+        System.out.println("Rentrer une adresse mail");
+        mail=scanner.next();
+        UtilisateurDAO.createcompte(pseudo,mdp,mail);
+        util=UtilisateurDAO.connectcompte(pseudo,mdp);
+        boolean success=false;
+        while (!success) {
+            try {
+                System.out.println("Choisissez un nom pour votre premier personnage");
+                nom_perso = scanner.next();
+                player = PersonnageDAO.getchar(PersonnageDAO.createchar(nom_perso, util));
+                success=true;
+            }
+            catch (InputMismatchException e){
+                System.out.println("Nom de personnage non disponible");
+            }
+        }
+    }
+
+
+    private static void launch() throws SQLException {
+        String input;
+        boolean error=false;
+        input = scanner.next().toUpperCase();
+                switch (input) {
+                    case "N":
+                        error = true;
+                        startaccount();
+                        break;
+                    case "O":
+                        error = true;
+                        connectaccount();
+                        break;
+                    default:
+                        throw new InputMismatchException();
+                }
+            }
+        // a ce stade seulement player est définit,on veut maintenant définir tout les élements interactable sur une carte
+        private static void mapload() throws SQLException{
+            carte=player.getLieux();
+            pnjs=new ArrayList<>();
+            echanges=new ArrayList<>();
+            coffres= MapDAO.getcoffres(carte);
+            sorties=PorteDAO.getPorte(carte);
+            for (Personnage p:PersonnageDAO.getPersonnages(carte,util)) {
+                if(p instanceof PNJ){
+                    pnjs.add((PNJ) p);
+                    echanges.add(EchangeDAO.getEchangetree((PNJ) p));
+                }
+            }
+        }
+
+        //on a maintenant définit tout ce dont on a besoin pour jouer, il est temps de lancer la boucle principal du jeu
+
+
+    private static void deplacement() throws SQLException {
         Scanner scanner=new Scanner(System.in);
         char input='f';
         try {
             while (input != 'J') {
-                for (Porte p : portes) {
+                for (Porte p : sorties) {
                     if (p.distance(player) < 1) {
                         System.out.println("Il y a une porte à proximité voulez vous la traverser ? y/n");
                         String inputs = scanner.next().toUpperCase();
                         if (inputs.equals("Y")) {
                             p.traverse(player);
+                            mapload();
                             System.out.println("Vous venez d'arriver à " + player.getLieux().getNomLieu());
                             return;
                         }
@@ -44,11 +219,18 @@ public class Input {
         }
         catch (Exception e){
             System.out.println("Direction invalide!!!, choix possibles : E,N,S,O pour se déplacer , J pour sortir");
-            deplacement(player,portes);
+            deplacement();
         }
     }
 
-    public static void pick(Personnage player, Coffre[] coffres){
+
+
+
+
+
+
+
+    private static void pick(){
         Scanner scanner=new Scanner(System.in);
         int compteur=0;
         try {
@@ -79,11 +261,15 @@ public class Input {
             }
         catch (Exception e){
             System.out.println("Entrée invalide");
-            pick(player,coffres);
+            pick();
         }
     }
 
-    public static void drink(Personnage player){
+
+
+
+
+    private static void drink(){
         int inputs3 = 0;
         Scanner scanner=new Scanner(System.in);
         try{
@@ -106,17 +292,17 @@ public class Input {
         }
         catch (Exception e) {
             System.out.println("Entrée invalide");
-            drink(player);
+            drink();
         }
     }
 
-    public static void talk(Personnage player, PNJ[] pnjs, Echange[] dialogue) {
+    private static void talk() {
         int compteur = 0;
         try {
             for (PNJ p : pnjs) {
                 if (p.distance(player) <= 1) {
                     compteur = compteur + 1;
-                    for (Echange e : dialogue) {
+                    for (Echange e : echanges) {
                         if (e.getParleur() == p && e.getQuestion() == null) {
                             boolean quisq=false;
                             if(!e.isObjectifquete()){
@@ -144,11 +330,11 @@ public class Input {
             }
         } catch (Exception ex) {
             System.out.println("Entrée invalide");
-            talk(player, pnjs, dialogue);
+            talk();
         }
     }
 
-    public static void weapon(Personnage player) {
+    private static void weapon() {
         Scanner scanner = new Scanner(System.in);
         int inputs = 0;
         try {
@@ -170,12 +356,12 @@ public class Input {
             }
         catch(Exception e){
             System.out.println("Entrée invalide");
-            weapon(player);
+            weapon();
         }
         }
 
 
-    public static void armure(Personnage player) {
+    private static void armure() {
         int inputs2 = 0;
         Scanner scanner = new Scanner(System.in);
         try {
@@ -196,12 +382,11 @@ public class Input {
             }
         } catch (Exception e) {
             System.out.println("Entrée invalide");
-            armure(player);
+            armure();
         }
     }
 
-    public static void playerinput(String input, Personnage player, PNJ[] pnjs, Coffre[] coffres, Echange[] dialogue, Porte[] portes) throws SQLException {
-        Scanner scanner = new Scanner(System.in);
+    public static void playerinput(String input) throws SQLException {
         String playername=player.getNomPersonnage();
         Connection conn= DriverManager.getConnection("jdbc:postgresql://10.113.28.39:5432/jdr2d_simon","stapiau","Afpa54*");
         Statement st0=conn.createStatement();
@@ -211,7 +396,7 @@ public class Input {
         switch (input) {
             //le deplacement
             case "MOVE":
-                deplacement(player,portes);
+                deplacement();
                 break;
 
             // la baston
@@ -236,31 +421,31 @@ public class Input {
                 //la discussion
 
             case "TALK":
-                talk(player,pnjs,dialogue);
+                talk();
                 break;
 
                 //ramasser un objet dans un coffre
 
             case "OPEN":
-                pick(player,coffres);
+                pick();
                 break;
 
                 //equiper une arme
 
             case "EQUIPWEAPON":
-                weapon(player);
+                weapon();
                 break;
 
                 //equiper une armure
 
             case "EQUIPARMURE" :
-                armure(player);
+                armure();
                 break;
 
                 //boire une potion
 
             case "DRINK":
-                drink(player);
+                drink();
                 break;
 
                 //liste des taches

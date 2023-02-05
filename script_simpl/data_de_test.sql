@@ -65,4 +65,10 @@ INSERT INTO donne(id_dialogue,id_interaction) VALUES ((SELECT id_dialogue FROM d
 
 --ajout des statistiques
 
-INSERT INTO statistique(nom_statistique) VALUES ('pV'),('pVmax'),('nbrmain'),('deg'),('redudeg');
+INSERT INTO statistique(nom_statistique) VALUES ('pV'),('pVmax'),('nbrmain'),('deg'),('redudeg'),('duree');
+
+--ajout d'un coffre a deux niveau
+
+INSERT INTO objet(nom_objet) VALUES ('coffre en bois');
+INSERT INTO objet(nom_objet,contenant) VALUES ('tas de tissus',(SELECT id_objet FROM objet WHERE nom_objet='coffre en bois')),('petit sac',(SELECT id_objet FROM objet WHERE nom_objet='coffre en bois'));
+INSERT INTO objet(nom_objet,contenant) VALUES ('ferraille',(SELECT id_objet FROM objet WHERE nom_objet='petit sac'));

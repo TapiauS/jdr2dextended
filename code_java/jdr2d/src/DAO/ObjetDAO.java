@@ -28,7 +28,7 @@ public abstract class ObjetDAO extends DAOObject {
 
     public static Objet getObjet(int id) throws SQLException{
         ArrayList<Object> args=new ArrayList<>(List.of(id));
-        ResultSet rs=query("SELECT nom_objet,deg,redu_deg,x,y,nbrmain,emplacement,id_lieu,poid,id_type_objet,is_coffre(id_objet),nom_type_objet,pv,pvmax,duree FROM fichobjet WHERE id_objet=?;",args);
+        ResultSet rs=query("SELECT id_objet,nom_objet,deg,redudeg,x,y,nbrmain,emplacement,id_lieu,poid,is_coffre(id_objet),nom_type_objet,pv,pvmax,duree FROM fichobjet WHERE id_objet=?;",args);
         Objet retour=null;
         rs.next();
         if(rs.getBoolean("is_coffre")) {

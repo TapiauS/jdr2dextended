@@ -11,6 +11,7 @@ import java.util.List;
 
 public abstract class EchangeDAO extends DAOObject{
 
+    //JE CROIS que c'est pour les objectifs de quete que je suis sencé utiliser getparleur
     public static PNJ getparleur(int id) throws SQLException{
         return new PNJ();
     }

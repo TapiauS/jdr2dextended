@@ -9,17 +9,34 @@ import jdr2dcore.*;
 
 public abstract class PersonnageDAO extends DAOObject {
 
-    public static void createchar(String nom, Race race, Utilisateur util) throws SQLException {
-        ArrayList<Object> args=new ArrayList<>(List.of(nom, race.getNomRace(),util.getId()));
-        queryUDC("INSERT INTO personnage(nom_personnage,race,id_compte_utilisateur,id_lieu) VALUES (?,?,?,(SELECT id_lieu FROM lieu WHERE nom_lieu='Tarante'));",args);
+    public static int createchar(String nom, Utilisateur util) throws SQLException {
+        ArrayList<Object> args=new ArrayList<>(List.of(nom,util.getId()));
+        queryUDC("INSERT INTO personnage(nom_personnage,id_compte_utilisateur,id_lieu) VALUES (?,?,(SELECT id_lieu FROM lieu WHERE nom_lieu='Tarante'));",args);
+        ResultSet rs=query("SELECT id_personnage FROM personnage WHERE nom_personnage=? AND id_compte_utilisateur=?",args);
+        rs.next();
+        int retour=rs.getInt(1);
+        rs.getStatement().close();
         close();
+        return retour;
+    }
+
+    public static ArrayList<Personnage> getPersonnages(Map m,Utilisateur util) throws SQLException{
+        ArrayList<Object> args=new ArrayList<>(List.of(m.getId(), util.getId()));
+        ArrayList<Personnage> perso=new ArrayList<>();
+        ResultSet rs=query("SELECT id_personnage FROM personnage WHERE id_lieu=? AND id_compte_utilisateur!=?",args);
+        while (rs.next()){
+            perso.add(PersonnageDAO.getchar(rs.getInt(1)));
+        }
+        rs.getStatement().close();
+        close();
+        return perso;
     }
 
 
 
     public static Personnage getchar(int id) throws SQLException {
         ArrayList<Object> args=new ArrayList<>(List.of(id));
-        ResultSet rs=query("SELECT * FROM fiche_perso WHERE id_personnage=?;",args);
+        ResultSet rs=query("SELECT * FROM fichperso WHERE id_personnage=?;",args);
         rs.next();
         //version trés basique a des fin de test, le gros du taf va se jouer sur la récupération des objectifs et des objets associées au personnage
         Personnage retour;
@@ -40,7 +57,7 @@ public abstract class PersonnageDAO extends DAOObject {
     public static Coffre getinv(int id) throws SQLException{
         ArrayList<Object> args=new ArrayList<>(List.of(id));
         Coffre invent=new Coffre();
-        ResultSet rs=query("SELECT id_objet FROM objet WHERE id_personnage=?;",args);
+        ResultSet rs=query("SELECT id_objet FROM objet WHERE id_personnage_possede=?;",args);
         while (rs.next()){
             invent.add(ObjetDAO.getObjet(rs.getInt("id_objet")));
         }
