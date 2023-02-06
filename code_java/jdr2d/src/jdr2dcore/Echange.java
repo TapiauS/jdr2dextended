@@ -89,7 +89,6 @@ public class Echange {
             return this;
         }
         else {
-            System.err.println("Ce dialogue ne donne pas de quete");
             return this;
         }
     }

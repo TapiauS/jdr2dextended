@@ -14,8 +14,9 @@ public abstract class Input {
     protected static Personnage player;
     protected static Scanner scanner;
     protected static Utilisateur util;
+    protected static char[][] map;
     public static void game() throws SQLException {
-        String input;
+        String input = "";
         scanner=new Scanner(System.in);
         System.out.println("Bienvenu dans Afpanums, la démo de la révolution du jeu vidéo imaginé à l'Afpa de pompey ");
         System.out.println("Avez vous déja un compte ? O/N ?");
@@ -24,14 +25,53 @@ public abstract class Input {
         }
         catch (InputMismatchException e){
             System.out.println("Ecrire O ou N ");
-            launch();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         mapload();
 
+        while (input!="EXIT"){
+            System.out.println("Tapez une commande pour votre personnage, tapez \"Help\" pour la liste des commandes");
+            draw();
+            input=scanner.next().toUpperCase();
+            if(input!="EXIT")
+                playerinput(input);
+        }
 
     }
+
+    private static void draw() throws SQLException {
+        map=new char[carte.getDimensions()[0]][carte.getDimensions()[1]];
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[0].length; j++) {
+                map[i][j]=carte.getCarte()[i][j];
+            }
+        }
+
+        for (Coffre c: coffres) {
+            if(c.getLieux()!=null){
+                map[c.getY()][c.getY()]='C';
+            }
+        }
+        for (PNJ p: pnjs) {
+            if(p.getLieux()!=null){
+                map[p.getY()][p.getX()]='E';
+            }
+        }
+        for (Porte p: sorties) {
+            if(p.getLieux()!=null){
+                map[p.getY()][p.getX()]='P';
+            }
+        }
+        map[player.getY()][player.getX()]='J';
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[0].length; j++) {
+                System.out.print(map[i][j]);
+            }
+            System.out.print('\n');
+        }
+    }
+
 
     //Le but de connectaccount et start account est de récupérer le personnage du joueur, c'est pourquoi dés que celui ci est définit on force la sortie de la fonction
     private static void connectaccount() throws SQLException {
@@ -82,6 +122,33 @@ public abstract class Input {
                 catch (Exception e){
                     System.out.println("Nom de personnage déja utilisé, entrer un autre nom");
                 }
+            }
+        }
+        sucess=false;
+        while (!sucess) {
+            try {
+                System.out.println("0:Creer un personnage " + '\n' +
+                                    "1:Selectionner un personnage");
+                System.out.println("Choisir une option:");
+                int choix = scanner.nextInt();
+                switch (choix){
+                    case 0:
+                            System.out.println("Choisissez un nom pour votre premier perso");
+                            String nomperso = scanner.next();
+                            player=PersonnageDAO.getchar(PersonnageDAO.createchar(nomperso,util));
+                            return;
+                    case 1:
+                            sucess=true;
+                            break;
+                    default:
+                            throw new IllegalArgumentException();
+                }
+                }
+            catch (IllegalArgumentException il){
+                System.out.println("Entrer 0 ou 1");
+            }
+            catch (Exception e){
+                System.out.println("Erreur inconnue veuillez recommencer");
             }
         }
         int i=0;
@@ -178,6 +245,7 @@ public abstract class Input {
                     echanges.add(EchangeDAO.getEchangetree((PNJ) p));
                 }
             }
+            System.out.println("Vous venez d'arriver à "+carte.getNomLieu());
         }
 
         //on a maintenant définit tout ce dont on a besoin pour jouer, il est temps de lancer la boucle principal du jeu
@@ -205,16 +273,7 @@ public abstract class Input {
                 if (input != 'J') {
                     player.depl(input);
                 }
-                for (int i = 0; i < player.getLieux().getDimensions()[0]; i++) {
-                    for (int j = 0; j < player.getLieux().getDimensions()[1]; j++) {
-                        if (j != player.getX() || i != player.getY()) {
-                            System.out.print(player.getLieux().getCarte()[i][j]);
-                        } else {
-                            System.out.print('J');
-                        }
-                    }
-                    System.out.print('\n');
-                }
+                draw();
             }
         }
         catch (Exception e){
@@ -388,10 +447,6 @@ public abstract class Input {
 
     public static void playerinput(String input) throws SQLException {
         String playername=player.getNomPersonnage();
-        Connection conn= DriverManager.getConnection("jdbc:postgresql://10.113.28.39:5432/jdr2d_simon","stapiau","Afpa54*");
-        Statement st0=conn.createStatement();
-        //ResultSet rs0= st0.executeQuery("SELECT id_personnage FROM personnage WHERE nom_personnage="+playername);
-        PreparedStatement st=conn.prepareStatement("SELECT id_personnage FROM map WHERE ");
         int compteur = 0;
         switch (input) {
             //le deplacement

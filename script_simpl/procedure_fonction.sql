@@ -134,6 +134,9 @@ lisid INT [];
 id INT;
 BEGIN 
 SELECT ARRAY_AGG(id_dialogue) FROM dialogue WHERE dialogue.id_personnage=idperso INTO lisid;
+IF lisid IS NULL THEN
+    RETURN NULL;
+END IF;
 FOREACH id IN ARRAY lisid LOOP 
     IF (SELECT id_embranchement FROM embranchement WHERE id_dialogue=id) IS NULL THEN
         RETURN id;

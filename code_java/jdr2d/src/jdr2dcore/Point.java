@@ -25,8 +25,8 @@ public class Point {
         if(x<0){
             this.x=0;
         }
-        else if (x>=this.lieux.getDimensions()[0]) {
-            this.x=this.lieux.getDimensions()[0]-1;
+        else if (x>=this.lieux.getDimensions()[1]) {
+            this.x=this.lieux.getDimensions()[1]-1;
         }
         else{
             this.x=x;
@@ -37,8 +37,8 @@ public class Point {
     public Point setY( int y){
         if(y<0){
             this.y=0;
-        } else if (y>=this.lieux.getDimensions()[1]) {
-            this.y=this.lieux.getDimensions()[1]-1;
+        } else if (y>=this.lieux.getDimensions()[0]) {
+            this.y=this.lieux.getDimensions()[0]-1;
         }
         else{
         this.y=y;

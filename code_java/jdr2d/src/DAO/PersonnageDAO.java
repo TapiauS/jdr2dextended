@@ -23,7 +23,7 @@ public abstract class PersonnageDAO extends DAOObject {
     public static ArrayList<Personnage> getPersonnages(Map m,Utilisateur util) throws SQLException{
         ArrayList<Object> args=new ArrayList<>(List.of(m.getId(), util.getId()));
         ArrayList<Personnage> perso=new ArrayList<>();
-        ResultSet rs=query("SELECT id_personnage FROM personnage WHERE id_lieu=? AND id_compte_utilisateur!=?",args);
+        ResultSet rs=query("SELECT id_personnage FROM personnage WHERE id_lieu=? AND id_compte_utilisateur!=? OR id_compte_utilisateur IS NULL",args);
         while (rs.next()){
             perso.add(PersonnageDAO.getchar(rs.getInt(1)));
         }

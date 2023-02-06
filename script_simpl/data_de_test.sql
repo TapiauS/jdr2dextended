@@ -72,3 +72,7 @@ INSERT INTO statistique(nom_statistique) VALUES ('pV'),('pVmax'),('nbrmain'),('d
 INSERT INTO objet(nom_objet) VALUES ('coffre en bois');
 INSERT INTO objet(nom_objet,contenant) VALUES ('tas de tissus',(SELECT id_objet FROM objet WHERE nom_objet='coffre en bois')),('petit sac',(SELECT id_objet FROM objet WHERE nom_objet='coffre en bois'));
 INSERT INTO objet(nom_objet,contenant) VALUES ('ferraille',(SELECT id_objet FROM objet WHERE nom_objet='petit sac'));
+
+--ajout d'un placeholder pour les types objets
+
+INSERT INTO type_objet(nom_type_objet) VALUES ('default');

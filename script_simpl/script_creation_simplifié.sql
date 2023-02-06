@@ -161,7 +161,7 @@ CREATE TABLE caracterise
 					valeur INT,
 					PRIMARY KEY(id_statistique,id_personnage),
 					FOREIGN KEY(id_personnage) REFERENCES personnage(id_personnage) ON DELETE CASCADE,
-					FOREIGN KEY(id_statistique) REFERENCES sta(id_statistique) ON DELETE CASCADE
+					FOREIGN KEY(id_statistique) REFERENCES statistique(id_statistique) ON DELETE CASCADE
 				);
 
 CREATE TABLE accorde 

@@ -20,7 +20,7 @@ public abstract class QueteDAO extends DAOObject {
     public static ArrayList<Quete> getqueteSuivie(int id) throws SQLException {
         ArrayList<Object> args=new ArrayList<>(List.of(id,id));
         ResultSet rs=query("SELECT interaction.id_interaction,ordre,nom_interaction,description_interaction,nom_objectif,objectif.id_personnage as target,objectif.id_objet as find,objet.id_objet as recompense,objectif.id_objectif,objectif.id_dialogue as talk,validation FROM queste \n" +
-                "    JOIN interaction ON id_personnage=? AND interaction.id_interaction=joue_un_role.id_interaction                                             \n" +
+                "    JOIN interaction ON id_personnage=? AND interaction.id_interaction=queste.id_interaction                                             \n" +
                 "    JOIN objet ON interaction.id_interaction=objet.id_quete                                                    \n" +
                 "    JOIN objectif on objectif.id_interaction=interaction.id_interaction                                              \n" +
                 "    JOIN valide ON objectif.id_objectif=valide.id_objectif and valide.id_personnage=? ORDER BY id_interaction,ordre ;",args);
@@ -76,6 +76,8 @@ public abstract class QueteDAO extends DAOObject {
         for (int i=0;i<listo.size();i++) {
             rec[i]=ObjetDAO.getObjet(listo.get(i));
         }
+        if(listid.size()==0)
+            return new ArrayList<Quete>();
         Quete q=new Quete(nom,descript,new ArrayList<>(),rec).setId(listid.get(0));
         for (Objectifs o:objs) {
             q.addObjectifs(o);
@@ -112,7 +114,7 @@ public abstract class QueteDAO extends DAOObject {
 
     public static void update(Quete q, Personnage player) throws SQLException {
         ArrayList<Object> args=new ArrayList<>(List.of(q.getId(),player.getId()));
-        queryUDC("INSERT INTO queste(id_interaction,id_quete) VALUES (?,?)",args);
+        queryUDC("INSERT INTO queste(id_interaction,id_personnage) VALUES (?,?)",args);
     }
 
 }
