@@ -1,6 +1,5 @@
 package DAO;
-import jdr2dcore.*;
-import tableau.*;
+
 public class StringClassPair {
     private String key;
     private Class value;

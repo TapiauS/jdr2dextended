@@ -38,8 +38,11 @@ public abstract class EchangeDAO extends DAOObject{
             listid.add(rs.getInt("id_embranchement"));
             reponse=rs.getString("contenu_dialogue");
         }
+        if(id==0)
+            return null;
         Echange [] echangsuiv=new Echange[listid.size()];
         for (int i=0;i<listid.size();i++) {
+            System.out.println("id_embranchement = "+listid.get(i));
             echangsuiv[i]=getechangesuivant(perso,listid.get(i));
         }
         if(q==null) {
@@ -81,7 +84,7 @@ public abstract class EchangeDAO extends DAOObject{
         ArrayList<Object> args=new ArrayList<>(List.of(id));
         ResultSet rs=query("SELECT dialogue.id_dialogue,eb0.choix,contenu_dialogue,eb1.id_embranchement  as id_suiv,interaction.id_interaction,id_objectif FROM embranchement as eb0 JOIN" +
                 "                 dialogue ON eb0.id_dialogue=dialogue.id_dialogue AND eb0.id_embranchement=? LEFT JOIN precede" +
-                "                          ON precede.id_dialogue=dialogue.id_dialogue JOIN embranchement as eb1" +
+                "                          ON precede.id_dialogue=dialogue.id_dialogue LEFT JOIN embranchement as eb1" +
                 "                          ON eb1.id_embranchement=precede.id_embranchement LEFT JOIN donne " +
                 "                          ON dialogue.id_dialogue=donne.id_dialogue LEFT JOIN interaction " +
                 "                          ON donne.id_interaction=interaction.id_interaction LEFT JOIN objectif" +
@@ -121,7 +124,6 @@ public abstract class EchangeDAO extends DAOObject{
                 }
             }
         else{
-
             if(o==null) {
                 Echange retour = new Echange(perso, question, reponse, null, true, q);
                 retour.setId(ids);

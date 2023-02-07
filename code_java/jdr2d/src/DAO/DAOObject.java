@@ -60,7 +60,7 @@ import java.lang.reflect.Method;
 
         // TODO : CallableStatement
 
-        public static ResultSet query(String sql) throws SQLException{
+        public static ResultSet query() throws SQLException{
             return createStatement().executeQuery(sql);
         }
 

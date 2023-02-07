@@ -16,7 +16,7 @@ public abstract class UtilisateurDAO extends DAOObject {
             retour=new Utilisateur(rs.getString("couriel_compte"),rs.getString("mdp_compte"),rs.getString("pseudo_compte"),true,rs.getInt("id_compte_utilisateur"));
         }
         else {
-            retour=null;
+            throw new SQLDataException();
         }
         rs.getStatement().close();
         close();

@@ -98,4 +98,36 @@ public abstract class ObjetDAO extends DAOObject {
         queryUDC("UPDATE objet SET id_personnage_possede=null WHERE id_objet=?",args);
         close();
     }
+
+    public static void addObjetCoffre(Objet o,int id) throws SQLException{
+        switch (o.getClass().getName()){
+            case "jdr2dcore.Arme":
+                Arme a=(Arme) o;
+                ArrayList<Object> args0=new ArrayList<>(List.of(a.getNomObjet(),a.getPoid(),a.getDeg(),a.getRedudeg(),a.getNbrmain(),id));
+                queryUDC("CALL add_arme(?,?,?,?,?,?);",args0);
+                close();
+                break;
+            case "jdr2dcore.Armure":
+                Armure ar=(Armure) o;
+                ArrayList<Object> argar=new ArrayList<>(List.of(ar.getNomObjet(),ar.getPoid(),ar.getDeg(),ar.getRedudeg(),ar.getTypearmure(),id));
+                queryUDC("CALL add_armure(?,?,?,?,?,?);",argar);
+                close();
+                break;
+            case "jdr2dcore.Potion":
+                Potion pot=(Potion) o;
+                ArrayList<Object> argpot=new ArrayList<>(List.of(pot.getNomObjet(),pot.getPoid(),pot.getEffets()[0],pot.getEffets()[1],pot.getEffets()[2],pot.getEffets()[3],pot.getDuree().getSeconds(),id));
+                queryUDC("CALL add_potion(?,?,?,?,?,?);",argpot);
+                close();
+                break;
+            case "jdr2dcore.Coffre":
+
+                break;
+            default:
+        }
+    }
+
+    public static void addcoffre(String nomcoffre,int x,int y,Map m) throws SQLException {
+        ArrayList<Object> args=new ArrayList<>(List.of(nomcoffre,x,y,m.getId()));
+        ResultSet rs=query("")
+    }
 }

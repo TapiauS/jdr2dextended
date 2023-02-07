@@ -1,4 +1,4 @@
-package tableau;
+package gamegenerator;
 
 public class CarteDealer {
 

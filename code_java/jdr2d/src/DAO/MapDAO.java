@@ -3,7 +3,7 @@ package DAO;
 
 import jdr2dcore.*;
 import jdr2dcore.Map;
-import tableau.*;
+import gamegenerator.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

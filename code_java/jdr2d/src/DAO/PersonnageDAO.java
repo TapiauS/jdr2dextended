@@ -118,4 +118,12 @@ public abstract class PersonnageDAO extends DAOObject {
         close();
         return retour;
     }
+
+    public static void updatedatabase(Personnage p) throws SQLException {
+        ArrayList<Object> args=new ArrayList<>(List.of(p.getX(),p.getY(),p.getLieux().getId(),p.getId()));
+        queryUDC("UPDATE personnage SET x=?,y=?,id_lieu=? WHERE id_personnage=?;",args);
+        ArrayList<Object> args1=new ArrayList<>(List.of(p.getpV(),p.getId()));
+        queryUDC("UPDATE caracterise SET valeur=? WHERE id_personnage=? AND id_statistique=(SELECT id_statistique FROM statistique WHERE nom_statistique='pV');",args1);
+        close();
+    }
 }

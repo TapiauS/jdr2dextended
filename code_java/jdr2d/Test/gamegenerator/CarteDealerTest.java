@@ -1,7 +1,6 @@
-package tableau;
+package gamegenerator;
 
 import org.junit.jupiter.api.Test;
-import tableau.CarteDealer;
 
 import static org.junit.jupiter.api.Assertions.*;
 

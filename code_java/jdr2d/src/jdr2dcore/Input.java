@@ -20,24 +20,30 @@ public abstract class Input {
         scanner=new Scanner(System.in);
         System.out.println("Bienvenu dans Afpanums, la démo de la révolution du jeu vidéo imaginé à l'Afpa de pompey ");
         System.out.println("Avez vous déja un compte ? O/N ?");
-        try{
-            launch();
-        }
-        catch (InputMismatchException e){
-            System.out.println("Ecrire O ou N ");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        boolean success=false;
+        while (!success) {
+            try {
+                launch();
+                success = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Ecrire O ou N ");
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
         mapload();
-
-        while (input!="EXIT"){
+        while (!input.equals("EXIT")){
             System.out.println("Tapez une commande pour votre personnage, tapez \"Help\" pour la liste des commandes");
             draw();
             input=scanner.next().toUpperCase();
-            if(input!="EXIT")
+            if(!input.equals("EXIT")) {
                 playerinput(input);
+            }
         }
-
+        PersonnageDAO.updatedatabase(player);
+        for (PNJ p: pnjs) {
+            PersonnageDAO.updatedatabase(p);
+        }
     }
 
     private static void draw() throws SQLException {
@@ -242,7 +248,9 @@ public abstract class Input {
             for (Personnage p:PersonnageDAO.getPersonnages(carte,util)) {
                 if(p instanceof PNJ){
                     pnjs.add((PNJ) p);
-                    echanges.add(EchangeDAO.getEchangetree((PNJ) p));
+                    Echange start=EchangeDAO.getEchangetree((PNJ) p);
+                    if(start!=null)
+                        echanges.add(start);
                 }
             }
             System.out.println("Vous venez d'arriver à "+carte.getNomLieu());
@@ -362,7 +370,7 @@ public abstract class Input {
                 if (p.distance(player) <= 1) {
                     compteur = compteur + 1;
                     for (Echange e : echanges) {
-                        if (e.getParleur() == p && e.getQuestion() == null) {
+                        if (e.getParleur() == p) {
                             boolean quisq=false;
                             if(!e.isObjectifquete()){
                                 quisq=true;
@@ -394,7 +402,6 @@ public abstract class Input {
     }
 
     private static void weapon() {
-        Scanner scanner = new Scanner(System.in);
         int inputs = 0;
         try {
             while (inputs != -1) {
@@ -422,7 +429,6 @@ public abstract class Input {
 
     private static void armure() {
         int inputs2 = 0;
-        Scanner scanner = new Scanner(System.in);
         try {
             while (inputs2 != -1) {
                 System.out.println("Votre inventaire contient les armes:");
@@ -532,7 +538,7 @@ public abstract class Input {
                         Pour quitter le jeu : Quit""");
                 break;
 
-            case "QUIT":
+            case "EXIT":
                 break;
         }
     }
