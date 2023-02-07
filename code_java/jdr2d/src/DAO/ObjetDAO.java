@@ -115,8 +115,8 @@ public abstract class ObjetDAO extends DAOObject {
                 break;
             case "jdr2dcore.Potion":
                 Potion pot=(Potion) o;
-                ArrayList<Object> argpot=new ArrayList<>(List.of(pot.getNomObjet(),pot.getPoid(),pot.getEffets()[0],pot.getEffets()[1],pot.getEffets()[2],pot.getEffets()[3],pot.getDuree().getSeconds(),id));
-                queryUDC("CALL add_potion(?,?,?,?,?,?);",argpot);
+                ArrayList<Object> argpot=new ArrayList<>(List.of(pot.getNomObjet(),pot.getPoid(),pot.getEffets()[0],pot.getEffets()[1],pot.getEffets()[2],pot.getEffets()[3],(int) pot.getDuree().getSeconds(),id));
+                queryUDC("CALL add_potion(?,?,?,?,?,?,?,?);",argpot);
                 close();
                 break;
             case "jdr2dcore.Coffre":
@@ -126,8 +126,24 @@ public abstract class ObjetDAO extends DAOObject {
         }
     }
 
-    public static void addcoffre(String nomcoffre,int x,int y,Map m) throws SQLException {
+    public static int addcoffre(String nomcoffre,int x,int y,Map m) throws SQLException {
         ArrayList<Object> args=new ArrayList<>(List.of(nomcoffre,x,y,m.getId()));
-        ResultSet rs=query("")
+        ResultSet rs=query("SELECT add_coffre(?,?,?,?)",args);
+        rs.next();
+        int retour=rs.getInt(1);
+        rs.getStatement().close();
+        close();
+        return retour;
     }
+
+    public static int addcoffre(String nomcoffre,int id) throws SQLException {
+        ArrayList<Object> args=new ArrayList<>(List.of(nomcoffre,id));
+        ResultSet rs=query("SELECT add_coffre(?,?)",args);
+        rs.next();
+        int retour=rs.getInt(1);
+        rs.getStatement().close();
+        close();
+        return retour;
+    }
+
 }

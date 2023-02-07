@@ -192,7 +192,7 @@ CREATE OR REPLACE PROCEDURE add_potion(nom TEXT,poid INT,deg INT,redudeg INT,pv 
 LANGUAGE plpgsql
 AS $$
 BEGIN
-INSERT INTO objet(nom_objet,poid,emplacement,contenant,id_type_objet) VALUES (nom,poid,typearmure,contenant,(SELECT id_type_objet FROM type_objet WHERE nom_type_objet='Potion'));
+INSERT INTO objet(nom_objet,poid,contenant,id_type_objet) VALUES (nom,poid,contenant,(SELECT id_type_objet FROM type_objet WHERE nom_type_objet='Potion'));
 INSERT INTO affecte(id_statistique,id_objet,valeur) VALUES ((SELECT id_statistique FROM statistique WHERE nom_statistique='deg'),(SELECT MAX(objet.id_objet) FROM objet),deg);
 INSERT INTO affecte(id_statistique,id_objet,valeur) VALUES ((SELECT id_statistique FROM statistique WHERE nom_statistique='redudeg'),(SELECT MAX(objet.id_objet) FROM objet),redudeg);
 INSERT INTO affecte(id_statistique,id_objet,valeur) VALUES ((SELECT id_statistique FROM statistique WHERE nom_statistique='pV'),(SELECT MAX(objet.id_objet) FROM objet),pv);

@@ -1,10 +1,9 @@
 package gamegenerator;
 
-import jdr2dcore.Arme;
-import jdr2dcore.Armure;
-import jdr2dcore.Objet;
-import jdr2dcore.Potion;
+import DAO.ObjetDAO;
+import jdr2dcore.*;
 
+import java.sql.SQLException;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -31,5 +30,41 @@ public class CoffreGenerator {
 
     private final static ArrayList<Objet> contenuposs=new ArrayList<>(List.of(epee,marteaudeguerre,bouclier,pavois,casquelourd,gantelet,plastrail,jambiere,bottes,potionsoin,potionforce,potionarmure,potionconstitution));
 
+    public static void filldatabase(Map m) throws SQLException {
+        for (int i = 0; i < m.getDimensions()[0]; i++) {
+            for (int j = 0; j < m.getDimensions()[1]; j++) {
+                if(m.getCarte()[i][j]=='C')
+                    create_fill(i,j,m);
+            }
+        }
+    }
+
+    private static void petit_coffre(int id) throws SQLException {
+        int taille=(int) (Math.random()*10);
+        int idc=ObjetDAO.addcoffre("Coffre",id);
+        for (int k = 0; k < taille; k++) {
+            if(Math.random()<0.9){
+                int obj=(int) (Math.random()*contenuposs.size());
+                ObjetDAO.addObjetCoffre(contenuposs.get(obj),id);
+            }
+            else {
+                petit_coffre(id);
+            }
+        }
+    }
+
+    private static void create_fill(int i,int j,Map m) throws SQLException {
+        int taille=(int) (Math.random()*10);
+        int id=ObjetDAO.addcoffre("Coffre",i,j,m);
+        for (int k = 0; k < taille; k++) {
+            if(Math.random()<0.9){
+                int obj=(int) (Math.random()*contenuposs.size());
+                ObjetDAO.addObjetCoffre(contenuposs.get(obj),id);
+            }
+            else {
+                petit_coffre(id);
+            }
+        }
+    }
 
 }
