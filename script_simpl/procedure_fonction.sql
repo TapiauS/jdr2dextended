@@ -162,3 +162,59 @@ ELSE
 END IF;
 END;
 $$;
+
+--Fonction qui ajoute une arme
+
+CREATE OR REPLACE PROCEDURE add_arme(nom TEXT,poid INT,deg INT,redudeg INT,nbrmain INT,contenant INT) 
+LANGUAGE plpgsql
+AS $$
+BEGIN
+INSERT INTO objet(nom_objet,poid,contenant,id_type_objet) VALUES (nom,poid,contenant,(SELECT id_type_objet FROM type_objet WHERE nom_type_objet='Arme'));
+INSERT INTO affecte(id_statistique,id_objet,valeur) VALUES ((SELECT id_statistique FROM statistique WHERE nom_statistique='deg'),(SELECT MAX(objet.id_objet) FROM objet),deg);
+INSERT INTO affecte(id_statistique,id_objet,valeur) VALUES ((SELECT id_statistique FROM statistique WHERE nom_statistique='redudeg'),(SELECT MAX(objet.id_objet) FROM objet),redudeg);
+INSERT INTO affecte(id_statistique,id_objet,valeur) VALUES ((SELECT id_statistique FROM statistique WHERE nom_statistique='nbrmain'),(SELECT MAX(objet.id_objet) FROM objet),nbrmain);
+END;
+$$;
+
+
+CREATE OR REPLACE PROCEDURE add_armure(nom TEXT,poid INT,deg INT,redudeg INT,typearmure TEXT,contenant INT)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+INSERT INTO objet(nom_objet,poid,emplacement,contenant,id_type_objet) VALUES (nom,poid,typearmure,contenant,(SELECT id_type_objet FROM type_objet WHERE nom_type_objet='Armure'));
+INSERT INTO affecte(id_statistique,id_objet,valeur) VALUES ((SELECT id_statistique FROM statistique WHERE nom_statistique='deg'),(SELECT MAX(objet.id_objet) FROM objet),deg);
+INSERT INTO affecte(id_statistique,id_objet,valeur) VALUES ((SELECT id_statistique FROM statistique WHERE nom_statistique='redudeg'),(SELECT MAX(objet.id_objet) FROM objet),redudeg);
+END;
+$$;
+
+
+CREATE OR REPLACE PROCEDURE add_potion(nom TEXT,poid INT,deg INT,redudeg INT,pv INT,pvmax INT,duree INT,contenant INT)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+INSERT INTO objet(nom_objet,poid,emplacement,contenant,id_type_objet) VALUES (nom,poid,typearmure,contenant,(SELECT id_type_objet FROM type_objet WHERE nom_type_objet='Potion'));
+INSERT INTO affecte(id_statistique,id_objet,valeur) VALUES ((SELECT id_statistique FROM statistique WHERE nom_statistique='deg'),(SELECT MAX(objet.id_objet) FROM objet),deg);
+INSERT INTO affecte(id_statistique,id_objet,valeur) VALUES ((SELECT id_statistique FROM statistique WHERE nom_statistique='redudeg'),(SELECT MAX(objet.id_objet) FROM objet),redudeg);
+INSERT INTO affecte(id_statistique,id_objet,valeur) VALUES ((SELECT id_statistique FROM statistique WHERE nom_statistique='pV'),(SELECT MAX(objet.id_objet) FROM objet),pv);
+INSERT INTO affecte(id_statistique,id_objet,valeur) VALUES ((SELECT id_statistique FROM statistique WHERE nom_statistique='pVmax'),(SELECT MAX(objet.id_objet) FROM objet),pvmax);
+INSERT INTO affecte(id_statistique,id_objet,valeur) VALUES ((SELECT id_statistique FROM statistique WHERE nom_statistique='duree'),(SELECT MAX(objet.id_objet) FROM objet),duree);
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION add_coffre(nom TEXT,x INT,y INT,id_lieu INT) RETURNS INT
+LANGUAGE plpgsql
+AS $$
+BEGIN
+INSERT INTO objet(nom_objet,x,y,id_lieu) VALUES(nom,x,y,id_lieu);
+RETURN (SELECT MAX(id_objet) FROM objet);
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION add_coffre(nom TEXT,contenant INT) RETURNS INT
+LANGUAGE plpgsql
+AS $$
+BEGIN
+INSERT INTO objet(nom_objet,contenant) VALUES(nom,contenant);
+RETURN (SELECT MAX(id_objet) FROM objet);
+END;
+$$;

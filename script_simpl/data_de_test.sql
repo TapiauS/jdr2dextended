@@ -75,4 +75,4 @@ INSERT INTO objet(nom_objet,contenant) VALUES ('ferraille',(SELECT id_objet FROM
 
 --ajout d'un placeholder pour les types objets
 
-INSERT INTO type_objet(nom_type_objet) VALUES ('default');
+INSERT INTO type_objet(nom_type_objet) VALUES ('Arme'),('Armure'),('Potion');

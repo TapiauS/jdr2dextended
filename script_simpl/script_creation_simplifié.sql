@@ -29,7 +29,7 @@ CREATE TABLE compte_utilisateur
 CREATE TABLE lieu
 				(
 					id_lieu SERIAL PRIMARY KEY ,
-					nom_lieu VARCHAR(255),
+					nom_lieu VARCHAR(255) UNIQUE,
 					description_lieu VARCHAR(255),
 					carte_lieu TEXT
 				);
@@ -164,23 +164,14 @@ CREATE TABLE caracterise
 					FOREIGN KEY(id_statistique) REFERENCES statistique(id_statistique) ON DELETE CASCADE
 				);
 
-CREATE TABLE accorde 
-				(
-					id_objet INT,
-					id_interaction INT,
-					PRIMARY KEY(id_objet,id_recompense) ,
-					FOREIGN KEY(id_recompense) REFERENCES recompense(id_recompense) ON DELETE CASCADE
-				);
 
 CREATE TABLE donne 
 				(
 					id_interaction INT,
 					id_dialogue INT,
-					code_role_interaction CHAR(2),
-					PRIMARY KEY(id_interaction,id_dialogue,code_role_interaction) ,
+					PRIMARY KEY(id_interaction,id_dialogue) ,
 					FOREIGN KEY(id_interaction) REFERENCES interaction(id_interaction) ON DELETE CASCADE,
 					FOREIGN KEY(id_dialogue) REFERENCES dialogue(id_dialogue) ON DELETE CASCADE,
-					FOREIGN KEY(code_role_interaction) REFERENCES role_interaction(code_role_interaction) ON DELETE CASCADE
 				);
 
 CREATE TABLE embranchement
@@ -199,7 +190,7 @@ CREATE TABLE queste
 							id_interaction INT,
 							FOREIGN KEY(id_personnage) REFERENCES personnage(id_personnage) ON DELETE CASCADE,
 							FOREIGN KEY(id_interaction) REFERENCES interaction(id_interaction) ON DELETE CASCADE,
-							PRIMARY KEY(id_personnage,code_role_interaction,id_interaction) 
+							PRIMARY KEY(id_personnage,id_interaction) 
 						);
 
 

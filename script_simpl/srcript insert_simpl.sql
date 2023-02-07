@@ -565,3 +565,10 @@ SELECT interaction.id_interaction,ordre,nom_interaction,nom_objectif,objectif.id
 
 
 
+SELECT dialogue.id_dialogue,eb0.choix,contenu_dialogue,eb1.id_embranchement  as id_suiv,interaction.id_interaction,id_objectif FROM embranchement as eb0 JOIN
+                                 dialogue ON eb0.id_dialogue=dialogue.id_dialogue AND eb0.id_embranchement=2 LEFT JOIN precede
+                                          ON precede.id_dialogue=dialogue.id_dialogue LEFT JOIN embranchement as eb1
+                                          ON eb1.id_embranchement=precede.id_embranchement LEFT JOIN donne 
+                                          ON dialogue.id_dialogue=donne.id_dialogue LEFT JOIN interaction 
+                                          ON donne.id_interaction=interaction.id_interaction LEFT JOIN objectif
+                                          ON dialogue.id_dialogue=objectif.id_dialogue;
