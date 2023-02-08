@@ -13,6 +13,7 @@ class CoffreGeneratorTest {
 
     @Test
     void filldatabase() throws SQLException {
+
         test.setId(3);
         CoffreGenerator.filldatabase(test);
     }

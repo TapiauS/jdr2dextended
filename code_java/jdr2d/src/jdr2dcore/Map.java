@@ -68,7 +68,7 @@ public class Map {
     }
 
     public Map(int[] dimensions,char[][] carte,String nomLieu,int id){
-        this.setDimensions(dimensions).setCarte(carte).setNomLieu(nomLieu).setPosition(null).setId(id);
+        this.setDimensions(new int[] {carte.length, carte[0].length}).setCarte(carte).setNomLieu(nomLieu).setPosition(null).setId(id);
     }
 
     public Map(int[] dimensions,char[][] carte,String nomLieu,Point p,int id){

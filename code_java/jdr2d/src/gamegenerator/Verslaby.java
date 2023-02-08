@@ -1,5 +1,9 @@
 package gamegenerator;
 
+import DAO.MapDAO;
+import jdr2dcore.Map;
+
+import java.sql.SQLException;
 import java.util.Random;
 
 public class Verslaby {
@@ -391,18 +395,24 @@ public class Verslaby {
         return laby;
     }
 
-    public static void main (String[]args) {
-        char[][] labyr =Verslaby.construitgroslaby(20,20,0.6);
-        StringBuffer labytdraw=new StringBuffer();
+   /* StringBuffer labytdraw=new StringBuffer();
         for (int i = 0; i < labyr.length; i++) {
-            for (int j = 0; j < labyr[i].length; j++) {
-                labytdraw.append(labyr[i][j]);
-            }
-            labytdraw.append('\n');
+        for (int j = 0; j < labyr[i].length; j++) {
+            labytdraw.append(labyr[i][j]);
         }
-        CarteDealer c=new CarteDealer();
-        String labystring=c.toString(labyr);
-        System.out.println("savedtableau= "+labystring);
-        System.out.println(labytdraw);
+        labytdraw.append('\n');
     }
+    */
+
+   /* public static void main (String[]args) throws SQLException {
+
+
+        CarteDealer c=new CarteDealer();
+        char [][] carte=Verslaby.construitgroslaby(80,80,0.6);
+        Map m=new Map(new int[] {1,4},carte,"Caladon",9);
+        MapDAO.createMap(m);
+        CoffreGenerator.filldatabase(m);
+    }
+    */
+
 }
