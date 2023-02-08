@@ -410,7 +410,7 @@ public class Verslaby {
         CarteDealer c=new CarteDealer();
         char [][] carte=Verslaby.construitgroslaby(80,80,0.6);
         Map m=new Map(new int[] {1,4},carte,"Caladon",9);
-        MapDAO.createMap(m);
+        m.setId(MapDAO.createMap(m));
         CoffreGenerator.filldatabase(m);
     }
     */

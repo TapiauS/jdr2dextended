@@ -11,11 +11,16 @@ import java.util.List;
 public abstract class MapDAO extends DAOObject {
 
 
-    public static void createMap(Map m) throws SQLException {
+    public static int createMap(Map m) throws SQLException {
         CarteDealer c=new CarteDealer();
         ArrayList<Object> args=new ArrayList<>(List.of(m.getNomLieu(),c.toString(m.getCarte())));
         queryUDC("INSERT INTO lieu(nom_lieu,carte_lieu) VALUES (?,?)",args);
+        ResultSet rs=query("SELECT MAX(id_lieu) FROM lieu");
+        rs.next();
+        int retour=rs.getInt(1);
+        rs.getStatement().close();
         close();
+        return retour;
     }
 
 
