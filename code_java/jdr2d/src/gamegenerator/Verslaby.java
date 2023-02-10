@@ -395,12 +395,7 @@ public class Verslaby {
         return laby;
     }
 
-   /* StringBuffer labytdraw=new StringBuffer();
-        for (int i = 0; i < labyr.length; i++) {
-        for (int j = 0; j < labyr[i].length; j++) {
-            labytdraw.append(labyr[i][j]);
-        }
-        labytdraw.append('\n');
+   /*
     }
     */
 
