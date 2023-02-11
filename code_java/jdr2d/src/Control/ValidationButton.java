@@ -1,4 +1,4 @@
-package Graphic;
+package Control;
 
 import javax.swing.*;
 import java.awt.*;
@@ -6,10 +6,12 @@ import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 
 import DAO.*;
-public class ValidationButton extends AbstractAction {
-    private FullInterface fenetre;
+import Graphic.FullLogInterface;
 
-    public ValidationButton(FullInterface fenetre, String texte){
+public class ValidationButton extends AbstractAction {
+    private FullLogInterface fenetre;
+
+    public ValidationButton(FullLogInterface fenetre, String texte){
         super(texte);
 
         this.fenetre = fenetre;

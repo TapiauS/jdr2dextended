@@ -1,4 +1,4 @@
-package Graphic;
+package Control;
 
 public class MdpValidationButton {
 }

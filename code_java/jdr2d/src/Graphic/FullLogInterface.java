@@ -1,14 +1,16 @@
 package Graphic;
 
+import Control.CreateAccountButton;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class FullInterface extends JFrame {
+public class FullLogInterface extends JFrame {
     private JTextField textField;
     private JLabel label;
 
 
-    public FullInterface(){
+    public FullLogInterface(){
         super();
         build();//On initialise notre fenêtre
     }

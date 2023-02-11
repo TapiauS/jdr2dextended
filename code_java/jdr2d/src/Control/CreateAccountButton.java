@@ -1,4 +1,6 @@
-package Graphic;
+package Control;
+
+import Graphic.FullLogInterface;
 
 import javax.swing.*;
 import java.awt.*;
@@ -6,8 +8,8 @@ import java.awt.event.ActionEvent;
 
 public class CreateAccountButton extends AbstractAction {
 
-    private FullInterface fenetre;
-    public CreateAccountButton(FullInterface full,String texte){
+    private FullLogInterface fenetre;
+    public CreateAccountButton(FullLogInterface full, String texte){
         super(texte);
         this.fenetre=full;
     }
