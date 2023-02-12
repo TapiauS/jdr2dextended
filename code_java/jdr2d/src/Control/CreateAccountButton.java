@@ -18,14 +18,14 @@ public class CreateAccountButton extends AbstractAction {
     public void actionPerformed(ActionEvent e) {
         JTextField create = new JTextField();
         create.setColumns(10);
-        JButton valide=new JButton(new ValidationButton(this.fenetre,"Validation"));
-        this.fenetre.remove((Component) e.getSource());
-        this.fenetre.remove(this.fenetre.getLabel());
-        this.fenetre.setTextField(create);
-        this.fenetre.add(this.fenetre.getTextField());
-        this.fenetre.add(valide);
-        this.fenetre.setLabel(new JLabel("Entrer un pseudo"));
-        this.fenetre.add(this.fenetre.getLabel());
+        JButton valide=new JButton(new ValidationPseudoButton(this.fenetre,"Validation"));
+        this.fenetre.setTop(valide);
+        this.fenetre.setToptextfield(create);
+        this.fenetre.setToplabel(new JLabel("Entrer un pseudo"));
+        this.fenetre.setBottom(new JButton(new ConnexionButton(this.fenetre,"Se connecter")));
+        this.fenetre.getBottomlabel().setVisible(false);
+        this.fenetre.getBottomtextfield().setVisible(false);
+        this.fenetre.pack();
         this.fenetre.repaint();
         this.fenetre.revalidate();
     }

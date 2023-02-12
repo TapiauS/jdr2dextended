@@ -56,6 +56,23 @@ public abstract class UtilisateurDAO extends DAOObject {
         }
     }
 
+
+
+    public static boolean checkmail(String mail) throws SQLException {
+        ArrayList<Object> args=new ArrayList<>(List.of(mail));
+        ResultSet rs=query("SELECT * FROM compte_utilisateur WHERE couriel_compte=?",args);
+        if(rs.next()) {
+            rs.getStatement().close();
+            close();
+            return false;
+        }
+        else {
+            rs.getStatement().close();
+            close();
+            return true;
+        }
+    }
+
     public static void createcompte(String nom, String mdp,String mail) throws SQLException {
         ArrayList<Object> args=new ArrayList<>(List.of(mail,nom,mdp));
         queryUDC("CALL add_user(?,?,?);",args);

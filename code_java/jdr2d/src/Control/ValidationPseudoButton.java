@@ -1,69 +1,62 @@
 package Control;
 
-import DAO.UtilisateurDAO;
-import Graphic.FullLogInterface;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 
-public class MdpValidationButton extends AbstractAction {
+import DAO.*;
+import Graphic.FullLogInterface;
 
-
+public class ValidationPseudoButton extends AbstractAction {
     private FullLogInterface fenetre;
-    private String pseudo;
-
 
 
     //getters
-
 
     public FullLogInterface getFenetre() {
         return fenetre;
     }
 
+    //setters
 
     public void setFenetre(FullLogInterface fenetre) {
         this.fenetre = fenetre;
     }
 
-    public MdpValidationButton(FullLogInterface fenetre, String texte,String pseudo){
+    public ValidationPseudoButton(FullLogInterface fenetre, String texte){
         super(texte);
         this.setFenetre(fenetre);
-        this.pseudo=pseudo;
+
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         JTextField textField= (JTextField) fenetre.getToptextfield();
-        String mdp = textField.getText();
+        String pseudo = textField.getText();
         boolean val;
         try {
-            val = UtilisateurDAO.checkpseudo(mdp);
+            val = UtilisateurDAO.checkpseudo(pseudo);
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
         if(val){
-            JLabel mail =new JLabel("Rentrer votre adresse mail");
-            this.fenetre.setToplabel(mail);
-            JTextField zone=new JTextField();
-            zone.setColumns(10);
-            this.fenetre.setToptextfield(zone);
-            this.fenetre.setTop(new JButton(new MailButton(this.fenetre,"Validation",this.pseudo,mdp)));
-            this.fenetre.setToptextfield(zone);
+
+            JTextField createchar = new JTextField();
+            createchar.setColumns(10);
+            JLabel create=new JLabel("Choisir un mot de passe");
+            this.fenetre.setToplabel(create);
+            this.fenetre.setToptextfield(createchar);
+            this.fenetre.setTop(new JButton(new MdpValidationButton(this.fenetre,"Validation",pseudo)));
             this.fenetre.pack();
             this.fenetre.repaint();
             this.fenetre.revalidate();
         }
         else {
-            JButton c= (JButton) e.getSource();
-            this.fenetre.add(c);
-            this.fenetre.setToplabel(new JLabel("Mot de passe non disponible, veuillez re essayer"));
+            this.fenetre.setToplabel(new JLabel("Pseudo non disponible, veuillez re essayer"));
             this.fenetre.pack();
             this.fenetre.repaint();
             this.fenetre.revalidate();
         }
-
     }
 }

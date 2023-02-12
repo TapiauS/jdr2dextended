@@ -126,4 +126,13 @@ public abstract class PersonnageDAO extends DAOObject {
         queryUDC("UPDATE caracterise SET valeur=? WHERE id_personnage=? AND id_statistique=(SELECT id_statistique FROM statistique WHERE nom_statistique='pV');",args1);
         close();
     }
+
+    public static boolean checkcharname(String name) throws SQLException {
+        ArrayList<Object> args=new ArrayList<>(List.of(name));
+        ResultSet rs=query("SELECT * FROM personnage WHERE nom_personnage=?;",args);
+        boolean retour=!rs.next();
+        rs.getStatement().close();
+        close();
+        return retour;
+    }
 }
