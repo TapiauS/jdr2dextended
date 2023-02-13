@@ -6,6 +6,7 @@ import jdr2dcore.Utilisateur;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.sql.SQLDataException;
 import java.sql.SQLException;
 import java.util.Hashtable;
 
@@ -25,11 +26,17 @@ public class LogButton extends AbstractAction {
         Utilisateur util = new Utilisateur();
         try {
             util=UtilisateurDAO.connectcompte(pseudo,mdp);
-        } catch (SQLException ex) {
-            this.fenetre.setToplabel(new JLabel("Pseudo ou mot de passe incorrect, réessayez"));
-            this.fenetre.pack();
-            this.fenetre.repaint();
-            this.fenetre.revalidate();
+        }
+        catch (SQLException ex) {
+
+            if(ex instanceof SQLDataException) {
+                System.err.println("je passe dans l'exception data");
+                this.fenetre.setToplabel(new JLabel("Pseudo ou mot de passe incorrect, réessayez"));
+                this.fenetre.pack();
+                this.fenetre.repaint();
+                this.fenetre.revalidate();
+                return;
+            }
         }
         GroupLayout group= (GroupLayout) this.fenetre.getContentPane().getLayout();
         Hashtable<String,Integer> refperso;

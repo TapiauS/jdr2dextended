@@ -123,11 +123,6 @@ public class FullLogInterface extends JFrame {
     }
 
 
-
-
-
-
-
     private void build() {
         setTitle("Afpanums"); //On donne un titre à l'application
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //On dit à l'application de se fermer lors du clic sur la croix
@@ -135,7 +130,6 @@ public class FullLogInterface extends JFrame {
         pack();
         setLocationRelativeTo(null); //On centre la fenêtre sur l'écran
         setResizable(true);
-
     }
 
     private JPanel buildContentPane(){
