@@ -52,17 +52,13 @@ public class MdpValidationButton extends AbstractAction {
             this.fenetre.setToptextfield(zone);
             this.fenetre.setTop(new JButton(new MailButton(this.fenetre,"Validation",this.pseudo,mdp)));
             this.fenetre.setToptextfield(zone);
-            this.fenetre.pack();
-            this.fenetre.repaint();
-            this.fenetre.revalidate();
+            this.fenetre.refresh();
         }
         else {
             JButton c= (JButton) e.getSource();
             this.fenetre.add(c);
             this.fenetre.setToplabel(new JLabel("Mot de passe non disponible, veuillez re essayer"));
-            this.fenetre.pack();
-            this.fenetre.repaint();
-            this.fenetre.revalidate();
+            this.fenetre.refresh();
         }
 
     }

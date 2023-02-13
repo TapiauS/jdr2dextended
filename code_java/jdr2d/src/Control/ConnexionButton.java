@@ -20,8 +20,6 @@ public class ConnexionButton extends AbstractAction {
         this.fenetre.setBottomlabel(new JLabel("Entrer un mot de passe"));
         this.fenetre.getBottomtextfield().setVisible(true);
         this.fenetre.getBottomtextfield().setColumns(10);
-        this.fenetre.pack();
-        this.fenetre.repaint();
-        this.fenetre.revalidate();
+        this.fenetre.refresh();
     }
 }

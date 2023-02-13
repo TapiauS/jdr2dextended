@@ -6,40 +6,26 @@ import jdr2dcore.Utilisateur;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.sql.SQLDataException;
 import java.sql.SQLException;
 import java.util.Hashtable;
 
-public class LogButton extends AbstractAction {
+public class CharSelectionButton extends AbstractAction {
 
     private FullLogInterface fenetre;
-    public LogButton(FullLogInterface fenetre,String texte){
+
+    private Utilisateur util;
+
+    public CharSelectionButton(String texte,Utilisateur util,FullLogInterface fenetre){
         super(texte);
         this.fenetre=fenetre;
+        this.util=util;
     }
-
     @Override
     public void actionPerformed(ActionEvent e) {
-        JTextField textField= (JTextField) fenetre.getToptextfield();
-        String pseudo=textField.getText();
-        String mdp=this.fenetre.getBottomtextfield().getText();
-        Utilisateur util = new Utilisateur();
-        try {
-            util=UtilisateurDAO.connectcompte(pseudo,mdp);
-        }
-        catch (SQLException ex) {
-
-            if(ex instanceof SQLDataException) {
-                System.err.println("je passe dans l'exception data");
-                this.fenetre.setToplabel(new JLabel("Pseudo ou mot de passe incorrect, réessayez"));
-                this.fenetre.refresh();
-                return;
-            }
-        }
         GroupLayout group= (GroupLayout) this.fenetre.getContentPane().getLayout();
         Hashtable<String,Integer> refperso;
         try {
-            refperso=UtilisateurDAO.displaypersonnage(util);
+            refperso= UtilisateurDAO.displaypersonnage(util);
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }

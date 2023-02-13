@@ -2,17 +2,20 @@ package Graphic;
 
 import Control.ConnexionButton;
 import Control.CreateAccountButton;
-import DAO.PersonnageDAO;
+import Control.EventListenerWindow;
+import Control.ThreadDealer;
 import jdr2dcore.Map;
 import jdr2dcore.Personnage;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class FullLogInterface extends JFrame {
+public class FullLogInterface extends JFrame  {
     private Component toptextfield;
     private JLabel toplabel;
 
+
+    private ThreadDealer observer;
     private JButton top;
 
     private JTextField bottomtextfield;
@@ -26,6 +29,7 @@ public class FullLogInterface extends JFrame {
     private Map map;
 
 
+
     public FullLogInterface(){
         super();
 
@@ -34,6 +38,8 @@ public class FullLogInterface extends JFrame {
 
 
     //getters
+
+
 
 
     public Map getMap() {
@@ -68,9 +74,16 @@ public class FullLogInterface extends JFrame {
         return bottomtextfield;
     }
 
+    public ThreadDealer getObserver() {
+        return observer;
+    }
 
 
     //setters
+
+    public void setObserver(ThreadDealer observer) {
+        this.observer = observer;
+    }
 
     public void setMap(Map map) {
         this.map = map;
@@ -108,8 +121,9 @@ public class FullLogInterface extends JFrame {
         this.bottomtextfield = bottomtextfield;
     }
 
-    public void setPerso(Personnage perso) {
+    public void setPerso(Personnage perso) throws InterruptedException {
         this.perso = perso;
+        this.observer.update(this);
     }
 
     //methodes
@@ -177,6 +191,12 @@ public class FullLogInterface extends JFrame {
                                 .addComponent(bottom)));
 
         return panel;
+    }
+
+    public void refresh(){
+        this.pack();
+        this.repaint();
+        this.revalidate();
     }
 
 }

@@ -25,9 +25,7 @@ public class CreateAccountButton extends AbstractAction {
         this.fenetre.setBottom(new JButton(new ConnexionButton(this.fenetre,"Se connecter")));
         this.fenetre.getBottomlabel().setVisible(false);
         this.fenetre.getBottomtextfield().setVisible(false);
-        this.fenetre.pack();
-        this.fenetre.repaint();
-        this.fenetre.revalidate();
+        this.fenetre.refresh();
     }
 }
 

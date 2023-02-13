@@ -69,17 +69,13 @@ public class MailButton extends AbstractAction {
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
-            this.fenetre.setTop(new JButton(new CreateCharButton(this.fenetre,"Validation",util)));
+            this.fenetre.setTop(new JButton(new FirstCharButton(this.fenetre,"Validation",util)));
             this.fenetre.setToptextfield(zone);
-            this.fenetre.pack();
-            this.fenetre.repaint();
-            this.fenetre.revalidate();
+            this.fenetre.refresh();
         }
         else {
             this.fenetre.setToplabel(new JLabel("Adresse mail non disponible, veuillez re essayer"));
-            this.fenetre.pack();
-            this.fenetre.repaint();
-            this.fenetre.revalidate();
+            this.fenetre.refresh();
         }
 
     }

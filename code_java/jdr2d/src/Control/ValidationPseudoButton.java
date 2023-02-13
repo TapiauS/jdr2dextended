@@ -48,15 +48,11 @@ public class ValidationPseudoButton extends AbstractAction {
             this.fenetre.setToplabel(create);
             this.fenetre.setToptextfield(createchar);
             this.fenetre.setTop(new JButton(new MdpValidationButton(this.fenetre,"Validation",pseudo)));
-            this.fenetre.pack();
-            this.fenetre.repaint();
-            this.fenetre.revalidate();
+            this.fenetre.refresh();
         }
         else {
             this.fenetre.setToplabel(new JLabel("Pseudo non disponible, veuillez re essayer"));
-            this.fenetre.pack();
-            this.fenetre.repaint();
-            this.fenetre.revalidate();
+            this.fenetre.refresh();
         }
     }
 }

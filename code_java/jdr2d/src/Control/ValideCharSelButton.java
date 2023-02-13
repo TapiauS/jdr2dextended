@@ -51,11 +51,9 @@ public class ValideCharSelButton extends AbstractAction {
         this.fenetre.getTop().setVisible(false);
         try {
             this.fenetre.setPerso(PersonnageDAO.getchar(refperso.get(charname)));
-        } catch (SQLException ex) {
+        } catch (SQLException | InterruptedException ex) {
             throw new RuntimeException(ex);
         }
-        this.fenetre.pack();
-        this.fenetre.repaint();
-        this.fenetre.revalidate();
+        this.fenetre.refresh();
     }
 }
