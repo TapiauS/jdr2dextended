@@ -44,7 +44,6 @@ public class ValideCharSelButton extends AbstractAction {
     public void actionPerformed(ActionEvent e) {
         JList list=(JList) this.fenetre.getToptextfield();
         String charname= (String) list.getSelectedValue();
-        this.fenetre.setToplabel(new JLabel("Vous avez sélectionné "+charname));
         this.fenetre.getToptextfield().setVisible(false);
         this.fenetre.getBottomlabel().setVisible(false);
         this.fenetre.getBottom().setVisible(false);
@@ -54,6 +53,7 @@ public class ValideCharSelButton extends AbstractAction {
         } catch (SQLException | InterruptedException ex) {
             throw new RuntimeException(ex);
         }
+        this.fenetre.setVisible(false);
         this.fenetre.refresh();
     }
 }

@@ -78,8 +78,8 @@ public class MapPanel extends JPanel implements KeyListener {
         draw(g);
     }
     public void draw(Graphics g){
-        for (int i = 0; i <player.getLieux().getCarte().length; i++) {
-            for (int j = 0; j < player.getLieux().getCarte()[0].length; j++) {
+        for (int i = 0; i <player.getLieux().getCarte()[0].length; i++) {
+            for (int j = 0; j < player.getLieux().getCarte().length; j++) {
                 if(player.getLieux().getCarte()[j][i]=='#') {
                     g.setColor(Color.black);
                     g.fillRect(i * unit_size, j * unit_size, unit_size, unit_size);

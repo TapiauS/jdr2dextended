@@ -28,14 +28,13 @@ public class LogButton extends AbstractAction {
             util=UtilisateurDAO.connectcompte(pseudo,mdp);
         }
         catch (SQLException ex) {
-
             if(ex instanceof SQLDataException) {
-                System.err.println("je passe dans l'exception data");
                 this.fenetre.setToplabel(new JLabel("Pseudo ou mot de passe incorrect, réessayez"));
                 this.fenetre.refresh();
                 return;
             }
         }
+        this.fenetre.setUtil(util);
         GroupLayout group= (GroupLayout) this.fenetre.getContentPane().getLayout();
         Hashtable<String,Integer> refperso;
         try {
