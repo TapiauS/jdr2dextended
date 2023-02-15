@@ -64,8 +64,10 @@ public class MailButton extends AbstractAction {
                 throw new RuntimeException(ex);
             }
             Utilisateur util;
+
             try {
                 util=UtilisateurDAO.connectcompte(this.pseudo,this.mdp);
+                this.fenetre.setUtil(util);
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }

@@ -8,7 +8,9 @@ import java.sql.SQLException;
 import DAO.*;
 import Graphic.FullLogInterface;
 
-public class ValidationPseudoButton extends AbstractAction {
+public class
+
+ValidationPseudoButton extends AbstractAction {
     private FullLogInterface fenetre;
 
 

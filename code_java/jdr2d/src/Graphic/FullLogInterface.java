@@ -4,15 +4,21 @@ import Control.ConnexionButton;
 import Control.CreateAccountButton;
 import Control.EventListenerWindow;
 import Control.ThreadDealer;
-import jdr2dcore.Map;
-import jdr2dcore.Personnage;
+import DAO.EchangeDAO;
+import DAO.MapDAO;
+import DAO.PersonnageDAO;
+import DAO.PorteDAO;
+import jdr2dcore.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class FullLogInterface extends JFrame  {
     private Component toptextfield;
     private JLabel toplabel;
+
 
 
     private ThreadDealer observer;
@@ -23,6 +29,8 @@ public class FullLogInterface extends JFrame  {
     private JLabel bottomlabel;
 
     private JButton bottom;
+
+    private Utilisateur util;
 
     private Personnage perso;
 
@@ -40,7 +48,9 @@ public class FullLogInterface extends JFrame  {
     //getters
 
 
-
+    public Utilisateur getUtil() {
+        return util;
+    }
 
     public Map getMap() {
         return map;
@@ -80,6 +90,11 @@ public class FullLogInterface extends JFrame  {
 
 
     //setters
+
+
+    public void setUtil(Utilisateur util) {
+        this.util = util;
+    }
 
     public void setObserver(ThreadDealer observer) {
         this.observer = observer;
@@ -153,22 +168,17 @@ public class FullLogInterface extends JFrame  {
         group.setAutoCreateGaps(true);
         group.setAutoCreateContainerGaps(true);
         JButton create=new JButton(new CreateAccountButton(this,"Creer un compte"));
-        top=create;
-        bottom=new JButton(new ConnexionButton(this,"Connexion"));
-        bottomlabel=new JLabel();
-        bottomtextfield=new JTextField();
-
-        toptextfield =new JTextField(10);
-        toplabel=new JLabel();
-
+        top = create;
+        bottom = new JButton(new ConnexionButton(this, "Connexion"));
+        bottomlabel = new JLabel();
+        bottomtextfield = new JTextField();
+        toptextfield = new JTextField(10);
+        toplabel = new JLabel();
         toplabel.setVisible(false);
         toptextfield.setVisible(false);
-
         bottomlabel.setVisible(false);
         bottomtextfield.setVisible(false);
         bottom.setVisible(true);
-
-
         group.setHorizontalGroup(group.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGroup(group.createSequentialGroup()
                         .addComponent(toplabel)
@@ -186,9 +196,11 @@ public class FullLogInterface extends JFrame  {
                         .addComponent(toptextfield)
                         .addComponent(top))
                 .addGroup(group.createParallelGroup()
-                                .addComponent(bottomlabel)
-                                .addComponent(bottomtextfield)
-                                .addComponent(bottom)));
+                        .addComponent(bottomlabel)
+                        .addComponent(bottomtextfield)
+                        .addComponent(bottom)));
+
+
 
         return panel;
     }
@@ -198,5 +210,23 @@ public class FullLogInterface extends JFrame  {
         this.repaint();
         this.revalidate();
     }
+
+    public void reset(){
+        setTop(new JButton(new CreateAccountButton(this,"Creer un compte")));
+        setBottom(new JButton(new ConnexionButton(this, "Connexion")));
+        setBottomlabel(new JLabel());
+        setToptextfield(new JTextField(10));
+        setToplabel(new JLabel());
+        setBottomtextfield(new JTextField());
+        toplabel.setVisible(false);
+        toptextfield.setVisible(false);
+        bottomlabel.setVisible(false);
+        bottomtextfield.setVisible(false);
+        bottom.setVisible(true);
+        this.setVisible(true);
+        this.refresh();
+    }
+
+
 
 }

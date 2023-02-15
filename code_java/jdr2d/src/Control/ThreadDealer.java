@@ -1,12 +1,17 @@
 package Control;
 
 import Graphic.FullLogInterface;
+import Graphic.GameInterface;
 import jdr2dcore.Personnage;
+import jdr2dcore.Utilisateur;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class ThreadDealer implements EventListenerWindow{
 
     private  Personnage player;
-
+    private Utilisateur util;
 
 
     //getters
@@ -32,31 +37,20 @@ public class ThreadDealer implements EventListenerWindow{
     public void launch() throws InterruptedException {
         FullLogInterface window = new FullLogInterface();
         window.setObserver(this);
-        /*Thread t =new Thread(){*/
-           // @Override
-           // public void run() {
-            //super.run();
         window.setVisible(true);//On la rend visible
-
-       // }
-   // };
-        //t.start();
-
-        System.out.println("Test join");
     }
 
 
     @Override
-    public void update(FullLogInterface fullLogInterface) throws InterruptedException {
+    public void update(FullLogInterface fullLogInterface) throws InterruptedException{
         this.player=fullLogInterface.getPerso();
-
-       Thread t =new Thread(){
-        @Override
-        public void run() {
-        super.run();
-        System.out.println("Le thread magique");
-             }
-             };
-            t.start();
+        this.util=fullLogInterface.getUtil();
+        try {
+            GameInterface game = new GameInterface(player,util);
+        }
+        catch (SQLException e){
+            System.err.println("??");
+        }
     }
+
 }

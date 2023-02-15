@@ -1,33 +1,45 @@
 package Graphic;
 
-import jdr2dcore.Personnage;
+
+import jdr2dcore.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 public class MapPanel extends JPanel implements KeyListener {
 
     private Personnage player;
+
+    private ArrayList<Porte> sorties;
+
+    private ArrayList<PNJ> pnjs;
+
+    private ArrayList<Echange> echanges;
 
 
 
     static private final int WINDOWS_WIDTH=790;
     static private final int WINDOWS_HEIGH=790;
 
-    private  int UNIT_SIZE;
+    private  int unit_size;
 
     //getters
 
+
+    public ArrayList<Porte> getSorties() {
+        return sorties;
+    }
 
     public Personnage getPlayer() {
         return player;
     }
 
 
-    public int getUNIT_SIZE() {
-        return UNIT_SIZE;
+    public int getUnit_size() {
+        return unit_size;
     }
 
     public int getWINDOWS_HEIGH() {
@@ -40,10 +52,13 @@ public class MapPanel extends JPanel implements KeyListener {
 
     //setters
 
+    public void setSorties(ArrayList<Porte> sorties) {
+        this.sorties = sorties;
+    }
 
     public void setPlayer(Personnage player) {
         this.player = player;
-        this.UNIT_SIZE=(int) Math.sqrt((float) WINDOWS_HEIGH*WINDOWS_WIDTH/(player.getLieux().getCarte().length*player.getLieux().getCarte()[0].length));
+        this.unit_size = Math.min(WINDOWS_WIDTH/(player.getLieux().getCarte().length),WINDOWS_HEIGH/player.getLieux().getCarte()[0].length);
     }
 
 
@@ -65,18 +80,21 @@ public class MapPanel extends JPanel implements KeyListener {
     public void draw(Graphics g){
         for (int i = 0; i <player.getLieux().getCarte().length; i++) {
             for (int j = 0; j < player.getLieux().getCarte()[0].length; j++) {
-                if(player.getLieux().getCarte()[i][j]=='#') {
+                if(player.getLieux().getCarte()[j][i]=='#') {
                     g.setColor(Color.black);
-                    System.out.println("Unit size="+UNIT_SIZE);
-                    g.fillRect(i * UNIT_SIZE, j * UNIT_SIZE, UNIT_SIZE, UNIT_SIZE);
+                    g.fillRect(i * unit_size, j * unit_size, unit_size, unit_size);
                 }
-                if(player.getLieux().getCarte()[i][j]=='C'){
+                if(player.getLieux().getCarte()[j][i]=='C'){
                     g.setColor(Color.cyan);
-                    g.fillOval(i * UNIT_SIZE,j * UNIT_SIZE,UNIT_SIZE,UNIT_SIZE);
+                    g.fillOval(i * unit_size,j * unit_size, unit_size, unit_size);
                 }
-                if(player.getLieux().getCarte()[i][j]=='E'||player.getLieux().getCarte()[i][j]=='S'){
+                if(player.getLieux().getCarte()[j][i]=='E'||player.getLieux().getCarte()[j][i]=='S'){
                     g.setColor(Color.red);
-                    g.fillOval(i * UNIT_SIZE,j * UNIT_SIZE,UNIT_SIZE,UNIT_SIZE);
+                    g.fillOval(i * unit_size,j * unit_size, unit_size, unit_size);
+                }
+                if(i==player.getX()&&j==player.getY()) {
+                    g.setColor(Color.green);
+                    g.fillOval(i * unit_size, j * unit_size, unit_size, unit_size);
                 }
             }
         }

@@ -19,11 +19,10 @@ public class Main {
     public static void main(String[] args) throws SQLException, InterruptedException {
         //Input.game();
 
-       char[][] carte= Verslaby.construitgroslaby(150,150,0.5);
-        Map map=new Map(new int[]{carte.length, carte[0].length},carte,"GriseColline",5);
-        Personnage player=new Personnage(1,0,map,new ArrayList<>(),new ArrayList<>(),"test",10,new Coffre(),15,new ArrayList<>(),new Race());
 
-        GameInterface testmap=new GameInterface(player);
+
+        ThreadDealer test=new ThreadDealer();
+        test.launch();
 
         /*SwingUtilities.invokeLater(new Runnable(){
             public void run(){

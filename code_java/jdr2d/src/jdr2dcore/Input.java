@@ -279,7 +279,16 @@ public abstract class Input {
                 System.out.println("Choisir une direction, taper J pour sortir du deplacement ");
                 input = scanner.next().toUpperCase().charAt(0);
                 if (input != 'J') {
-                    player.depl(input);
+                    switch (input) {
+                        case 'O':player.depl(Direction.OUEST);
+                                break;
+                        case 'N':player.depl(Direction.NORD);
+                                break;
+                        case 'E':player.depl(Direction.EST);
+                                break;
+                        case 'S':player.depl(Direction.SUD);
+                                break;
+                    }
                 }
                 draw();
             }

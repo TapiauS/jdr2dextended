@@ -58,7 +58,7 @@ public class FirstCharButton extends AbstractAction {
                 } catch (InterruptedException ex) {
                     throw new RuntimeException(ex);
                 }
-                this.fenetre.dispatchEvent(new WindowEvent(this.fenetre, WindowEvent.WINDOW_CLOSING));
+                this.fenetre.setVisible(false);
             } else {
                 this.fenetre.setToplabel(new JLabel("Personnage non disponible, choisir un autre nom"));
                 this.fenetre.refresh();
