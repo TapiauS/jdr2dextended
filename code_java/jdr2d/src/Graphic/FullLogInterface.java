@@ -138,7 +138,11 @@ public class FullLogInterface extends JFrame  {
 
     public void setPerso(Personnage perso) throws InterruptedException {
         this.perso = perso;
-        this.observer.update(this);
+        try {
+            this.observer.update(this);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     //methodes

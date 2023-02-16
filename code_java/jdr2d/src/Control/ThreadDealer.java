@@ -42,15 +42,13 @@ public class ThreadDealer implements EventListenerWindow{
 
 
     @Override
-    public void update(FullLogInterface fullLogInterface) throws InterruptedException{
+    public void update(FullLogInterface fullLogInterface) throws InterruptedException, SQLException {
         this.player=fullLogInterface.getPerso();
         this.util=fullLogInterface.getUtil();
-        try {
+
             GameInterface game = new GameInterface(player,util);
-        }
-        catch (SQLException e){
-            System.err.println("??");
-        }
+
+
     }
 
 }

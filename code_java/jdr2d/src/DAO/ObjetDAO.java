@@ -60,7 +60,7 @@ public abstract class ObjetDAO extends DAOObject {
                     retour = new Arme( rs.getString("nom_objet"), rs.getInt("poid"), rs.getInt("deg"), rs.getInt("deg"), rs.getInt("nbrmain")).setId(rs.getInt("id_objet"));
                     break;
                 case "Armure":
-                    retour = new Armure( rs.getString("nom_objet"), rs.getInt("poid"), rs.getInt("deg"), rs.getInt("deg"), rs.getString("type_armure")).setId(rs.getInt("id_objet"));
+                    retour = new Armure( rs.getString("nom_objet"), rs.getInt("poid"), rs.getInt("deg"), rs.getInt("deg"), rs.getString("emplacement")).setId(rs.getInt("id_objet"));
                     break;
                 case "Potion":
                     retour=PotionDAO.getpotion(rs);
