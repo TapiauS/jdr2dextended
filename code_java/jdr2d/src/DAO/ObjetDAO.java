@@ -40,17 +40,17 @@ public abstract class ObjetDAO extends DAOObject {
         if(rs.getInt("id_lieu")!=0) {
             switch (rs.getString("nom_type_objet")) {
                 case "Arme":
-                    retour = new Arme(rs.getInt("x"), rs.getInt("y"), MapDAO.getmap(rs.getInt("id_lieu")), rs.getString("nom_objet"), rs.getInt("poid"), rs.getInt("deg"), rs.getInt("deg"), rs.getInt("nbrmain")).setId(rs.getInt("id_objet"));
+                    retour = new Arme(rs.getInt("y"), rs.getInt("x"), MapDAO.getmap(rs.getInt("id_lieu")), rs.getString("nom_objet"), rs.getInt("poid"), rs.getInt("deg"), rs.getInt("deg"), rs.getInt("nbrmain")).setId(rs.getInt("id_objet"));
                     break;
                 case "Armure":
-                    retour = new Armure(rs.getInt("x"), rs.getInt("y"), MapDAO.getmap(rs.getInt("id_lieu")), rs.getString("nom_objet"), rs.getInt("poid"), rs.getInt("deg"), rs.getInt("deg"), rs.getString("type_armure")).setId(rs.getInt("id_objet"));
+                    retour = new Armure(rs.getInt("y"), rs.getInt("x"), MapDAO.getmap(rs.getInt("id_lieu")), rs.getString("nom_objet"), rs.getInt("poid"), rs.getInt("deg"), rs.getInt("deg"), rs.getString("type_armure")).setId(rs.getInt("id_objet"));
                     break;
                 case "Potion":
                     retour=PotionDAO.getpotion(rs);
-                    retour.setLieux(MapDAO.getmap(rs.getInt("id_lieu"))).setX(rs.getInt("x")).setY(rs.getInt("y"));
+                    retour.setLieux(MapDAO.getmap(rs.getInt("id_lieu"))).setX(rs.getInt("y")).setY(rs.getInt("x"));
                     break;
                 default:
-                    retour = new Objet(rs.getInt("x"), rs.getInt("y"), MapDAO.getmap(rs.getInt("id_lieu")), rs.getString("nom_objet"), rs.getInt("poid"));
+                    retour = new Objet(rs.getInt("y"), rs.getInt("x"), MapDAO.getmap(rs.getInt("id_lieu")), rs.getString("nom_objet"), rs.getInt("poid"));
                     break;
             }
         }

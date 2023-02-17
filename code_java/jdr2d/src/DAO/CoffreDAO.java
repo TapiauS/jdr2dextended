@@ -18,6 +18,7 @@ public abstract class CoffreDAO extends DAOObject {
             while (rs.next()) {
                 if(rs.getInt("id_lieu")!=0) {
                     if (rs.getInt("id_objet") == id) {
+                        System.out.println("xcoffre="+rs.getInt("x"));
                         retour.setNomObjet(rs.getString("nom_objet")).setX(rs.getInt("x")).setY(rs.getInt("y")).setLieux(MapDAO.getmap(rs.getInt("id_lieu")));
                     } else {
                         contenu.add(ObjetDAO.getObjet(rs.getInt("id_objet")));
@@ -25,6 +26,7 @@ public abstract class CoffreDAO extends DAOObject {
                 }
                 else{
                     if (rs.getInt("id_objet") == id) {
+                        System.out.println("je ne suis pas sencer passer par la");
                         retour.setNomObjet(rs.getString("nom_objet"));
                     } else {
                         contenu.add(ObjetDAO.getObjet(rs.getInt("id_objet")));

@@ -21,8 +21,8 @@ public class MapPanel extends JPanel implements KeyListener {
 
 
 
-    static public final int MAP_WIDTH = (int) (GameInterface.WINDOW_WIDTH*0.8);
-    static public final int MAP_HEIGH =(int) (GameInterface.WINDOWS_HEIGH*0.8);
+    static public final int MAP_WIDTH = (int) (GameInterface.WINDOW_WIDTH*0.6);
+    static public final int MAP_HEIGH =(int) (GameInterface.WINDOWS_HEIGH*0.6);
 
     private  int unit_size;
 

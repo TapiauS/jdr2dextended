@@ -24,8 +24,8 @@ public class Point {
     public Point setX(int x) {
         if (x < 0) {
             this.x = 0;
-        } else if (x >= this.lieux.getDimensions()[1]) {
-            this.x = this.lieux.getDimensions()[1] - 1;
+        } else if (x >= this.lieux.getCarte()[0].length) {
+            this.x = this.lieux.getCarte()[0].length - 1;
         } else {
             this.x = x;
         }
@@ -35,8 +35,8 @@ public class Point {
     public Point setY(int y) {
         if (y < 0) {
             this.y = 0;
-        } else if (y >= this.lieux.getDimensions()[0]) {
-            this.y = this.lieux.getDimensions()[0] - 1;
+        } else if (y >= this.lieux.getCarte().length) {
+            this.y = this.lieux.getCarte().length- 1;
         } else {
             this.y = y;
         }
@@ -68,7 +68,9 @@ public class Point {
             int x1 = p1.getX();
             int y1 = p1.getY();
             int dist;
-            dist = Math.abs(x - x1) + Math.abs(y - y1);
+            System.out.println("x="+this.x);
+            System.out.println("y="+this.y);
+            dist = Math.abs(this.x - x1) + Math.abs(this.y - y1);
             return dist;
         } else {
             return 1000000000;

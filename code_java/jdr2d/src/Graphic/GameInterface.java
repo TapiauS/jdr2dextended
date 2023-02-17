@@ -16,6 +16,9 @@ import java.util.ArrayList;
 
 public class GameInterface extends JFrame  implements KeyListener {
 
+    private CoffreInterface coffredealer;
+    private boolean interaction;
+
     private Personnage player;
 
     private MapPanel mapPanel;
@@ -41,6 +44,7 @@ public class GameInterface extends JFrame  implements KeyListener {
 
     public GameInterface(Personnage player,Utilisateur util) throws SQLException {
         super();
+        this.interaction=false;
         this.setLayout(null);
         this.player=player;
         this.util=util;
@@ -55,7 +59,8 @@ public class GameInterface extends JFrame  implements KeyListener {
         container.add(mapPanel);
         container.setLayout(null);
         container.add(eventHistory);
-
+        coffredealer=new CoffreInterface(this.player);
+        container.add(coffredealer);
         this.setContentPane(container);
         this.setResizable(false);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -71,23 +76,34 @@ public class GameInterface extends JFrame  implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode()==38) {
+        e.consume();
+        if(e.getKeyCode()==38&&!interaction) {
             player.depl(Direction.NORD);
-            System.out.println("??");
             eventHistory.addLine("haut");
         }
-        if (e.getKeyCode()==37) {
+        if (e.getKeyCode()==37&&!interaction) {
             player.depl(Direction.OUEST);
             eventHistory.addLine("droite");
         }
-        if(e.getKeyCode()==39) {
+        if(e.getKeyCode()==39&&!interaction) {
             player.depl(Direction.EST);
             eventHistory.addLine("gauche");
         }
-        if(e.getKeyCode()==40) {
+        if(e.getKeyCode()==40&&!interaction) {
             player.depl(Direction.SUD);
             eventHistory.addLine("bas");
         }
+
+        if(e.getKeyChar()=='i') {
+            for (Coffre c: coffres) {
+                System.out.println("coffre x =" +c.getX());
+                if(c.distance(player)<10){
+                    coffredealer.setOpenedcoffre(c);
+                    break;
+                }
+            }
+        }
+
         revalidate();
         repaint();
 
@@ -117,5 +133,41 @@ public class GameInterface extends JFrame  implements KeyListener {
         }
 
     }
+    //getters
+
+
+    public Personnage getPlayer() {
+        return player;
+    }
+
+    public Utilisateur getUtil() {
+        return util;
+    }
+
+    public ArrayList<PNJ> getPnjs() {
+        return pnjs;
+    }
+
+    public ArrayList<Coffre> getCoffres() {
+        return coffres;
+    }
+
+    public ArrayList<Echange> getEchanges() {
+        return echanges;
+    }
+
+    public ArrayList<Porte> getSorties() {
+        return sorties;
+    }
+
+    public EventHistory getEventHistory() {
+        return eventHistory;
+    }
+
+
+    public JPanel getContainer() {
+        return container;
+    }
+
 
 }

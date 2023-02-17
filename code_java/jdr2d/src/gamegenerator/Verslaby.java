@@ -399,7 +399,7 @@ public class Verslaby {
     }
     */
 
-   /* public static void main (String[]args) throws SQLException {
+    /*public static void main (String[]args) throws SQLException {
 
 
         CarteDealer c=new CarteDealer();
@@ -408,6 +408,6 @@ public class Verslaby {
         m.setId(MapDAO.createMap(m));
         CoffreGenerator.filldatabase(m);
     }
-    */
+*/
 
 }
