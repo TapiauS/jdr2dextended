@@ -20,7 +20,6 @@ public class FullLogInterface extends JFrame  {
     private JLabel toplabel;
 
 
-
     private ThreadDealer observer;
     private JButton top;
 
@@ -203,8 +202,6 @@ public class FullLogInterface extends JFrame  {
                         .addComponent(bottomlabel)
                         .addComponent(bottomtextfield)
                         .addComponent(bottom)));
-
-
 
         return panel;
     }

@@ -21,8 +21,8 @@ public class MapPanel extends JPanel implements KeyListener {
 
 
 
-    static private final int WINDOWS_WIDTH=790;
-    static private final int WINDOWS_HEIGH=790;
+    static public final int MAP_WIDTH = (int) (GameInterface.WINDOW_WIDTH*0.8);
+    static public final int MAP_HEIGH =(int) (GameInterface.WINDOWS_HEIGH*0.8);
 
     private  int unit_size;
 
@@ -43,11 +43,11 @@ public class MapPanel extends JPanel implements KeyListener {
     }
 
     public int getWINDOWS_HEIGH() {
-        return WINDOWS_HEIGH;
+        return MAP_HEIGH;
     }
 
     public int getWINDOWS_WIDTH() {
-        return WINDOWS_WIDTH;
+        return MAP_WIDTH;
     }
 
     //setters
@@ -58,7 +58,7 @@ public class MapPanel extends JPanel implements KeyListener {
 
     public void setPlayer(Personnage player) {
         this.player = player;
-        this.unit_size = Math.min(WINDOWS_WIDTH/(player.getLieux().getCarte().length),WINDOWS_HEIGH/player.getLieux().getCarte()[0].length);
+        this.unit_size = Math.min(MAP_WIDTH /(player.getLieux().getCarte().length), MAP_HEIGH /player.getLieux().getCarte()[0].length);
     }
 
 
@@ -67,10 +67,9 @@ public class MapPanel extends JPanel implements KeyListener {
     MapPanel(Personnage player){
         super();
         this.setPlayer(player);
-        this.setPreferredSize(new Dimension(WINDOWS_WIDTH,WINDOWS_HEIGH));
+        this.setBounds(0,0,MAP_WIDTH,MAP_HEIGH);
         this.setBackground(Color.white);
         this.setVisible(true);
-
     }
 
     public void paintComponent(Graphics g){

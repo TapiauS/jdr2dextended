@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import Control.ThreadDealer;
 import DAO.PersonnageDAO;
+import Graphic.EventHistory;
 import Graphic.FullLogInterface;
 import Graphic.GameInterface;
 import gamegenerator.Verslaby;
@@ -18,7 +19,6 @@ import javax.swing.*;
 public class Main {
     public static void main(String[] args) throws SQLException, InterruptedException {
         //Input.game();
-
 
 
         ThreadDealer test=new ThreadDealer();
