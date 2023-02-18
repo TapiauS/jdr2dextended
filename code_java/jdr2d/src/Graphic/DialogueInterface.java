@@ -1,13 +1,14 @@
 package Graphic;
 
 import jdr2dcore.Echange;
+import jdr2dcore.Personnage;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Hashtable;
 
-public class DialogueInterface extends JPanel {
+public class DialogueInterface extends InteractionInterface {
     private Echange presentechange;
 
     private String[] reponses;
@@ -21,19 +22,18 @@ public class DialogueInterface extends JPanel {
 
 
     private String[] data;
-    private static final int DIAL_WIDTH= (int) (GameInterface.WINDOW_WIDTH*0.4);
-    private static final int DIAL_HEIGH= (int) (GameInterface.WINDOW_WIDTH*0.3);
 
     //builder
 
-    public DialogueInterface(){
-        super();
+    //TODO:pas finis du tout mais ne pas toucher tant que des PNJ ne sont pas ajouté au jeu
+    public DialogueInterface(GameInterface fenetre,Personnage player){
+        super(fenetre,player);
         question=new JLabel();
-        question.setBounds(MapPanel.MAP_WIDTH,DIAL_HEIGH,DIAL_WIDTH,DIAL_HEIGH/10);
+        question.setBounds(MapPanel.MAP_WIDTH,INTERACTION_HEIGH,INTERACTION_WIDTH,INTERACTION_HEIGH/10);
         data=new String[0];
         linkrepEchange=new Hashtable<>();
         choix=new JList<>();
-        choix.setBounds(MapPanel.MAP_WIDTH,DIAL_HEIGH+DIAL_HEIGH/10,DIAL_WIDTH, (int) (DIAL_HEIGH*0.8));
+        choix.setBounds(MapPanel.MAP_WIDTH,INTERACTION_HEIGH+INTERACTION_HEIGH/10,INTERACTION_WIDTH, (int) (INTERACTION_HEIGH*0.8));
         valider=new JButton();
         valider.addActionListener(new ActionListener() {
             @Override
@@ -43,6 +43,7 @@ public class DialogueInterface extends JPanel {
                 revalidate();
             }
         });
+
         this.setVisible(false);
         this.add(choix);
         }

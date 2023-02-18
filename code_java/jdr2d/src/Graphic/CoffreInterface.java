@@ -4,17 +4,20 @@ import jdr2dcore.Coffre;
 import jdr2dcore.Personnage;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class CoffreInterface extends JPanel {
+public class CoffreInterface extends InteractionInterface {
+
+
 
     private ArrayList<Coffre> parentcoffres;
 
     private Coffre openedcoffre;
 
-    private Personnage player;
+
 
     private JButton pick;
 
@@ -28,23 +31,25 @@ public class CoffreInterface extends JPanel {
     private JLabel cofrename;
 
     private int coffrelvl;
-    private static final int COFFRE_WIDTH= (int) (GameInterface.WINDOW_WIDTH*0.4);
-    private static final int COFFRE_HEIGH= (int) (GameInterface.WINDOW_WIDTH*0.3);
 
 
     //builder
 
-    public CoffreInterface(Personnage player){
-        super();
-        this.player=player;
+    public CoffreInterface(Personnage player,GameInterface fenetre){
+        super(fenetre,player);
         this.parentcoffres=new ArrayList<>();
         coffrelvl=0;
         cofrename=new JLabel();
-        cofrename.setBounds(MapPanel.MAP_WIDTH,COFFRE_HEIGH,COFFRE_WIDTH,COFFRE_HEIGH/10);
+        cofrename.setBounds((int) (MapPanel.MAP_WIDTH*1.01), (int) (INTERACTION_HEIGH*1.01), INTERACTION_WIDTH, INTERACTION_HEIGH /10);
         cofrename.setVisible(true);
+        this.add(cofrename);
         data=new String[0];
         choix=new JList<>();
-        choix.setBounds(MapPanel.MAP_WIDTH,COFFRE_HEIGH+COFFRE_HEIGH/10,COFFRE_WIDTH, (int) (COFFRE_HEIGH*0.8));
+        choix.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+        choix.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        choix.setVisibleRowCount(-1);
+        choix.setBounds(MapPanel.MAP_WIDTH, (int) (INTERACTION_HEIGH + 1.01*INTERACTION_HEIGH /10), INTERACTION_WIDTH, (int) (INTERACTION_HEIGH *0.8));
+        choix.setPreferredSize(new Dimension(INTERACTION_WIDTH,(int) (INTERACTION_HEIGH *0.8)));
         choix.setVisible(true);
         this.add(choix);
         //on définit pick
@@ -52,27 +57,29 @@ public class CoffreInterface extends JPanel {
         pick.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!(openedcoffre.getContenu().get(choix.getSelectedIndex()) instanceof Coffre)) {
-                    player.addObjet(openedcoffre.getContenu().get(choix.getSelectedIndex()));
-                    openedcoffre.remove(choix.getSelectedIndex());
-                    //GameInterface game = (GameInterface) getParent().getParent().g;
-                    udpateref();
-                    choix.setListData(data);
-                    //game.getEventHistory().addLine(player.getNomPersonnage() + " a ramassé :" + openedcoffre.getContenu().get(choix.getSelectedIndex()).getNomObjet());
+                if(choix.getSelectedIndex()>-1) {
+                    if (!(openedcoffre.getContenu().get(choix.getSelectedIndex()) instanceof Coffre)) {
+                        player.addObjet(openedcoffre.getContenu().get(choix.getSelectedIndex()));
+                        fenetre.getEventHistory().addLine(player.getNomPersonnage() + " a ramassé :" + openedcoffre.getContenu().get(choix.getSelectedIndex()).getNomObjet());
+                        openedcoffre.remove(choix.getSelectedIndex());
+                        udpateref();
+                        choix.setListData(data);
+
+                    } else {
+                        parentcoffres.add(openedcoffre);
+                        Coffre newcoffre = (Coffre) openedcoffre.getContenu().get(choix.getSelectedIndex());
+                        setOpenedcoffre(newcoffre);
+                        coffrelvl++;
+                        exit.setVisible(false);
+                        goBack.setVisible(true);
+                    }
                 }
-                else{
-                    parentcoffres.add((Coffre) openedcoffre.getContenu().get(choix.getSelectedIndex()));
-                    Coffre newcoffre= (Coffre) openedcoffre.getContenu().get(choix.getSelectedIndex());
-                    setOpenedcoffre(newcoffre);
-                    coffrelvl++;
-                    exit.setVisible(false);
-                    goBack.setVisible(true);
-                }
+                fenetre.requestFocus();
                 repaint();
                 revalidate();
             }
         });
-        pick.setBounds(MapPanel.MAP_WIDTH+COFFRE_WIDTH/5,COFFRE_HEIGH+9*COFFRE_HEIGH/10,COFFRE_WIDTH/5,(int) (COFFRE_HEIGH*0.1));
+        pick.setBounds(MapPanel.MAP_WIDTH+ INTERACTION_WIDTH /5, (int) (INTERACTION_HEIGH +9.01*INTERACTION_HEIGH /10), INTERACTION_WIDTH /5,(int) (INTERACTION_HEIGH *0.1));
         pick.setVisible(true);
         this.add(pick);
         //on definit exit
@@ -81,15 +88,17 @@ public class CoffreInterface extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
+                fenetre.setInteraction(false);
                 openedcoffre=null;
                 data=null;
                 repaint();
                 revalidate();
+                fenetre.requestFocus();
             }
         });
         this.add(exit);
         exit.setVisible(true);
-        exit.setBounds(MapPanel.MAP_WIDTH+3*COFFRE_WIDTH/5,COFFRE_HEIGH+9*COFFRE_HEIGH/10,COFFRE_WIDTH/5,(int) (COFFRE_HEIGH*0.1));
+        exit.setBounds(MapPanel.MAP_WIDTH+3* INTERACTION_WIDTH /5, (int) (INTERACTION_HEIGH +9.01* INTERACTION_HEIGH /10), INTERACTION_WIDTH /5,(int) (INTERACTION_HEIGH *0.05));
         //on définit goback
         goBack=new JButton("Go back");
         goBack.addActionListener(new ActionListener() {
@@ -102,14 +111,16 @@ public class CoffreInterface extends JPanel {
                     goBack.setVisible(false);
                     exit.setVisible(true);
                 }
+                fenetre.requestFocus();
                 repaint();
                 revalidate();
             }
         });
         goBack.setVisible(false);
         this.add(goBack);
-        goBack.setBounds(MapPanel.MAP_WIDTH+3*COFFRE_WIDTH/5,COFFRE_HEIGH+9*COFFRE_HEIGH/10,COFFRE_WIDTH/5,(int) (COFFRE_HEIGH*0.1));
-        this.setBounds(MapPanel.MAP_WIDTH,COFFRE_HEIGH,COFFRE_WIDTH,COFFRE_HEIGH);
+
+        goBack.setBounds(MapPanel.MAP_WIDTH+3* INTERACTION_WIDTH /5, (int) (INTERACTION_HEIGH +9.01* INTERACTION_HEIGH /10), INTERACTION_WIDTH /5,(int) (INTERACTION_HEIGH *0.05));
+        this.setBounds(MapPanel.MAP_WIDTH, INTERACTION_HEIGH, INTERACTION_WIDTH, INTERACTION_HEIGH);
         this.setVisible(false);
     }
 
@@ -134,10 +145,9 @@ public class CoffreInterface extends JPanel {
 
 
     public void setOpenedcoffre(Coffre openedcoffre) {
-        System.out.println("debugage de l'interface");
         this.openedcoffre = openedcoffre;
         this.udpateref();
-        this.cofrename.setText(openedcoffre.getNomObjet());
+        this.cofrename.setText(openedcoffre.getNomObjet()+" contient les objets suivants:");
         this.choix.setListData(data);
         this.setVisible(true);
         this.repaint();

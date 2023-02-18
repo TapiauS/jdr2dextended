@@ -175,6 +175,7 @@ public class Personnage extends Point implements EventListenerQuete {
 
     public Personnage addArme(Arme arme) throws SQLException {
         int compteurmain=0;
+        ObjetDAO.equip(this,arme);
         for(Arme a:this.getArme()){
             compteurmain=compteurmain+a.getNbrmain();
         }
@@ -210,6 +211,7 @@ public class Personnage extends Point implements EventListenerQuete {
                 this.armes.add(arme);
             }
         }
+
         this.armes.add(arme);
         return this;
     }
@@ -224,6 +226,7 @@ public class Personnage extends Point implements EventListenerQuete {
     public Personnage addArmure(Armure armure) throws SQLException {
         boolean emplacementlibre=true;
         Armure armurer=new Armure();
+        ObjetDAO.equip(this,armure);
         for(Armure a:this.getArmure()){
             if(a.getTypearmure().equals(armure.getTypearmure())){
                 emplacementlibre=false;
@@ -255,7 +258,13 @@ public class Personnage extends Point implements EventListenerQuete {
         return this;
     }
 
-    public Personnage removObjet(Objet objet){
+    public Personnage dropObjet(Objet objet) throws SQLException {
+        this.inventaire.remove(objet);
+        ObjetDAO.dropObjet(objet);
+        return this;
+    }
+
+    public Personnage removeObjet(Objet objet){
         this.inventaire.remove(objet);
         return this;
     }

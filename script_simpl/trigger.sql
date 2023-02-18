@@ -27,11 +27,17 @@ CASE
         NEW.contenant=NULL;
         RETURN NEW ;
     WHEN OLD.id_personnage_possede IS NOT NULL AND NEW.id_personnage_possede IS NULL THEN
-
         SELECT x FROM personnage WHERE id_personnage=OLD.id_personnage_possede INTO xt;
         SELECT y FROM personnage WHERE id_personnage=OLD.id_personnage_possede INTO yt;
         NEW.x=xt; 
         NEW.y=yt;
+        RETURN NEW;
+    WHEN OLD.id_personnage_equipe IS NULL AND NEW.id_personnage_equipe IS NOT NULL THEN
+        NEW.id_personnage_equipe=OLD.id_personnage_possede;
+        NEW.id_personnage_possede=NULL;
+        RETURN NEW;
+    WHEN OLD.id_personnage_equipe IS NOT NULL AND NEW.id_personnage_equipe IS NULL THEN
+        NEW.id_personnage_possede=OLD.id_personnage_equipe;
         RETURN NEW;
 ELSE
     RETURN NEW;
