@@ -3,6 +3,8 @@ package Graphic;
 import jdr2dcore.Personnage;
 
 import javax.swing.*;
+import java.awt.*;
+import java.sql.SQLException;
 
 public class InteractionInterface extends JPanel {
     protected static final int INTERACTION_WIDTH = (int) (GameInterface.WINDOW_WIDTH*0.4);
@@ -17,8 +19,15 @@ public class InteractionInterface extends JPanel {
 
     public InteractionInterface(GameInterface fenetre,Personnage player){
         super();
-        this.fenetre=fenetre;
-        this.player=player;
+        this.setFenetre(fenetre);
+        try {
+            this.setPlayer(player);
+        } catch (SQLException e) {
+            //TODO COMME D'HAB
+            throw new RuntimeException(e);
+        }
+        this.setBackground(Color.white);
+        this.setBounds(MapPanel.MAP_WIDTH, INTERACTION_HEIGH, INTERACTION_WIDTH, INTERACTION_HEIGH);
         this.setVisible(false);
     }
 
@@ -38,7 +47,20 @@ public class InteractionInterface extends JPanel {
         this.fenetre = fenetre;
     }
 
-    public void setPlayer(Personnage player) {
+    public void setPlayer(Personnage player) throws SQLException {
         this.player = player;
+    }
+
+    //methodes
+
+    protected void refreshfocus(){
+        fenetre.requestFocus();
+        fenetre.revalidate();
+        fenetre.repaint();
+    }
+
+    protected void returndefault(){
+        this.setVisible(false);
+        this.fenetre.getDefaultInteractionInterface().setVisible(true);
     }
 }

@@ -93,9 +93,10 @@ public abstract class ObjetDAO extends DAOObject {
         close();
     }
 
-    public static void dropObjet(Objet o) throws SQLException{
-        ArrayList<Object> args=new ArrayList<>(List.of(o.getId()));
-        queryUDC("UPDATE objet SET id_personnage_possede=null WHERE id_objet=?",args);
+    public static void dropObjet(Objet o,Personnage player) throws SQLException{
+        ArrayList<Object> args=new ArrayList<>(List.of(player.getX(),player.getY(),player.getId(),o.getId()));
+        queryUDC("UPDATE personnage SET x=?,y=? WHERE id_personnage=?;" +
+                "UPDATE objet SET id_personnage_possede=null WHERE id_objet=?;",args);
         close();
     }
 

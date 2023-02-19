@@ -3,6 +3,7 @@ package Graphic;
 import jdr2dcore.*;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -39,12 +40,13 @@ public class InventaireInterface extends InteractionInterface{
         itemdisplay.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         itemdisplay.setLayoutOrientation(JList.HORIZONTAL_WRAP);
         itemdisplay.setVisibleRowCount(-1);
+        itemdisplay.setPreferredSize(new Dimension(INTERACTION_WIDTH,INTERACTION_HEIGH*9/10));
         this.add(itemdisplay);
         //on initialise parentcoffre
         parentscoffre=new ArrayList<>();
         //on rajoute le bouton pick
         equip=new JButton("Equiper ou utiliser");
-        equip.setBounds(MapPanel.MAP_WIDTH+INTERACTION_WIDTH/7, (int) (INTERACTION_HEIGH+INTERACTION_HEIGH*9.5/10),
+        equip.setBounds(MapPanel.MAP_WIDTH+INTERACTION_WIDTH/7, (int) (INTERACTION_HEIGH+INTERACTION_HEIGH*9/10),
                 INTERACTION_WIDTH/7, (int) (INTERACTION_HEIGH*0.5/10));
         equip.addActionListener(new ActionListener() {
             @Override
@@ -54,10 +56,11 @@ public class InventaireInterface extends InteractionInterface{
                     if (!(selecteobjet instanceof Coffre newcoffre)) {
                         if(selecteobjet instanceof Arme){
                             try {
-                                player.dropObjet(selecteobjet);
+                                player.removeObjet(selecteobjet);
                                 player.addArme((Arme) selecteobjet);
                                 fenetre.getEventHistory().addLine(player.getNomPersonnage() + " a equipé l'arme:"
                                         + selecteobjet.getNomObjet());
+                                fenetre.getFenetreInfo().update();
                             } catch (SQLException ex) {
                                 //TODO gere exception
                                 throw new RuntimeException(ex);
@@ -65,7 +68,7 @@ public class InventaireInterface extends InteractionInterface{
                         }
                         if(selecteobjet instanceof Armure) {
                             try {
-                                player.dropObjet(selecteobjet);
+                                player.removeObjet(selecteobjet);
                                 player.addArmure((Armure) selecteobjet);
                                 fenetre.getEventHistory().addLine(player.getNomPersonnage() + " a equipé l'armure:"
                                         + selecteobjet.getNomObjet());
@@ -74,19 +77,14 @@ public class InventaireInterface extends InteractionInterface{
                                 throw new RuntimeException(ex);
                             }
                         }
-                        if(selecteobjet instanceof Potion)
-                            try {
-                                Time.drinkpotion((Potion) selecteobjet,player);
-                                player.dropObjet(selecteobjet);
-                                fenetre.getEventHistory().addLine(player.getNomPersonnage() + " a bu la potion :"
-                                        + selecteobjet.getNomObjet());
-                            } catch (SQLException ex) {
-                                //TODO toi même tu sait
-                                throw new RuntimeException(ex);
-                            }
+                        if(selecteobjet instanceof Potion) {
+                            Time.drinkpotion((Potion) selecteobjet, player);
+                            player.removeObjet(selecteobjet);
+                            fenetre.getEventHistory().addLine(player.getNomPersonnage() + " a bu la potion :"
+                                    + selecteobjet.getNomObjet());
+                        }
                         udpateref();
                         itemdisplay.setListData(data);
-
                     } else {
                         parentscoffre.add((Coffre) selecteobjet);
                         setOpenedcoffre(newcoffre);
@@ -95,37 +93,82 @@ public class InventaireInterface extends InteractionInterface{
                         goback.setVisible(true);
                     }
                 }
-                fenetre.requestFocus();
-                repaint();
-                revalidate();
+                refreshfocus();
             }
         });
+        equip.setVisible(true);
         this.add(equip);
         // on cree drop
         drop=new JButton("Jeter");
-        drop.setBounds(MapPanel.MAP_WIDTH+INTERACTION_WIDTH*3/7, (int) (INTERACTION_HEIGH+INTERACTION_HEIGH*9.5/10),
+        drop.setBounds(MapPanel.MAP_WIDTH+INTERACTION_WIDTH*3/7, (int) (INTERACTION_HEIGH+INTERACTION_HEIGH*9/10),
                 INTERACTION_WIDTH/7, (int) (INTERACTION_HEIGH*0.5/10));
-        drop.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e){
-                if(itemdisplay.getSelectedIndex()>-1){
-                    Objet selecteobjet=openedcoffre.getContenu().get(itemdisplay.getSelectedIndex());
-                    try {
-                        player.dropObjet(selecteobjet);
-                        for (Coffre c: fenetre.getCoffres()) {
-                            if(player.distance(c)==0)
-                                c.add(selecteobjet);
-                            else
+        drop.addActionListener(
+                new ActionListener(){
+                @Override
+                public void actionPerformed(ActionEvent e){
+                    if(itemdisplay.getSelectedIndex()>-1){
+                        Objet selecteobjet=openedcoffre.getContenu().get(itemdisplay.getSelectedIndex());
+                        try {
+                            boolean incoffre=false;
+                            player.dropObjet(selecteobjet);
+                            for (Coffre c: fenetre.getCoffres()) {
+                                if (player.distance(c) == 0) {
+                                    c.add(selecteobjet);
+                                    incoffre=true;
+                                    break;
+                                }
+                            }
+                            if(!incoffre)
                                 fenetre.getCoffres().add((Coffre) ((Coffre) (new Coffre(selecteobjet))
-                                        .setX(player.getX()).setY(player.getY()).setLieux(player.getLieux())).setNomObjet("tas"));
+                                    .setX(player.getX()).setY(player.getY()).setLieux(player.getLieux())).setNomObjet("tas"));
+                        } catch (SQLException ex) {
+                            throw new RuntimeException(ex);
                         }
-
-                    } catch (SQLException ex) {
-                        throw new RuntimeException(ex);
+                        itemdisplay.setListData(data);
+                        udpateref();
+                        refreshfocus();
                     }
-
                 }
-        }});
+                });
+        drop.setVisible(true);
+        this.add(drop);
+        //creation du bouton exit
+        exit=new JButton("Quitter");
+        exit.setBounds(MapPanel.MAP_WIDTH+INTERACTION_WIDTH*5/7, (int) (INTERACTION_HEIGH+INTERACTION_HEIGH*9/10),
+                INTERACTION_WIDTH/7, (int) (INTERACTION_HEIGH*0.5/10));
+        exit.addActionListener(
+                new ActionListener(){
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        returndefault();
+                        fenetre.setInteraction(false);
+                        openedcoffre=null;
+                        data=null;
+                        refreshfocus();
+                    }
+                });
+        exit.setVisible(true);
+        this.add(exit);
+        //creation du bouton goback
+        goback=new JButton("Revenir en arriére");
+        goback.setBounds(MapPanel.MAP_WIDTH+INTERACTION_WIDTH*5/7, (int) (INTERACTION_HEIGH+INTERACTION_HEIGH*9.5/10),
+                INTERACTION_WIDTH/7, (int) (INTERACTION_HEIGH*0.5/10));
+        goback.addActionListener(
+                new ActionListener() {
+                    @Override
+                        public void actionPerformed(ActionEvent e) {
+                            setOpenedcoffre(parentscoffre.get(parentscoffre.size()-1));
+                            parentscoffre.remove(parentscoffre.size()-1);
+                            coffrelvl--;
+                            if(coffrelvl==0){
+                                goback.setVisible(false);
+                                exit.setVisible(true);
+                            }
+                            refreshfocus();
+                        }
+        });
+        goback.setVisible(false);
+        this.add(goback);
     }
 
 

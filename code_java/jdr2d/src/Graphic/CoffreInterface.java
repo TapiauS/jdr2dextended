@@ -1,12 +1,16 @@
 package Graphic;
 
+import DAO.ObjetDAO;
 import jdr2dcore.Coffre;
+import jdr2dcore.Objet;
 import jdr2dcore.Personnage;
+import jdr2dcore.Quete;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class CoffreInterface extends InteractionInterface {
@@ -39,12 +43,14 @@ public class CoffreInterface extends InteractionInterface {
         super(fenetre,player);
         this.parentcoffres=new ArrayList<>();
         coffrelvl=0;
-        cofrename=new JLabel();
-        cofrename.setBounds((int) (MapPanel.MAP_WIDTH*1.01), (int) (INTERACTION_HEIGH*1.01), INTERACTION_WIDTH, INTERACTION_HEIGH /10);
-        cofrename.setVisible(true);
-        this.add(cofrename);
         data=new String[0];
         choix=new JList<>();
+        //on initialise le label
+        cofrename=new JLabel();
+        cofrename.setBounds((int) (MapPanel.MAP_WIDTH*1.0), (int) (INTERACTION_HEIGH*1.01), INTERACTION_WIDTH, INTERACTION_HEIGH /10);
+        cofrename.setVisible(true);
+        this.add(cofrename);
+        //on initialise le panneau de choix
         choix.setLayoutOrientation(JList.HORIZONTAL_WRAP);
         choix.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         choix.setVisibleRowCount(-1);
@@ -58,28 +64,33 @@ public class CoffreInterface extends InteractionInterface {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(choix.getSelectedIndex()>-1) {
-                    if (!(openedcoffre.getContenu().get(choix.getSelectedIndex()) instanceof Coffre)) {
-                        player.addObjet(openedcoffre.getContenu().get(choix.getSelectedIndex()));
-                        fenetre.getEventHistory().addLine(player.getNomPersonnage() + " a ramassé :" + openedcoffre.getContenu().get(choix.getSelectedIndex()).getNomObjet());
-                        openedcoffre.remove(choix.getSelectedIndex());
+                    Objet selectobjet=openedcoffre.getContenu().get(choix.getSelectedIndex());
+                    if (!(selectobjet instanceof Coffre)) {
+                        try {
+                            player.addObjet(selectobjet);
+                            ObjetDAO.pickObjet(player, selectobjet);
+                            fenetre.getEventHistory().addLine(player.getNomPersonnage() + " a ramassé :" + selectobjet.getNomObjet());
+                            openedcoffre.remove(choix.getSelectedIndex());
+                        }
+                        catch (SQLException es){
+                            //TODO gerer les bug bdd
+                        }
                         udpateref();
                         choix.setListData(data);
-
                     } else {
                         parentcoffres.add(openedcoffre);
-                        Coffre newcoffre = (Coffre) openedcoffre.getContenu().get(choix.getSelectedIndex());
+                        Coffre newcoffre = (Coffre) selectobjet;
                         setOpenedcoffre(newcoffre);
                         coffrelvl++;
                         exit.setVisible(false);
                         goBack.setVisible(true);
                     }
                 }
-                fenetre.requestFocus();
-                repaint();
-                revalidate();
+                refreshfocus();
             }
         });
-        pick.setBounds(MapPanel.MAP_WIDTH+ INTERACTION_WIDTH /5, (int) (INTERACTION_HEIGH +9.01*INTERACTION_HEIGH /10), INTERACTION_WIDTH /5,(int) (INTERACTION_HEIGH *0.1));
+        pick.setBounds(MapPanel.MAP_WIDTH+ INTERACTION_WIDTH /5, (int) (INTERACTION_HEIGH +9.01*INTERACTION_HEIGH /10),
+                INTERACTION_WIDTH /5,(int) (INTERACTION_HEIGH *0.1));
         pick.setVisible(true);
         this.add(pick);
         //on definit exit
@@ -87,18 +98,17 @@ public class CoffreInterface extends InteractionInterface {
         exit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setVisible(false);
+                returndefault();
                 fenetre.setInteraction(false);
                 openedcoffre=null;
                 data=null;
-                repaint();
-                revalidate();
-                fenetre.requestFocus();
+                refreshfocus();
             }
         });
         this.add(exit);
         exit.setVisible(true);
-        exit.setBounds(MapPanel.MAP_WIDTH+3* INTERACTION_WIDTH /5, (int) (INTERACTION_HEIGH +9.01* INTERACTION_HEIGH /10), INTERACTION_WIDTH /5,(int) (INTERACTION_HEIGH *0.05));
+        exit.setBounds(MapPanel.MAP_WIDTH+3* INTERACTION_WIDTH /5, (int) (INTERACTION_HEIGH +9.01* INTERACTION_HEIGH /10),
+                INTERACTION_WIDTH /5,(int) (INTERACTION_HEIGH *0.05));
         //on définit goback
         goBack=new JButton("Go back");
         goBack.addActionListener(new ActionListener() {
@@ -111,17 +121,15 @@ public class CoffreInterface extends InteractionInterface {
                     goBack.setVisible(false);
                     exit.setVisible(true);
                 }
-                fenetre.requestFocus();
-                repaint();
-                revalidate();
+                refreshfocus();
             }
         });
         goBack.setVisible(false);
         this.add(goBack);
+        goBack.setBounds(MapPanel.MAP_WIDTH+3* INTERACTION_WIDTH /5, (int) (INTERACTION_HEIGH +9.01* INTERACTION_HEIGH /10)
+                , INTERACTION_WIDTH /5,(int) (INTERACTION_HEIGH *0.05));
 
-        goBack.setBounds(MapPanel.MAP_WIDTH+3* INTERACTION_WIDTH /5, (int) (INTERACTION_HEIGH +9.01* INTERACTION_HEIGH /10), INTERACTION_WIDTH /5,(int) (INTERACTION_HEIGH *0.05));
-        this.setBounds(MapPanel.MAP_WIDTH, INTERACTION_HEIGH, INTERACTION_WIDTH, INTERACTION_HEIGH);
-        this.setVisible(false);
+        this.fenetre.requestFocus();
     }
 
 
@@ -158,9 +166,7 @@ public class CoffreInterface extends InteractionInterface {
         this.pick = pick;
     }
 
-    public void setPlayer(Personnage player) {
-        this.player = player;
-    }
+
 
     public void setGoBack(JButton goBack) {
         this.goBack = goBack;

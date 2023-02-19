@@ -39,11 +39,9 @@ public class DialogueInterface extends InteractionInterface {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setPresentechange(linkrepEchange.get(choix.getSelectedValue().toString()));
-                repaint();
-                revalidate();
+                refreshfocus();
             }
         });
-
         this.setVisible(false);
         this.add(choix);
         }

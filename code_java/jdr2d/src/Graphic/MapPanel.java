@@ -9,16 +9,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
-public class MapPanel extends JPanel implements KeyListener {
+public class MapPanel extends JPanel {
 
     private Personnage player;
 
     private ArrayList<Porte> sorties;
 
     private ArrayList<PNJ> pnjs;
-
-    private ArrayList<Echange> echanges;
-
 
 
     static public final int MAP_WIDTH = (int) (GameInterface.WINDOW_WIDTH*0.6);
@@ -27,7 +24,6 @@ public class MapPanel extends JPanel implements KeyListener {
     private  int unit_size;
 
     //getters
-
 
     public ArrayList<Porte> getSorties() {
         return sorties;
@@ -64,14 +60,14 @@ public class MapPanel extends JPanel implements KeyListener {
 
     //constructeur
 
-    MapPanel(Personnage player){
+    MapPanel(Personnage player,ArrayList<PNJ> pnjs){
         super();
+        this.pnjs=pnjs;
         this.setPlayer(player);
         this.setBounds(0,0,MAP_WIDTH,MAP_HEIGH);
         this.setBackground(Color.white);
         this.setVisible(true);
     }
-
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         draw(g);
@@ -95,22 +91,47 @@ public class MapPanel extends JPanel implements KeyListener {
                     g.setColor(Color.green);
                     g.fillOval(i * unit_size, j * unit_size, unit_size, unit_size);
                 }
+                for (PNJ p: pnjs) {
+                    if(i==p.getX()&&j==p.getY()){
+                        g.setColor(Color.PINK);
+                        g.fillOval(i * unit_size, j * unit_size, unit_size, unit_size);
+                    }
+                }
+            }
+        }
+        for (int i = player.getLieux().getCarte()[0].length; i*unit_size <MAP_WIDTH ; i++) {
+            for (int j = 0; j*unit_size <MAP_WIDTH ; j++) {
+                g.setColor(Color.black);
+                g.fillRect(i*unit_size,j*unit_size,unit_size,unit_size);
+            }
+
+        }
+        for (int j = player.getLieux().getCarte().length; j*unit_size <MAP_HEIGH ; j++) {
+            for (int i = 0; i*unit_size<MAP_HEIGH; i++) {
+                g.setColor(Color.black);
+                g.fillRect(i*unit_size,j*unit_size,unit_size,unit_size);
             }
         }
     }
 
-    @Override
-    public void keyTyped(KeyEvent e) {
 
+
+
+    //getters
+
+    public ArrayList<PNJ> getPnjs() {
+        return pnjs;
     }
 
-    @Override
-    public void keyPressed(KeyEvent e) {
+    //setters
 
+
+    public void setPnjs(ArrayList<PNJ> pnjs) {
+        this.pnjs = pnjs;
     }
 
-    @Override
-    public void keyReleased(KeyEvent e) {
-
+    public void setUnit_size(int unit_size) {
+        this.unit_size = unit_size;
     }
+
 }

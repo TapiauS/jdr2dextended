@@ -15,7 +15,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class GameInterface extends JFrame  implements KeyListener {
-    private Thread save;
+    private final Thread save;
+
+    private PlayerInfo fenetreInfo;
+
+    private InventaireInterface inventdealer;
+
+    private DefaultInteractionInterface defaultInteractionInterface;
+
+    private QueteInterface quetedisplayer;
     private boolean interaction;
     private CoffreInterface coffredealer;
     private Personnage player;
@@ -50,16 +58,28 @@ public class GameInterface extends JFrame  implements KeyListener {
         this.setSize(new Dimension(WINDOW_WIDTH,WINDOWS_HEIGH));
         this.setLocationRelativeTo(null);
         mapload();
-        mapPanel=new MapPanel(this.player);
+        //on definit tout les élements
+        fenetreInfo=new PlayerInfo(this.player,this);
+        mapPanel=new MapPanel(this.player,this.pnjs);
+        defaultInteractionInterface=new DefaultInteractionInterface(this,this.player);
+        defaultInteractionInterface.setVisible(true);
         eventHistory=new EventHistory();
+        coffredealer=new CoffreInterface(this.player,this);
+        inventdealer=new InventaireInterface(this,this.player);
+        quetedisplayer=new QueteInterface(this,this.player);
+        //on définit la fenétre globale et lui donne tout les élements
         this.container=new JPanel();
         container.setBounds(0,0,WINDOW_WIDTH,WINDOWS_HEIGH);
+        container.add(fenetreInfo);
         container.setVisible(true);
         container.add(mapPanel);
         container.setLayout(null);
         container.add(eventHistory);
-        coffredealer=new CoffreInterface(this.player,this);
+        container.add(inventdealer);
         container.add(coffredealer);
+        container.add(quetedisplayer);
+        container.add(defaultInteractionInterface);
+        container.setBackground(Color.black);
         this.setContentPane(container);
         this.setResizable(false);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -74,6 +94,7 @@ public class GameInterface extends JFrame  implements KeyListener {
         });
         Runtime.getRuntime().addShutdownHook(save);
         addKeyListener(this);
+        this.requestFocus();
     }
 
 
@@ -84,33 +105,40 @@ public class GameInterface extends JFrame  implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        System.out.println("Est ce que le probléme ce situe ici");
-            if (e.getKeyCode() == 38 && !interaction) {
-                player.depl(Direction.NORD);
-                System.out.println("??");
-                eventHistory.addLine("haut");
-            }
-            if (e.getKeyCode() == 37 && !interaction) {
-                player.depl(Direction.OUEST);
-                eventHistory.addLine("droite");
-            }
-            if (e.getKeyCode() == 39 && !interaction) {
-                player.depl(Direction.EST);
-                eventHistory.addLine("gauche");
 
-            }
-            if (e.getKeyCode() == 40 && !interaction) {
-                player.depl(Direction.SUD);
-                eventHistory.addLine("bas");
-
-            }
-        if(e.getKeyChar()=='i') {
+        if (e.getKeyCode() == 38 && !interaction) {
+            player.depl(Direction.NORD);
+        }
+        if (e.getKeyCode() == 37 && !interaction) {
+            player.depl(Direction.OUEST);
+        }
+        if (e.getKeyCode() == 39 && !interaction) {
+            player.depl(Direction.EST);
+        }
+        if (e.getKeyCode() == 40 && !interaction) {
+            player.depl(Direction.SUD);
+        }
+        if(e.getKeyCode()==80 &&!interaction) {
             for (Coffre c: coffres) {
                 if(c.distance(player)<2){
+                    defaultInteractionInterface.setVisible(false);
                     coffredealer.setOpenedcoffre(c);
                     this.setInteraction(true);
                     break;
                 }
+            }
+        }
+        if (e.getKeyCode()==73&&!interaction){
+            defaultInteractionInterface.setVisible(false);
+            inventdealer.setOpenedcoffre(player.getInventaire());
+            this.setInteraction(true);
+        }
+        if(e.getKeyCode()==81&&!interaction){
+            try {
+                defaultInteractionInterface.setVisible(false);
+                quetedisplayer.updateQuete();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
             }
         }
         revalidate();
@@ -134,7 +162,6 @@ public class GameInterface extends JFrame  implements KeyListener {
         sorties= PorteDAO.getPorte(carte);
         for (Personnage p: PersonnageDAO.getPersonnages(carte,util)) {
             if(p instanceof PNJ){
-                System.out.println("Vous venez d'arriver à "+carte.getNomLieu());
                 pnjs.add((PNJ) p);
                 Echange start= EchangeDAO.getEchangetree((PNJ) p);
                 if(start!=null)
@@ -145,6 +172,22 @@ public class GameInterface extends JFrame  implements KeyListener {
     }
     //getters
 
+
+    public PlayerInfo getFenetreInfo() {
+        return fenetreInfo;
+    }
+
+    public DefaultInteractionInterface getDefaultInteractionInterface() {
+        return defaultInteractionInterface;
+    }
+
+    public InventaireInterface getInventdealer() {
+        return inventdealer;
+    }
+
+    public QueteInterface getQuetedisplayer() {
+        return quetedisplayer;
+    }
 
     public boolean isInteraction() {
         return interaction;
@@ -203,7 +246,6 @@ public class GameInterface extends JFrame  implements KeyListener {
     }
 
     public void setInteraction(boolean interaction) {
-        System.out.println("debugage de l'interaction");
         this.interaction = interaction;
     }
 

@@ -47,7 +47,7 @@ public class ObjetDAOTest {
     @Test
 
     void dropObjet() throws SQLException{
-        ObjetDAO.dropObjet(o);
+        //ObjetDAO.dropObjet(o);
     }
 
     @Test

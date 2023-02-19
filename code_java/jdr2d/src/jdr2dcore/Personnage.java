@@ -260,7 +260,7 @@ public class Personnage extends Point implements EventListenerQuete {
 
     public Personnage dropObjet(Objet objet) throws SQLException {
         this.inventaire.remove(objet);
-        ObjetDAO.dropObjet(objet);
+        ObjetDAO.dropObjet(objet,this);
         return this;
     }
 

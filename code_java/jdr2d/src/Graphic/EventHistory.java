@@ -20,7 +20,7 @@ public class EventHistory extends JLabel {
 
     public EventHistory(){
         super();
-
+        this.setBackground(Color.white);
         events=new String("<HTML></HTML>");
         nb_displayed_line=0;
         this.setText(events);
