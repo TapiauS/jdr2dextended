@@ -115,6 +115,7 @@ CREATE TABLE objet
 					description_objet TEXT,
 					x INT,
 					y INT,
+					UNIQUE(x,y),
 					emplacement VARCHAR ,
                     id_personnage_possede INT,
                     id_personnage_equipe INT,

@@ -72,6 +72,7 @@ public class InventaireInterface extends InteractionInterface{
                                 player.addArmure((Armure) selecteobjet);
                                 fenetre.getEventHistory().addLine(player.getNomPersonnage() + " a equipé l'armure:"
                                         + selecteobjet.getNomObjet());
+                                fenetre.getFenetreInfo().update();
                             } catch (SQLException ex) {
                                 //TODO gere exception
                                 throw new RuntimeException(ex);
@@ -108,6 +109,7 @@ public class InventaireInterface extends InteractionInterface{
                 public void actionPerformed(ActionEvent e){
                     if(itemdisplay.getSelectedIndex()>-1){
                         Objet selecteobjet=openedcoffre.getContenu().get(itemdisplay.getSelectedIndex());
+                        System.out.println("objet jeté="+selecteobjet.getNomObjet());
                         try {
                             boolean incoffre=false;
                             player.dropObjet(selecteobjet);
@@ -120,12 +122,14 @@ public class InventaireInterface extends InteractionInterface{
                             }
                             if(!incoffre)
                                 fenetre.getCoffres().add((Coffre) ((Coffre) (new Coffre(selecteobjet))
-                                    .setX(player.getX()).setY(player.getY()).setLieux(player.getLieux())).setNomObjet("tas"));
+                                    .setLieux(player.getLieux()).setX(player.getX()).setY(player.getY())).setNomObjet("tas"));
                         } catch (SQLException ex) {
                             throw new RuntimeException(ex);
                         }
-                        itemdisplay.setListData(data);
                         udpateref();
+                        fenetre.getMapPanel().repaint();
+                        fenetre.getMapPanel().revalidate();
+                        itemdisplay.setListData(data);
                         refreshfocus();
                     }
                 }

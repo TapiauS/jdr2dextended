@@ -19,6 +19,7 @@ CREATE OR REPLACE FUNCTION pos_objet() RETURNS TRIGGER AS $$
 DECLARE
 xt INT;
 yt INT;
+id INT;
 BEGIN
 CASE 
     WHEN OLD.id_personnage_possede IS NULL AND NEW.id_personnage_possede IS NOT NULL THEN
@@ -29,11 +30,16 @@ CASE
     WHEN OLD.id_personnage_possede IS NOT NULL AND NEW.id_personnage_possede IS NULL THEN
         SELECT x FROM personnage WHERE id_personnage=OLD.id_personnage_possede INTO xt;
         SELECT y FROM personnage WHERE id_personnage=OLD.id_personnage_possede INTO yt;
-        NEW.x=xt; 
-        NEW.y=yt;
-        RETURN NEW;
+        SELECT containedcoffre(xt,yt) INTO id;
+        IF id IS NOT NULL THEN
+            NEW.contenant=id;
+            RETURN NEW;
+        ELSE
+            INSERT INTO objet(nom_objet,x,y,id_type_objet) VALUES ('un tas d''objet',xt,yt,(SELECT id_type_objet FROM type_objet WHERE nom_type_objet='tas')) RETURNING objet.id_objet INTO id;
+            NEW.contenant=id;
+            RETURN NEW;
+        END IF;
     WHEN OLD.id_personnage_equipe IS NULL AND NEW.id_personnage_equipe IS NOT NULL THEN
-        NEW.id_personnage_equipe=OLD.id_personnage_possede;
         NEW.id_personnage_possede=NULL;
         RETURN NEW;
     WHEN OLD.id_personnage_equipe IS NOT NULL AND NEW.id_personnage_equipe IS NULL THEN
@@ -142,7 +148,7 @@ BEGIN
     IF NEW.id_compte_utilisateur IS NOT NULL THEN
         SELECT id_lieu FROM lieu WHERE nom_lieu='Tarante' INTO idlieu;
         RAISE NOTICE 'idlieu %',idlieu ;
-        UPDATE personnage SET id_lieu=idlieu,x=0,y=0 WHERE id_personnage=NEW.id_personnage;
+        UPDATE personnage SET id_lieu=idlieu,x=33,y=69 WHERE id_personnage=NEW.id_personnage;
         INSERT INTO caracterise(id_personnage,id_statistique,valeur) VALUES (NEW.id_personnage,(SELECT id_statistique FROM statistique WHERE nom_statistique='pV'),15),
                                                                             (NEW.id_personnage,(SELECT id_statistique FROM statistique WHERE nom_statistique='pVmax'),15),
                                                                             (NEW.id_personnage,(SELECT id_statistique FROM statistique WHERE nom_statistique='deg'),0),

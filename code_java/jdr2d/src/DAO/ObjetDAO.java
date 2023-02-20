@@ -57,10 +57,10 @@ public abstract class ObjetDAO extends DAOObject {
         else{
             switch (rs.getString("nom_type_objet")) {
                 case "Arme":
-                    retour = new Arme( rs.getString("nom_objet"), rs.getInt("poid"), rs.getInt("deg"), rs.getInt("deg"), rs.getInt("nbrmain")).setId(rs.getInt("id_objet"));
+                    retour = new Arme( rs.getString("nom_objet"), rs.getInt("poid"), rs.getInt("deg"), rs.getInt("redudeg"), rs.getInt("nbrmain")).setId(rs.getInt("id_objet"));
                     break;
                 case "Armure":
-                    retour = new Armure( rs.getString("nom_objet"), rs.getInt("poid"), rs.getInt("deg"), rs.getInt("deg"), rs.getString("emplacement")).setId(rs.getInt("id_objet"));
+                    retour = new Armure( rs.getString("nom_objet"), rs.getInt("poid"), rs.getInt("deg"), rs.getInt("redudeg"), rs.getString("emplacement")).setId(rs.getInt("id_objet"));
                     break;
                 case "Potion":
                     retour=PotionDAO.getpotion(rs);
@@ -89,12 +89,12 @@ public abstract class ObjetDAO extends DAOObject {
 
     public static void desequip(Objet o) throws SQLException{
         ArrayList<Object> args=new ArrayList<>(List.of(o.getId()));
-        queryUDC("UPDATE objet SET id_personnage_equipe=null WHERE id_objet=?;",args);
+        queryUDC("UPDATE objet SET id_personnage_equipe=NULL WHERE id_objet=?;",args);
         close();
     }
 
     public static void dropObjet(Objet o,Personnage player) throws SQLException{
-        ArrayList<Object> args=new ArrayList<>(List.of(player.getX(),player.getY(),player.getId(),o.getId()));
+        ArrayList<Object> args=new ArrayList<>(List.of(player.getY(),player.getX(),player.getId(),o.getId()));
         queryUDC("UPDATE personnage SET x=?,y=? WHERE id_personnage=?;" +
                 "UPDATE objet SET id_personnage_possede=null WHERE id_objet=?;",args);
         close();

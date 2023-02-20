@@ -55,7 +55,6 @@ public class CarteDealer {
         }
         index=0;
         char[][] retour = new char[lengthy][lengthx];
-
         while(index<eos){
             while((carte.charAt(index)=='{' || carte.charAt(index)==','||carte.charAt(index)=='}')&&index<eos-1){
                 index++;

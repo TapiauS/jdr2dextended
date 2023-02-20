@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class EventHistory extends JLabel {
+public class EventHistory extends JTextArea {
     String events;
 
     int nb_displayed_line;
@@ -21,10 +21,10 @@ public class EventHistory extends JLabel {
     public EventHistory(){
         super();
         this.setBackground(Color.white);
-        events=new String("<HTML></HTML>");
+        events=new String("");
         nb_displayed_line=0;
         this.setText(events);
-        this.setVerticalTextPosition(JLabel.TOP);
+        this.setRequestFocusEnabled(false);
         this.setBounds(0,GameInterface.WINDOW_WIDTH-EVENT_HEIGH,EVENT_WIDTH,EVENT_HEIGH);
         this.setVisible(true);
     }
@@ -50,11 +50,7 @@ public class EventHistory extends JLabel {
     public void addLine(String line){
         nb_displayed_line++;
         if(nb_displayed_line<EVENT_HEIGH/10)
-            setEvents(events.substring(0,events.length()-7)+"<BR>"+line+"</HTML>");
-        else {
-            setEvents("<HTML>"+line+"</HTML>");
-            nb_displayed_line=0;
-        }
+            setEvents(events+'\n'+line);
         this.setText(events);
         this.repaint();
         this.revalidate();

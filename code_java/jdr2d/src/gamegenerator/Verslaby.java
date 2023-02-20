@@ -395,19 +395,12 @@ public class Verslaby {
         return laby;
     }
 
-   /*
-    }
-    */
 
     /*public static void main (String[]args) throws SQLException {
-
-
         CarteDealer c=new CarteDealer();
-        char [][] carte=Verslaby.construitgroslaby(80,80,0.6);
-        Map m=new Map(new int[] {1,4},carte,"Caladon",9);
-        m.setId(MapDAO.createMap(m));
+        Map m=MapDAO.getmap(5);
         CoffreGenerator.filldatabase(m);
     }
-*/
 
+*/
 }

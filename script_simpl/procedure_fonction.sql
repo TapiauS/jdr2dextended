@@ -218,3 +218,14 @@ INSERT INTO objet(nom_objet,contenant) VALUES(nom,contenant);
 RETURN (SELECT MAX(id_objet) FROM objet);
 END;
 $$;
+
+CREATE OR REPLACE FUNCTION containedcoffre(xt int,yt int) RETURNS INT
+LANGUAGE plpgsql
+AS $$
+DECLARE
+lisid INT;
+BEGIN
+SELECT id_objet FROM objet WHERE objet.x=xt AND objet.y=yt AND (SELECT is_coffre(id_objet)) IS TRUE INTO lisid;
+RETURN lisid;
+END;
+$$;

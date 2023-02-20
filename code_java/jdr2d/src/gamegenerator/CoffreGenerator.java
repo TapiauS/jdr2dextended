@@ -45,10 +45,10 @@ public class CoffreGenerator {
         for (int k = 0; k < taille; k++) {
             if(Math.random()<0.9){
                 int obj=(int) (Math.random()*contenuposs.size());
-                ObjetDAO.addObjetCoffre(contenuposs.get(obj),id);
+                ObjetDAO.addObjetCoffre(contenuposs.get(obj),idc);
             }
             else {
-                petit_coffre(id);
+                petit_coffre(idc);
             }
         }
     }

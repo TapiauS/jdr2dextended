@@ -60,7 +60,7 @@ public class GameInterface extends JFrame  implements KeyListener {
         mapload();
         //on definit tout les élements
         fenetreInfo=new PlayerInfo(this.player,this);
-        mapPanel=new MapPanel(this.player,this.pnjs);
+        mapPanel=new MapPanel(this.player,this.pnjs,this);
         defaultInteractionInterface=new DefaultInteractionInterface(this,this.player);
         defaultInteractionInterface.setVisible(true);
         eventHistory=new EventHistory();
@@ -68,6 +68,8 @@ public class GameInterface extends JFrame  implements KeyListener {
         inventdealer=new InventaireInterface(this,this.player);
         quetedisplayer=new QueteInterface(this,this.player);
         //on définit la fenétre globale et lui donne tout les élements
+        //JScrollPane contevent=new JScrollPane(eventHistory);
+        //contevent.setVisible(true);
         this.container=new JPanel();
         container.setBounds(0,0,WINDOW_WIDTH,WINDOWS_HEIGH);
         container.add(fenetreInfo);
@@ -168,7 +170,6 @@ public class GameInterface extends JFrame  implements KeyListener {
                     echanges.add(start);
             }
         }
-
     }
     //getters
 

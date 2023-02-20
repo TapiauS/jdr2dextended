@@ -187,14 +187,13 @@ public class Personnage extends Point implements EventListenerQuete {
                         this.addObjet(a);
                     }
                 }
-                this.setArmes(new ArrayList<>(List.of(new Arme("Poing",0,0,0,0))));
                 this.armes.add(arme);
             }
             else{
-                Arme a=this.armes.get(2);
+                Arme a=this.armes.get(armes.size()-1);
                 this.removeArme(a);
                 this.armes.add(arme);
-                this.setInventaire(this.getInventaire().add(a));
+                this.addObjet(a);
             }
         } else if (compteurmain==1 || compteurmain==0) {
             if(arme.getNbrmain()==2){
@@ -204,7 +203,6 @@ public class Personnage extends Point implements EventListenerQuete {
                         this.addObjet(a);
                     }
                 }
-                this.setArmes(new ArrayList<>(List.of(new Arme("Poing",0,0,0,0))));
                 this.armes.add(arme);
             }
             else{
@@ -212,7 +210,6 @@ public class Personnage extends Point implements EventListenerQuete {
             }
         }
 
-        this.armes.add(arme);
         return this;
     }
 
