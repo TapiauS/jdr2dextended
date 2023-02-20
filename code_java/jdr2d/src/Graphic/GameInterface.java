@@ -12,7 +12,13 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.sql.SQLException;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class GameInterface extends JFrame  implements KeyListener {
     private final Thread save;
@@ -34,6 +40,10 @@ public class GameInterface extends JFrame  implements KeyListener {
 
     private Utilisateur util;
 
+    private Instant nextmactiontime;
+
+    private static final long timestepms=100;
+
     private Map carte;
 
     private EventHistory eventHistory;
@@ -51,6 +61,7 @@ public class GameInterface extends JFrame  implements KeyListener {
 
     public GameInterface(Personnage player,Utilisateur util) throws SQLException {
         super();
+        this.nextmactiontime=Instant.now();
         this.interaction=false;
         this.setLayout(null);
         this.player=player;
@@ -108,16 +119,20 @@ public class GameInterface extends JFrame  implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
 
-        if (e.getKeyCode() == 38 && !interaction) {
+        if (e.getKeyCode() == 38 && !interaction && Instant.now().isAfter(nextmactiontime)) {
+            nextmactiontime=Instant.now().plus(timestepms, ChronoUnit.MILLIS);
             player.depl(Direction.NORD);
         }
-        if (e.getKeyCode() == 37 && !interaction) {
+        if (e.getKeyCode() == 37 && !interaction && Instant.now().isAfter(nextmactiontime)) {
+            nextmactiontime=Instant.now().plus(timestepms, ChronoUnit.MILLIS);
             player.depl(Direction.OUEST);
         }
-        if (e.getKeyCode() == 39 && !interaction) {
+        if (e.getKeyCode() == 39 && !interaction && Instant.now().isAfter(nextmactiontime)) {
+            nextmactiontime=Instant.now().plus(timestepms, ChronoUnit.MILLIS);
             player.depl(Direction.EST);
         }
-        if (e.getKeyCode() == 40 && !interaction) {
+        if (e.getKeyCode() == 40 && !interaction && Instant.now().isAfter(nextmactiontime)) {
+            nextmactiontime=Instant.now().plus(timestepms, ChronoUnit.MILLIS);
             player.depl(Direction.SUD);
         }
         if(e.getKeyCode()==80 &&!interaction) {

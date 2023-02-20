@@ -180,7 +180,7 @@ public class Verslaby {
                 if (compteur == posE) {
                     laby[l - 1][L - 1 - m] = 'E';
                 } else if (compteur == posS) {
-                    laby[L-1][L-1-m] = 'S';
+                    laby[l-1][L-1-m] = 'S';
                 }
             }
         }
@@ -396,11 +396,11 @@ public class Verslaby {
     }
 
 
-    /*public static void main (String[]args) throws SQLException {
-        CarteDealer c=new CarteDealer();
-        Map m=MapDAO.getmap(5);
-        CoffreGenerator.filldatabase(m);
+    public static void main (String[]args) throws SQLException {
+        Verslaby.construitgroslaby(50,70,0.8);
+        //Map m=MapDAO.getmap(5);
+        //CoffreGenerator.filldatabase(m);
     }
 
-*/
+
 }
