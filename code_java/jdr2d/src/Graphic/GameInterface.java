@@ -1,28 +1,33 @@
 package Graphic;
 
-import DAO.EchangeDAO;
-import DAO.MapDAO;
-import DAO.PersonnageDAO;
-import DAO.PorteDAO;
+import DAO.*;
 import jdr2dcore.*;
 
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
 public class GameInterface extends JFrame  implements KeyListener {
     private final Thread save;
 
+    private FullLogInterface log;
     private PlayerInfo fenetreInfo;
 
     private InventaireInterface inventdealer;
@@ -59,8 +64,17 @@ public class GameInterface extends JFrame  implements KeyListener {
     
     private JPanel container;
 
-    public GameInterface(Personnage player,Utilisateur util) throws SQLException {
+    private JLabel portrait;
+
+    private JMenuBar menubar;
+
+    private QuitMenu quitter;
+
+
+
+    public GameInterface(Personnage player,Utilisateur util,FullLogInterface log) throws SQLException {
         super();
+        this.log=log;
         this.nextmactiontime=Instant.now();
         this.interaction=false;
         this.setLayout(null);
@@ -78,11 +92,27 @@ public class GameInterface extends JFrame  implements KeyListener {
         coffredealer=new CoffreInterface(this.player,this);
         inventdealer=new InventaireInterface(this,this.player);
         quetedisplayer=new QueteInterface(this,this.player);
+        menubar=new JMenuBar();
+        menubar.setVisible(true);
+        quitter = new QuitMenu(this,"Menu");
+        menubar.add(quitter);
+        //menubar.setBounds(0,0,WINDOW_WIDTH,10);
+        BufferedImage myPicture = null;
+        try {
+            myPicture = ImageIO.read(new File("Portraits/dwarf2.png"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        //myPicture=myPicture.getSubimage(0,0,WINDOW_WIDTH-MapPanel.MAP_WIDTH,WINDOWS_HEIGH-MapPanel.MAP_HEIGH);
+        portrait = new JLabel(new ImageIcon(myPicture));
+        portrait.setBounds(MapPanel.MAP_WIDTH,MapPanel.MAP_HEIGH,WINDOW_WIDTH-MapPanel.MAP_WIDTH,WINDOWS_HEIGH-MapPanel.MAP_HEIGH);
+        portrait.setVisible(true);
         //on définit la fenétre globale et lui donne tout les élements
         //JScrollPane contevent=new JScrollPane(eventHistory);
         //contevent.setVisible(true);
         this.container=new JPanel();
-        container.setBounds(0,0,WINDOW_WIDTH,WINDOWS_HEIGH);
+        container.setBounds(0,menubar.getHeight(),WINDOW_WIDTH,WINDOWS_HEIGH);
+        this.setJMenuBar(menubar);
         container.add(fenetreInfo);
         container.setVisible(true);
         container.add(mapPanel);
@@ -92,6 +122,7 @@ public class GameInterface extends JFrame  implements KeyListener {
         container.add(coffredealer);
         container.add(quetedisplayer);
         container.add(defaultInteractionInterface);
+        container.add(portrait);
         container.setBackground(Color.black);
         this.setContentPane(container);
         this.setResizable(false);
@@ -99,10 +130,53 @@ public class GameInterface extends JFrame  implements KeyListener {
         this.setVisible(true);
         save = new Thread(() -> {
             try {
-                PersonnageDAO.updatedatabase(player);
+                //PersonnageDAO.updatedatabase(player);
+                DAOObject.close();
+                System.out.println("on sauvegarde");
             } catch (SQLException e) {
                 //TODO gérer cette exception
                 throw new RuntimeException(e);
+            }
+        });
+        this.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                try {
+                    PersonnageDAO.updatedatabase(player);
+                    System.out.println("Sauvegarde closing");
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
             }
         });
         Runtime.getRuntime().addShutdownHook(save);
@@ -122,18 +196,22 @@ public class GameInterface extends JFrame  implements KeyListener {
         if (e.getKeyCode() == 38 && !interaction && Instant.now().isAfter(nextmactiontime)) {
             nextmactiontime=Instant.now().plus(timestepms, ChronoUnit.MILLIS);
             player.depl(Direction.NORD);
+            checkdoor();
         }
         if (e.getKeyCode() == 37 && !interaction && Instant.now().isAfter(nextmactiontime)) {
             nextmactiontime=Instant.now().plus(timestepms, ChronoUnit.MILLIS);
             player.depl(Direction.OUEST);
+            checkdoor();
         }
         if (e.getKeyCode() == 39 && !interaction && Instant.now().isAfter(nextmactiontime)) {
             nextmactiontime=Instant.now().plus(timestepms, ChronoUnit.MILLIS);
             player.depl(Direction.EST);
+            checkdoor();
         }
         if (e.getKeyCode() == 40 && !interaction && Instant.now().isAfter(nextmactiontime)) {
             nextmactiontime=Instant.now().plus(timestepms, ChronoUnit.MILLIS);
             player.depl(Direction.SUD);
+            checkdoor();
         }
         if(e.getKeyCode()==80 &&!interaction) {
             for (Coffre c: coffres) {
@@ -173,6 +251,9 @@ public class GameInterface extends JFrame  implements KeyListener {
 
     private  void mapload() throws SQLException {
         carte=player.getLieux();
+        System.out.println("nom lieu="+carte.getNomLieu());
+        MapGraph graph=new MapGraph();
+
         pnjs=new ArrayList<>();
         echanges=new ArrayList<>();
         coffres= MapDAO.getcoffres(carte);
@@ -185,9 +266,54 @@ public class GameInterface extends JFrame  implements KeyListener {
                     echanges.add(start);
             }
         }
+
+        if(mapPanel!=null) {
+            mapPanel.setPnjs(pnjs);
+            mapPanel.setPlayer(player);
+            mapPanel.setSorties(sorties);
+        }
+    }
+
+    private void checkdoor(){
+        for (Porte p: sorties) {
+            System.out.println("distance porte= " +p.distance(player));
+            if(p.distance(player)<1){
+                int res=JOptionPane.showConfirmDialog(this,"Il y a une porte ici voulez vous traverser?","Porte",JOptionPane.YES_NO_OPTION);
+                if(res==0){
+                    p.traverse(player);
+                    try {
+                        mapload();
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                    this.revalidate();
+                    this.repaint();
+                }
+            }
+        }
     }
     //getters
 
+
+    public FullLogInterface getLog() {
+        return log;
+    }
+
+    public Instant getNextmactiontime() {
+        return nextmactiontime;
+    }
+
+    public JLabel getPortrait() {
+        return portrait;
+    }
+
+    public JMenuBar getMenubar() {
+        return menubar;
+    }
+
+    public JMenu getQuitter() {
+        return quitter;
+    }
 
     public PlayerInfo getFenetreInfo() {
         return fenetreInfo;
@@ -304,4 +430,37 @@ public class GameInterface extends JFrame  implements KeyListener {
     public void setContainer(JPanel container) {
         this.container = container;
     }
+
+    public void setLog(FullLogInterface log) {
+        this.log = log;
+    }
+
+    public void setFenetreInfo(PlayerInfo fenetreInfo) {
+        this.fenetreInfo = fenetreInfo;
+    }
+
+    public void setInventdealer(InventaireInterface inventdealer) {
+        this.inventdealer = inventdealer;
+    }
+
+    public void setDefaultInteractionInterface(DefaultInteractionInterface defaultInteractionInterface) {
+        this.defaultInteractionInterface = defaultInteractionInterface;
+    }
+
+    public void setQuetedisplayer(QueteInterface quetedisplayer) {
+        this.quetedisplayer = quetedisplayer;
+    }
+
+    public void setNextmactiontime(Instant nextmactiontime) {
+        this.nextmactiontime = nextmactiontime;
+    }
+
+    public void setPortrait(JLabel portrait) {
+        this.portrait = portrait;
+    }
+
+    public void setMenubar(JMenuBar menubar) {
+        this.menubar = menubar;
+    }
+
 }

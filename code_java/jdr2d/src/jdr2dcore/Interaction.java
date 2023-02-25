@@ -1,5 +1,6 @@
 package jdr2dcore;
 
+import DAO.ObjectifsDAO;
 import DAO.QueteDAO;
 
 import java.sql.SQLException;
@@ -160,6 +161,11 @@ public class Interaction {
                 if (e instanceof ObjectifK) {
                     if(((ObjectifK) e).getTarget().getId()==this.opposant.getId()) {
                         this.notifyOneobs(e);
+                        try {
+                            ObjectifsDAO.setobj(joueur,(ObjectifK) e);
+                        } catch (SQLException ex) {
+                            throw new RuntimeException(ex);
+                        }
                         this.removeObserK(e);
                     }
                 }
@@ -169,7 +175,7 @@ public class Interaction {
     }
 
     public void dialogue() throws SQLException {
-        // Attention ! quand on crée un arbre de dialgue la position des dialogues donneurs de quete et des dialogues objectifs d'une quete doit être bien reflechie.
+        // Attention ! quand on crée un arbre de dialogue la position des dialogues donneurs de quete et des dialogues objectifs d'une quete doit être bien reflechie.
         //le point d'acces
         Scanner scanner = new Scanner(System.in);
         System.out.println(this.getOpposant().getNomPersonnage() + " :" + this.getDialogue().getReponse());
@@ -196,6 +202,7 @@ public class Interaction {
                 if (this.getObserverT().get(i) instanceof ObjectifT) {
                     if (((ObjectifT) this.getObserverT().get(i)).getConvaincre() == nextechange.getDialogueSuivant()[entre].getId()) {
                         this.getObserverT().get(i).update();
+
                     }
                 }
             }

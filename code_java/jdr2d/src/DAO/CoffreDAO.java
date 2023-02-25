@@ -36,7 +36,7 @@ public abstract class CoffreDAO extends DAOObject {
         }
         retour.setContenu(contenu);
         rs.getStatement().close();
-        DAOObject.close();
+
         return retour;
     }
 

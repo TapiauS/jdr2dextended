@@ -1,6 +1,8 @@
 package jdr2dcore;
 
+import DAO.ObjectifsDAO;
 import DAO.ObjetDAO;
+import DAO.QueteDAO;
 
 import java.sql.SQLException;
 import java.time.Duration;
@@ -248,6 +250,11 @@ public class Personnage extends Point implements EventListenerQuete {
             if(observerF.get(j) instanceof ObjectifF){
                 if(objet.getId()==((ObjectifF) observerF.get(j)).getObjetquete().getId()) {
                     notifyoneEventF(observerF.get(j));
+                    try {
+                        ObjectifsDAO.setobj(this,(ObjectifF) observerF.get(j));
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
                     this.removeObserver(observerF.get(j));
                 }
             }

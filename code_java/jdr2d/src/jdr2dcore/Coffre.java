@@ -116,7 +116,8 @@ public class Coffre extends Objet {
                 LinkedHashMap<Integer, String> cofreint=((Coffre) o).findweapon();
                 int ajoutindex=cofreint.size();
                 while(cofreint.size()>0){
-                    retour.put(cofreint.keySet().stream().findFirst().get()+index,indexglobal+"."+cofreint.get(cofreint.keySet().stream().findFirst().get()));
+                    retour.put(cofreint.keySet().stream().findFirst().get()+index,indexglobal+
+                            "."+cofreint.get(cofreint.keySet().stream().findFirst().get()));
                     cofreint.remove(cofreint.keySet().stream().findFirst().get());
                 }
                 index=index+ajoutindex;
@@ -139,7 +140,8 @@ public class Coffre extends Objet {
                 LinkedHashMap<Integer, String> cofreint=((Coffre) o).findweapon();
                 int ajoutindex=cofreint.size();
                 while(cofreint.size()>0){
-                    retour.put(cofreint.keySet().stream().findFirst().get()+index,indexglobal+"."+cofreint.get(cofreint.keySet().stream().findFirst().get()));
+                    retour.put(cofreint.keySet().stream().findFirst().get()+index,indexglobal+
+                            "."+cofreint.get(cofreint.keySet().stream().findFirst().get()));
                     cofreint.remove(cofreint.keySet().stream().findFirst().get());
                 }
                 index=index+ajoutindex;
@@ -163,7 +165,8 @@ public class Coffre extends Objet {
                 LinkedHashMap<Integer, String> cofreint=((Coffre) o).findweapon();
                 int ajoutindex=cofreint.size();
                 while(cofreint.size()>0){
-                    retour.put(cofreint.keySet().stream().findFirst().get()+index,indexglobal+"."+cofreint.get(cofreint.keySet().stream().findFirst().get()));
+                    retour.put(cofreint.keySet().stream().findFirst().get()+index,indexglobal+
+                            "."+cofreint.get(cofreint.keySet().stream().findFirst().get()));
                     cofreint.remove(cofreint.keySet().stream().findFirst().get());
                 }
                 index=index+ajoutindex;

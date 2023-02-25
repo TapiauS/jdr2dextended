@@ -1,9 +1,13 @@
 package gamegenerator;
 
+import DAO.DAOObject;
 import DAO.MapDAO;
 import jdr2dcore.Map;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Verslaby {
@@ -396,11 +400,7 @@ public class Verslaby {
     }
 
 
-    public static void main (String[]args) throws SQLException {
-        Verslaby.construitgroslaby(50,70,0.8);
-        //Map m=MapDAO.getmap(5);
-        //CoffreGenerator.filldatabase(m);
-    }
+
 
 
 }

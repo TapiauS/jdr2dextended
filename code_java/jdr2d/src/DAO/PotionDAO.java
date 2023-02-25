@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 
-public abstract class PotionDAO {
+public abstract class PotionDAO extends DAOObject{
     public static Potion getpotion(ResultSet rs) throws SQLException {
         int [] effets=new int[4];
         effets[0]=rs.getInt("deg");

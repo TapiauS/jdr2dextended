@@ -10,7 +10,7 @@ public class EventHistory extends JTextArea {
 
     int nb_displayed_line;
 
-    JTextArea historydisplayer;
+    //JTextArea historydisplayer;
 
     public static final int EVENT_WIDTH= (int) (GameInterface.WINDOW_WIDTH*0.6);
 

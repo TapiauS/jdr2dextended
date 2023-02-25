@@ -50,6 +50,11 @@ public class MapPanel extends JPanel {
 
     //setters
 
+
+    public void setFenetre(GameInterface fenetre) {
+        this.fenetre = fenetre;
+    }
+
     public void setSorties(ArrayList<Porte> sorties) {
         this.sorties = sorties;
     }
@@ -66,6 +71,7 @@ public class MapPanel extends JPanel {
         super();
         this.pnjs=pnjs;
         this.fenetre=fenetre;
+        this.sorties=fenetre.getSorties();
         this.setPlayer(player);
         this.setBounds(0,0,MAP_WIDTH,MAP_HEIGH);
         this.setBackground(Color.white);
@@ -77,6 +83,8 @@ public class MapPanel extends JPanel {
     }
     public void draw(Graphics g){
         for (Coffre c:fenetre.getCoffres()) {
+            MapGraph graph=new MapGraph();
+            System.out.println(graph.affichmap(player.getLieux().getCarte()));
             for (int i = 0; i < player.getLieux().getCarte()[0].length; i++) {
                 for (int j = 0; j < player.getLieux().getCarte().length; j++) {
                     if (player.getLieux().getCarte()[j][i] == '#') {
@@ -86,10 +94,6 @@ public class MapPanel extends JPanel {
                     if (c.getY() == j && c.getX() == i) {
                         g.setColor(Color.CYAN);
                         g.fillOval(i*unit_size,j*unit_size,unit_size,unit_size);
-                    }
-                    if (player.getLieux().getCarte()[j][i] == 'E' || player.getLieux().getCarte()[j][i] == 'S') {
-                        g.setColor(Color.red);
-                        g.fillOval(i * unit_size, j * unit_size, unit_size, unit_size);
                     }
                     if (i == player.getX() && j == player.getY()) {
                         g.setColor(Color.green);
@@ -115,6 +119,16 @@ public class MapPanel extends JPanel {
             for (int i = 0; i*unit_size<MAP_HEIGH; i++) {
                 g.setColor(Color.black);
                 g.fillRect(i*unit_size,j*unit_size,unit_size,unit_size);
+            }
+        }
+        for (Porte p: sorties) {
+            for (int i = 0; i < player.getLieux().getCarte()[0].length; i++) {
+                for (int j = 0; j < player.getLieux().getCarte().length; j++) {
+                    if(p.getX()==i&&p.getY()==j){
+                        g.setColor(Color.orange);
+                        g.fillRect(i*unit_size,j*unit_size,unit_size,unit_size);
+                    }
+                }
             }
         }
     }

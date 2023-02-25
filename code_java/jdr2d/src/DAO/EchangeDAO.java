@@ -13,8 +13,9 @@ public abstract class EchangeDAO extends DAOObject{
 
     //JE CROIS que c'est pour les objectifs de quete que je suis sencé utiliser getparleur
     public static PNJ getparleur(int id) throws SQLException{
-        return new PNJ();
+        return (PNJ) PersonnageDAO.getchar(id);
     }
+
     public static Echange getEchangetree(PNJ perso) throws SQLException {
         ArrayList<Object> args=new ArrayList<>(List.of(perso.getId()));
         ResultSet rs=query("SELECT dialogue.id_dialogue as dial,contenu_dialogue,choix,embranchement.id_embranchement,interaction.id_interaction,objectif.id_objectif FROM dialogue JOIN \n" +
@@ -50,7 +51,7 @@ public abstract class EchangeDAO extends DAOObject{
                 Echange retour = new Echange(perso, null, reponse, echangsuiv);
                 retour.setId(id);
                 rs.getStatement().close();
-                close();
+               ;
                 return retour;
 
             }
@@ -58,7 +59,7 @@ public abstract class EchangeDAO extends DAOObject{
                 Echange retour = new Echange(perso, null, reponse, echangsuiv,false,null,new Echange(),o);
                 retour.setId(id);
                 rs.getStatement().close();
-                close();
+               ;
                 return retour;
             }
         }
@@ -67,14 +68,14 @@ public abstract class EchangeDAO extends DAOObject{
                 Echange retour = new Echange(perso, null, reponse, echangsuiv,true,q);
                 retour.setId(id);
                 rs.getStatement().close();
-                close();
+               ;
                 return retour;
             }
             else{
                 Echange retour = new Echange(perso, null, reponse, echangsuiv,true,q,new Echange(),o);
                 retour.setId(id);
                 rs.getStatement().close();
-                close();
+               ;
                 return retour;
             }
         }
@@ -112,14 +113,14 @@ public abstract class EchangeDAO extends DAOObject{
                     Echange retour = new Echange(perso, question, reponse, null, false, null);
                     retour.setId(ids);
                     rs.getStatement().close();
-                    close();
+                   ;
                     return retour;
                 }
                 else{
                     Echange retour = new Echange(perso, null, reponse, null,false,null,null,o);
                     retour.setId(ids);
                     rs.getStatement().close();
-                    close();
+                   ;
                     return retour;
                 }
             }
@@ -128,14 +129,14 @@ public abstract class EchangeDAO extends DAOObject{
                 Echange retour = new Echange(perso, question, reponse, null, true, q);
                 retour.setId(ids);
                 rs.getStatement().close();
-                close();
+               ;
                 return retour;
             }
             else {
                 Echange retour = new Echange(perso, question, reponse, null,true,q,null,o);
                 retour.setId(ids);
                 rs.getStatement().close();
-                close();
+               ;
                 return retour;
             }
             }
@@ -148,7 +149,7 @@ public abstract class EchangeDAO extends DAOObject{
                 if(o==null) {
                     Echange retour = new Echange(perso, question, reponse, echangsuiv, false, null);
                     rs.getStatement().close();
-                    close();
+                   ;
                     retour.setId(ids);
                     return retour;
                 }
@@ -156,7 +157,7 @@ public abstract class EchangeDAO extends DAOObject{
                     Echange retour = new Echange(perso, question, reponse, echangsuiv,false,null,null,o);
                     retour.setId(ids);
                     rs.getStatement().close();
-                    close();
+                   ;
                     return retour;
                 }
             }
@@ -165,14 +166,14 @@ public abstract class EchangeDAO extends DAOObject{
                     Echange retour = new Echange(perso, question, reponse, echangsuiv, true, q);
                     retour.setId(ids);
                     rs.getStatement().close();
-                    close();
+                   ;
                     return retour;
                 }
                 else{
                     Echange retour = new Echange(perso, question, reponse, echangsuiv,true,q,null,o);
                     retour.setId(ids);
                     rs.getStatement().close();
-                    close();
+                   ;
                     return retour;
                 }
             }

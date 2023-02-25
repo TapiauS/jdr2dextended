@@ -19,7 +19,7 @@ public abstract class MapDAO extends DAOObject {
         rs.next();
         int retour=rs.getInt(1);
         rs.getStatement().close();
-        close();
+
         return retour;
     }
 
@@ -32,11 +32,11 @@ public abstract class MapDAO extends DAOObject {
             int[] dim = new int[]{carte.length, carte[0].length};
             Map retour=new Map(dim, carte, rs.getString("nom_lieu"), rs.getInt("id_lieu"));
             rs.getStatement().close();
-            close();
+           ;
             return retour;
         }
         rs.getStatement().close();
-        close();
+       ;
         throw new IllegalArgumentException("Cette map n'existe pas !");
     }
 
@@ -48,12 +48,8 @@ public abstract class MapDAO extends DAOObject {
             retour.add(CoffreDAO.getcoffre(rs.getInt(1)));
         }
         rs.getStatement().close();
-        close();
+       ;
         return retour;
     }
-
-
-   // les inventaires et équipements pas encore gérés, ca arrive promis
-
 
 }

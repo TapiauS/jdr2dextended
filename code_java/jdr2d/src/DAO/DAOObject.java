@@ -1,5 +1,6 @@
 package DAO;
 
+import java.io.File;
 import java.sql.*;
 import java.util.Properties;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.lang.reflect.Method;
         private static Properties config = null;
         private static Connection conn = null;
 
-        protected static void close() throws SQLException {
+        public static void close() throws SQLException {
             if(conn!=null) {
                 conn.close();
                 conn = null;
@@ -72,6 +73,35 @@ import java.lang.reflect.Method;
             return pst.executeQuery();
         }
 
+
+        /*public static void fillimagebank(String imgname,String imgebankname, File img) throws SQLException, IOException {
+            getConnection(filename,false);
+            conn.setAutoCommit(false);
+            FileInputStream fis=new FileInputStream(img);
+            PreparedStatement ps=conn.prepareStatement("INSERT INTO "+imgebankname+"(nom_"+imgebankname+",image) VALUES (?,?)");
+            ps.setString(1,imgname);
+            ps.setBinaryStream(2,fis,img.length());
+            ps.executeUpdate();
+            ps.close();
+            fis.close();
+            conn.setAutoCommit(true);
+        }
+
+        public static byte[] readimagebank(int id,String imgebankname) throws SQLException, IOException {
+            getConnection(filename,false);
+            conn.setAutoCommit(false);
+            PreparedStatement ps=conn.prepareStatement("SELECT image FROM "+imgebankname+" WHERE id_"+imgebankname+"=?");
+            ps.setInt(1,id);
+            ResultSet rs=ps.executeQuery();
+            rs.next();
+            byte[] imgBytes = rs.getBytes(1);
+            rs.close();
+            ps.close();
+            conn.setAutoCommit(true);
+            return imgBytes;
+        }
+        */
+
         public static void queryUDC(String sql, ArrayList<Object> args) throws SQLException{
             PreparedStatement pst = createPreparedStatement(sql);
             bindValues(pst, args);
@@ -79,7 +109,7 @@ import java.lang.reflect.Method;
            pst.close();
         }
 
-        protected static void bindValues(PreparedStatement pst, ArrayList<Object> args) throws SQLException{
+        private static void bindValues(PreparedStatement pst, ArrayList<Object> args) throws SQLException{
 
             int i = 1;
             Hashtable<String, StringClassPair> correspondance = new Hashtable<String, StringClassPair>();
@@ -95,6 +125,7 @@ import java.lang.reflect.Method;
             correspondance.put("java.lang.jdr2dcore.Time",       new StringClassPair("setTime", Time.class));
             correspondance.put("java.lang.Timestamp",  new StringClassPair("setTimestamp", Timestamp.class));
             correspondance.put("java.lang.Byte",       new StringClassPair("setByte", Byte.class));
+            //correspondance.put("")             ,        new StringClassPair("setBinaryStream",)
 
             for(Object arg : args){
                 String func = correspondance.get(arg.getClass().getName()).getKey();

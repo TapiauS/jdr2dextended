@@ -20,7 +20,7 @@ public abstract class UtilisateurDAO extends DAOObject {
             throw new SQLDataException();
         }
         rs.getStatement().close();
-        close();
+       ;
         return retour;
     }
 
@@ -32,12 +32,12 @@ public abstract class UtilisateurDAO extends DAOObject {
         ResultSet rs=query("SELECT * FROM compte_utilisateur WHERE mdp_compte=?",args);
         if(rs.next()) {
             rs.getStatement().close();
-            close();
+           ;
             return false;
         }
         else {
             rs.getStatement().close();
-            close();
+           ;
             return true;
         }
     }
@@ -47,12 +47,12 @@ public abstract class UtilisateurDAO extends DAOObject {
         ResultSet rs=query("SELECT * FROM compte_utilisateur WHERE pseudo_compte=?",args);
         if(rs.next()) {
             rs.getStatement().close();
-            close();
+           ;
             return false;
         }
         else {
             rs.getStatement().close();
-            close();
+           ;
             return true;
         }
     }
@@ -64,12 +64,12 @@ public abstract class UtilisateurDAO extends DAOObject {
         ResultSet rs=query("SELECT * FROM compte_utilisateur WHERE couriel_compte=?",args);
         if(rs.next()) {
             rs.getStatement().close();
-            close();
+           ;
             return false;
         }
         else {
             rs.getStatement().close();
-            close();
+           ;
             return true;
         }
     }
@@ -77,12 +77,11 @@ public abstract class UtilisateurDAO extends DAOObject {
     public static void createcompte(String nom, String mdp,String mail) throws SQLException {
         ArrayList<Object> args=new ArrayList<>(List.of(mail,nom,mdp));
         queryUDC("CALL add_user(?,?,?);",args);
-        close();
+       ;
     }
 
     public static Hashtable<String, Integer> displaypersonnage(Utilisateur util) throws SQLException {
         ArrayList<Object> args=new ArrayList<>(List.of(util.getId()));
-
         ResultSet rs = query("SELECT id_personnage,nom_personnage FROM personnage WHERE id_compte_utilisateur=? ORDER BY id_personnage;",args);
         Hashtable<String,Integer> retour=new Hashtable<>();
         int i=0;
@@ -90,10 +89,7 @@ public abstract class UtilisateurDAO extends DAOObject {
             retour.put(rs.getString(2), rs.getInt(1));
             i++;
         }
-
         rs.getStatement().close();
-        close();
-
         return retour;
     }
 

@@ -11,7 +11,7 @@ public abstract class ObjetDAO extends DAOObject {
     public static void create(Objet o) throws SQLException {
         ArrayList<Object> args=new ArrayList<>(List.of(o.getNomObjet(),o.getPoid(),o.getX(),o.getY(),o.getLieux().getId()));
         queryUDC("INSERT INTO objet(nom_objet,poid,x,y,id_lieu) VALUES (?,?,?,?,?)",args);
-        close();
+       ;
     }
 
     public static String getObjettype(int id) throws SQLException{
@@ -22,7 +22,7 @@ public abstract class ObjetDAO extends DAOObject {
             retour = rs.getString(1);
         }
         rs.getStatement().close();
-        close();
+       ;
         return retour;
     }
 
@@ -34,7 +34,7 @@ public abstract class ObjetDAO extends DAOObject {
         if(rs.getBoolean("is_coffre")) {
             retour = CoffreDAO.getcoffre(rs.getInt("id_objet"));
             rs.getStatement().close();
-            close();
+           ;
             return retour;
         }
         if(rs.getInt("id_lieu")!=0) {
@@ -71,33 +71,33 @@ public abstract class ObjetDAO extends DAOObject {
             }
         }
         rs.getStatement().close();
-        close();
+       ;
         return retour;
     }
 
     public static void pickObjet(Personnage p, Objet o) throws SQLException{
         ArrayList<Object> args=new ArrayList<>(List.of(p.getId(),o.getId()));
         queryUDC("UPDATE objet SET id_personnage_possede=? WHERE id_objet=?",args);
-        close();
+       ;
     }
 
     public static void equip(Personnage p,Objet a) throws SQLException{
         ArrayList<Object> args=new ArrayList<>(List.of(p.getId(),a.getId()));
         queryUDC("UPDATE objet SET id_personnage_equipe=? WHERE id_objet=?;",args);
-        close();
+       ;
     }
 
     public static void desequip(Objet o) throws SQLException{
         ArrayList<Object> args=new ArrayList<>(List.of(o.getId()));
         queryUDC("UPDATE objet SET id_personnage_equipe=NULL WHERE id_objet=?;",args);
-        close();
+       ;
     }
 
     public static void dropObjet(Objet o,Personnage player) throws SQLException{
         ArrayList<Object> args=new ArrayList<>(List.of(player.getY(),player.getX(),player.getId(),o.getId()));
         queryUDC("UPDATE personnage SET x=?,y=? WHERE id_personnage=?;" +
                 "UPDATE objet SET id_personnage_possede=null WHERE id_objet=?;",args);
-        close();
+       ;
     }
 
     public static void addObjetCoffre(Objet o,int id) throws SQLException{
@@ -106,19 +106,19 @@ public abstract class ObjetDAO extends DAOObject {
                 Arme a=(Arme) o;
                 ArrayList<Object> args0=new ArrayList<>(List.of(a.getNomObjet(),a.getPoid(),a.getDeg(),a.getRedudeg(),a.getNbrmain(),id));
                 queryUDC("CALL add_arme(?,?,?,?,?,?);",args0);
-                close();
+               ;
                 break;
             case "jdr2dcore.Armure":
                 Armure ar=(Armure) o;
                 ArrayList<Object> argar=new ArrayList<>(List.of(ar.getNomObjet(),ar.getPoid(),ar.getDeg(),ar.getRedudeg(),ar.getTypearmure(),id));
                 queryUDC("CALL add_armure(?,?,?,?,?,?);",argar);
-                close();
+               ;
                 break;
             case "jdr2dcore.Potion":
                 Potion pot=(Potion) o;
                 ArrayList<Object> argpot=new ArrayList<>(List.of(pot.getNomObjet(),pot.getPoid(),pot.getEffets()[0],pot.getEffets()[1],pot.getEffets()[2],pot.getEffets()[3],(int) pot.getDuree().getSeconds(),id));
                 queryUDC("CALL add_potion(?,?,?,?,?,?,?,?);",argpot);
-                close();
+               ;
                 break;
             case "jdr2dcore.Coffre":
 
@@ -133,7 +133,7 @@ public abstract class ObjetDAO extends DAOObject {
         rs.next();
         int retour=rs.getInt(1);
         rs.getStatement().close();
-        close();
+       ;
         return retour;
     }
 
@@ -143,7 +143,7 @@ public abstract class ObjetDAO extends DAOObject {
         rs.next();
         int retour=rs.getInt(1);
         rs.getStatement().close();
-        close();
+       ;
         return retour;
     }
 

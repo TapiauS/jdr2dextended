@@ -224,7 +224,7 @@ public class FullLogInterface extends JFrame  {
         bottomlabel.setVisible(false);
         bottomtextfield.setVisible(false);
         bottom.setVisible(true);
-        this.setVisible(true);
+        this.setVisible(false);
         this.refresh();
     }
 

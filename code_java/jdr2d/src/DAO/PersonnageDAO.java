@@ -16,7 +16,7 @@ public abstract class PersonnageDAO extends DAOObject {
         rs.next();
         int retour=rs.getInt(1);
         rs.getStatement().close();
-        close();
+       ;
         return retour;
     }
 
@@ -28,7 +28,7 @@ public abstract class PersonnageDAO extends DAOObject {
             perso.add(PersonnageDAO.getchar(rs.getInt(1)));
         }
         rs.getStatement().close();
-        close();
+       ;
         return perso;
     }
 
@@ -38,7 +38,6 @@ public abstract class PersonnageDAO extends DAOObject {
         ArrayList<Object> args=new ArrayList<>(List.of(id));
         ResultSet rs=query("SELECT * FROM fichperso WHERE id_personnage=?;",args);
         rs.next();
-        //version trés basique a des fin de test, le gros du taf va se jouer sur la récupération des objectifs et des objets associées au personnage
         Personnage retour;
         if(rs.getInt("id_compte_utilisateur")!=0) {
            retour = new Personnage(rs.getInt("x"), rs.getInt("y"), MapDAO.getmap(rs.getInt("id_lieu")), getarme(id), getarmure(id), rs.getString("nom_personnage"), rs.getInt("pv"), getinv(id), rs.getInt("pvmax"),new ArrayList<>() , null);
@@ -74,7 +73,7 @@ public abstract class PersonnageDAO extends DAOObject {
             retour.add((Arme) ObjetDAO.getObjet(rs.getInt(1)));
         }
         rs.getStatement().close();
-        close();
+       ;
         return retour;
     }
 
@@ -89,7 +88,7 @@ public abstract class PersonnageDAO extends DAOObject {
             retour.add((Armure) ObjetDAO.getObjet(rs.getInt(1)));
         }
         rs.getStatement().close();
-        close();
+       ;
         return retour;
     }
 
@@ -101,7 +100,7 @@ public abstract class PersonnageDAO extends DAOObject {
                 retour.add(PersonnageDAO.getchar(rs.getInt(1)));
         }
         rs.getStatement().close();
-        close();
+       ;
         return retour;
     }
 
@@ -115,7 +114,6 @@ public abstract class PersonnageDAO extends DAOObject {
                 retour.add((ObjetDAO.getObjet(rs.getInt(1))));
         }
         rs.getStatement().close();
-        close();
         return retour;
     }
 
@@ -124,7 +122,7 @@ public abstract class PersonnageDAO extends DAOObject {
         queryUDC("UPDATE personnage SET x=?,y=?,id_lieu=? WHERE id_personnage=?;",args);
         ArrayList<Object> args1=new ArrayList<>(List.of(p.getpV(),p.getId()));
         queryUDC("UPDATE caracterise SET valeur=? WHERE id_personnage=? AND id_statistique=(SELECT id_statistique FROM statistique WHERE nom_statistique='pV');",args1);
-        close();
+       ;
     }
 
     public static boolean checkcharname(String name) throws SQLException {
@@ -132,7 +130,7 @@ public abstract class PersonnageDAO extends DAOObject {
         ResultSet rs=query("SELECT * FROM personnage WHERE nom_personnage=?;",args);
         boolean retour=!rs.next();
         rs.getStatement().close();
-        close();
+       ;
         return retour;
     }
 }

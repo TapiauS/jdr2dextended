@@ -17,26 +17,27 @@ public abstract class ObjectifsDAO extends DAOObject{
             ObjectifK retour=new ObjectifK((PNJ) PersonnageDAO.getchar(rs.getInt("id_personnage")));
             retour.setId(id);
             rs.getStatement().close();
-            close();
+           ;
             return retour;
         }
         if(rs.getInt("id_objet")!=0){
             ObjectifF retour=new ObjectifF(ObjetDAO.getObjet(rs.getInt("id_objet")));
             retour.setId(id);
             rs.getStatement().close();
-            close();
+           ;
             return retour;
         }
         if(rs.getInt("id_dialogue")!=0){
             ObjectifT retour=new ObjectifT(rs.getInt("id_dialogue"));
             retour.setId(id);
             rs.getStatement().close();
-            close();
+           ;
             return retour;
         }
         throw new SQLDataException("Objectif d'aucun type définie");
     }
 
+    //TODO gere les objectis talks, les objectifs find et kill sont correctements update
     public static void setobj(Personnage player,Objectifs o) throws SQLException {
         ArrayList<Object> args=new ArrayList<>(List.of(player.getId(),o.getId()));
         queryUDC("UPDATE valide SET validation=TRUE WHERE id_personnage=? AND id_objectif=?",args);
