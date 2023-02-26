@@ -28,7 +28,7 @@ public class GameInterface extends JFrame  implements KeyListener {
     private final Thread save;
 
     private FullLogInterface log;
-    private PlayerInfo fenetreInfo;
+    private PlayerInfo thisInfo;
 
     private InventaireInterface inventdealer;
 
@@ -70,6 +70,8 @@ public class GameInterface extends JFrame  implements KeyListener {
 
     private QuitMenu quitter;
 
+    private DialogueInterface dialogdealer;
+
 
 
     public GameInterface(Personnage player,Utilisateur util,FullLogInterface log) throws SQLException {
@@ -84,7 +86,7 @@ public class GameInterface extends JFrame  implements KeyListener {
         this.setLocationRelativeTo(null);
         mapload();
         //on definit tout les élements
-        fenetreInfo=new PlayerInfo(this.player,this);
+        thisInfo=new PlayerInfo(this.player,this);
         mapPanel=new MapPanel(this.player,this.pnjs,this);
         defaultInteractionInterface=new DefaultInteractionInterface(this,this.player);
         defaultInteractionInterface.setVisible(true);
@@ -96,6 +98,7 @@ public class GameInterface extends JFrame  implements KeyListener {
         menubar.setVisible(true);
         quitter = new QuitMenu(this,"Menu");
         menubar.add(quitter);
+        dialogdealer=new DialogueInterface(this,player);
         //menubar.setBounds(0,0,WINDOW_WIDTH,10);
         BufferedImage myPicture = null;
         try {
@@ -113,9 +116,10 @@ public class GameInterface extends JFrame  implements KeyListener {
         this.container=new JPanel();
         container.setBounds(0,menubar.getHeight(),WINDOW_WIDTH,WINDOWS_HEIGH);
         this.setJMenuBar(menubar);
-        container.add(fenetreInfo);
+        container.add(thisInfo);
         container.setVisible(true);
         container.add(mapPanel);
+        container.add(dialogdealer);
         container.setLayout(null);
         container.add(eventHistory);
         container.add(inventdealer);
@@ -236,6 +240,22 @@ public class GameInterface extends JFrame  implements KeyListener {
                 throw new RuntimeException(ex);
             }
         }
+        if(e.getKeyCode()==84&&!interaction){
+            for (PNJ p: this.getPnjs()) {
+                if (p.distance(player) < 1) {
+                    for (Echange ech : this.getEchanges()) {
+                        if (ech.getParleur() == p) {
+                            this.getDialogdealer().setPresentechange(ech);
+                            this.getDialogdealer().setVisible(true);
+                            this.getDialogdealer().buildObserver();
+                            setVisible(false);
+                            this.setInteraction(true);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
         revalidate();
         repaint();
     }
@@ -251,7 +271,7 @@ public class GameInterface extends JFrame  implements KeyListener {
 
     private  void mapload() throws SQLException {
         carte=player.getLieux();
-        System.out.println("nom lieu="+carte.getNomLieu());
+        System.out.println("id lieu="+carte.getId());
         MapGraph graph=new MapGraph();
 
         pnjs=new ArrayList<>();
@@ -266,7 +286,6 @@ public class GameInterface extends JFrame  implements KeyListener {
                     echanges.add(start);
             }
         }
-
         if(mapPanel!=null) {
             mapPanel.setPnjs(pnjs);
             mapPanel.setPlayer(player);
@@ -295,6 +314,10 @@ public class GameInterface extends JFrame  implements KeyListener {
     //getters
 
 
+    public DialogueInterface getDialogdealer() {
+        return dialogdealer;
+    }
+
     public FullLogInterface getLog() {
         return log;
     }
@@ -315,8 +338,8 @@ public class GameInterface extends JFrame  implements KeyListener {
         return quitter;
     }
 
-    public PlayerInfo getFenetreInfo() {
-        return fenetreInfo;
+    public PlayerInfo getthisInfo() {
+        return thisInfo;
     }
 
     public DefaultInteractionInterface getDefaultInteractionInterface() {
@@ -383,6 +406,11 @@ public class GameInterface extends JFrame  implements KeyListener {
 
     //setters
 
+
+    public void setDialogdealer(DialogueInterface dialogdealer) {
+        this.dialogdealer = dialogdealer;
+    }
+
     public void setCoffredealer(CoffreInterface coffredealer) {
         this.coffredealer = coffredealer;
     }
@@ -435,8 +463,8 @@ public class GameInterface extends JFrame  implements KeyListener {
         this.log = log;
     }
 
-    public void setFenetreInfo(PlayerInfo fenetreInfo) {
-        this.fenetreInfo = fenetreInfo;
+    public void setthisInfo(PlayerInfo thisInfo) {
+        this.thisInfo = thisInfo;
     }
 
     public void setInventdealer(InventaireInterface inventdealer) {
@@ -463,4 +491,7 @@ public class GameInterface extends JFrame  implements KeyListener {
         this.menubar = menubar;
     }
 
+    public PlayerInfo getFenetreInfo() {
+        return thisInfo;
+    }
 }

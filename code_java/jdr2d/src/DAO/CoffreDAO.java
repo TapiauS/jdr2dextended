@@ -5,38 +5,51 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import jdr2dcore.Arme;
+import jdr2dcore.Armure;
 import jdr2dcore.Coffre;
 import jdr2dcore.Objet;
 
 public abstract class CoffreDAO extends DAOObject {
     public static Coffre getcoffre(int id) throws SQLException {
         ArrayList<Object> args=new ArrayList<>(List.of(id,id));
-        ResultSet rs= DAOObject.query("SELECT * FROM objet WHERE contenant=? OR id_objet=?;",args);
-        ArrayList<Objet> contenu=new ArrayList<>();
+        ResultSet rs= DAOObject.query("SELECT id_objet,nom_objet,deg,redudeg,x,y,nbrmain,emplacement,id_lieu,poid,is_coffre(id_objet),nom_type_objet,pv,pvmax,duree FROM fichobjet WHERE contenant=? OR id_objet=?;",args);
+        //ArrayList<Objet> contenu=new ArrayList<>();
         Coffre retour=new Coffre();
-
-            while (rs.next()) {
+        while (rs.next()) {
+            if (rs.getInt("id_objet") == id) {
                 if(rs.getInt("id_lieu")!=0) {
-                    if (rs.getInt("id_objet") == id) {
-                        retour.setNomObjet(rs.getString("nom_objet")).setLieux(MapDAO.getmap(rs.getInt("id_lieu")))
-                                .setX(rs.getInt("y"))
-                                .setY(rs.getInt("x"));
-                    } else {
-                        contenu.add(ObjetDAO.getObjet(rs.getInt("id_objet")));
-                    }
+                    retour.setNomObjet(rs.getString("nom_objet")).setLieux(MapDAO.getmap(rs.getInt("id_lieu")))
+                            .setX(rs.getInt("y"))
+                            .setY(rs.getInt("x"));
+                    System.out.println("coffre posX= "+retour.getX());
+                    System.out.println("coffre posY= "+retour.getY());
                 }
                 else{
-                    if (rs.getInt("id_objet") == id) {
-                        System.out.println("je ne suis pas sencer passer par la");
-                        retour.setNomObjet(rs.getString("nom_objet"));
-                    } else {
-                        contenu.add(ObjetDAO.getObjet(rs.getInt("id_objet")));
+                    retour.setNomObjet(rs.getString("nom_objet"));
                     }
+                } else {
+                    if (rs.getBoolean("is_coffre")) {
+                        retour.add(CoffreDAO.getcoffre(rs.getInt("id_objet")));
+                    }
+                    else {
+                    switch (rs.getString("nom_type_objet")) {
+                        case "Arme":
+                            retour.add(new Arme(rs.getString("nom_objet"), rs.getInt("poid"), rs.getInt("deg"), rs.getInt("redudeg"), rs.getInt("nbrmain")).setId(rs.getInt("id_objet")));
+                            break;
+                        case "Armure":
+                            retour.add(new Armure(rs.getString("nom_objet"), rs.getInt("poid"), rs.getInt("deg"), rs.getInt("redudeg"), rs.getString("emplacement")).setId(rs.getInt("id_objet")));
+                            break;
+                        case "Potion":
+                            retour.add(PotionDAO.getpotion(rs));
+                            break;
+                        default:
+                            retour.add(new Objet(rs.getString("nom_objet"), rs.getInt("poid")));
+                    }
+                    }
+                }
             }
-        }
-        retour.setContenu(contenu);
         rs.getStatement().close();
-
         return retour;
     }
 

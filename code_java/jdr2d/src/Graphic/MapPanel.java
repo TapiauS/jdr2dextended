@@ -82,28 +82,34 @@ public class MapPanel extends JPanel {
         draw(g);
     }
     public void draw(Graphics g){
-        for (Coffre c:fenetre.getCoffres()) {
-            MapGraph graph=new MapGraph();
-            System.out.println(graph.affichmap(player.getLieux().getCarte()));
-            for (int i = 0; i < player.getLieux().getCarte()[0].length; i++) {
-                for (int j = 0; j < player.getLieux().getCarte().length; j++) {
-                    if (player.getLieux().getCarte()[j][i] == '#') {
-                        g.setColor(Color.black);
-                        g.fillRect(i * unit_size, j * unit_size, unit_size, unit_size);
-                    }
-                    if (c.getY() == j && c.getX() == i) {
-                        g.setColor(Color.CYAN);
-                        g.fillOval(i*unit_size,j*unit_size,unit_size,unit_size);
-                    }
-                    if (i == player.getX() && j == player.getY()) {
-                        g.setColor(Color.green);
+
+            //MapGraph graph=new MapGraph();
+            //System.out.println(graph.affichmap(player.getLieux().getCarte()));
+        for (int i = 0; i < player.getLieux().getCarte()[0].length; i++) {
+            for (int j = 0; j < player.getLieux().getCarte().length; j++) {
+                if (player.getLieux().getCarte()[j][i] == '#') {
+                    g.setColor(Color.black);
+                    g.fillRect(i * unit_size, j * unit_size, unit_size, unit_size);
+                }
+                if (i == player.getX() && j == player.getY()) {
+                    g.setColor(Color.green);
+                    g.fillOval(i * unit_size, j * unit_size, unit_size, unit_size);
+                }
+                for (PNJ p : pnjs) {
+                    if (i == p.getX() && j == p.getY()) {
+                        g.setColor(Color.PINK);
                         g.fillOval(i * unit_size, j * unit_size, unit_size, unit_size);
                     }
-                    for (PNJ p : pnjs) {
-                        if (i == p.getX() && j == p.getY()) {
-                            g.setColor(Color.PINK);
-                            g.fillOval(i * unit_size, j * unit_size, unit_size, unit_size);
-                        }
+                }
+            }
+        }
+
+        for (Coffre c:fenetre.getCoffres()) {
+            for (int i = 0; i < player.getLieux().getCarte()[0].length; i++) {
+                for (int j = 0; j < player.getLieux().getCarte().length; j++) {
+                    if (c.getY() == j && c.getX() == i) {
+                        g.setColor(Color.CYAN);
+                        g.fillOval(i * unit_size, j * unit_size, unit_size, unit_size);
                     }
                 }
             }
@@ -132,9 +138,6 @@ public class MapPanel extends JPanel {
             }
         }
     }
-
-
-
 
     //getters
 

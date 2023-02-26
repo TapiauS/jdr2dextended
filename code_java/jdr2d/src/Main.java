@@ -19,11 +19,8 @@ import javax.swing.*;
 public class Main {
     public static void main(String[] args) throws SQLException, InterruptedException {
         //Input.game();
-
-
         ThreadDealer test=new ThreadDealer();
         test.launch();
-
         /*SwingUtilities.invokeLater(new Runnable(){
             public void run(){
                 //On crée une nouvelle instance de notre JWindow

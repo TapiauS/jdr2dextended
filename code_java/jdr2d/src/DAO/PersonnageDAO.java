@@ -23,12 +23,11 @@ public abstract class PersonnageDAO extends DAOObject {
     public static ArrayList<Personnage> getPersonnages(Map m,Utilisateur util) throws SQLException{
         ArrayList<Object> args=new ArrayList<>(List.of(m.getId(), util.getId()));
         ArrayList<Personnage> perso=new ArrayList<>();
-        ResultSet rs=query("SELECT id_personnage FROM personnage WHERE id_lieu=? AND id_compte_utilisateur!=? OR id_compte_utilisateur IS NULL",args);
+        ResultSet rs=query("SELECT id_personnage FROM personnage WHERE id_lieu=? AND (id_compte_utilisateur!=? OR id_compte_utilisateur IS NULL)",args);
         while (rs.next()){
             perso.add(PersonnageDAO.getchar(rs.getInt(1)));
         }
         rs.getStatement().close();
-       ;
         return perso;
     }
 
@@ -122,7 +121,6 @@ public abstract class PersonnageDAO extends DAOObject {
         queryUDC("UPDATE personnage SET x=?,y=?,id_lieu=? WHERE id_personnage=?;",args);
         ArrayList<Object> args1=new ArrayList<>(List.of(p.getpV(),p.getId()));
         queryUDC("UPDATE caracterise SET valeur=? WHERE id_personnage=? AND id_statistique=(SELECT id_statistique FROM statistique WHERE nom_statistique='pV');",args1);
-       ;
     }
 
     public static boolean checkcharname(String name) throws SQLException {

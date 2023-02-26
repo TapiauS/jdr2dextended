@@ -4,8 +4,7 @@ import DAO.QueteDAO;
 import jdr2dcore.*;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -21,7 +20,7 @@ public class DialogueInterface extends InteractionInterface {
     private JButton valider;
 
     private JLabel question;
-    private JList choix;
+    private JList<Object> choix;
 
     private ArrayList<EventListenerTalk>  observerT;
 
@@ -33,13 +32,22 @@ public class DialogueInterface extends InteractionInterface {
     //TODO:pas finis du tout mais ne pas toucher tant que des PNJ ne sont pas ajouté au jeu
     public DialogueInterface(GameInterface fenetre,Personnage player){
         super(fenetre,player);
+        //this.setLayout(null);
+        this.setVisible(false);
+
         question=new JLabel();
         question.setBounds(MapPanel.MAP_WIDTH,INTERACTION_HEIGH,INTERACTION_WIDTH,INTERACTION_HEIGH/10);
+        this.add(question);
         data=new String[0];
         linkrepEchange=new Hashtable<>();
         choix=new JList<>();
-        choix.setBounds(MapPanel.MAP_WIDTH,INTERACTION_HEIGH+INTERACTION_HEIGH/10,INTERACTION_WIDTH, (int) (INTERACTION_HEIGH*0.8));
-        valider=new JButton();
+        choix.setLayoutOrientation(JList.VERTICAL_WRAP);
+        choix.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        choix.setVisibleRowCount(-1);
+        choix.setBounds(MapPanel.MAP_WIDTH, (int) (INTERACTION_HEIGH + 1.01*INTERACTION_HEIGH /10), INTERACTION_WIDTH, (int) (INTERACTION_HEIGH *0.8));
+        choix.setPreferredSize(new Dimension(INTERACTION_WIDTH,(int) (INTERACTION_HEIGH *0.8)));
+        this.add(choix);
+        valider=new JButton("Répondre");
         valider.addActionListener(e -> {
             setPresentechange(linkrepEchange.get(choix.getSelectedValue().toString()));
             for (int i=0;i<observerT.size();i++) {
@@ -67,8 +75,8 @@ public class DialogueInterface extends InteractionInterface {
             }
             refreshfocus();
         });
-        this.setVisible(false);
-        this.add(choix);
+        valider.setBounds(MapPanel.MAP_WIDTH+INTERACTION_WIDTH/3,INTERACTION_HEIGH+INTERACTION_HEIGH*9/10,INTERACTION_WIDTH/3, (int) (INTERACTION_HEIGH*0.1));
+        this.add(valider);
         }
 
 
@@ -84,18 +92,26 @@ public class DialogueInterface extends InteractionInterface {
         }
         else{
          this.presentechange=presentechange;
-         question.setText(presentechange.getParleur().getNomPersonnage()+":"+presentechange.getReponse());
-         choix.setVisible(false);
-         valider.setVisible(false);
+         fenetre.getEventHistory().addLine(presentechange.getParleur().getNomPersonnage()+":"+presentechange.getReponse());
+         this.setVisible(false);
+         fenetre.setInteraction(false);
+         fenetre.getDefaultInteractionInterface().setVisible(true);
+         refreshfocus();
         }
     }
 
-    public void setChoix(JList choix) {
+    public void setChoix(JList<Object> choix) {
         this.choix = choix;
     }
 
     public void setPlayer(Personnage player){
         this.player = player;
+        buildObserver();
+    }
+
+    //methodes
+
+    public void buildObserver(){
         this.observerT=new ArrayList<>();
         for (Quete q : player.getQueteSuivie()) {
             for (Objectifs o : q.getObjectifs() ) {
@@ -105,9 +121,6 @@ public class DialogueInterface extends InteractionInterface {
             }
         }
     }
-
-    //methodes
-
     private void udpateref(){
         data=new String[presentechange.getDialogueSuivant().length];
         linkrepEchange=new Hashtable<>();

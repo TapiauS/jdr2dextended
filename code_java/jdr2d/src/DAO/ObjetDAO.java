@@ -34,7 +34,6 @@ public abstract class ObjetDAO extends DAOObject {
         if(rs.getBoolean("is_coffre")) {
             retour = CoffreDAO.getcoffre(rs.getInt("id_objet"));
             rs.getStatement().close();
-           ;
             return retour;
         }
         if(rs.getInt("id_lieu")!=0) {

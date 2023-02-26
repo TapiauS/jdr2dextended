@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 public class MainGameGenerator {
     public static void main (String[]args) throws SQLException, IOException {
+
         //mettre des images dans la BDD et les lire
         //Verslaby.construitgroslaby(50,70,0.8);
         //Map m=MapDAO.getmap(6);
@@ -23,6 +24,7 @@ public class MainGameGenerator {
         //File f=new File("C:\\Users\\SimTa\\OneDrive\\Images\\dwarf1.png");
         //DAOObject.fillimagebank("Dwarf1","portrait",f);
         //DAOObject.readimagebank(1,"portrait");
+
 
         int id=6;
         Map tarante= MapDAO.getmap(id);
@@ -37,5 +39,6 @@ public class MainGameGenerator {
 
         PorteDAO.addPorte(sortie);
         */
+
     }
 }

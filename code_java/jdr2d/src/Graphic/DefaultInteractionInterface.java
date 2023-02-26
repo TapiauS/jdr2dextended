@@ -81,7 +81,17 @@ public class DefaultInteractionInterface extends InteractionInterface{
                     public void actionPerformed(ActionEvent e) {
                         for (PNJ p: fenetre.getPnjs()) {
                             if(p.distance(player)<2){
-                                //TODO quand DialogueInterface est finie
+                                System.out.println("distance=" + p.distance(player));
+                                for (Echange ech: fenetre.getEchanges()) {
+                                    if(ech.getParleur()==p) {
+                                        fenetre.getDialogdealer().setPresentechange(ech);
+                                        fenetre.getDialogdealer().setVisible(true);
+                                        fenetre.getDialogdealer().buildObserver();
+                                        setVisible(false);
+                                        fenetre.setInteraction(true);
+                                        break;
+                                    }
+                                }
                             }
                         }
                         refreshfocus();

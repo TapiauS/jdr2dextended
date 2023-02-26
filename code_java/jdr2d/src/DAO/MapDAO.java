@@ -48,7 +48,6 @@ public abstract class MapDAO extends DAOObject {
             retour.add(CoffreDAO.getcoffre(rs.getInt(1)));
         }
         rs.getStatement().close();
-       ;
         return retour;
     }
 
