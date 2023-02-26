@@ -7,6 +7,7 @@ import jdr2dcore.Utilisateur;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -18,11 +19,11 @@ public class ValidePictureChoice extends AbstractAction {
 
     private Personnage personnage;
 
-    private ArrayList<File> availableportrait;
+    private ArrayList<BufferedImage> availableportrait;
 
     private int indexportrait;
 
-    public ValidePictureChoice(FullLogInterface fenetre, Utilisateur util, Personnage personnage, ArrayList<File> availableportrait, String message){
+    public ValidePictureChoice(FullLogInterface fenetre, Utilisateur util, Personnage personnage, ArrayList<BufferedImage> availableportrait, String message){
         super(message);
         this.fenetre=fenetre;
         this.util=util;

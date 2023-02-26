@@ -1,5 +1,6 @@
 package Control;
 
+import DAO.ImageDAO;
 import DAO.PersonnageDAO;
 import Graphic.FullLogInterface;
 import jdr2dcore.Personnage;
@@ -60,16 +61,17 @@ public class FirstCharButton extends AbstractAction {
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
-                File directorie=new File("Portraits");
-                ArrayList<File> availableportraits = new ArrayList<>(Arrays.asList(Objects.requireNonNull(directorie.listFiles())));
-
-                BufferedImage myPicture = null;
+                //File directorie=new File("Portraits");
+                ArrayList<BufferedImage> availableportraits;
                 try {
-                    myPicture = ImageIO.read(availableportraits.get(0));
+                    availableportraits = ImageDAO.loadfullimagebank("portrait");
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
-                fenetre.getToplabel().setIcon(new ImageIcon(myPicture));
+                if(availableportraits.get(0)!=null)
+                    fenetre.getToplabel().setIcon(new ImageIcon(availableportraits.get(0)));
                 fenetre.getToplabel().setText("");
                 fenetre.getToptextfield().setVisible(false);
                 fenetre.getBottomtextfield().setVisible(false);

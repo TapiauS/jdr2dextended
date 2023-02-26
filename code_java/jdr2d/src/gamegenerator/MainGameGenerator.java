@@ -1,17 +1,42 @@
 package gamegenerator;
 
-import DAO.DAOObject;
-import DAO.MapDAO;
-import DAO.PorteDAO;
-import jdr2dcore.Map;
-import jdr2dcore.Porte;
+import DAO.ImageDAO;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.Objects;
 
 public class MainGameGenerator {
     public static void main (String[]args) throws SQLException, IOException {
+
+        /*Path target= Paths.get("C:\\Users\\SimTa\\Documents\\Projet_afpa\\jdr2d\\code_java\\jdr2d\\Portraits\\test.png");
+
+        InputStream is = new ByteArrayInputStream(DAOObject.readoneimage(1,"portrait"));
+        BufferedImage bi = ImageIO.read(is);
+        Graphics2D g = bi.createGraphics();
+        g.setFont(new Font("TimesRoman", Font.BOLD, 30));
+        g.setColor(Color.BLACK);
+        g.drawString("Hello World", 100, 100);
+
+        // save it
+        ImageIO.write(bi, "png", target.toFile());
+
+*/
+        File sourcerepo=new File("Portraits");
+
+        for (File f: Objects.requireNonNull(sourcerepo.listFiles())) {
+            for (int i=1;i<9;i++) {
+                Path target = Paths.get("C:\\Users\\SimTa\\OneDrive\\Images\\" + f.getName());
+                BufferedImage bi = ImageDAO.readoneimage(i, "portrait");
+                ImageIO.write(bi, "png", target.toFile());
+                System.out.println("J'ai fini une image");
+            }
+        }
 
         //mettre des images dans la BDD et les lire
         //Verslaby.construitgroslaby(50,70,0.8);
@@ -23,7 +48,7 @@ public class MainGameGenerator {
         //DAOObject.queryUDC("ALTER TABLE personnage ADD FOREIGN KEY(id_portrait) REFERENCES portrait(id_portrait);",new ArrayList<>());
         //File f=new File("C:\\Users\\SimTa\\OneDrive\\Images\\dwarf1.png");
         //DAOObject.fillimagebank("Dwarf1","portrait",f);
-        //DAOObject.readimagebank(1,"portrait");
+
 
 
         int id=6;

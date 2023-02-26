@@ -1,19 +1,18 @@
 package DAO;
 
-import java.io.File;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.sql.*;
 import java.util.Properties;
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.lang.reflect.Method;
 
     abstract public class DAOObject {
-        private static String filename = "app.config";
-        private static Properties config = null;
-        private static Connection conn = null;
+        protected static String filename = "app.config";
+        protected static Properties config = null;
+        protected static Connection conn = null;
 
         public static void close() throws SQLException {
             if(conn!=null) {
@@ -72,35 +71,6 @@ import java.lang.reflect.Method;
 
             return pst.executeQuery();
         }
-
-
-        /*public static void fillimagebank(String imgname,String imgebankname, File img) throws SQLException, IOException {
-            getConnection(filename,false);
-            conn.setAutoCommit(false);
-            FileInputStream fis=new FileInputStream(img);
-            PreparedStatement ps=conn.prepareStatement("INSERT INTO "+imgebankname+"(nom_"+imgebankname+",image) VALUES (?,?)");
-            ps.setString(1,imgname);
-            ps.setBinaryStream(2,fis,img.length());
-            ps.executeUpdate();
-            ps.close();
-            fis.close();
-            conn.setAutoCommit(true);
-        }
-
-        public static byte[] readimagebank(int id,String imgebankname) throws SQLException, IOException {
-            getConnection(filename,false);
-            conn.setAutoCommit(false);
-            PreparedStatement ps=conn.prepareStatement("SELECT image FROM "+imgebankname+" WHERE id_"+imgebankname+"=?");
-            ps.setInt(1,id);
-            ResultSet rs=ps.executeQuery();
-            rs.next();
-            byte[] imgBytes = rs.getBytes(1);
-            rs.close();
-            ps.close();
-            conn.setAutoCommit(true);
-            return imgBytes;
-        }
-        */
 
         public static void queryUDC(String sql, ArrayList<Object> args) throws SQLException{
             PreparedStatement pst = createPreparedStatement(sql);

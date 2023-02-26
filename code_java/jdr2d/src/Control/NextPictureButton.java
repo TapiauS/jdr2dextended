@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class NextPictureButton extends AbstractAction {
 
@@ -20,14 +21,14 @@ public class NextPictureButton extends AbstractAction {
 
     private Utilisateur util;
 
-    private ArrayList<File> availableportrait;
+    private Hashtable<Integer,BufferedImage> availableportrait;
 
     private int indexportrait;
 
     private ValidePictureChoice observer;
 
 
-    public NextPictureButton(FullLogInterface fenetre,Personnage nomperso,Utilisateur util,ArrayList<File> availableportrait,String message,ValidePictureChoice observer){
+    public NextPictureButton(FullLogInterface fenetre,Personnage nomperso,Utilisateur util,Hashtable<Integer,BufferedImage> availableportrait,String message,ValidePictureChoice observer){
         super(message);
         this.fenetre=fenetre;
         this.personnage=nomperso;
@@ -45,11 +46,7 @@ public class NextPictureButton extends AbstractAction {
             indexportrait=0;
         observer.update(indexportrait);
         BufferedImage myPicture = null;
-        try {
-            myPicture = ImageIO.read(availableportrait.get(indexportrait));
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+        myPicture = availableportrait.get(availableportrait.keySet().indexportrait);
         fenetre.getToplabel().setIcon(new ImageIcon(myPicture));
         fenetre.refresh();
     }
