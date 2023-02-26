@@ -40,13 +40,14 @@ public class NextPictureButton extends AbstractAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        ArrayList<Integer> keystoarray= (ArrayList<Integer>) availableportrait.keySet().stream().toList();
         if(indexportrait+1<availableportrait.size())
             indexportrait++;
         else
             indexportrait=0;
         observer.update(indexportrait);
         BufferedImage myPicture = null;
-        myPicture = availableportrait.get(availableportrait.keySet().indexportrait);
+        myPicture = availableportrait.get(keystoarray.get(indexportrait));
         fenetre.getToplabel().setIcon(new ImageIcon(myPicture));
         fenetre.refresh();
     }
