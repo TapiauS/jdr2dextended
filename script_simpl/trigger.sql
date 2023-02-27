@@ -167,8 +167,33 @@ CREATE OR REPLACE TRIGGER new_char
 
 
 
+CREATE OR REPLACE FUNCTION deletechar() RETURNS TRIGGER AS $$
+DECLARE
+idobjetinventaire INT [];
+id INT;
+idobjetequipement INT [];
+BEGIN
+    SELECT ARRAY_AGG(id_objet) FROM objet WHERE id_personnage_possede=OLD.id_personnage INTO idobjetinventaire;
+    SELECT ARRAY_AGG(id_objet) FROM objet WHERE id_personnage_equipe=OLD.id_personnage INTO idobjetequipement;
+    RAISE NOTICE 'idobjetequipement=%',idobjetequipement;
+    IF idobjetinventaire!=NULL THEN
+        FOREACH id IN ARRAY idobjetinventaire LOOP
+            UPDATE objet SET id_personnage_possede=NULL WHERE id_objet=id;
+        END LOOP;
+    END IF;
+    IF idobjetequipement!=NULL THEN
+        FOREACH id IN ARRAY idobjetequipement LOOP
+            UPDATE objet SET id_personnage_equipe=NULL WHERE id_objet=id;
+            UPDATE objet SET id_personnage_possede=NULL WHERE id_objet=id;
+        END LOOP;
+    END IF;
+    RETURN OLD; 
+END;
+$$ LANGUAGE plpgsql;
 
-
+CREATE OR REPLACE TRIGGER del_char
+    BEFORE DELETE ON personnage
+    FOR EACH ROW EXECUTE PROCEDURE deletechar();
 
 
 
