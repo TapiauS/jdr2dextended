@@ -14,9 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.*;
 
 public class FirstCharButton extends AbstractAction {
 
@@ -62,7 +60,7 @@ public class FirstCharButton extends AbstractAction {
                     throw new RuntimeException(ex);
                 }
                 //File directorie=new File("Portraits");
-                ArrayList<BufferedImage> availableportraits;
+                Hashtable<Integer,BufferedImage> availableportraits;
                 try {
                     availableportraits = ImageDAO.loadfullimagebank("portrait");
                 } catch (SQLException ex) {
@@ -70,8 +68,9 @@ public class FirstCharButton extends AbstractAction {
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
-                if(availableportraits.get(0)!=null)
-                    fenetre.getToplabel().setIcon(new ImageIcon(availableportraits.get(0)));
+                List<Integer> ids=  availableportraits.keySet().stream().toList();
+                if(ids.get(0)!=null)
+                    fenetre.getToplabel().setIcon(new ImageIcon(availableportraits.get(ids.get(0))));
                 fenetre.getToplabel().setText("");
                 fenetre.getToptextfield().setVisible(false);
                 fenetre.getBottomtextfield().setVisible(false);

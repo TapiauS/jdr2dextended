@@ -1,5 +1,7 @@
 package DAO;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +11,16 @@ import jdr2dcore.*;
 
 public abstract class PersonnageDAO extends DAOObject {
 
+    public static BufferedImage getcharportrait(int id) throws SQLException, IOException {
+        ResultSet rs=query("SELECT id_portrait FROM personnage WHERE id_personnage=?;",new ArrayList<>(List.of(id)));
+        if(rs.next()) {
+            BufferedImage retour = ImageDAO.readoneimage(rs.getInt(1), "portrait");
+            return retour;
+        }
+        else {
+            throw new SQLDataException("Portrait indisponible");
+        }
+    }
     public static int createchar(String nom, Utilisateur util) throws SQLException {
         ArrayList<Object> args=new ArrayList<>(List.of(nom,util.getId()));
         queryUDC("INSERT INTO personnage(nom_personnage,id_compte_utilisateur,id_lieu) VALUES (?,?,(SELECT id_lieu FROM lieu WHERE nom_lieu='Tarante'));",args);

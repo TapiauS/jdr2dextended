@@ -22,7 +22,7 @@ public class Main {
         ThreadDealer test=new ThreadDealer();
         test.launch();
         /*SwingUtilities.invokeLater(new Runnable(){
-            public void run(){
+        t    public void run(){
                 //On crée une nouvelle instance de notre JWindow
                 FullLogInterface window = new FullLogInterface();
                 window.setVisible(true);//On la rend visible

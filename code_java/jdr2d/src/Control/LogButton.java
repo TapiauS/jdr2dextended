@@ -31,7 +31,11 @@ public class LogButton extends AbstractAction {
             if(ex instanceof SQLDataException) {
                 this.fenetre.setToplabel(new JLabel("Pseudo ou mot de passe incorrect, réessayez"));
                 this.fenetre.refresh();
+                JOptionPane.showMessageDialog(null, "Une erreur de pseudo:");
                 return;
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Une erreur :");
             }
         }
         this.fenetre.setUtil(util);

@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 public class NextPictureButton extends AbstractAction {
 
@@ -40,7 +41,7 @@ public class NextPictureButton extends AbstractAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        ArrayList<Integer> keystoarray= (ArrayList<Integer>) availableportrait.keySet().stream().toList();
+        List<Integer> keystoarray=  availableportrait.keySet().stream().toList();
         if(indexportrait+1<availableportrait.size())
             indexportrait++;
         else

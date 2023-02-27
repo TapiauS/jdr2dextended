@@ -30,12 +30,7 @@ public class MainGameGenerator {
         File sourcerepo=new File("Portraits");
 
         for (File f: Objects.requireNonNull(sourcerepo.listFiles())) {
-            for (int i=1;i<9;i++) {
-                Path target = Paths.get("C:\\Users\\SimTa\\OneDrive\\Images\\" + f.getName());
-                BufferedImage bi = ImageDAO.readoneimage(i, "portrait");
-                ImageIO.write(bi, "png", target.toFile());
-                System.out.println("J'ai fini une image");
-            }
+            ImageDAO.fillimagebank(f.getName(),"portrait",f);
         }
 
         //mettre des images dans la BDD et les lire

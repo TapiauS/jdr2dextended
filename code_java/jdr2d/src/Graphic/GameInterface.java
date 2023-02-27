@@ -102,7 +102,7 @@ public class GameInterface extends JFrame  implements KeyListener {
         //menubar.setBounds(0,0,WINDOW_WIDTH,10);
         BufferedImage myPicture = null;
         try {
-            myPicture = ImageIO.read(new File("Portraits/dwarf2.png"));
+            myPicture = PersonnageDAO.getcharportrait(player.getId());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -112,7 +112,7 @@ public class GameInterface extends JFrame  implements KeyListener {
         portrait.setVisible(true);
         //on définit la fenétre globale et lui donne tout les élements
         //JScrollPane contevent=new JScrollPane(eventHistory);
-        //contevent.setVisible(true);
+
         this.container=new JPanel();
         container.setBounds(0,menubar.getHeight(),WINDOW_WIDTH,WINDOWS_HEIGH);
         this.setJMenuBar(menubar);
@@ -248,7 +248,7 @@ public class GameInterface extends JFrame  implements KeyListener {
                             this.getDialogdealer().setPresentechange(ech);
                             this.getDialogdealer().setVisible(true);
                             this.getDialogdealer().buildObserver();
-                            setVisible(false);
+                            this.defaultInteractionInterface.setVisible(false);
                             this.setInteraction(true);
                             break;
                         }
