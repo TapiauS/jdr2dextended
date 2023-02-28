@@ -130,7 +130,7 @@ public class GameInterface extends JFrame  implements KeyListener {
         container.setBackground(Color.black);
         this.setContentPane(container);
         this.setResizable(false);
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         this.setVisible(true);
         save = new Thread(() -> {
             try {
