@@ -13,6 +13,7 @@ public class ThreadDealer implements EventListenerWindow{
     private  Personnage player;
     private Utilisateur util;
 
+    private Thread pnjloop;
 
     //getters
 
@@ -47,7 +48,8 @@ public class ThreadDealer implements EventListenerWindow{
         this.util=fullLogInterface.getUtil();
         GameInterface game = new GameInterface(player,util,fullLogInterface);
         fullLogInterface.reset();
-
     }
+
+
 
 }

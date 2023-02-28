@@ -1,5 +1,6 @@
 package Graphic;
 
+import Control.PNJThread;
 import DAO.*;
 import jdr2dcore.*;
 
@@ -72,6 +73,8 @@ public class GameInterface extends JFrame  implements KeyListener {
 
     private DialogueInterface dialogdealer;
 
+    private PNJThread ias;
+
 
 
     public GameInterface(Personnage player,Utilisateur util,FullLogInterface log) throws SQLException {
@@ -85,6 +88,7 @@ public class GameInterface extends JFrame  implements KeyListener {
         this.setSize(new Dimension(WINDOW_WIDTH,WINDOWS_HEIGH));
         this.setLocationRelativeTo(null);
         mapload();
+        ias=new PNJThread(pnjs,this);
         //on definit tout les élements
         thisInfo=new PlayerInfo(this.player,this);
         mapPanel=new MapPanel(this.player,this.pnjs,this);
@@ -152,6 +156,7 @@ public class GameInterface extends JFrame  implements KeyListener {
             public void windowClosing(WindowEvent e) {
                 try {
                     PersonnageDAO.updatedatabase(player);
+                    ias.setSwitchmap(false);
                     System.out.println("Sauvegarde closing");
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
@@ -301,7 +306,11 @@ public class GameInterface extends JFrame  implements KeyListener {
                 if(res==0){
                     p.traverse(player);
                     try {
+                        ias.setSwitchmap(false);
                         mapload();
+                        ias.setSwitchmap(true);
+                        ias.setPnjs(pnjs);
+                        ias.start();
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
