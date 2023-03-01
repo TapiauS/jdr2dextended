@@ -5,15 +5,16 @@ import Control.PNJThread;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class PNJ extends Personnage {
     protected boolean nomme;
 
     protected Point posinit;
 
-    private Instant nextmactiontime;
-
     private Instant respawntime;
+    private boolean interact;
+
 
     //getters
 
@@ -22,9 +23,6 @@ public class PNJ extends Personnage {
         return nomme;
     }
 
-    public Instant getNextmactiontime() {
-        return nextmactiontime;
-    }
 
     public Instant getRespawntime() {
         return respawntime;
@@ -38,7 +36,16 @@ public class PNJ extends Personnage {
         return posinit;
     }
 
+    public boolean isInteract() {
+        return interact;
+    }
+
+
     //setters
+
+    public void setInteract(boolean interact) {
+        this.interact = interact;
+    }
 
     public PNJ setnomme(boolean nomme) {
         this.nomme = nomme;
@@ -56,10 +63,6 @@ public class PNJ extends Personnage {
 
     public void setPosinit(Point posinit) {
         this.posinit = posinit;
-    }
-
-    public void setNextmactiontime(Instant nextmactiontime) {
-        this.nextmactiontime = nextmactiontime;
     }
 
     public void setRespawntime(Instant respawntime) {
@@ -81,7 +84,9 @@ public class PNJ extends Personnage {
     public PNJ(int x, int y, Map lieux, ArrayList<Arme> arme, ArrayList<Armure> armure, String nomPersonnage, int pV, Coffre inventaire, int pVmax, Race race, Boolean nomme){
         super(x, y, lieux, arme, armure, nomPersonnage, pV, inventaire, pVmax,new ArrayList<>(), race);
         this.setnomme(nomme).setposinit(new Point(x,y,lieux));
-        this.nextmactiontime=Instant.now().plus(PNJThread.WALKSTEPDURATIONS, ChronoUnit.SECONDS);
+        Random rand=new Random();
+        this.interact=false;
+        //int randomdelayms=rand.nextInt(100);.plus(randomdelayms,ChronoUnit.MILLIS)
         this.respawntime=null;
     }
 

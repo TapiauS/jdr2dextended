@@ -1,9 +1,12 @@
 package Control;
 
+import DAO.PersonnageDAO;
 import Graphic.GameInterface;
 import jdr2dcore.Direction;
 import jdr2dcore.PNJ;
+import jdr2dcore.Personnage;
 
+import java.sql.SQLException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -19,9 +22,9 @@ public class PNJThread extends Thread{
 
     private GameInterface fenetre;
 
-    public static final long WALKSTEPDURATIONS =1;
+    public static final long WALKSTEPDURATIONSMS =500;
 
-    public static final long DEATHRESPAWNDELAYSEC =10;
+    public static final long DEATHRESPAWNDELAYMSEC =10000;
 
 
     public PNJThread(ArrayList<PNJ> pnjs,GameInterface fenetre){
@@ -47,7 +50,7 @@ public class PNJThread extends Thread{
         return switchmap;
     }
 
-    //setters
+
 
     public void setPnjs(ArrayList<PNJ> pnjs) {
         this.pnjs = pnjs;
@@ -83,27 +86,65 @@ public class PNJThread extends Thread{
 
     public void ia(){
         for (PNJ p: pnjs) {
-            if(p.getpV()>0&& Instant.now().isAfter(p.getNextmactiontime())){
+            if(p.getpV()>0&&!p.isInteract()){
                 randommoove(p);
-                p.setNextmactiontime(Instant.now().plus(WALKSTEPDURATIONS, ChronoUnit.SECONDS));
+                try {
+                    System.out.println("j'attend");
+                    sleep(WALKSTEPDURATIONSMS);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                fenetre.repaint();
+                fenetre.revalidate();
             }
-            System.out.println("pnj pv="+p.getpV());
-            if (p.getpV()<=0&&p.getRespawntime()==null){
-                p.setRespawntime(Instant.now().plus(DEATHRESPAWNDELAYSEC,ChronoUnit.SECONDS));
-            } else if (p.getpV()<=0&&Instant.now().isAfter(p.getRespawntime())) {
-                p.setPvmax(20);
-                p.setpV(15);
+            else if(p.getpV()<=0&&!p.isInteract()) {
+                respawn(p);
+                fenetre.repaint();
+                fenetre.revalidate();
             }
         }
-        fenetre.repaint();
-        fenetre.revalidate();
+        //System.out.println("ou suis je ???");
     }
 
     public void run(){
-        while (switchmap){
+        while (this.switchmap){
             ia();
         }
+        System.out.println("Je sors !!!!!!!!!!!!");
     }
 
+    public void respawn(PNJ p) {
+        p.setInteract(true);
+        Thread t = new Thread(() -> {
+            //super.run();
+            for (int i = 0; i < DEATHRESPAWNDELAYMSEC ; i++) {
+                if(isSwitchmap()) {
+                    try {
+                        sleep(1);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                else {
+                    p.setpV(p.getpVmax());
+                    try {
+                        PersonnageDAO.updatepnj(p);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                    p.setInteract(false);
+                    return;
+                }
+            }
+            p.setpV(p.getpVmax());
+            try {
+                PersonnageDAO.updatepnj(p);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            p.setInteract(false);
+        });
+        t.start();
+    }
 
 }

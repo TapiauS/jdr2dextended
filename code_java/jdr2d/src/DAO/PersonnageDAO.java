@@ -64,6 +64,13 @@ public abstract class PersonnageDAO extends DAOObject {
         return retour;
     }
 
+    public static void updatepnj(PNJ p) throws SQLException {
+        ArrayList<Object> args=new ArrayList<>(List.of(p.getpV(),p.getId()));
+        System.out.println("pnj hp= "+p.getpV());
+        System.out.println("pnj id= "+p.getId());
+        queryUDC("UPDATE caracterise SET valeur=? WHERE id_personnage=? AND id_statistique=(SELECT id_statistique FROM statistique WHERE nom_statistique='pV');",args);
+    }
+
     public static Coffre getinv(int id) throws SQLException{
         ArrayList<Object> args=new ArrayList<>(List.of(id));
         Coffre invent=new Coffre();

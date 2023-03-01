@@ -80,7 +80,7 @@ public class DefaultInteractionInterface extends InteractionInterface{
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         for (PNJ p: fenetre.getPnjs()) {
-                            if(p.distance(player)<2){
+                            if(p.distance(player)<1&&p.getpV()>0){
                                 System.out.println("distance=" + p.distance(player));
                                 for (Echange ech: fenetre.getEchanges()) {
                                     if(ech.getParleur()==p) {

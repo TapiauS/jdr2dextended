@@ -82,7 +82,6 @@ public class MapPanel extends JPanel {
         draw(g);
     }
     public void draw(Graphics g){
-
             //MapGraph graph=new MapGraph();
             //System.out.println(graph.affichmap(player.getLieux().getCarte()));
         for (int i = 0; i < player.getLieux().getCarte()[0].length; i++) {
@@ -96,7 +95,7 @@ public class MapPanel extends JPanel {
                     g.fillOval(i * unit_size, j * unit_size, unit_size, unit_size);
                 }
                 for (PNJ p : pnjs) {
-                    if (i == p.getX() && j == p.getY()) {
+                    if (i == p.getX() && j == p.getY()&&p.getpV()>0) {
                         g.setColor(Color.PINK);
                         g.fillOval(i * unit_size, j * unit_size, unit_size, unit_size);
                     }

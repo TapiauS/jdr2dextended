@@ -103,18 +103,18 @@ public class GameInterface extends JFrame  implements KeyListener {
         quitter = new QuitMenu(this,"Menu");
         menubar.add(quitter);
         dialogdealer=new DialogueInterface(this,player);
-        //menubar.setBounds(0,0,WINDOW_WIDTH,10);
         BufferedImage myPicture = null;
         try {
             myPicture = PersonnageDAO.getcharportrait(player.getId());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        //myPicture=myPicture.getSubimage(0,0,WINDOW_WIDTH-MapPanel.MAP_WIDTH,WINDOWS_HEIGH-MapPanel.MAP_HEIGH);
         portrait = new JLabel(new ImageIcon(myPicture));
         portrait.setBounds(MapPanel.MAP_WIDTH,MapPanel.MAP_HEIGH,WINDOW_WIDTH-MapPanel.MAP_WIDTH,WINDOWS_HEIGH-MapPanel.MAP_HEIGH);
         portrait.setVisible(true);
-        //on définit la fenétre globale et lui donne tout les élements
+        /* on définit la fenétre globale et lui donne tout les élements */
+
+
         //JScrollPane contevent=new JScrollPane(eventHistory);
 
         this.container=new JPanel();
@@ -134,13 +134,11 @@ public class GameInterface extends JFrame  implements KeyListener {
         container.setBackground(Color.black);
         this.setContentPane(container);
         this.setResizable(false);
-        this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setVisible(true);
         save = new Thread(() -> {
             try {
-                //PersonnageDAO.updatedatabase(player);
                 DAOObject.close();
-                System.out.println("on sauvegarde");
             } catch (SQLException e) {
                 //TODO gérer cette exception
                 throw new RuntimeException(e);
@@ -155,9 +153,12 @@ public class GameInterface extends JFrame  implements KeyListener {
             @Override
             public void windowClosing(WindowEvent e) {
                 try {
+                    System.out.println("On sauvegarde en fermant");
                     PersonnageDAO.updatedatabase(player);
                     ias.setSwitchmap(false);
-                    System.out.println("Sauvegarde closing");
+                    for (PNJ ps: pnjs) {
+                        PersonnageDAO.updatepnj(ps);
+                    }
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -247,7 +248,8 @@ public class GameInterface extends JFrame  implements KeyListener {
         }
         if(e.getKeyCode()==84&&!interaction){
             for (PNJ p: this.getPnjs()) {
-                if (p.distance(player) < 1) {
+                if (p.distance(player) < 1&&p.getpV()>0) {
+                    p.setInteract(true);
                     for (Echange ech : this.getEchanges()) {
                         if (ech.getParleur() == p) {
                             this.getDialogdealer().setPresentechange(ech);
@@ -258,6 +260,22 @@ public class GameInterface extends JFrame  implements KeyListener {
                             break;
                         }
                     }
+                }
+            }
+        }
+        if(e.getKeyCode()==70&&!interaction){
+            for (PNJ p: this.getPnjs()) {
+                if (p.distance(player) < 1 && p.getpV() > 0) {
+                    p.setInteract(true);
+                    Interaction inter = new Interaction(player, p);
+                    if (inter.combat()) {
+                        eventHistory.addLine(player.getNomPersonnage() + " a vaincu " + p.getNomPersonnage());
+                    } else {
+                        eventHistory.addLine(player.getNomPersonnage() + " a ete tué");
+                    }
+                    p.setInteract(false);
+
+                    thisInfo.update();
                 }
             }
         }
@@ -305,12 +323,18 @@ public class GameInterface extends JFrame  implements KeyListener {
                 int res=JOptionPane.showConfirmDialog(this,"Il y a une porte ici voulez vous traverser?","Porte",JOptionPane.YES_NO_OPTION);
                 if(res==0){
                     p.traverse(player);
+                    for (PNJ pn: pnjs) {
+                        if (pn.isNomme()) {
+                            try {
+                                PersonnageDAO.updatepnj(pn);
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
                     try {
-                        ias.setSwitchmap(false);
                         mapload();
-                        ias.setSwitchmap(true);
                         ias.setPnjs(pnjs);
-                        ias.start();
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }

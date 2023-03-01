@@ -96,6 +96,7 @@ public class DialogueInterface extends InteractionInterface {
          this.setVisible(false);
          fenetre.setInteraction(false);
          fenetre.getDefaultInteractionInterface().setVisible(true);
+         presentechange.getParleur().setInteract(false);
          refreshfocus();
         }
     }
