@@ -1,9 +1,6 @@
 package jdr2dcore;
 
-import Control.PNJThread;
-
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -12,7 +9,6 @@ public class PNJ extends Personnage {
 
     protected Point posinit;
 
-    private Instant respawntime;
     private boolean interact;
 
 
@@ -23,10 +19,6 @@ public class PNJ extends Personnage {
         return nomme;
     }
 
-
-    public Instant getRespawntime() {
-        return respawntime;
-    }
 
     public boolean isnomme() {
         return nomme;
@@ -65,9 +57,6 @@ public class PNJ extends Personnage {
         this.posinit = posinit;
     }
 
-    public void setRespawntime(Instant respawntime) {
-        this.respawntime = respawntime;
-    }
 
     //builders
 
@@ -87,7 +76,6 @@ public class PNJ extends Personnage {
         Random rand=new Random();
         this.interact=false;
         //int randomdelayms=rand.nextInt(100);.plus(randomdelayms,ChronoUnit.MILLIS)
-        this.respawntime=null;
     }
 
 

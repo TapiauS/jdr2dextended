@@ -90,7 +90,7 @@ public class MapPanel extends JPanel {
                     g.setColor(Color.black);
                     g.fillRect(i * unit_size, j * unit_size, unit_size, unit_size);
                 }
-                if (i == player.getX() && j == player.getY()) {
+                if (i == player.getX() && j == player.getY()&&player.getpV()>0) {
                     g.setColor(Color.green);
                     g.fillOval(i * unit_size, j * unit_size, unit_size, unit_size);
                 }

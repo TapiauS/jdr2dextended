@@ -16,19 +16,11 @@ public class ThreadDealer implements EventListenerWindow{
     private Thread pnjloop;
 
     //getters
-
-
     public Personnage getPlayer() {
         return player;
     }
 
-
-
-
     //setters
-
-
-
 
     public void setPlayer(Personnage player) {
         this.player = player;
@@ -41,12 +33,12 @@ public class ThreadDealer implements EventListenerWindow{
         window.setVisible(true);//On la rend visible
     }
 
-
     @Override
     public void update(FullLogInterface fullLogInterface) throws InterruptedException, SQLException {
         this.player=fullLogInterface.getPerso();
         this.util=fullLogInterface.getUtil();
         GameInterface game = new GameInterface(player,util,fullLogInterface);
+        player.setFenetre(game);
         fullLogInterface.reset();
     }
 

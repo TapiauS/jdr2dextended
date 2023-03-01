@@ -1,8 +1,10 @@
 package jdr2dcore;
 
+import Control.PersoThread;
 import DAO.ObjectifsDAO;
 import DAO.ObjetDAO;
 import DAO.QueteDAO;
+import Graphic.GameInterface;
 
 import java.sql.SQLException;
 import java.time.Duration;
@@ -26,9 +28,15 @@ public class Personnage extends Point implements EventListenerQuete {
 
     protected ArrayList<EventListenerF> observerF ;
 
+    private GameInterface fenetre;
+
 
     //getters
 
+
+    public GameInterface getFenetre() {
+        return fenetre;
+    }
 
     public int getId() {
         return id;
@@ -80,6 +88,12 @@ public class Personnage extends Point implements EventListenerQuete {
     //setters
 
 
+    public void setFenetre(GameInterface fenetre) {
+        this.fenetre = fenetre;
+        if(this.pV<=0)
+            PersoThread.respawn(this);
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -101,6 +115,8 @@ public class Personnage extends Point implements EventListenerQuete {
         else {
             this.pV = pV;
         }
+        if(this.pV<=0&&fenetre!=null)
+            PersoThread.respawn(this);
         return this;
     }
 
