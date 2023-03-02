@@ -3,6 +3,7 @@ package Control;
 import DAO.PersonnageDAO;
 import Graphic.GameInterface;
 import jdr2dcore.Direction;
+import jdr2dcore.Interaction;
 import jdr2dcore.PNJ;
 import jdr2dcore.Personnage;
 
@@ -52,6 +53,7 @@ public class PersoThread extends Thread{
 
     public void setPnjs(ArrayList<PNJ> pnjs) {
         this.pnjs = pnjs;
+
     }
 
     public void setIaPnj(Thread iaPnj) {
@@ -64,25 +66,98 @@ public class PersoThread extends Thread{
 
     private void randommoove(PNJ perso) {
         Random rand = new Random();
-        int nextdepl = rand.nextInt(4);
-        switch (nextdepl) {
-            case 0:
-                perso.depl(Direction.NORD);
-                break;
-            case 1:
-                perso.depl(Direction.EST);
-                break;
-            case 2:
-                perso.depl(Direction.SUD);
-            case 3:
-                perso.depl(Direction.OUEST);
+        Personnage player=fenetre.getPlayer();
+        if(fenetre.getPlayer().distance(perso)<1&&!perso.isNomme()&&!fenetre.isInteraction()){
+            fenetre.getEventHistory().addLine("un "+perso.getNomPersonnage()+" vous attaque :");
+            Interaction inter=new Interaction(fenetre.getPlayer(),perso);
+            if(inter.combat()) {
+                fenetre.getEventHistory().addLine(fenetre.getPlayer().getNomPersonnage() + " a vaincu un " + perso.getNomPersonnage());
+                fenetre.getFenetreInfo().update();
+            }
+            else {
+                fenetre.getEventHistory().addLine(fenetre.getPlayer().getNomPersonnage() + " a ete vaincu par un " + perso.getNomPersonnage());
+                fenetre.getFenetreInfo().update();
+            }
         }
+        if(!perso.isNomme()&&perso.distance(player)<4&&!fenetre.isInteraction()){
+            int moov=rand.nextInt(2);
+            if(perso.getX()>player.getX()&&perso.getY()>player.getY()){
+                if(moov==0){
+                    perso.depl(Direction.OUEST);
+                }
+                else {
+                    perso.depl(Direction.NORD);
+                }
+                return;
+            }
+            if(perso.getX()<player.getX()&&perso.getY()>player.getY()){
+                if(moov==0){
+                    perso.depl(Direction.EST);
+                }
+                else {
+                    perso.depl(Direction.NORD);
+                }
+                return;
+            }
+            if(perso.getX()<player.getX()&&perso.getY()<player.getY()){
+                if(moov==0){
+                    perso.depl(Direction.EST);
+                }
+                else {
+                    perso.depl(Direction.SUD);
+                }
+                return;
+            }
+            if(perso.getX()>player.getX()&&perso.getY()<player.getY()){
+                if(moov==0){
+                    perso.depl(Direction.OUEST);
+                }
+                else {
+                    perso.depl(Direction.SUD);
+                }
+                return;
+            }
+            if(perso.getX()== player.getX()&&perso.getY()>player.getY()) {
+                perso.depl(Direction.NORD);
+                return;
+            }
+            if (perso.getX()==player.getX()&&perso.getY()<player.getY()) {
+                perso.depl(Direction.SUD);
+                return;
+            }
+            if(perso.getY()==player.getY()&&perso.getX()>player.getX()) {
+                perso.depl(Direction.EST);
+                return;
+            }
+            if(perso.getY()==player.getY()&&perso.getX()<player.getX()){
+                perso.depl(Direction.OUEST);
+            }
+        }
+        else{
+            int nextdepl = rand.nextInt(4);
+            switch (nextdepl) {
+                case 0:
+                    perso.depl(Direction.NORD);
+                    break;
+                case 1:
+                    perso.depl(Direction.EST);
+                    break;
+                case 2:
+                    perso.depl(Direction.SUD);
+                    break;
+                case 3:
+                    perso.depl(Direction.OUEST);
+                    break;
+            }
+        }
+
     }
 
 
 
 
     public void ia(){
+        ArrayList<PNJ> pnjs=this.getPnjs();
         for (PNJ p: pnjs) {
             if(p.getpV()>0&&!p.isInteract()){
                 randommoove(p);

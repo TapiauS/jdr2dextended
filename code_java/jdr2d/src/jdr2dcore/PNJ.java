@@ -82,7 +82,7 @@ public class PNJ extends Personnage {
     @Override
     public void depl(Direction dir) {
         super.depl(dir);
-        if(this.distance(posinit)>5){
+        if(this.distance(posinit)>10){
             super.depl(dir.opposite());
         }
     }

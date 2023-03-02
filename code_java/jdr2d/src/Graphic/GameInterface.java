@@ -1,10 +1,13 @@
 package Graphic;
 
 import Control.PersoThread;
+import Control.Soundtrackscontroller;
 import DAO.*;
 import jdr2dcore.*;
 
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -12,6 +15,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.Instant;
@@ -45,6 +49,7 @@ public class GameInterface extends JFrame  implements KeyListener {
 
     private Map carte;
 
+    private Soundtrackscontroller music;
     private EventHistory eventHistory;
 
     private ArrayList<Porte> sorties;
@@ -109,16 +114,17 @@ public class GameInterface extends JFrame  implements KeyListener {
 
 
         //JScrollPane contevent=new JScrollPane(eventHistory);
-
+        //contevent.setVisible(true);
         this.container=new JPanel();
         container.setBounds(0,menubar.getHeight(),WINDOW_WIDTH,WINDOWS_HEIGH);
         this.setJMenuBar(menubar);
         container.add(thisInfo);
+        container.add(eventHistory);
         container.setVisible(true);
         container.add(mapPanel);
         container.add(dialogdealer);
         container.setLayout(null);
-        container.add(eventHistory);
+        //container.add(eventHistory);
         container.add(inventdealer);
         container.add(coffredealer);
         container.add(quetedisplayer);
@@ -149,8 +155,10 @@ public class GameInterface extends JFrame  implements KeyListener {
                     System.out.println("On sauvegarde en fermant");
                     PersonnageDAO.updatedatabase(player);
                     ias.setSwitchmap(false);
+                    music.getClip().stop();
                     for (PNJ ps: pnjs) {
-                        PersonnageDAO.updatepnj(ps);
+                        if(ps.isNomme())
+                            PersonnageDAO.updatepnj(ps);
                     }
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
@@ -184,6 +192,17 @@ public class GameInterface extends JFrame  implements KeyListener {
         });
         Runtime.getRuntime().addShutdownHook(save);
         addKeyListener(this);
+        try {
+            music=new Soundtrackscontroller(player.getLieux().getNomLieu()+".wav");
+        } catch (UnsupportedAudioFileException e) {
+            System.err.println(e.getMessage());
+            JOptionPane.showMessageDialog(null,"Erreur lors du chargement de la musique du jeu");
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+            JOptionPane.showMessageDialog(null,"Erreur lors du chargement de la musique du jeu");
+        } catch (LineUnavailableException e) {
+            JOptionPane.showMessageDialog(null,"Erreur lors de la lecture de la musique du jeu");
+        }
         this.requestFocus();
     }
 
@@ -288,7 +307,6 @@ public class GameInterface extends JFrame  implements KeyListener {
         carte=player.getLieux();
         System.out.println("id lieu="+carte.getId());
         MapGraph graph=new MapGraph();
-
         pnjs=new ArrayList<>();
         echanges=new ArrayList<>();
         coffres= MapDAO.getcoffres(carte);
@@ -326,10 +344,19 @@ public class GameInterface extends JFrame  implements KeyListener {
                     }
                     try {
                         mapload();
+                        File source=new File("music\\"+player.getLieux().getNomLieu()+".wav");
+                        music.setSource(source);
                         ias.setPnjs(pnjs);
                     } catch (SQLException e) {
+                        throw new RuntimeException(e);}
+                    catch (UnsupportedAudioFileException e) {
+                        throw new RuntimeException(e);
+                    } catch (LineUnavailableException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
+
                     this.revalidate();
                     this.repaint();
                 }
@@ -338,6 +365,10 @@ public class GameInterface extends JFrame  implements KeyListener {
     }
     //getters
 
+
+    public PersoThread getIas() {
+        return ias;
+    }
 
     public DialogueInterface getDialogdealer() {
         return dialogdealer;
@@ -430,6 +461,7 @@ public class GameInterface extends JFrame  implements KeyListener {
     }
 
     //setters
+
 
 
     public void setDialogdealer(DialogueInterface dialogdealer) {

@@ -46,6 +46,7 @@ public class QuitMenu extends JMenu {
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
                     }
+                    fenetre.getIas().setSwitchmap(false);
                     fenetre.dispose();
                 }
             }

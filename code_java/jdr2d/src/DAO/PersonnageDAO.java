@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+import Control.Drones;
 import jdr2dcore.*;
 
 public abstract class PersonnageDAO extends DAOObject {
@@ -34,13 +35,23 @@ public abstract class PersonnageDAO extends DAOObject {
 
     public static ArrayList<Personnage> getPersonnages(Map m,Utilisateur util) throws SQLException{
         ArrayList<Object> args=new ArrayList<>(List.of(m.getId(), util.getId()));
-        ArrayList<Personnage> perso=new ArrayList<>();
+        ArrayList<Personnage> persos=new ArrayList<>();
         ResultSet rs=query("SELECT id_personnage FROM personnage WHERE id_lieu=? AND (id_compte_utilisateur!=? OR id_compte_utilisateur IS NULL)",args);
         while (rs.next()){
-            perso.add(PersonnageDAO.getchar(rs.getInt(1)));
+            Personnage perso=PersonnageDAO.getchar(rs.getInt(1));
+            if(perso instanceof PNJ){
+                if(((PNJ) perso).isnomme())
+                    persos.add(perso);
+                else {
+                    Drones drones = new Drones((PNJ) perso);
+                    for (PNJ p : drones) {
+                        persos.add(p);
+                    }
+                }
+            }
         }
         rs.getStatement().close();
-        return perso;
+        return persos;
     }
 
 
@@ -57,7 +68,7 @@ public abstract class PersonnageDAO extends DAOObject {
             }
         }
         else {
-            retour = new PNJ(rs.getInt("x"), rs.getInt("y"), MapDAO.getmap(rs.getInt("id_lieu")), getarme(id), getarmure(id), rs.getString("nom_personnage"), rs.getInt("pv"), getinv(rs.getInt("id_personnage")), rs.getInt("pvmax"), null,true);
+            retour = new PNJ(rs.getInt("x"), rs.getInt("y"), MapDAO.getmap(rs.getInt("id_lieu")), getarme(id), getarmure(id), rs.getString("nom_personnage"), rs.getInt("pv"), getinv(rs.getInt("id_personnage")), rs.getInt("pvmax"), null,rs.getBoolean("nomme"));
         }
         retour.setId(rs.getInt("id_personnage"));
         rs.getStatement().close();

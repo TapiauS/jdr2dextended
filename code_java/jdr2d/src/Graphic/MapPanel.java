@@ -96,8 +96,14 @@ public class MapPanel extends JPanel {
                 }
                 for (PNJ p : pnjs) {
                     if (i == p.getX() && j == p.getY()&&p.getpV()>0) {
-                        g.setColor(Color.PINK);
-                        g.fillOval(i * unit_size, j * unit_size, unit_size, unit_size);
+                        if(p.isNomme()) {
+                            g.setColor(Color.PINK);
+                            g.fillOval(i * unit_size, j * unit_size, unit_size, unit_size);
+                        }
+                        else {
+                            g.setColor(Color.RED);
+                            g.fillRect(i * unit_size, j * unit_size, unit_size, unit_size);
+                        }
                     }
                 }
             }

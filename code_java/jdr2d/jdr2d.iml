@@ -84,5 +84,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="javafx-sdk-19.0.2" level="project" />
   </component>
 </module>

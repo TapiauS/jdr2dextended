@@ -3,8 +3,6 @@ import javax.swing.*;
 
 public class MapGraph {
 
-
-
     public String affichmap(char[][] map) {
         StringBuffer labytdraw = new StringBuffer();
         for (int i = 0; i < map.length; i++) {
