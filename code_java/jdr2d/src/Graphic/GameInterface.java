@@ -1,11 +1,10 @@
 package Graphic;
 
-import Control.PNJThread;
+import Control.PersoThread;
 import DAO.*;
 import jdr2dcore.*;
 
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -13,17 +12,11 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Locale;
 
 public class GameInterface extends JFrame  implements KeyListener {
     private final Thread save;
@@ -73,7 +66,7 @@ public class GameInterface extends JFrame  implements KeyListener {
 
     private DialogueInterface dialogdealer;
 
-    private PNJThread ias;
+    private PersoThread ias;
 
 
 
@@ -88,7 +81,7 @@ public class GameInterface extends JFrame  implements KeyListener {
         this.setSize(new Dimension(WINDOW_WIDTH,WINDOWS_HEIGH));
         this.setLocationRelativeTo(null);
         mapload();
-        ias=new PNJThread(pnjs,this);
+        ias=new PersoThread(pnjs,this);
         //on definit tout les élements
         thisInfo=new PlayerInfo(this.player,this);
         mapPanel=new MapPanel(this.player,this.pnjs,this);

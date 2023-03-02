@@ -140,6 +140,7 @@ public class FullLogInterface extends JFrame  {
         try {
             this.observer.update(this);
         } catch (SQLException e) {
+            System.exit(-1);
             throw new RuntimeException(e);
         }
     }
