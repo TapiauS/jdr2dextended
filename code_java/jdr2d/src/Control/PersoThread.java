@@ -157,8 +157,8 @@ public class PersoThread extends Thread{
 
 
     public void ia(){
-        ArrayList<PNJ> pnjs=this.getPnjs();
-        for (PNJ p: pnjs) {
+        ArrayList<PNJ> pnjs=
+        for (PNJ p: this.getPnjs()) {
             if(p.getpV()>0&&!p.isInteract()){
                 randommoove(p);
                 try {
@@ -180,6 +180,7 @@ public class PersoThread extends Thread{
 
     public void run(){
         while (this.switchmap){
+            this.setPnjs(fenetre.getPnjs());
             ia();
         }
         System.out.println("Je sors !!!!!!!!!!!!");
