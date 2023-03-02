@@ -68,8 +68,6 @@ public class Point {
             int x1 = p1.getX();
             int y1 = p1.getY();
             int dist;
-            System.out.println("x="+this.x);
-            System.out.println("y="+this.y);
             dist = Math.abs(this.x - x1) + Math.abs(this.y - y1);
             return dist;
         } else {

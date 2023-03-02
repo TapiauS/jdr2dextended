@@ -100,6 +100,12 @@ public class GameInterface extends JFrame  implements KeyListener {
         menubar.setVisible(true);
         quitter = new QuitMenu(this,"Menu");
         menubar.add(quitter);
+        JMenuItem settings=new JMenuItem("Parametres");
+        settings.addActionListener(e->{
+            SettingsDisplayer setings=new SettingsDisplayer(this);
+            interaction=true;
+        });
+        menubar.add(settings);
         dialogdealer=new DialogueInterface(this,player);
         BufferedImage myPicture = null;
         try {
@@ -365,6 +371,10 @@ public class GameInterface extends JFrame  implements KeyListener {
     }
     //getters
 
+
+    public Soundtrackscontroller getMusic() {
+        return music;
+    }
 
     public PersoThread getIas() {
         return ias;

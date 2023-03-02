@@ -21,7 +21,7 @@ public class PersoThread extends Thread{
 
     private static GameInterface  fenetre;
 
-    public static final long WALKSTEPDURATIONSMS =500;
+    public static final long WALKSTEPDURATIONSMS =200;
 
     public static final long DEATHRESPAWNDELAYMSEC =10000;
 
@@ -80,6 +80,7 @@ public class PersoThread extends Thread{
             }
         }
         if(!perso.isNomme()&&perso.distance(player)<4&&!fenetre.isInteraction()){
+            System.out.println("je suis bien a proximité");
             int moov=rand.nextInt(2);
             if(perso.getX()>player.getX()&&perso.getY()>player.getY()){
                 if(moov==0){
@@ -157,12 +158,12 @@ public class PersoThread extends Thread{
 
 
     public void ia(){
-        ArrayList<PNJ> pnjs=
-        for (PNJ p: this.getPnjs()) {
+        System.out.println("nbr de pnj= "+pnjs.size());
+        for (int i = 0; i < pnjs.size() ; i++) {
+            PNJ p=pnjs.get(i);
             if(p.getpV()>0&&!p.isInteract()){
                 randommoove(p);
                 try {
-                    System.out.println("j'attend");
                     sleep(WALKSTEPDURATIONSMS);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
