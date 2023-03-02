@@ -274,7 +274,6 @@ public class GameInterface extends JFrame  implements KeyListener {
                         eventHistory.addLine(player.getNomPersonnage() + " a ete tué");
                     }
                     p.setInteract(false);
-
                     thisInfo.update();
                 }
             }
