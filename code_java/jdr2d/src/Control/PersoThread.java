@@ -21,7 +21,7 @@ public class PersoThread extends Thread{
 
     private static GameInterface  fenetre;
 
-    public static final long WALKSTEPDURATIONSMS =200;
+    public static final long WALKSTEPDURATIONSMS =2000;
 
     public static final long DEATHRESPAWNDELAYMSEC =10000;
 
@@ -127,11 +127,11 @@ public class PersoThread extends Thread{
                 return;
             }
             if(perso.getY()==player.getY()&&perso.getX()>player.getX()) {
-                perso.depl(Direction.EST);
+                perso.depl(Direction.OUEST);
                 return;
             }
             if(perso.getY()==player.getY()&&perso.getX()<player.getX()){
-                perso.depl(Direction.OUEST);
+                perso.depl(Direction.EST);
             }
         }
         else{
@@ -158,13 +158,12 @@ public class PersoThread extends Thread{
 
 
     public void ia(){
-        System.out.println("nbr de pnj= "+pnjs.size());
         for (int i = 0; i < pnjs.size() ; i++) {
             PNJ p=pnjs.get(i);
             if(p.getpV()>0&&!p.isInteract()){
                 randommoove(p);
                 try {
-                    sleep(WALKSTEPDURATIONSMS);
+                    sleep(WALKSTEPDURATIONSMS/pnjs.size());
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -184,7 +183,6 @@ public class PersoThread extends Thread{
             this.setPnjs(fenetre.getPnjs());
             ia();
         }
-        System.out.println("Je sors !!!!!!!!!!!!");
     }
 
     public static void respawn(PNJ p) {

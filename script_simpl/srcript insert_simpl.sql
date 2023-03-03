@@ -572,3 +572,18 @@ SELECT dialogue.id_dialogue,eb0.choix,contenu_dialogue,eb1.id_embranchement  as 
                                           ON dialogue.id_dialogue=donne.id_dialogue LEFT JOIN interaction 
                                           ON donne.id_interaction=interaction.id_interaction LEFT JOIN objectif
                                           ON dialogue.id_dialogue=objectif.id_dialogue;
+
+/* datas modernes*/
+
+
+INSERT INTO personnage(nom_personnage,id_lieu,x,y,nomme) VALUES ('loup',5,25,25,false);
+INSERT INTO caracterise(valeur,id_personnage,id_statistique) VALUES (10,(SELECT id_personnage FROM personnage WHERE nom_personnage='loup'),(SELECT id_statistique FROM statistique WHERE nom_statistique='pV')),(10,(SELECT id_personnage FROM personnage WHERE nom_personnage='loup'),(SELECT id_statistique FROM statistique WHERE nom_statistique='pVmax'));
+INSERT INTO objet(nom_objet,id_personnage_equipe,poid,id_type_objet) VALUES ('griffe de loups',(SELECT id_personnage FROM personnage WHERE nom_personnage='loup'),0,(SELECT id_type_objet FROM type_objet WHERE nom_type_objet='arme'));
+INSERT INTO objet(nom_objet,emplacement,id_personnage_equipe,poid,id_type_objet) VALUES ('peau de loup','natif',(SELECT id_personnage FROM personnage WHERE nom_personnage='loup'),0,(SELECT id_type_objet FROM type_objet WHERE nom_type_objet='armure'));
+INSERT INTO affecte(valeur,id_statistique,id_objet) VALUES (10,(SELECT id_statistique FROM statistique WHERE nom_statistique='deg'),(SELECT id_objet FROM objet WHERE nom_objet='griffe de loup'));
+INSERT INTO affecte(valeur,id_statistique,id_objet) VALUES (5,(SELECT id_statistique FROM statistique WHERE nom_statistique='redudeg'),(SELECT id_objet FROM objet WHERE nom_objet='peau de loup'));
+
+INSERT INTO relation(id_demandeur,id_repondeur ,agressif)
+    SELECT a.id_personnage,b.id_personnage,FALSE 
+        FROM personnage as a,personnage as b WHERE a.id_personnage != b.id_personnage AND a.id_compte_utilisateur IS NULL AND b.id_compte_utilisateur IS NULL
+            ORDER BY a.id_personnage;

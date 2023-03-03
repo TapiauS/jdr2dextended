@@ -70,8 +70,8 @@ CREATE OR REPLACE VIEW distobjet(persoref,objet,diff) AS
 
 --fiche d'un personnage
 
-CREATE OR REPLACE VIEW fichperso(id_personnage,nom_personnage,id_lieu,id_compte_utilisateur,x,y,pV,pVmax,deg,redudeg) AS
-    SELECT personnage.id_personnage,nom_personnage,id_lieu,id_compte_utilisateur,x,y,p0.valeur AS pV,p1.valeur AS pVmax,p2.valeur AS deg,p3.valeur AS redudeg FROM personnage 
+CREATE OR REPLACE VIEW fichperso(id_personnage,nom_personnage,id_lieu,id_compte_utilisateur,x,y,pV,pVmax,deg,redudeg,nomme) AS
+    SELECT personnage.id_personnage,nom_personnage,id_lieu,id_compte_utilisateur,x,y,p0.valeur AS pV,p1.valeur AS pVmax,p2.valeur AS deg,p3.valeur AS redudeg,nomme FROM personnage 
         LEFT JOIN caracterise AS p0 ON p0.id_personnage=personnage.id_personnage AND p0.id_statistique=(SELECT id_statistique FROM statistique WHERE nom_statistique='pV')
         LEFT JOIN caracterise AS p1 ON p1.id_personnage=personnage.id_personnage AND p1.id_statistique=(SELECT id_statistique FROM statistique WHERE nom_statistique='pVmax')
         LEFT JOIN caracterise AS p2 ON p2.id_personnage=personnage.id_personnage AND p1.id_statistique=(SELECT id_statistique FROM statistique WHERE nom_statistique='deg')

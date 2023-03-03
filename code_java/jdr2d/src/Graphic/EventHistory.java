@@ -49,8 +49,10 @@ public class EventHistory extends JTextArea {
 
     public void addLine(String line){
         nb_displayed_line++;
-        if(nb_displayed_line<EVENT_HEIGH/10)
+        if(nb_displayed_line<15)
             setEvents(events+'\n'+line);
+        else
+            setEvents(line);
         this.setText(events);
         this.repaint();
         this.revalidate();

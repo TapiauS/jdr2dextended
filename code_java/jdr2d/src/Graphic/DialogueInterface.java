@@ -61,11 +61,13 @@ public class DialogueInterface extends InteractionInterface {
             if (presentechange.isQuete()) {
                 if(!player.getQueteSuivie().contains(presentechange.getQuete())) {
                     player.addsQuete(presentechange.getQuete());
-                    fenetre.getEventHistory().addLine("Vous venez de revoir la quête "+presentechange.getQuete().getNomQuete());
                     try {
                         QueteDAO.update(presentechange.getQuete(),player);
+                        fenetre.getEventHistory().addLine("Vous venez de revoir la quête "+presentechange.getQuete().getNomQuete());
                     } catch (SQLException ex) {
-                        throw new RuntimeException(ex);
+                        player.removesQuete(presentechange.getQuete());
+                        setPresentechange(new Echange(presentechange.getParleur(),presentechange.getQuestion(),
+                                " Vous avez déja recu ce travail ",null));
                     }
                 }
                 else {

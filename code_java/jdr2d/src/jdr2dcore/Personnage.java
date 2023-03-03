@@ -197,7 +197,7 @@ public class Personnage extends Point implements EventListenerQuete {
         for(Arme a:this.getArme()){
             compteurmain=compteurmain+a.getNbrmain();
         }
-        if(compteurmain==2){
+        if(compteurmain>=2){
             if(arme.getNbrmain()==2){
                 for (Arme a:this.getArme()) {
                     if(a.nbrmain!=0){
@@ -227,7 +227,6 @@ public class Personnage extends Point implements EventListenerQuete {
                 this.armes.add(arme);
             }
         }
-
         return this;
     }
 

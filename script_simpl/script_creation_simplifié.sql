@@ -84,14 +84,13 @@ CREATE TABLE personnage
 					id_personnage SERIAL PRIMARY KEY ,
 					nom_personnage VARCHAR(255) NOT NULL UNIQUE,
                     xp INT,
-                    pv INT,
-					pvmax INT,
 					vivant BOOLEAN,
                     x INT,
 					y INT,
 					id_lieu INT,
 					id_compte_utilisateur INT,
 					race VARCHAR,
+					nomme BOOLEAN,
 					FOREIGN KEY(id_compte_utilisateur) REFERENCES compte_utilisateur(id_compte_utilisateur) ON DELETE CASCADE,
 					FOREIGN KEY(id_lieu) REFERENCES lieu(id_lieu) ON DELETE CASCADE
 				);

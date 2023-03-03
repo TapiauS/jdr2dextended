@@ -1,5 +1,6 @@
 package DAO;
 
+import javax.swing.*;
 import java.io.*;
 import java.sql.*;
 import java.util.Properties;
@@ -38,11 +39,17 @@ import java.lang.reflect.Method;
             return prop;
         }
 
-        public static Connection getConnection(String fileName, boolean force) throws SQLException{
+        public static Connection getConnection(String fileName, boolean force) {
             boolean forcing = force || filename != fileName ||config == null|| conn==null;
             if(forcing){
                 config = loadConfig(fileName);
-                conn = DriverManager.getConnection(config.getProperty("connexion"), config);
+                try {
+                    conn = DriverManager.getConnection(config.getProperty("connexion"), config);
+                }
+                catch (SQLException sqe){
+                    JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","Erreur",JOptionPane.ERROR_MESSAGE);
+                    System.exit(-1);
+                }
             }
 
             return conn;
