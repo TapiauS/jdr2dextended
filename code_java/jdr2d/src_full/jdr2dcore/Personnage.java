@@ -144,8 +144,8 @@ public class Personnage extends Point implements EventListenerQuete {
 
     public Personnage addPotion(Potion p){
         this.effetpotion.add(p);
-        this.setpV(this.getpV()+p.getEffets()[2]);
         this.setPvmax(this.getpVmax()+p.getEffets()[3]);
+        this.setpV(this.pV+p.getEffets()[2]);
         this.datefin.add(LocalDateTime.now().plus(p.getDuree()));
         return this;
     }
@@ -197,12 +197,20 @@ public class Personnage extends Point implements EventListenerQuete {
         for(Arme a:this.getArme()){
             compteurmain=compteurmain+a.getNbrmain();
         }
-        if(compteurmain>=2){
+        if(compteurmain>2) {
+            for (int i=0;i<this.armes.size() ; i++) {
+                if (this.armes.get(i).nbrmain != 0) {
+                    this.addObjet(this.armes.get(i));
+                    this.removeArme(this.armes.get(i));
+                }
+            }
+        }
+        if(compteurmain==2){
             if(arme.getNbrmain()==2){
-                for (Arme a:this.getArme()) {
-                    if(a.nbrmain!=0){
-                        this.removeArme(a);
-                        this.addObjet(a);
+                for (int i=0;i<this.armes.size() ; i++) {
+                    if (this.armes.get(i).nbrmain != 0) {
+                        this.addObjet(this.armes.get(i));
+                        this.removeArme(this.armes.get(i));
                     }
                 }
                 this.armes.add(arme);
@@ -215,10 +223,10 @@ public class Personnage extends Point implements EventListenerQuete {
             }
         } else if (compteurmain==1 || compteurmain==0) {
             if(arme.getNbrmain()==2){
-                for (Arme a:this.getArme()) {
-                    if(a.nbrmain!=0){
-                        this.removeArme(a);
-                        this.addObjet(a);
+                for (int i=0;i<this.armes.size() ; i++) {
+                    if (this.armes.get(i).nbrmain != 0) {
+                        this.addObjet(this.armes.get(i));
+                        this.removeArme(this.armes.get(i));
                     }
                 }
                 this.armes.add(arme);
@@ -402,7 +410,6 @@ public class Personnage extends Point implements EventListenerQuete {
     @Override
     public void update(Quete q) {
         this.removesQuete(q);
-        System.out.println("Felicitation vous avez accompli la quete : "+q.getNomQuete()+"et obtenu les récompenses");
         for (Objet o: q.getRecompenses()) {
             this.addObjet(o);
            System.out.println(o.getNomObjet());

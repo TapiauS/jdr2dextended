@@ -1,5 +1,6 @@
 package Graphic;
 
+import Control.Interaction;
 import Control.PersoThread;
 import Control.Soundtrackscontroller;
 import DAO.*;
@@ -284,13 +285,8 @@ public class GameInterface extends JFrame  implements KeyListener {
         if(e.getKeyCode()==70&&!interaction){
             for (PNJ p: this.getPnjs()) {
                 if (p.distance(player) < 1 && p.getpV() > 0) {
-                    p.setInteract(true);
-                    Interaction inter = new Interaction(player, p);
-                    if (inter.combat()) {
-                        eventHistory.addLine(player.getNomPersonnage() + " a vaincu " + p.getNomPersonnage());
-                    } else {
-                        eventHistory.addLine(player.getNomPersonnage() + " a ete tué");
-                    }
+                    Interaction inter = new Interaction(player, p,this);
+                    inter.combat();
                     p.setInteract(false);
                     thisInfo.update();
                 }

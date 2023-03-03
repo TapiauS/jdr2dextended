@@ -1,5 +1,6 @@
 package jdr2dcore;
 
+import Control.Interaction;
 import DAO.*;
 
 import java.sql.*;
@@ -475,7 +476,7 @@ public abstract class Input {
                     if (p.distance(player) <= 1) {
                         compteur = compteur + 1;
                         Interaction figth = new Interaction(player, p);
-                        if (figth.combat()) {
+                        if (figth.getWinner()) {
                             System.out.println("Victoire!");
                         } else {
                             System.out.println("Defaite");

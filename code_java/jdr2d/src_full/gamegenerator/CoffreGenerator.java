@@ -23,7 +23,7 @@ public class CoffreGenerator {
     private final static Armure jambiere=new Armure("Jambiere",2,0,9,"JAMBIERE");
     private final static Armure bottes=new Armure("Botte",1,1,3,"BOTTE");
 
-    private final static Potion potionsoin=new Potion("Potion de soin",0,new int[]{0,0,5,0}, Duration.of(1, ChronoUnit.SECONDS));
+    private final static Potion potionsoin=new Potion("Potion de soin",0,new int[]{0,0,10,0}, Duration.of(1, ChronoUnit.SECONDS));
     private final static Potion potionforce=new Potion("Potion de force",0,new int[] {3,0,0,0},Duration.of(600,ChronoUnit.SECONDS));
     private final static Potion potionarmure=new Potion("Potion d'armure",0,new int[] {0,5,0,0},Duration.of(600,ChronoUnit.SECONDS));
     private final static Potion potionconstitution=new Potion("Potion de constitution",0,new int[] {0,0,0,10},Duration.of(1200,ChronoUnit.SECONDS));

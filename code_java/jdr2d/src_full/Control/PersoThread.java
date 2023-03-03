@@ -3,7 +3,6 @@ package Control;
 import DAO.PersonnageDAO;
 import Graphic.GameInterface;
 import jdr2dcore.Direction;
-import jdr2dcore.Interaction;
 import jdr2dcore.PNJ;
 import jdr2dcore.Personnage;
 
@@ -69,15 +68,8 @@ public class PersoThread extends Thread{
         Personnage player=fenetre.getPlayer();
         if(fenetre.getPlayer().distance(perso)<1&&!perso.isNomme()&&!fenetre.isInteraction()){
             fenetre.getEventHistory().addLine("un "+perso.getNomPersonnage()+" vous attaque :");
-            Interaction inter=new Interaction(fenetre.getPlayer(),perso);
-            if(inter.combat()) {
-                fenetre.getEventHistory().addLine(fenetre.getPlayer().getNomPersonnage() + " a vaincu un " + perso.getNomPersonnage());
-                fenetre.getFenetreInfo().update();
-            }
-            else {
-                fenetre.getEventHistory().addLine(fenetre.getPlayer().getNomPersonnage() + " a ete vaincu par un " + perso.getNomPersonnage());
-                fenetre.getFenetreInfo().update();
-            }
+            Interaction inter=new Interaction(fenetre.getPlayer(),perso,fenetre);
+            inter.combat();
         }
         if(!perso.isNomme()&&perso.distance(player)<4&&!fenetre.isInteraction()){
             System.out.println("je suis bien a proximité");

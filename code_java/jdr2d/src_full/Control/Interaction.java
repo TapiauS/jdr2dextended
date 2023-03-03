@@ -1,11 +1,15 @@
-package jdr2dcore;
+package Control;
 
 import DAO.ObjectifsDAO;
 import DAO.QueteDAO;
+import Graphic.GameInterface;
+import jdr2dcore.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import static java.lang.Thread.sleep;
 
 public class Interaction {
     protected Personnage joueur;
@@ -15,6 +19,7 @@ public class Interaction {
 
     protected boolean agressif;
 
+    protected GameInterface fenetre;
     protected ArrayList<EventListenerK> observerK;
 
     protected ArrayList<EventListenerTalk> observerT;
@@ -45,6 +50,10 @@ public class Interaction {
 
     public ArrayList<EventListenerTalk> getObserverT() {
         return observerT;
+    }
+
+    public Boolean getWinner() {
+        return winner;
     }
 
     //setters
@@ -121,6 +130,18 @@ public class Interaction {
                 .setAgressif(agressif);
     }
 
+
+    public Interaction(Personnage joueur,PNJ opposant,GameInterface fenetre){
+        this.setObserverK(new ArrayList<EventListenerK>())
+                .setObserverT(new ArrayList<EventListenerTalk>())
+                .setJoueur(joueur)
+                .setOpposant(opposant)
+                .fenetre=fenetre;
+        this.winner=null;
+    }
+
+
+
     //methode
 
     public void notifyOneobs(EventListenerK ev) {
@@ -147,32 +168,54 @@ public class Interaction {
         return this;
     }
 
+    public Boolean winner;
+
     public void notifyOneobsT(EventListenerTalk ev){
         ev.update();
     }
 
-    public Boolean combat() {
-        while (this.getJoueur().getpV() > 0 && this.getOpposant().getpV() > 0) {
-            this.getOpposant().setpV(this.getOpposant().getpV() - this.getJoueur().bagarre(this.getOpposant()));
-            this.getJoueur().setpV(this.getJoueur().getpV() - this.getOpposant().bagarre(this.getJoueur()));
-        }
-        if (this.getOpposant().getpV() <= 0) {
-            for (EventListenerK e : this.getObserverK()) {
-                if (e instanceof ObjectifK) {
-                    if(((ObjectifK) e).getTarget().getId()==this.opposant.getId()) {
-                        this.notifyOneobs(e);
-                        try {
-                            ObjectifsDAO.setobj(joueur,(ObjectifK) e);
-                        } catch (SQLException ex) {
-                            throw new RuntimeException(ex);
+    public void combat() {
+        Thread t = new Thread(() -> {
+            fenetre.setInteraction(true);
+            while (getJoueur().getpV() > 0 && getOpposant().getpV() > 0) {
+                getOpposant().setpV(getOpposant().getpV() - getJoueur().bagarre(getOpposant()));
+                fenetre.getEventHistory().addLine(joueur.getNomPersonnage() +" à infligé a "+opposant.getNomPersonnage()+" "+getJoueur().bagarre(getOpposant())+" degats");
+                getJoueur().setpV(getJoueur().getpV() - getOpposant().bagarre(getJoueur()));
+                fenetre.getEventHistory().addLine(opposant.getNomPersonnage() +" à infligé a "+joueur.getNomPersonnage()+" "+getOpposant().bagarre(getJoueur())+" degats");
+                fenetre.getFenetreInfo().update();
+                try {
+                    sleep(200);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                System.out.println("Je passe ici");
+            }
+            if (getOpposant().getpV() <= 0) {
+                for (EventListenerK e : getObserverK()) {
+                    if (e instanceof ObjectifK) {
+                        if (((ObjectifK) e).getTarget().getId() == opposant.getId()) {
+                            notifyOneobs(e);
+                            try {
+                                ObjectifsDAO.setobj(joueur, (ObjectifK) e);
+                            } catch (SQLException ex) {
+                                throw new RuntimeException(ex);
+                            }
+                            removeObserK(e);
                         }
-                        this.removeObserK(e);
                     }
                 }
+                fenetre.getEventHistory().addLine(joueur.getNomPersonnage() + " a vaincu un " + opposant.getNomPersonnage());
+                fenetre.getFenetreInfo().update();
+            } else{
+                fenetre.getEventHistory().addLine(joueur.getNomPersonnage() + " a ete vaincu par un " + opposant.getNomPersonnage());
+                fenetre.getFenetreInfo().update();
             }
-            return true;
-        } else return false;
+            fenetre.setInteraction(false);
+        });
+        t.start();
     }
+
+
 
     public void dialogue() throws SQLException {
         // Attention ! quand on crée un arbre de dialogue la position des dialogues donneurs de quete et des dialogues objectifs d'une quete doit être bien reflechie.
