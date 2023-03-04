@@ -1,6 +1,8 @@
 package jdr2dcore;
 
-public class Point {
+import java.io.Serializable;
+
+public class Point implements Serializable {
     protected int x;
     protected int y;
     protected Map lieux;

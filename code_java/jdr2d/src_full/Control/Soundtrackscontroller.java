@@ -19,11 +19,11 @@ public class Soundtrackscontroller {
     public Soundtrackscontroller(String filepath) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         super();
         source=new File("music\\"+filepath);
-        audioInputStream = AudioSystem.getAudioInputStream(source.getAbsoluteFile());
+        audioInputStream = AudioSystem.getAudioInputStream(source);
         clip=AudioSystem.getClip();
         clip.open(audioInputStream);
         clip.loop(Clip.LOOP_CONTINUOUSLY);
-        setVolume(0.5f);
+        setVolume(0.3f);
     }
 
 
@@ -46,7 +46,7 @@ public class Soundtrackscontroller {
         clip.stop();
         audioInputStream.close();
         this.source = source;
-        audioInputStream = AudioSystem.getAudioInputStream(source.getAbsoluteFile());
+        audioInputStream = AudioSystem.getAudioInputStream(source);
         clip=AudioSystem.getClip();
         clip.open(audioInputStream);
         clip.loop(Clip.LOOP_CONTINUOUSLY);

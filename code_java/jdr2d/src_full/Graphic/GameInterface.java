@@ -2,6 +2,7 @@ package Graphic;
 
 import Control.Interaction;
 import Control.PersoThread;
+import Control.SoundEffect;
 import Control.Soundtrackscontroller;
 import DAO.*;
 import jdr2dcore.*;
@@ -225,21 +226,57 @@ public class GameInterface extends JFrame  implements KeyListener {
         if (e.getKeyCode() == 38 && !interaction && Instant.now().isAfter(nextmactiontime)) {
             nextmactiontime=Instant.now().plus(timestepms, ChronoUnit.MILLIS);
             player.depl(Direction.NORD);
+            try {
+                SoundEffect.playSound("walk");
+            } catch (UnsupportedAudioFileException ex) {
+                throw new RuntimeException(ex);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (LineUnavailableException ex) {
+                throw new RuntimeException(ex);
+            }
             checkdoor();
         }
         if (e.getKeyCode() == 37 && !interaction && Instant.now().isAfter(nextmactiontime)) {
             nextmactiontime=Instant.now().plus(timestepms, ChronoUnit.MILLIS);
             player.depl(Direction.OUEST);
+            try {
+                SoundEffect.playSound("walk");
+            } catch (UnsupportedAudioFileException ex) {
+                throw new RuntimeException(ex);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (LineUnavailableException ex) {
+                throw new RuntimeException(ex);
+            }
             checkdoor();
         }
         if (e.getKeyCode() == 39 && !interaction && Instant.now().isAfter(nextmactiontime)) {
             nextmactiontime=Instant.now().plus(timestepms, ChronoUnit.MILLIS);
             player.depl(Direction.EST);
+            try {
+                SoundEffect.playSound("walk");
+            } catch (UnsupportedAudioFileException ex) {
+                throw new RuntimeException(ex);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (LineUnavailableException ex) {
+                throw new RuntimeException(ex);
+            }
             checkdoor();
         }
         if (e.getKeyCode() == 40 && !interaction && Instant.now().isAfter(nextmactiontime)) {
             nextmactiontime=Instant.now().plus(timestepms, ChronoUnit.MILLIS);
             player.depl(Direction.SUD);
+            try {
+                SoundEffect.playSound("walk");
+            } catch (UnsupportedAudioFileException ex) {
+                throw new RuntimeException(ex);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (LineUnavailableException ex) {
+                throw new RuntimeException(ex);
+            }
             checkdoor();
         }
         if(e.getKeyCode()==80 &&!interaction) {
@@ -358,7 +395,6 @@ public class GameInterface extends JFrame  implements KeyListener {
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-
                     this.revalidate();
                     this.repaint();
                 }
