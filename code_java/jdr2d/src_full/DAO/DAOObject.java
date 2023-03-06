@@ -48,6 +48,7 @@ import java.lang.reflect.Method;
                 }
                 catch (SQLException sqe){
                     JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","Erreur",JOptionPane.ERROR_MESSAGE);
+                    System.err.println(sqe.getMessage());
                     System.exit(-1);
                 }
             }

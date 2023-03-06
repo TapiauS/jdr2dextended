@@ -1,13 +1,19 @@
 package Control;
 
-public enum InputType {
+import java.io.Serializable;
+
+public enum InputType implements Serializable {
     MOUVEAST,
     MOUVWEST,
     MOUVNORD,
     MOUVSOUTH,
     FIGTH,
     TALK,
+    EQUIP,
+    DROP,
+    USE,
     PICK,
     QUEST,
-    INVENTAIRE
+    INVENTAIRE,
+    QUIT
 }

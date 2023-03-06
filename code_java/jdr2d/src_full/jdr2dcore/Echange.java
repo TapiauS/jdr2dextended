@@ -1,6 +1,8 @@
 package jdr2dcore;
 
-public class Echange {
+import java.io.Serializable;
+
+public class Echange implements Serializable {
 
     protected PNJ parleur;
     protected String question;

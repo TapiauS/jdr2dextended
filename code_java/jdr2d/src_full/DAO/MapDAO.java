@@ -37,7 +37,7 @@ public abstract class MapDAO extends DAOObject {
         }
         rs.getStatement().close();
        ;
-        throw new IllegalArgumentException("Cette map n'existe pas !");
+        return null;
     }
 
     public static ArrayList<Coffre> getcoffres(Map m) throws SQLException {

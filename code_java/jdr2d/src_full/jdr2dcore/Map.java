@@ -1,6 +1,8 @@
 package jdr2dcore;
 
-public class Map {
+import java.io.Serializable;
+
+public class Map implements Serializable {
     private int id;
     private String nomLieu ;
     private char[][] carte;

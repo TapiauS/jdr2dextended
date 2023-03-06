@@ -1,8 +1,9 @@
 package jdr2dcore;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Quete implements EventListenerO {
+public class Quete implements EventListenerO, Serializable {
     protected String nomQuete;
     protected String descriptionQuete;
 

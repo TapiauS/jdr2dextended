@@ -1,8 +1,9 @@
 package jdr2dcore;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public abstract class Objectifs {
+public abstract class Objectifs implements Serializable {
     protected boolean valide;
 
     protected ArrayList<EventListenerO> observer;
