@@ -10,10 +10,10 @@ import jdr2dcore.Direction;
 import jdr2dcore.Personnage;
 import jdr2dcore.Utilisateur;
 
+import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageOutputStream;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.sql.SQLDataException;
 import java.sql.SQLException;
@@ -29,6 +29,10 @@ public class Client extends Thread{
 
     private boolean connected;
 
+    private InputStream in;
+
+    private OutputStream out;
+
     private ObjectInputStream input;
 
     private ObjectOutputStream output;
@@ -43,6 +47,9 @@ public class Client extends Thread{
         connected=true;
         avatar=null;
         util=null;
+
+        out=socket.getOutputStream();
+        in=socket.getInputStream();
         output=new ObjectOutputStream(socket.getOutputStream());
         input=new ObjectInputStream(socket.getInputStream());
         System.out.println("je passe bien ?");
@@ -201,8 +208,10 @@ public class Client extends Thread{
                         charname= (String) input.readObject();
                         success=PersonnageDAO.checkcharname(charname);
                         output.writeObject(success);
-                        output.writeObject(avatar);
-                        pickpicture(charname);
+                        if(success) {
+                            output.writeObject(avatar);
+                            pickpicture(charname);
+                        }
                     }
                     case PICKCHAR -> {
                         pick();
@@ -223,11 +232,13 @@ public class Client extends Thread{
         try {
             Hashtable<Integer, BufferedImage> caroussel= ImageDAO.loadfullimagebank("portrait");
             int indexportrait=0;
-            List<Integer> keystoarray=  caroussel.keySet().stream().toList();
+            List<Integer> keystoarray= caroussel.keySet().stream().toList();
             boolean valid=false;
             ConnexionInput choice;
             while (!valid){
-                output.writeObject(caroussel.get(keystoarray.get(indexportrait)));
+                System.out.println(keystoarray.get(indexportrait));
+                ImageIO.write(caroussel.get(keystoarray.get(indexportrait)),"png",out);
+                out.flush();
                 choice=(ConnexionInput) input.readObject();
                 switch (choice){
                     case NEXTPICTURE -> {

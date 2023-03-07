@@ -51,17 +51,19 @@ public class FirstCharButton extends AbstractAction {
             boolean validation;
             Personnage perso;
             try {
-                ClientPart.getServeroutput().writeObject(ConnexionInput.CREATECHAR);
+                ClientPart.getServeroutput().writeObject(ConnexionInput.VALIDCHOICE);
                 ClientPart.getServeroutput().writeObject(charname);
-                validation=ClientPart.getServerinput().readBoolean();
-            } catch (IOException ex) {
+                validation= (boolean) ClientPart.getServerinput().readObject();
+            } catch (IOException | ClassNotFoundException ex) {
                 throw new RuntimeException(ex);
             }
             if (validation) {
                 BufferedImage firstportraits;
                 try {
                     perso= (Personnage) ClientPart.getServerinput().readObject();
-                    firstportraits= (BufferedImage) ClientPart.getServerinput().readObject();
+                    System.out.println("j'arrive ici");
+                    firstportraits= ImageIO.read(ClientPart.getImginput());
+                    System.out.println("j'ai chargé l'image");
                 } catch (IOException | ClassNotFoundException ex) {
                     throw new RuntimeException(ex);
                 }

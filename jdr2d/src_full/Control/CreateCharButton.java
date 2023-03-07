@@ -6,6 +6,7 @@ import jdr2dcore.Utilisateur;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 public class CreateCharButton extends AbstractAction {
 
@@ -24,6 +25,11 @@ public class CreateCharButton extends AbstractAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         this.fenetre.getToplabel().setText("Entrer un nom pour votre personnage");
+        try {
+            ClientPart.getServeroutput().writeObject(ConnexionInput.CREATECHAR);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
         this.fenetre.setToptextfield(new JTextField(10));
         this.fenetre.setTop(new JButton(new FirstCharButton(this.fenetre,"Valider",this.util)));
         this.fenetre.getBottomlabel().setVisible(false);

@@ -14,7 +14,7 @@ public class InputReceiver {
 
     private Personnage avatar;
     private Socket clientSocket;
-    private final int portNumber=5987;
+    private final int portNumber=6000;
 
 
     public InputReceiver(){
