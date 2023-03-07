@@ -6,6 +6,9 @@ import jdr2dcore.Utilisateur;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.sql.SQLException;
 
 public class MailButton extends AbstractAction {
@@ -49,8 +52,10 @@ public class MailButton extends AbstractAction {
 
         boolean val;
         try {
-            val = UtilisateurDAO.checkmail(mail);
-        } catch (SQLException ex) {
+            (ClientPart.getServeroutput()).writeObject(ConnexionInput.VALIDCHOICE);
+            (ClientPart.getServeroutput()).writeObject(mail);
+            val= (boolean) ClientPart.getServerinput().readObject();
+        } catch (IOException | ClassNotFoundException ex) {
             throw new RuntimeException(ex);
         }
         if(val){
@@ -58,17 +63,11 @@ public class MailButton extends AbstractAction {
             this.fenetre.setToplabel(perso);
             JTextField zone=new JTextField();
             zone.setColumns(10);
-            try {
-                UtilisateurDAO.createcompte(this.pseudo,this.mdp,mail);
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
             Utilisateur util;
-
             try {
-                util=UtilisateurDAO.connectcompte(this.pseudo,this.mdp);
+                util= (Utilisateur) ClientPart.getServerinput().readObject();
                 this.fenetre.setUtil(util);
-            } catch (SQLException ex) {
+            } catch ( IOException | ClassNotFoundException ex) {
                 throw new RuntimeException(ex);
             }
             this.fenetre.setTop(new JButton(new FirstCharButton(this.fenetre,"Validation",util)));
@@ -79,6 +78,5 @@ public class MailButton extends AbstractAction {
             this.fenetre.setToplabel(new JLabel("Adresse mail non disponible, veuillez re essayer"));
             this.fenetre.refresh();
         }
-
     }
 }

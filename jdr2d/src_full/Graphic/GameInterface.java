@@ -163,7 +163,7 @@ public class GameInterface extends JFrame  implements KeyListener {
                     System.out.println("On sauvegarde en fermant");
                     PersonnageDAO.updatedatabase(player);
                     ias.setSwitchmap(false);
-                    music.getClip().stop();
+                    //music.getClip().stop();
                     for (PNJ ps: pnjs) {
                         if(ps.isNomme())
                             PersonnageDAO.updatepnj(ps);

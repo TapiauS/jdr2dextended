@@ -5,6 +5,8 @@ import Graphic.FullLogInterface;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 public class CreateAccountButton extends AbstractAction {
 
@@ -17,6 +19,11 @@ public class CreateAccountButton extends AbstractAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         JTextField create = new JTextField();
+        try {
+            new ObjectOutputStream(ClientPart.getServeroutput()).writeObject(ConnexionInput.CREATION);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
         create.setColumns(10);
         JButton valide=new JButton(new ValidationPseudoButton(this.fenetre,"Validation"));
         this.fenetre.setTop(valide);

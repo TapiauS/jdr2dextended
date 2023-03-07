@@ -1,8 +1,10 @@
 
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 
+import Control.ClientPart;
 import Control.ThreadDealer;
 import DAO.PersonnageDAO;
 import Graphic.EventHistory;
@@ -17,10 +19,9 @@ import jdr2dcore.Race;
 import javax.swing.*;
 
 public class Main {
-    public static void main(String[] args) throws SQLException, InterruptedException {
+    public static void main(String[] args) throws SQLException, InterruptedException, IOException, ClassNotFoundException {
         //Input.game();
-        ThreadDealer test=new ThreadDealer();
-        test.launch();
+        ClientPart.launch();
         /*SwingUtilities.invokeLater(new Runnable(){
             public void run(){
                 //On crée une nouvelle instance de notre JWindow

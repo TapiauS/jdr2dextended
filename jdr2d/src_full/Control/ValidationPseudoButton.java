@@ -3,6 +3,9 @@ package Control;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.sql.SQLException;
 
 import DAO.*;
@@ -38,12 +41,13 @@ ValidationPseudoButton extends AbstractAction {
         String pseudo = textField.getText();
         boolean val;
         try {
-            val = UtilisateurDAO.checkpseudo(pseudo);
-        } catch (SQLException ex) {
+            (ClientPart.getServeroutput()).writeObject(ConnexionInput.VALIDCHOICE);
+            (ClientPart.getServeroutput()).writeObject(pseudo);
+            val= (boolean) ClientPart.getServerinput().readObject();
+        } catch (IOException | ClassNotFoundException ex) {
             throw new RuntimeException(ex);
         }
         if(val){
-
             JTextField createchar = new JTextField();
             createchar.setColumns(10);
             JLabel create=new JLabel("Choisir un mot de passe");

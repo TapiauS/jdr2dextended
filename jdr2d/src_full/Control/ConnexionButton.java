@@ -4,6 +4,8 @@ import Graphic.FullLogInterface;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 public class ConnexionButton extends AbstractAction {
     FullLogInterface fenetre;
@@ -14,6 +16,11 @@ public class ConnexionButton extends AbstractAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         this.fenetre.setToplabel(new JLabel("Entrer un pseudo"));
+        try {
+            ClientPart.getServeroutput().writeObject(ConnexionInput.CONNEXION);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
         this.fenetre.setToptextfield(new JTextField(10));
         this.fenetre.setTop(new JButton(new LogButton(this.fenetre,"Validate")));
         this.fenetre.setBottom(new JButton(new CreateAccountButton(this.fenetre,"Creer un compte")));

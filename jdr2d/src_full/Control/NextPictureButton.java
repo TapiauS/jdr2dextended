@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -29,26 +31,24 @@ public class NextPictureButton extends AbstractAction {
     private ValidePictureChoice observer;
 
 
-    public NextPictureButton(FullLogInterface fenetre,Personnage nomperso,Utilisateur util,Hashtable<Integer,BufferedImage> availableportrait,String message,ValidePictureChoice observer){
+    public NextPictureButton(FullLogInterface fenetre,Personnage nomperso,Utilisateur util,BufferedImage availableportrait,String message,ValidePictureChoice observer){
         super(message);
         this.fenetre=fenetre;
         this.personnage=nomperso;
         this.util=util;
-        this.availableportrait=availableportrait;
         this.observer=observer;
         this.indexportrait=0;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        List<Integer> keystoarray=  availableportrait.keySet().stream().toList();
-        if(indexportrait+1<availableportrait.size())
-            indexportrait++;
-        else
-            indexportrait=0;
-        observer.update(indexportrait);
         BufferedImage myPicture = null;
-        myPicture = availableportrait.get(keystoarray.get(indexportrait));
+        try {
+            (ClientPart.getServeroutput()).writeObject(ConnexionInput.NEXTPICTURE);
+            myPicture= (BufferedImage) ClientPart.getServerinput().readObject();
+        } catch (IOException | ClassNotFoundException ex) {
+            throw new RuntimeException(ex);
+        }
         fenetre.getToplabel().setIcon(new ImageIcon(myPicture));
         fenetre.refresh();
     }

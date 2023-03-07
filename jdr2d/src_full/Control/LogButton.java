@@ -6,6 +6,9 @@ import jdr2dcore.Utilisateur;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.sql.SQLDataException;
 import java.sql.SQLException;
 import java.util.Hashtable;
@@ -24,29 +27,34 @@ public class LogButton extends AbstractAction {
         String pseudo=textField.getText();
         String mdp=this.fenetre.getBottomtextfield().getText();
         Utilisateur util = new Utilisateur();
+        boolean success;
         try {
-            util=UtilisateurDAO.connectcompte(pseudo,mdp);
+            ClientPart.getServeroutput().writeObject(ConnexionInput.CONNEXION);
+            ClientPart.getServeroutput().writeObject(pseudo);
+            ClientPart.getServeroutput().writeObject(mdp);
+            success= (boolean) ClientPart.getServerinput().readObject();
+        } catch (IOException | ClassNotFoundException ex) {
+        throw new RuntimeException(ex);
         }
-        catch (SQLException ex) {
-            if(ex instanceof SQLDataException) {
-                this.fenetre.setToplabel(new JLabel("Pseudo ou mot de passe incorrect, réessayez"));
-                this.fenetre.refresh();
-                return;
-            }
-            else {
-                JOptionPane.showMessageDialog(null,"Une erreur de connexion inconnue c'est produite","Erreur de connexion",JOptionPane.ERROR_MESSAGE);
-            }
+        if(!success){
+            this.fenetre.setToplabel(new JLabel("Pseudo ou mot de passe incorrect, réessayez"));
+            this.fenetre.refresh();
+            return;
+        }
+        try {
+            util= (Utilisateur) ClientPart.getServerinput().readObject();
+        } catch (IOException | ClassNotFoundException ex) {
+            throw new RuntimeException(ex);
         }
         this.fenetre.setUtil(util);
-        GroupLayout group= (GroupLayout) this.fenetre.getContentPane().getLayout();
         Hashtable<String,Integer> refperso;
         try {
-            refperso=UtilisateurDAO.displaypersonnage(util);
-        } catch (SQLException ex) {
+            refperso= (Hashtable<String, Integer>) ClientPart.getServerinput().readObject();
+        } catch ( IOException | ClassNotFoundException ex) {
             throw new RuntimeException(ex);
         }
         if(!refperso.isEmpty()) {
-            String[] data = refperso.keySet().toArray(new String[refperso.size()]);
+            String[] data = refperso.keySet().toArray(new String[0]);
             JList<String> lisperso = new JList<>(data);
             this.fenetre.setToptextfield(lisperso);
             this.fenetre.setToplabel(new JLabel("Choisissez un personnage ou creez en un nouveau"));

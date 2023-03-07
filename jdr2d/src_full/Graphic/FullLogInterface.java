@@ -1,9 +1,6 @@
 package Graphic;
 
-import Control.ConnexionButton;
-import Control.CreateAccountButton;
-import Control.EventListenerWindow;
-import Control.ThreadDealer;
+import Control.*;
 import DAO.EchangeDAO;
 import DAO.MapDAO;
 import DAO.PersonnageDAO;
@@ -12,6 +9,10 @@ import jdr2dcore.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -159,6 +160,46 @@ public class FullLogInterface extends JFrame  {
     private void build() {
         setTitle("Afpanums"); //On donne un titre à l'application
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //On dit à l'application de se fermer lors du clic sur la croix
+        addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                try {
+                    new ObjectOutputStream(ClientPart.getServeroutput()).writeObject(ConnexionInput.QUIT);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+        });
         setContentPane(buildContentPane());
         pack();
         setLocationRelativeTo(null); //On centre la fenêtre sur l'écran

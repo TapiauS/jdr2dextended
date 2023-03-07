@@ -22,7 +22,6 @@ public class CharSelectionButton extends AbstractAction {
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-        GroupLayout group= (GroupLayout) this.fenetre.getContentPane().getLayout();
         Hashtable<String,Integer> refperso;
         try {
             refperso= UtilisateurDAO.displaypersonnage(util);

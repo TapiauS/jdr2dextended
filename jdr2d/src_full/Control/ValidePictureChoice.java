@@ -10,6 +10,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -23,34 +25,26 @@ public class ValidePictureChoice extends AbstractAction {
 
     private Personnage personnage;
 
-    private Hashtable<Integer,BufferedImage> availableportrait;
+    private BufferedImage actualportraits;
 
-    private int indexportrait;
 
-    public ValidePictureChoice(FullLogInterface fenetre, Utilisateur util, Personnage personnage,Hashtable<Integer,BufferedImage> availableportrait, String message){
+    public ValidePictureChoice(FullLogInterface fenetre, Utilisateur util, Personnage personnage,BufferedImage actualportraits, String message){
         super(message);
         this.fenetre=fenetre;
         this.util=util;
         this.personnage=personnage;
-        this.availableportrait=availableportrait;
-        this.indexportrait=0;
+        this.actualportraits=actualportraits;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        List<Integer> keystoarray=  availableportrait.keySet().stream().toList();
         try {
-            DAOObject.queryUDC("UPDATE personnage SET id_portrait=? WHERE id_personnage=?;",new ArrayList<>(List.of(keystoarray.get(indexportrait),personnage.getId())));
+            (ClientPart.getServeroutput()).writeObject(ConnexionInput.VALIDPICTURE);
             this.fenetre.setPerso(personnage);
-        } catch (InterruptedException ex) {
-            throw new RuntimeException(ex);
-        } catch (SQLException ex) {
+        } catch (InterruptedException | IOException ex) {
             throw new RuntimeException(ex);
         }
         this.fenetre.setVisible(false);
     }
 
-    public void update(int position){
-        this.indexportrait=position;
-    }
 }

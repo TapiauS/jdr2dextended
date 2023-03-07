@@ -13,6 +13,8 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -49,43 +51,30 @@ public class FirstCharButton extends AbstractAction {
             boolean validation;
             Personnage perso;
             try {
-                validation = PersonnageDAO.checkcharname(charname);
-            } catch (SQLException ex) {
+                ClientPart.getServeroutput().writeObject(ConnexionInput.CREATECHAR);
+                ClientPart.getServeroutput().writeObject(charname);
+                validation=ClientPart.getServerinput().readBoolean();
+            } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
             if (validation) {
+                BufferedImage firstportraits;
                 try {
-                    perso = PersonnageDAO.getchar(PersonnageDAO.createchar(charname, util));
-                } catch (SQLException ex) {
+                    perso= (Personnage) ClientPart.getServerinput().readObject();
+                    firstportraits= (BufferedImage) ClientPart.getServerinput().readObject();
+                } catch (IOException | ClassNotFoundException ex) {
                     throw new RuntimeException(ex);
                 }
-                //File directorie=new File("Portraits");
-                Hashtable<Integer,BufferedImage> availableportraits;
-                try {
-                    availableportraits = ImageDAO.loadfullimagebank("portrait");
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-                List<Integer> ids=  availableportraits.keySet().stream().toList();
-                if(ids.get(0)!=null)
-                    fenetre.getToplabel().setIcon(new ImageIcon(availableportraits.get(ids.get(0))));
+                fenetre.getToplabel().setIcon(new ImageIcon(firstportraits));
                 fenetre.getToplabel().setText("");
                 fenetre.getToptextfield().setVisible(false);
                 fenetre.getBottomtextfield().setVisible(false);
                 fenetre.getBottomlabel().setVisible(false);
-                ValidePictureChoice valid=new ValidePictureChoice(this.fenetre,util,perso,availableportraits,"Valider");
+                ValidePictureChoice valid=new ValidePictureChoice(this.fenetre,util,perso,firstportraits,"Valider");
                 fenetre.setBottom(new JButton(valid));
-                NextPictureButton next=new NextPictureButton(this.fenetre,perso,this.util,availableportraits,"Option Suivante",valid);
+                NextPictureButton next=new NextPictureButton(this.fenetre,perso,this.util,firstportraits,"Option Suivante",valid);
                 fenetre.setTop(new JButton(next));
                 fenetre.refresh();
-                /*try {
-                    //this.fenetre.setPerso(perso);
-                } catch (InterruptedException ex) {
-                    throw new RuntimeException(ex);
-                }
-                this.fenetre.setVisible(false);/**/
             } else {
                 this.fenetre.setToplabel(new JLabel("Personnage non disponible, choisir un autre nom"));
                 this.fenetre.refresh();

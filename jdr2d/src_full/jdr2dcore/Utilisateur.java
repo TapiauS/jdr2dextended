@@ -1,6 +1,8 @@
 package jdr2dcore;
 
-public class Utilisateur {
+import java.io.Serializable;
+
+public class Utilisateur implements Serializable {
     private int id;
     private String nomUtilisateur;
     private String mdpUtilisateur;

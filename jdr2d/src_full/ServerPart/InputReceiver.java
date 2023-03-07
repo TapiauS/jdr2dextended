@@ -18,14 +18,15 @@ public class InputReceiver {
 
 
     public InputReceiver(){
+        try {
+        serverSocket = new ServerSocket(portNumber);
         while (true) {
-            try {
-                serverSocket = new ServerSocket(portNumber);
                 clientSocket = serverSocket.accept();
                 new Client(clientSocket);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
             }
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

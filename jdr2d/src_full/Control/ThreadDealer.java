@@ -12,7 +12,7 @@ public class ThreadDealer implements EventListenerWindow{
 
     private  Personnage player;
     private Utilisateur util;
-
+    
     private Thread pnjloop;
 
     //getters
