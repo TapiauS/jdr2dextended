@@ -2,8 +2,8 @@ package Control;
 
 
 
-import Log.LogLevel;
-import Log.Loggy;
+//import Log.LogLevel;
+//import Log.Loggy;
 
 import java.io.*;
 import java.net.Socket;
@@ -20,6 +20,10 @@ public abstract class ClientPart {
 
     private static ObjectInputStream serverinput;
 
+    private static ObjectOutputStream interactionoutputchannel;
+
+    private static ObjectInputStream interactioninputchannel;
+
     private static ObjectOutputStream serveroutput;
 
     private static InputStream in;
@@ -31,11 +35,13 @@ public abstract class ClientPart {
         Socket echoSocket = new Socket(hostName, port);
         in=echoSocket.getInputStream();
         out=echoSocket.getOutputStream();
-        Loggy.init();
-        Loggy.writlog("Check Client",LogLevel.ERROR);
+        //Loggy.init();
+        //Loggy.writlog("Check Client",LogLevel.ERROR);
         serveroutput=new ObjectOutputStream(echoSocket.getOutputStream());
         serverinput=new ObjectInputStream(echoSocket.getInputStream());
         autoupdatechannel=new ObjectInputStream(echoSocket.getInputStream());
+        interactioninputchannel=new ObjectInputStream(echoSocket.getInputStream());
+        interactionoutputchannel=new ObjectOutputStream(echoSocket.getOutputStream());
         ThreadDealer t=new ThreadDealer();
         t.launch();
     }
@@ -44,6 +50,14 @@ public abstract class ClientPart {
 
     //getters
 
+
+    public static ObjectOutputStream getInteractionoutputchannel() {
+        return interactionoutputchannel;
+    }
+
+    public static ObjectInputStream getInteractioninputchannel() {
+        return interactioninputchannel;
+    }
 
     public static ObjectOutputStream getServeroutput() {
         return  serveroutput;

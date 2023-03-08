@@ -55,6 +55,17 @@ public class GameZone {
 
     //methodes
 
+    public Client getClient(Personnage player){
+        for (Client c: clients) {
+            for (Personnage perso: joueurs) {
+                if(c.getAvatar().equals(perso))
+                    return c;
+            }
+
+        }
+        return null;
+    }
+
     public void addPlayer(Personnage joueur){
         this.joueurs.add(joueur);
     }

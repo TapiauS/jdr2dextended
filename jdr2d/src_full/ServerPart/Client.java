@@ -41,7 +41,18 @@ public class Client extends Thread implements Serializable{
     private Utilisateur util;
     private GameZone map;
 
+    private ObjectOutputStream interactionoutput;
+    private ObjectInputStream interactioninput;
     //getters et setters
+
+
+    public ObjectOutputStream getInteractionoutput() {
+        return interactionoutput;
+    }
+
+    public ObjectInputStream getInteractioninput() {
+        return interactioninput;
+    }
 
     public InputStream getIn() {
         return in;
@@ -66,6 +77,8 @@ public class Client extends Thread implements Serializable{
     public ObjectOutputStream getAutooutputstream() {
         return autooutputstream;
     }
+
+
 
     //setters
 
@@ -101,6 +114,8 @@ public class Client extends Thread implements Serializable{
         output=new ObjectOutputStream(socket.getOutputStream());
         input=new ObjectInputStream(socket.getInputStream());
         autooutputstream=new ObjectOutputStream(socket.getOutputStream());
+        interactionoutput=new ObjectOutputStream(out);
+        interactioninput=new ObjectInputStream(in);
         System.out.println("je passe bien ?");
         start();
 
