@@ -1,14 +1,9 @@
 package Control;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.sql.SQLException;
 
-import DAO.*;
 import Graphic.FullLogInterface;
 
 public class
@@ -41,7 +36,7 @@ ValidationPseudoButton extends AbstractAction {
         String pseudo = textField.getText();
         boolean val;
         try {
-            (ClientPart.getServeroutput()).writeObject(ConnexionInput.VALIDCHOICE);
+            (ClientPart.getServeroutput()).writeObject(ConnexionOutput.VALIDCHOICE);
             (ClientPart.getServeroutput()).writeObject(pseudo);
             val= (boolean) ClientPart.getServerinput().readObject();
         } catch (IOException | ClassNotFoundException ex) {

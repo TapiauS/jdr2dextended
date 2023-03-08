@@ -1,10 +1,6 @@
 package Graphic;
 
 import Control.*;
-import DAO.EchangeDAO;
-import DAO.MapDAO;
-import DAO.PersonnageDAO;
-import DAO.PorteDAO;
 import jdr2dcore.*;
 
 import javax.swing.*;
@@ -14,7 +10,6 @@ import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class FullLogInterface extends JFrame  {
     private Component toptextfield;
@@ -169,7 +164,7 @@ public class FullLogInterface extends JFrame  {
             @Override
             public void windowClosing(WindowEvent e) {
                 try {
-                    new ObjectOutputStream(ClientPart.getServeroutput()).writeObject(ConnexionInput.QUIT);
+                    new ObjectOutputStream(ClientPart.getServeroutput()).writeObject(ConnexionOutput.QUIT);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }

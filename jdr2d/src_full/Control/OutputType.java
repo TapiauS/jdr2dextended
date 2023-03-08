@@ -2,7 +2,7 @@ package Control;
 
 import java.io.Serializable;
 
-public enum InputType implements Serializable {
+public enum OutputType implements Serializable {
     MOUVEAST,
     MOUVWEST,
     MOUVNORD,

@@ -72,7 +72,6 @@ public class PersoThread extends Thread{
             inter.combat();
         }
         if(!perso.isNomme()&&perso.distance(player)<4&&!fenetre.isInteraction()){
-            System.out.println("je suis bien a proximité");
             int moov=rand.nextInt(2);
             if(perso.getX()>player.getX()&&perso.getY()>player.getY()){
                 if(moov==0){

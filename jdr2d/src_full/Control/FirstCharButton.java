@@ -1,7 +1,5 @@
 package Control;
 
-import DAO.ImageDAO;
-import DAO.PersonnageDAO;
 import Graphic.FullLogInterface;
 import jdr2dcore.Personnage;
 import jdr2dcore.Utilisateur;
@@ -9,14 +7,8 @@ import jdr2dcore.Utilisateur;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.sql.SQLException;
-import java.util.*;
+import java.io.*;
 
 public class FirstCharButton extends AbstractAction {
 
@@ -51,7 +43,7 @@ public class FirstCharButton extends AbstractAction {
             boolean validation;
             Personnage perso;
             try {
-                ClientPart.getServeroutput().writeObject(ConnexionInput.VALIDCHOICE);
+                ClientPart.getServeroutput().writeObject(ConnexionOutput.VALIDCHOICE);
                 ClientPart.getServeroutput().writeObject(charname);
                 validation= (boolean) ClientPart.getServerinput().readObject();
             } catch (IOException | ClassNotFoundException ex) {
@@ -62,8 +54,9 @@ public class FirstCharButton extends AbstractAction {
                 try {
                     perso= (Personnage) ClientPart.getServerinput().readObject();
                     System.out.println("j'arrive ici");
-                    firstportraits= ImageIO.read(ClientPart.getImginput());
-                    System.out.println("j'ai chargé l'image");
+                    int length= (int) ClientPart.getServerinput().readObject();
+                    byte [] imgbyte=ClientPart.getIn().readNBytes(length);
+                    firstportraits= ImageIO.read(new ByteArrayInputStream(imgbyte));
                 } catch (IOException | ClassNotFoundException ex) {
                     throw new RuntimeException(ex);
                 }

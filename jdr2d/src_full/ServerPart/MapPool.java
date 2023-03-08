@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public abstract class MapPool {
 
-    private static final ArrayList<MapState> listmaps;
+    private static final ArrayList<GameZone> listmaps;
 
     static {
         try {
@@ -23,33 +23,35 @@ public abstract class MapPool {
     //methodes
 
 
-    private static ArrayList<MapState> getmaps() throws SQLException {
+    private static ArrayList<GameZone> getmaps() throws SQLException {
         int idmap=1;
         while (MapDAO.getmap(idmap)==null) {
             idmap++;
         }
-        ArrayList<MapState> maps=new ArrayList<>();
+        ArrayList<GameZone> maps=new ArrayList<>();
         while (MapDAO.getmap(idmap)!=null){
-            maps.add(new MapState(idmap));
+            maps.add(new GameZone(idmap));
             idmap++;
         }
         return maps;
     }
 
     public static void addClient(Client client){
-        for (MapState m: listmaps) {
+        for (GameZone m: listmaps) {
             if(client.getAvatar().getLieux().getId()==m.getCarte().getId()) {
                 m.addClient(client);
                 client.setMap(m);
-                break;
+                return;
             }
         }
         throw new IllegalArgumentException("Cette map n'existe pas");
     }
 
+
+
     //getters
 
-    public static ArrayList<MapState> getLismaps(){
+    public static ArrayList<GameZone> getLismaps(){
         return listmaps;
     }
 

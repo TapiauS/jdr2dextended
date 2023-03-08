@@ -4,7 +4,6 @@ import Graphic.FullLogInterface;
 import jdr2dcore.Utilisateur;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 
@@ -26,7 +25,7 @@ public class CreateCharButton extends AbstractAction {
     public void actionPerformed(ActionEvent e) {
         this.fenetre.getToplabel().setText("Entrer un nom pour votre personnage");
         try {
-            ClientPart.getServeroutput().writeObject(ConnexionInput.CREATECHAR);
+            ClientPart.getServeroutput().writeObject(ConnexionOutput.CREATECHAR);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

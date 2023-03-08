@@ -1,15 +1,11 @@
 package Control;
 
-import DAO.UtilisateurDAO;
 import Graphic.FullLogInterface;
 import jdr2dcore.Utilisateur;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.sql.SQLException;
 
 public class MailButton extends AbstractAction {
 
@@ -52,7 +48,7 @@ public class MailButton extends AbstractAction {
 
         boolean val;
         try {
-            (ClientPart.getServeroutput()).writeObject(ConnexionInput.VALIDCHOICE);
+            (ClientPart.getServeroutput()).writeObject(ConnexionOutput.VALIDCHOICE);
             (ClientPart.getServeroutput()).writeObject(mail);
             val= (boolean) ClientPart.getServerinput().readObject();
         } catch (IOException | ClassNotFoundException ex) {

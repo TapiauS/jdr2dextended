@@ -1,6 +1,5 @@
 package Control;
 
-import DAO.PersonnageDAO;
 import Graphic.FullLogInterface;
 import jdr2dcore.Personnage;
 import jdr2dcore.Utilisateur;
@@ -8,7 +7,6 @@ import jdr2dcore.Utilisateur;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Hashtable;
 
 public class ValideCharSelButton extends AbstractAction {
@@ -48,7 +46,7 @@ public class ValideCharSelButton extends AbstractAction {
         String charname= (String) list.getSelectedValue();
         Personnage perso;
         try {
-            ClientPart.getServeroutput().writeObject(ConnexionInput.PICKCHAR);
+            ClientPart.getServeroutput().writeObject(ConnexionOutput.PICKCHAR);
             ClientPart.getServeroutput().writeObject(charname);
             perso= (Personnage) ClientPart.getServerinput().readObject();
         } catch (IOException | ClassNotFoundException ex) {

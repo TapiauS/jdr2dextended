@@ -2,8 +2,9 @@ package Control;
 
 
 
-import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageInputStream;
+import Log.LogLevel;
+import Log.Loggy;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -15,6 +16,7 @@ public abstract class ClientPart {
 
     private static OutputStream out;
 
+    private static ObjectInputStream autoupdatechannel;
 
     private static ObjectInputStream serverinput;
 
@@ -22,20 +24,22 @@ public abstract class ClientPart {
 
     private static InputStream in;
 
-    private static ImageInputStream imginput;
+    //private static ByteArrayInputStream imginput;
 
 
     public static void launch() throws IOException, ClassNotFoundException, InterruptedException {
         Socket echoSocket = new Socket(hostName, port);
         in=echoSocket.getInputStream();
         out=echoSocket.getOutputStream();
-        //Loggy.writlog("Check Client", LogLevel.DEBUG);
+        Loggy.init();
+        Loggy.writlog("Check Client",LogLevel.ERROR);
         serveroutput=new ObjectOutputStream(echoSocket.getOutputStream());
         serverinput=new ObjectInputStream(echoSocket.getInputStream());
-        imginput= ImageIO.createImageInputStream(ClientPart.getIn());
+        autoupdatechannel=new ObjectInputStream(echoSocket.getInputStream());
         ThreadDealer t=new ThreadDealer();
         t.launch();
     }
+
 
 
     //getters
@@ -57,10 +61,14 @@ public abstract class ClientPart {
         return in;
     }
 
-    public static ImageInputStream getImginput() {
+    /*public static ImageInputStream getImginput() {
         return imginput;
     }
+*/
 
+    public static ObjectInputStream getAutoupdatechannel() {
+        return autoupdatechannel;
+    }
     //setters
 
 

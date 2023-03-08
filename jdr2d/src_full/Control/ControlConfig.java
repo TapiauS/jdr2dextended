@@ -5,7 +5,7 @@ import java.util.Hashtable;
 
 public class ControlConfig {
 
-    private Hashtable<Integer,InputType> keybindings;
+    private Hashtable<Integer, OutputType> keybindings;
 
     private File source;
 

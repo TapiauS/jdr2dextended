@@ -1,16 +1,11 @@
 package Control;
 
-import DAO.UtilisateurDAO;
 import Graphic.FullLogInterface;
 import jdr2dcore.Utilisateur;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.sql.SQLDataException;
-import java.sql.SQLException;
 import java.util.Hashtable;
 
 public class LogButton extends AbstractAction {
@@ -29,7 +24,7 @@ public class LogButton extends AbstractAction {
         Utilisateur util = new Utilisateur();
         boolean success;
         try {
-            ClientPart.getServeroutput().writeObject(ConnexionInput.CONNEXION);
+            ClientPart.getServeroutput().writeObject(ConnexionOutput.CONNEXION);
             ClientPart.getServeroutput().writeObject(pseudo);
             ClientPart.getServeroutput().writeObject(mdp);
             success= (boolean) ClientPart.getServerinput().readObject();

@@ -1,7 +1,7 @@
 package ServerPart;
 
-import Control.ConnexionInput;
-import Control.InputType;
+import Control.ConnexionOutput;
+import Control.OutputType;
 import DAO.DAOObject;
 import DAO.ImageDAO;
 import DAO.PersonnageDAO;
@@ -11,7 +11,6 @@ import jdr2dcore.Personnage;
 import jdr2dcore.Utilisateur;
 
 import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageOutputStream;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.Socket;
@@ -20,10 +19,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Set;
 
 
-public class Client extends Thread{
+public class Client extends Thread implements Serializable{
 
     private final Socket socket;
 
@@ -35,23 +33,74 @@ public class Client extends Thread{
 
     private ObjectInputStream input;
 
+    private ObjectOutputStream autooutputstream;
     private ObjectOutputStream output;
     private Personnage avatar;
 
+    private ByteArrayOutputStream bytestream;
     private Utilisateur util;
-    private MapState map;
+    private GameZone map;
 
+    //getters et setters
+
+    public InputStream getIn() {
+        return in;
+    }
+
+    public OutputStream getOut() {
+        return out;
+    }
+
+    public ObjectOutputStream getOutput() {
+        return output;
+    }
+
+    public ByteArrayOutputStream getBytestream() {
+        return bytestream;
+    }
+
+    public Utilisateur getUtil() {
+        return util;
+    }
+
+    public ObjectOutputStream getAutooutputstream() {
+        return autooutputstream;
+    }
+
+    //setters
+
+
+    public void setIn(InputStream in) {
+        this.in = in;
+    }
+
+    public void setOut(OutputStream out) {
+        this.out = out;
+    }
+
+    public void setOutput(ObjectOutputStream output) {
+        this.output = output;
+    }
+
+    public void setBytestream(ByteArrayOutputStream bytestream) {
+        this.bytestream = bytestream;
+    }
+
+    public void setUtil(Utilisateur util) {
+        this.util = util;
+    }
 
     public Client(Socket socket) throws IOException {
         this.socket=socket;
         connected=true;
         avatar=null;
         util=null;
-
+        bytestream=new ByteArrayOutputStream();
         out=socket.getOutputStream();
         in=socket.getInputStream();
         output=new ObjectOutputStream(socket.getOutputStream());
         input=new ObjectInputStream(socket.getInputStream());
+        autooutputstream=new ObjectOutputStream(socket.getOutputStream());
         System.out.println("je passe bien ?");
         start();
 
@@ -60,9 +109,9 @@ public class Client extends Thread{
     private void connect() throws IOException, ClassNotFoundException {
         String pseudo;
         String mdp;
-        ConnexionInput conn=null;
-        while (util==null&&conn!= ConnexionInput.QUIT) {
-            conn=(ConnexionInput) input.readObject();
+        ConnexionOutput conn=null;
+        while (util==null&&conn!= ConnexionOutput.QUIT) {
+            conn=(ConnexionOutput) input.readObject();
             switch (conn) {
                 case CONNEXION -> {
                     pseudo = (String) input.readObject();
@@ -96,11 +145,11 @@ public class Client extends Thread{
     private void create() throws IOException, ClassNotFoundException {
         String pseudo="";
         String mdp="";
-        ConnexionInput conn = null;
+        ConnexionOutput conn = null;
         String mail="";
         boolean success = false;
         while (!success) {
-            conn = (ConnexionInput) input.readObject();
+            conn = (ConnexionOutput) input.readObject();
             switch (conn) {
                 case VALIDCHOICE -> {
                     String teste_pseudo;
@@ -126,7 +175,7 @@ public class Client extends Thread{
         }
         success = false;
         while (!success) {
-            conn = (ConnexionInput) input.readObject();
+            conn = (ConnexionOutput) input.readObject();
             switch (conn) {
                 case VALIDCHOICE -> {
                     String teste_mdp;
@@ -152,7 +201,7 @@ public class Client extends Thread{
         }
         success = false;
         while (!success) {
-            conn = (ConnexionInput) input.readObject();
+            conn = (ConnexionOutput) input.readObject();
             switch (conn) {
                 case VALIDCHOICE -> {
                     String teste_mail;
@@ -199,18 +248,20 @@ public class Client extends Thread{
     private void createchar(){
         String charname="";
         boolean success=false;
-        ConnexionInput conn;
+        ConnexionOutput conn;
         while (!success){
             try {
-                conn= (ConnexionInput) input.readObject();
+                conn= (ConnexionOutput) input.readObject();
                 switch (conn){
                     case VALIDCHOICE -> {
                         charname= (String) input.readObject();
                         success=PersonnageDAO.checkcharname(charname);
                         output.writeObject(success);
                         if(success) {
+                            int id=PersonnageDAO.createchar(charname,util);
+                            avatar=PersonnageDAO.getchar(id);
                             output.writeObject(avatar);
-                            pickpicture(charname);
+                            pickpicture();
                         }
                     }
                     case PICKCHAR -> {
@@ -228,18 +279,21 @@ public class Client extends Thread{
         }
     }
 
-    private void pickpicture(String charname){
+    private void pickpicture(){
         try {
             Hashtable<Integer, BufferedImage> caroussel= ImageDAO.loadfullimagebank("portrait");
             int indexportrait=0;
             List<Integer> keystoarray= caroussel.keySet().stream().toList();
+            System.out.println("Oscour "+keystoarray);
             boolean valid=false;
-            ConnexionInput choice;
+            ConnexionOutput choice;
             while (!valid){
-                System.out.println(keystoarray.get(indexportrait));
-                ImageIO.write(caroussel.get(keystoarray.get(indexportrait)),"png",out);
-                out.flush();
-                choice=(ConnexionInput) input.readObject();
+                bytestream=new ByteArrayOutputStream();
+                ImageIO.write(caroussel.get(keystoarray.get(indexportrait)),"png",bytestream);
+                byte [] imgbyte= bytestream.toByteArray();
+                output.writeObject(imgbyte.length);
+                out.write(imgbyte);
+                choice=(ConnexionOutput) input.readObject();
                 switch (choice){
                     case NEXTPICTURE -> {
                         if(indexportrait+1<keystoarray.size())
@@ -263,44 +317,50 @@ public class Client extends Thread{
     }
 
     public void run(){
-        ConnexionInput connect;
-        try {
-            connect = (ConnexionInput) input.readObject();
-            switch (connect) {
-                case CONNEXION -> connect();
-                case CREATION -> create();
-                case QUIT -> connected=false;
-            }
-        } catch (IOException | ClassNotFoundException ex) {
-            throw new RuntimeException(ex);
-        }
-        if(connected){
+            ConnexionOutput connect;
             try {
-                connect=(ConnexionInput) input.readObject();
-                switch (connect){
+                connect = (ConnexionOutput) input.readObject();
+                switch (connect) {
+                    case CONNEXION -> connect();
+                    case CREATION -> create();
+                }
+            } catch (IOException | ClassNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+            try {
+                connect = (ConnexionOutput) input.readObject();
+                switch (connect) {
                     case PICKCHAR -> pick();
                     case CREATECHAR -> createchar();
                 }
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
-        }
-        if(connected) {
+
             System.out.println(avatar.getLieux().getId());
             MapPool.addClient(this);
-            InputType inputType ;
+            new AutoUpdater(this);
+            OutputType outputType;
             do {
                 try {
-                    inputType = (InputType) input.readObject();
+                    outputType = (OutputType) input.readObject();
                 } catch (IOException | ClassNotFoundException e) {
                     throw new RuntimeException(e);
                 }
-                switch (inputType) {
-                    case MOUVNORD -> avatar.depl(Direction.NORD);
-                    case MOUVWEST -> avatar.depl(Direction.OUEST);
-                    case MOUVEAST -> avatar.depl(Direction.EST);
-                    case MOUVSOUTH -> avatar.depl(Direction.SUD);
-                    case QUIT -> connected=false;
+                switch (outputType) {
+                    case MOUVNORD -> {
+                        avatar.depl(Direction.NORD);
+                    }
+                    case MOUVWEST -> {
+                        avatar.depl(Direction.OUEST);
+                    }
+                    case MOUVEAST -> {
+                        avatar.depl(Direction.EST);
+                    }
+                    case MOUVSOUTH -> {
+                        avatar.depl(Direction.SUD);
+                    }
+                    case QUIT -> connected = false;
             /*
             case TALK -> break;
             case FIGTH -> break;
@@ -314,14 +374,15 @@ public class Client extends Thread{
             */
                 }
             } while (connected);
-        }
-        try {
-            input.close();
-            output.close();
-            socket.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+            try {
+                input.close();
+                map.removeClient(this);
+                output.close();
+                socket.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
     }
 
     //getters et setters
@@ -342,7 +403,7 @@ public class Client extends Thread{
         return avatar;
     }
 
-    public MapState getMap() {
+    public GameZone getMap() {
         return map;
     }
 
@@ -358,7 +419,7 @@ public class Client extends Thread{
         this.avatar = avatar;
     }
 
-    public void setMap(MapState map) {
+    public void setMap(GameZone map) {
         this.map = map;
     }
 }

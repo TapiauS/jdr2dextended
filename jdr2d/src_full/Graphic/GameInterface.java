@@ -1,10 +1,8 @@
 package Graphic;
 
-import Control.Interaction;
-import Control.PersoThread;
-import Control.SoundEffect;
-import Control.Soundtrackscontroller;
+import Control.*;
 import DAO.*;
+import ServerPart.MapState;
 import jdr2dcore.*;
 
 
@@ -54,6 +52,7 @@ public class GameInterface extends JFrame  implements KeyListener {
     private Soundtrackscontroller music;
     private EventHistory eventHistory;
 
+    private ArrayList<Personnage> players;
     private ArrayList<Porte> sorties;
 
     private ArrayList<Echange> echanges;
@@ -74,6 +73,8 @@ public class GameInterface extends JFrame  implements KeyListener {
     private DialogueInterface dialogdealer;
 
     private PersoThread ias;
+
+    private MapUpdater updater;
 
 
 
@@ -163,6 +164,7 @@ public class GameInterface extends JFrame  implements KeyListener {
                     System.out.println("On sauvegarde en fermant");
                     PersonnageDAO.updatedatabase(player);
                     ias.setSwitchmap(false);
+                    updater.setRunning(false);
                     //music.getClip().stop();
                     for (PNJ ps: pnjs) {
                         if(ps.isNomme())
@@ -212,6 +214,7 @@ public class GameInterface extends JFrame  implements KeyListener {
             JOptionPane.showMessageDialog(null,"Erreur lors de la lecture de la musique du jeu");
         }
         this.requestFocus();
+        updater=new MapUpdater(this);
     }
 
 
@@ -225,14 +228,11 @@ public class GameInterface extends JFrame  implements KeyListener {
 
         if (e.getKeyCode() == 38 && !interaction && Instant.now().isAfter(nextmactiontime)) {
             nextmactiontime=Instant.now().plus(timestepms, ChronoUnit.MILLIS);
-            player.depl(Direction.NORD);
             try {
+                ClientPart.getServeroutput().writeObject(OutputType.MOUVNORD);
+                player.depl(Direction.NORD);
                 SoundEffect.playSound("walk");
-            } catch (UnsupportedAudioFileException ex) {
-                throw new RuntimeException(ex);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            } catch (LineUnavailableException ex) {
+            } catch (UnsupportedAudioFileException |  LineUnavailableException | IOException ex) {
                 throw new RuntimeException(ex);
             }
             checkdoor();
@@ -241,12 +241,11 @@ public class GameInterface extends JFrame  implements KeyListener {
             nextmactiontime=Instant.now().plus(timestepms, ChronoUnit.MILLIS);
             player.depl(Direction.OUEST);
             try {
+                ClientPart.getServeroutput().writeObject(OutputType.MOUVWEST);
+                MapState test= (MapState) ClientPart.getServerinput().readObject();
+                player.depl(Direction.OUEST);
                 SoundEffect.playSound("walk");
-            } catch (UnsupportedAudioFileException ex) {
-                throw new RuntimeException(ex);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            } catch (LineUnavailableException ex) {
+            } catch (UnsupportedAudioFileException | ClassNotFoundException | LineUnavailableException | IOException ex) {
                 throw new RuntimeException(ex);
             }
             checkdoor();
@@ -255,12 +254,9 @@ public class GameInterface extends JFrame  implements KeyListener {
             nextmactiontime=Instant.now().plus(timestepms, ChronoUnit.MILLIS);
             player.depl(Direction.EST);
             try {
+                ClientPart.getServeroutput().writeObject(OutputType.MOUVEAST);
                 SoundEffect.playSound("walk");
-            } catch (UnsupportedAudioFileException ex) {
-                throw new RuntimeException(ex);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            } catch (LineUnavailableException ex) {
+            } catch (UnsupportedAudioFileException |  LineUnavailableException | IOException ex) {
                 throw new RuntimeException(ex);
             }
             checkdoor();
@@ -270,11 +266,8 @@ public class GameInterface extends JFrame  implements KeyListener {
             player.depl(Direction.SUD);
             try {
                 SoundEffect.playSound("walk");
-            } catch (UnsupportedAudioFileException ex) {
-                throw new RuntimeException(ex);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            } catch (LineUnavailableException ex) {
+                ClientPart.getServeroutput().writeObject(OutputType.MOUVSOUTH);
+            } catch (UnsupportedAudioFileException |  LineUnavailableException | IOException ex) {
                 throw new RuntimeException(ex);
             }
             checkdoor();
@@ -386,20 +379,18 @@ public class GameInterface extends JFrame  implements KeyListener {
                         File source=new File("music\\"+player.getLieux().getNomLieu()+".wav");
                         music.setSource(source);
                         ias.setPnjs(pnjs);
-                    } catch (SQLException e) {
+                    } catch (SQLException | UnsupportedAudioFileException | LineUnavailableException | IOException e) {
                         throw new RuntimeException(e);}
-                    catch (UnsupportedAudioFileException e) {
-                        throw new RuntimeException(e);
-                    } catch (LineUnavailableException e) {
-                        throw new RuntimeException(e);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
                     this.revalidate();
                     this.repaint();
                 }
             }
         }
+    }
+
+    public void updatstate(MapState mapState){
+        System.out.println("nbr pnjs =" +mapState.getPnjs().size());
+        System.out.println("nbr joueurs ="+mapState.getJoueurs().size());
     }
     //getters
 

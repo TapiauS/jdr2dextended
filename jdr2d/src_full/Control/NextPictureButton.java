@@ -5,17 +5,11 @@ import jdr2dcore.Personnage;
 import jdr2dcore.Utilisateur;
 
 import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageInputStream;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
+import java.io.*;
 import java.util.Hashtable;
-import java.util.List;
 
 public class NextPictureButton extends AbstractAction {
 
@@ -45,9 +39,11 @@ public class NextPictureButton extends AbstractAction {
     public void actionPerformed(ActionEvent e) {
         BufferedImage myPicture ;
         try {
-            (ClientPart.getServeroutput()).writeObject(ConnexionInput.NEXTPICTURE);
-            myPicture=ImageIO.read(ClientPart.getImginput());
-        } catch (IOException ex) {
+            (ClientPart.getServeroutput()).writeObject(ConnexionOutput.NEXTPICTURE);
+            int length= (int) ClientPart.getServerinput().readObject();
+            byte [] imgbyte=ClientPart.getIn().readNBytes(length);
+            myPicture= ImageIO.read(new ByteArrayInputStream(imgbyte));
+        } catch (IOException | ClassNotFoundException ex) {
             throw new RuntimeException(ex);
         }
         fenetre.getToplabel().setIcon(new ImageIcon(myPicture));

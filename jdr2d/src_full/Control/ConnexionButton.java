@@ -5,7 +5,6 @@ import Graphic.FullLogInterface;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 
 public class ConnexionButton extends AbstractAction {
     FullLogInterface fenetre;
@@ -17,7 +16,7 @@ public class ConnexionButton extends AbstractAction {
     public void actionPerformed(ActionEvent e) {
         this.fenetre.setToplabel(new JLabel("Entrer un pseudo"));
         try {
-            ClientPart.getServeroutput().writeObject(ConnexionInput.CONNEXION);
+            ClientPart.getServeroutput().writeObject(ConnexionOutput.CONNEXION);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

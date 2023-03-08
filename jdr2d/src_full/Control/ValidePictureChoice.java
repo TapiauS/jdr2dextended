@@ -1,21 +1,13 @@
 package Control;
 
-import DAO.DAOObject;
 import Graphic.FullLogInterface;
 import jdr2dcore.Personnage;
-import jdr2dcore.Potion;
 import jdr2dcore.Utilisateur;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
 
 public class ValidePictureChoice extends AbstractAction {
 
@@ -39,7 +31,7 @@ public class ValidePictureChoice extends AbstractAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         try {
-            (ClientPart.getServeroutput()).writeObject(ConnexionInput.VALIDPICTURE);
+            (ClientPart.getServeroutput()).writeObject(ConnexionOutput.VALIDPICTURE);
             this.fenetre.setPerso(personnage);
         } catch (InterruptedException | IOException ex) {
             throw new RuntimeException(ex);
