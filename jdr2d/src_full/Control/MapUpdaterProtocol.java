@@ -3,8 +3,10 @@ package Control;
 import Graphic.GameInterface;
 import ServerPart.AutoUpdateChannel;
 import ServerPart.MapState;
+import jdr2dcore.PNJ;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class MapUpdaterProtocol extends Thread{
     private GameInterface fenetre;
@@ -29,9 +31,10 @@ public class MapUpdaterProtocol extends Thread{
         super.run();
         while (this.running) {
             try {
-                System.out.println("je tourne");
-                AutoUpdateSocket.getServeroutput().writeInt(fenetre.getCarte().getId());
+                AutoUpdateSocket.getServeroutput().writeObject(fenetre.getCarte().getId());
+                System.out.println("je passe le write");
                 MapState ref= (MapState) AutoUpdateSocket.getServerinput().readObject();
+                System.out.println("x = "+ref.getPnjs().get(0).getX()+"y= "+ref.getPnjs().get(0).getY());
                 fenetre.updatstate(ref);
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);

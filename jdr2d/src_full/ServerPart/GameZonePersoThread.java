@@ -33,7 +33,7 @@ public class GameZonePersoThread extends Thread{
         start();
     }
 
-    /*
+
 
     private void randommoove(PNJ perso) throws IOException {
         Random rand = new Random();
@@ -41,7 +41,7 @@ public class GameZonePersoThread extends Thread{
         int closestdst = 4;
         for (Personnage player : gameZone.getJoueurs()) {
             Client client = gameZone.getClient(player);
-            if (player.distance(perso) < 1 && !perso.isNomme() && !client.isInteragit()) {
+            /*if (player.distance(perso) < 1 && !perso.isNomme() && !client.isInteragit()) {
                 client.getInteractioniaoutput().writeObject(ServerGameOutputType.PNJATK);
                 client.getInteractioniaoutput().writeObject(perso);
                 client.getAvatar().setpV(client.getInteractioniainput().readInt());
@@ -49,7 +49,7 @@ public class GameZonePersoThread extends Thread{
                 if (client.getAvatar().getpV() <= 0)
                     client.setInteragit(true);
                 return;
-            }
+            }*/
             if (!perso.isNomme() && perso.distance(player) < closestdst && !client.isInteragit()) {
                 closestdst = perso.distance(player);
                 closestsclients.add(player);
@@ -186,6 +186,6 @@ public class GameZonePersoThread extends Thread{
         });
         t.start();
     }
-    */
+
 
 }

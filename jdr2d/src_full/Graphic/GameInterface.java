@@ -389,9 +389,7 @@ public class GameInterface extends JFrame  implements KeyListener {
 
     public void updatstate(MapState mapState){
         this.setPnjs(mapState.getPnjs());
-        System.out.println("x pnj "+pnjs.get(0).getX()+" y pnj "+pnjs.get(0).getY());
-        System.out.println("x theorique "+mapState.getPnjs().get(0).getX()+" y theorique "+mapState.getPnjs().get(0).getY());
-        System.out.println("nbr joueurs ="+mapState.getJoueurs().size());
+        this.mapPanel.setPnjs(this.pnjs);
         repaint();
         revalidate();
     }

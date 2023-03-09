@@ -20,7 +20,6 @@ public class AutoUpdater extends Thread{
         try {
             input=new ObjectInputStream(client.getInputStream());
             output=new ObjectOutputStream(client.getOutputStream());
-            System.out.println("j'ai avancé");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -32,10 +31,13 @@ public class AutoUpdater extends Thread{
         super.run();
         while (client.isConnected()) {
             try {
-                idmap=input.readInt();
-                output.writeObject(MapPool.getGameZone(idmap).getStatut());
+                idmap= (int) input.readObject();
+                System.out.println("je passe le read");
+                MapState state=MapPool.getGameZone(idmap).getStatut();
+                output.writeObject(state);
+                output.reset();
                 sleep(30);
-            } catch (IOException | InterruptedException e) {
+            } catch (IOException | InterruptedException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         }
