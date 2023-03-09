@@ -13,7 +13,7 @@ public abstract class MapPool {
 
     static {
         try {
-            listmaps = getmaps();
+            listmaps = init();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -23,13 +23,14 @@ public abstract class MapPool {
     //methodes
 
 
-    private static ArrayList<GameZone> getmaps() throws SQLException {
+    public static ArrayList<GameZone> init() throws SQLException {
         int idmap=1;
         while (MapDAO.getmap(idmap)==null) {
             idmap++;
         }
         ArrayList<GameZone> maps=new ArrayList<>();
         while (MapDAO.getmap(idmap)!=null){
+            System.out.println("lancement ?");
             maps.add(new GameZone(idmap));
             idmap++;
         }
@@ -48,6 +49,13 @@ public abstract class MapPool {
     }
 
 
+    public static GameZone getGameZone(int idmap){
+        for (GameZone zone:listmaps) {
+            if(zone.getCarte().getId()==idmap)
+                return zone;
+        }
+        return null;
+    }
 
     //getters
 

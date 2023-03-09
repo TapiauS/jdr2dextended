@@ -6,6 +6,7 @@ import DAO.DAOObject;
 import DAO.ImageDAO;
 import DAO.PersonnageDAO;
 import DAO.UtilisateurDAO;
+import jdr2dcore.Coffre;
 import jdr2dcore.Direction;
 import jdr2dcore.Personnage;
 import jdr2dcore.Utilisateur;
@@ -33,26 +34,26 @@ public class Client extends Thread implements Serializable{
 
     private ObjectInputStream input;
 
-    private ObjectOutputStream autooutputstream;
     private ObjectOutputStream output;
     private Personnage avatar;
+
+    private Coffre openedcoffre;
 
     private ByteArrayOutputStream bytestream;
     private Utilisateur util;
     private GameZone map;
 
-    private ObjectOutputStream interactionoutput;
-    private ObjectInputStream interactioninput;
+    private boolean interagit;
+
+
+
+
     //getters et setters
 
-
-    public ObjectOutputStream getInteractionoutput() {
-        return interactionoutput;
+    public boolean isInteragit() {
+        return interagit;
     }
 
-    public ObjectInputStream getInteractioninput() {
-        return interactioninput;
-    }
 
     public InputStream getIn() {
         return in;
@@ -74,14 +75,14 @@ public class Client extends Thread implements Serializable{
         return util;
     }
 
-    public ObjectOutputStream getAutooutputstream() {
-        return autooutputstream;
-    }
-
 
 
     //setters
 
+
+    public void setInteragit(boolean interagit) {
+        this.interagit = interagit;
+    }
 
     public void setIn(InputStream in) {
         this.in = in;
@@ -113,12 +114,8 @@ public class Client extends Thread implements Serializable{
         in=socket.getInputStream();
         output=new ObjectOutputStream(socket.getOutputStream());
         input=new ObjectInputStream(socket.getInputStream());
-        autooutputstream=new ObjectOutputStream(socket.getOutputStream());
-        interactionoutput=new ObjectOutputStream(out);
-        interactioninput=new ObjectInputStream(in);
-        System.out.println("je passe bien ?");
+        openedcoffre=null;
         start();
-
     }
 
     private void connect() throws IOException, ClassNotFoundException {
@@ -131,15 +128,12 @@ public class Client extends Thread implements Serializable{
                 case CONNEXION -> {
                     pseudo = (String) input.readObject();
                     mdp = (String) input.readObject();
-                    System.out.println("?????");
                     try {
                         util = UtilisateurDAO.connectcompte(pseudo, mdp);
                         output.writeObject(true);
                         output.writeObject(util);
-                        System.out.println("je passe ici");
                     } catch (SQLException e) {
                         if (e instanceof SQLDataException) {
-                            System.out.println("je passe la");
                             output.writeObject(false);
                         }
                     }
@@ -354,7 +348,6 @@ public class Client extends Thread implements Serializable{
 
             System.out.println(avatar.getLieux().getId());
             MapPool.addClient(this);
-            new AutoUpdater(this);
             OutputType outputType;
             do {
                 try {
@@ -376,6 +369,10 @@ public class Client extends Thread implements Serializable{
                         avatar.depl(Direction.SUD);
                     }
                     case QUIT -> connected = false;
+                    case RESPAWN -> {
+                        interagit=false;
+                        avatar.setpV(avatar.getpVmax());
+                    }
             /*
             case TALK -> break;
             case FIGTH -> break;
@@ -401,6 +398,11 @@ public class Client extends Thread implements Serializable{
     }
 
     //getters et setters
+
+
+    public Coffre getOpenedcoffre() {
+        return openedcoffre;
+    }
 
     public Socket getSocket() {
         return socket;

@@ -2,8 +2,6 @@ package ServerPart;
 
 import Control.Interaction;
 import DAO.PersonnageDAO;
-import Graphic.GameInterface;
-import ServerPart.GameZone;
 import jdr2dcore.Direction;
 import jdr2dcore.PNJ;
 import jdr2dcore.Personnage;
@@ -18,7 +16,7 @@ public class GameZonePersoThread extends Thread{
 
     private Thread iaPnj;
 
-    private boolean switchmap;
+    private boolean running;
 
     private GameZone gameZone;
 
@@ -30,92 +28,98 @@ public class GameZonePersoThread extends Thread{
     public GameZonePersoThread(GameZone zone){
         this.gameZone=zone;
         this.pnjs=gameZone.getPnjs();
+        System.out.println("pnj= "+this.pnjs.size());
+        running=true;
+        start();
     }
 
+    /*
 
     private void randommoove(PNJ perso) throws IOException {
         Random rand = new Random();
-        for (Personnage player: gameZone.getJoueurs()) {
-            if(player.distance(perso)<1&&!perso.isNomme()){
-                Client client=gameZone.getClient(player);
-                client.getInteractionoutput().writeObject(ServerGameOutputType.PNJATK);
-                if(client.getInteractioninput().readBoolean());
-                {
-                    Interaction inter = new Interaction(player, perso);
-                    inter.combat();
-                }
+        ArrayList<Personnage> closestsclients = new ArrayList<>();
+        int closestdst = 4;
+        for (Personnage player : gameZone.getJoueurs()) {
+            Client client = gameZone.getClient(player);
+            if (player.distance(perso) < 1 && !perso.isNomme() && !client.isInteragit()) {
+                client.getInteractioniaoutput().writeObject(ServerGameOutputType.PNJATK);
+                client.getInteractioniaoutput().writeObject(perso);
+                client.getAvatar().setpV(client.getInteractioniainput().readInt());
+                perso.setpV(client.getInteractioniainput().readInt());
+                if (client.getAvatar().getpV() <= 0)
+                    client.setInteragit(true);
+                return;
+            }
+            if (!perso.isNomme() && perso.distance(player) < closestdst && !client.isInteragit()) {
+                closestdst = perso.distance(player);
+                closestsclients.add(player);
+            }
         }
-        /*
-        if(!perso.isNomme()&&perso.distance(player)<4&&!fenetre.isInteraction()){
-            int moov=rand.nextInt(2);
-            if(perso.getX()>player.getX()&&perso.getY()>player.getY()){
-                if(moov==0){
-                    perso.depl(Direction.OUEST);
+        for (Personnage player : closestsclients) {
+            if (player.distance(perso) <= closestdst) {
+                int moov = rand.nextInt(2);
+                if (perso.getX() > player.getX() && perso.getY() > player.getY()) {
+                    if (moov == 0) {
+                        perso.depl(Direction.OUEST);
+                    } else {
+                        perso.depl(Direction.NORD);
+                    }
+                    return;
                 }
-                else {
+                if (perso.getX() < player.getX() && perso.getY() > player.getY()) {
+                    if (moov == 0) {
+                        perso.depl(Direction.EST);
+                    } else {
+                        perso.depl(Direction.NORD);
+                    }
+                    return;
+                }
+                if (perso.getX() < player.getX() && perso.getY() < player.getY()) {
+                    if (moov == 0) {
+                        perso.depl(Direction.EST);
+                    } else {
+                        perso.depl(Direction.SUD);
+                    }
+                    return;
+                }
+                if (perso.getX() > player.getX() && perso.getY() < player.getY()) {
+                    if (moov == 0) {
+                        perso.depl(Direction.OUEST);
+                    } else {
+                        perso.depl(Direction.SUD);
+                    }
+                    return;
+                }
+                if (perso.getX() == player.getX() && perso.getY() > player.getY()) {
                     perso.depl(Direction.NORD);
+                    return;
                 }
-                return;
-            }
-            if(perso.getX()<player.getX()&&perso.getY()>player.getY()){
-                if(moov==0){
-                    perso.depl(Direction.EST);
-                }
-                else {
-                    perso.depl(Direction.NORD);
-                }
-                return;
-            }
-            if(perso.getX()<player.getX()&&perso.getY()<player.getY()){
-                if(moov==0){
-                    perso.depl(Direction.EST);
-                }
-                else {
+                if (perso.getX() == player.getX() && perso.getY() < player.getY()) {
                     perso.depl(Direction.SUD);
+                    return;
                 }
-                return;
-            }
-            if(perso.getX()>player.getX()&&perso.getY()<player.getY()){
-                if(moov==0){
+                if (perso.getY() == player.getY() && perso.getX() > player.getX()) {
                     perso.depl(Direction.OUEST);
+                    return;
                 }
-                else {
-                    perso.depl(Direction.SUD);
+                if (perso.getY() == player.getY() && perso.getX() < player.getX()) {
+                    perso.depl(Direction.EST);
+                    return;
                 }
-                return;
-            }
-            if(perso.getX()== player.getX()&&perso.getY()>player.getY()) {
-                perso.depl(Direction.NORD);
-                return;
-            }
-            if (perso.getX()==player.getX()&&perso.getY()<player.getY()) {
-                perso.depl(Direction.SUD);
-                return;
-            }
-            if(perso.getY()==player.getY()&&perso.getX()>player.getX()) {
-                perso.depl(Direction.OUEST);
-                return;
-            }
-            if(perso.getY()==player.getY()&&perso.getX()<player.getX()){
-                perso.depl(Direction.EST);
             }
         }
-        else{
-            int nextdepl = rand.nextInt(4);
-            switch (nextdepl) {
-                case 0 -> perso.depl(Direction.NORD);
-                case 1 -> perso.depl(Direction.EST);
-                case 2 -> perso.depl(Direction.SUD);
-                case 3 -> perso.depl(Direction.OUEST);
-            }*/
+        int nextdepl = rand.nextInt(4);
+        switch (nextdepl) {
+            case 0 -> perso.depl(Direction.NORD);
+            case 1 -> perso.depl(Direction.EST);
+            case 2 -> perso.depl(Direction.SUD);
+            case 3 -> perso.depl(Direction.OUEST);
         }
-
     }
 
 
 
-/*
-    public void ia(){
+    public void ia() throws IOException {
         for (int i = 0; i < pnjs.size() ; i++) {
             PNJ p=pnjs.get(i);
             if(p.getpV()>0&&!p.isInteract()){
@@ -125,21 +129,20 @@ public class GameZonePersoThread extends Thread{
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                fenetre.repaint();
-                fenetre.revalidate();
             }
             else if(p.getpV()<=0&&!p.isInteract()) {
                 respawn(p);
-                fenetre.repaint();
-                fenetre.revalidate();
             }
         }
     }
 
     public void run(){
-        while (this.switchmap){
-            this.setPnjs(fenetre.getPnjs());
-            ia();
+        while (running){
+            try {
+                ia();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -183,5 +186,6 @@ public class GameZonePersoThread extends Thread{
         });
         t.start();
     }
-*/
+    */
+
 }

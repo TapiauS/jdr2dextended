@@ -16,13 +16,9 @@ public abstract class ClientPart {
 
     private static OutputStream out;
 
-    private static ObjectInputStream autoupdatechannel;
 
     private static ObjectInputStream serverinput;
 
-    private static ObjectOutputStream interactionoutputchannel;
-
-    private static ObjectInputStream interactioninputchannel;
 
     private static ObjectOutputStream serveroutput;
 
@@ -37,11 +33,8 @@ public abstract class ClientPart {
         out=echoSocket.getOutputStream();
         //Loggy.init();
         //Loggy.writlog("Check Client",LogLevel.ERROR);
-        serveroutput=new ObjectOutputStream(echoSocket.getOutputStream());
-        serverinput=new ObjectInputStream(echoSocket.getInputStream());
-        autoupdatechannel=new ObjectInputStream(echoSocket.getInputStream());
-        interactioninputchannel=new ObjectInputStream(echoSocket.getInputStream());
-        interactionoutputchannel=new ObjectOutputStream(echoSocket.getOutputStream());
+        serveroutput=new ObjectOutputStream(out);
+        serverinput=new ObjectInputStream(in);
         ThreadDealer t=new ThreadDealer();
         t.launch();
     }
@@ -50,14 +43,6 @@ public abstract class ClientPart {
 
     //getters
 
-
-    public static ObjectOutputStream getInteractionoutputchannel() {
-        return interactionoutputchannel;
-    }
-
-    public static ObjectInputStream getInteractioninputchannel() {
-        return interactioninputchannel;
-    }
 
     public static ObjectOutputStream getServeroutput() {
         return  serveroutput;
@@ -80,9 +65,7 @@ public abstract class ClientPart {
     }
 */
 
-    public static ObjectInputStream getAutoupdatechannel() {
-        return autoupdatechannel;
-    }
+
     //setters
 
 

@@ -7,6 +7,7 @@ import jdr2dcore.Direction;
 import jdr2dcore.PNJ;
 import jdr2dcore.Personnage;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -71,6 +72,7 @@ public class PersoThread extends Thread{
         this.switchmap = switchmap;
     }
 
+    /*
     private void randommoove(PNJ perso) {
         Random rand = new Random();
         Personnage player=fenetre.getPlayer();
@@ -197,7 +199,7 @@ public class PersoThread extends Thread{
         });
         t.start();
     }
-
+    */
     public static void respawn(Personnage p){
         fenetre.setInteraction(true);
         Thread t = new Thread(() -> {
@@ -211,6 +213,11 @@ public class PersoThread extends Thread{
                 }
             }
             p.setpV(p.getpVmax());
+            try {
+                ClientPart.getServeroutput().writeObject(OutputType.RESPAWN);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             fenetre.getFenetreInfo().update();
             fenetre.setInteraction(false);
         });

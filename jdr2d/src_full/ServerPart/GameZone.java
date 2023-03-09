@@ -40,6 +40,7 @@ public class GameZone {
         }
         joueurs=new ArrayList<>();
         statut=new MapState(this);
+        new GameZonePersoThread(this);
     }
 
 
@@ -104,7 +105,7 @@ public class GameZone {
 
 
     public MapState getStatut() {
-        return statut;
+        return statut=new MapState(this);
     }
 
     public Map getCarte() {

@@ -5,13 +5,14 @@ import DAO.QueteDAO;
 import Graphic.GameInterface;
 import jdr2dcore.*;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import static java.lang.Thread.sleep;
 
-public class Interaction {
+public class Interaction implements Serializable {
     protected Personnage joueur;
     protected PNJ opposant;
 
@@ -58,6 +59,10 @@ public class Interaction {
 
     //setters
 
+
+    public void setFenetre(GameInterface fenetre) {
+        this.fenetre = fenetre;
+    }
 
     public Interaction setJoueur(Personnage joueur) {
         this.joueur = joueur;

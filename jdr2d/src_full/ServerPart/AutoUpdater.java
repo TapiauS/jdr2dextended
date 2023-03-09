@@ -1,15 +1,29 @@
 package ServerPart;
 
-import Control.ClientPart;
-
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 
 public class AutoUpdater extends Thread{
 
-    private Client client;
+    private final Socket client;
 
-    public AutoUpdater(Client client){
+    private ObjectOutputStream output;
+
+    private ObjectInputStream input;
+
+    private int idmap;
+
+    public AutoUpdater( Socket client){
         this.client=client;
+        try {
+            input=new ObjectInputStream(client.getInputStream());
+            output=new ObjectOutputStream(client.getOutputStream());
+            System.out.println("j'ai avancé");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         this.start();
     }
 
@@ -18,9 +32,9 @@ public class AutoUpdater extends Thread{
         super.run();
         while (client.isConnected()) {
             try {
-                client.getAutooutputstream().writeObject(client.getMap().getStatut());
+                idmap=input.readInt();
+                output.writeObject(MapPool.getGameZone(idmap).getStatut());
                 sleep(30);
-                System.out.println("je passe bien ici");
             } catch (IOException | InterruptedException e) {
                 throw new RuntimeException(e);
             }

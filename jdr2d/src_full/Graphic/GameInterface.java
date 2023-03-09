@@ -2,6 +2,7 @@ package Graphic;
 
 import Control.*;
 import DAO.*;
+import ServerPart.AutoUpdateChannel;
 import ServerPart.MapState;
 import jdr2dcore.*;
 
@@ -73,10 +74,6 @@ public class GameInterface extends JFrame  implements KeyListener {
     private DialogueInterface dialogdealer;
 
     private PersoThread ias;
-
-    private MapUpdater updater;
-
-
 
     public GameInterface(Personnage player,Utilisateur util,FullLogInterface log) throws SQLException {
         super();
@@ -164,7 +161,6 @@ public class GameInterface extends JFrame  implements KeyListener {
                     System.out.println("On sauvegarde en fermant");
                     PersonnageDAO.updatedatabase(player);
                     ias.setSwitchmap(false);
-                    updater.setRunning(false);
                     //music.getClip().stop();
                     for (PNJ ps: pnjs) {
                         if(ps.isNomme())
@@ -214,7 +210,12 @@ public class GameInterface extends JFrame  implements KeyListener {
             JOptionPane.showMessageDialog(null,"Erreur lors de la lecture de la musique du jeu");
         }
         this.requestFocus();
-        updater=new MapUpdater(this);
+        try {
+            AutoUpdateSocket.launch(this);
+        } catch (IOException | ClassNotFoundException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        new PNJiaProtocol(this);
     }
 
 
@@ -242,10 +243,8 @@ public class GameInterface extends JFrame  implements KeyListener {
             player.depl(Direction.OUEST);
             try {
                 ClientPart.getServeroutput().writeObject(OutputType.MOUVWEST);
-                MapState test= (MapState) ClientPart.getServerinput().readObject();
-                player.depl(Direction.OUEST);
                 SoundEffect.playSound("walk");
-            } catch (UnsupportedAudioFileException | ClassNotFoundException | LineUnavailableException | IOException ex) {
+            } catch (UnsupportedAudioFileException | javax.sound.sampled.LineUnavailableException  | IOException ex) {
                 throw new RuntimeException(ex);
             }
             checkdoor();
@@ -389,8 +388,12 @@ public class GameInterface extends JFrame  implements KeyListener {
     }
 
     public void updatstate(MapState mapState){
-        System.out.println("nbr pnjs =" +mapState.getPnjs().size());
+        this.setPnjs(mapState.getPnjs());
+        System.out.println("x pnj "+pnjs.get(0).getX()+" y pnj "+pnjs.get(0).getY());
+        System.out.println("x theorique "+mapState.getPnjs().get(0).getX()+" y theorique "+mapState.getPnjs().get(0).getY());
         System.out.println("nbr joueurs ="+mapState.getJoueurs().size());
+        repaint();
+        revalidate();
     }
     //getters
 
