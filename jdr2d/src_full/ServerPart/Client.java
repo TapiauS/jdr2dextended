@@ -2,14 +2,8 @@ package ServerPart;
 
 import Control.ConnexionOutput;
 import Control.OutputType;
-import ServerPart.DAO.DAOObject;
-import ServerPart.DAO.ImageDAO;
-import ServerPart.DAO.PersonnageDAO;
-import ServerPart.DAO.UtilisateurDAO;
-import jdr2dcore.Coffre;
-import jdr2dcore.Direction;
-import jdr2dcore.Personnage;
-import jdr2dcore.Utilisateur;
+import ServerPart.DAO.*;
+import jdr2dcore.*;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -20,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Objects;
 
 
 public class Client extends Thread implements Serializable{
@@ -44,6 +39,7 @@ public class Client extends Thread implements Serializable{
     private GameZone map;
 
     private boolean interagit;
+
 
 
 
@@ -246,7 +242,7 @@ public class Client extends Thread implements Serializable{
     private void pick(){
         try {
             Hashtable<String,Integer> display=UtilisateurDAO.displaypersonnage(util);
-            String nomperso= (String) input.readObject();
+            String nomperso=read();
             avatar= PersonnageDAO.getchar(display.get(nomperso));
             output.writeObject(avatar);
         } catch (SQLException | IOException | ClassNotFoundException e) {
@@ -260,7 +256,7 @@ public class Client extends Thread implements Serializable{
         ConnexionOutput conn;
         while (!success){
             try {
-                conn= (ConnexionOutput) input.readObject();
+                conn= read();
                 switch (conn){
                     case VALIDCHOICE -> {
                         charname= (String) input.readObject();
@@ -274,7 +270,11 @@ public class Client extends Thread implements Serializable{
                         }
                     }
                     case PICKCHAR -> {
-                        pick();
+                        conn = read();
+                        switch (conn) {
+                            case PICKCHAR -> pick();
+                            case CREATECHAR -> createchar();
+                        }
                         return;
                     }
                     case QUIT -> {
@@ -302,7 +302,7 @@ public class Client extends Thread implements Serializable{
                 byte [] imgbyte= bytestream.toByteArray();
                 output.writeObject(imgbyte.length);
                 out.write(imgbyte);
-                choice=(ConnexionOutput) input.readObject();
+                choice=read();
                 switch (choice){
                     case NEXTPICTURE -> {
                         if(indexportrait+1<keystoarray.size())
@@ -348,13 +348,20 @@ public class Client extends Thread implements Serializable{
 
             System.out.println(avatar.getLieux().getId());
             MapPool.addClient(this);
-            OutputType outputType;
+        try {
+            GameZone zone=Objects.requireNonNull(MapPool.getGameZone(avatar.getLieux().getId()));
+            write(avatar.getLieux());
+            write(zone.getPnjs());
+            write(zone.getEchanges());
+            write(zone.getCoffres());
+            write(zone.getSorties());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        OutputType outputType;
             do {
                 try {
                     outputType = (OutputType) input.readObject();
-                } catch (IOException | ClassNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
                 switch (outputType) {
                     case MOUVNORD -> {
                         avatar.depl(Direction.NORD);
@@ -373,6 +380,34 @@ public class Client extends Thread implements Serializable{
                         interagit=false;
                         avatar.setpV(avatar.getpVmax());
                     }
+                    case TALK -> {
+                            this.interagit=true;
+                            int id=read();
+                        for (PNJ p: map.getPnjs()) {
+                            if(p.getId()==id) {
+                                p.setInteract(true);
+                                break;
+                            }
+                        }
+                        ArrayList<Quete> quetes=read();
+                        for (Quete q: quetes) {
+                            avatar.addsQuete(q);
+                        }
+                        ArrayList<Integer> ids=read();
+                        for (int i=0;i<ids.size();i++){
+                            for (Quete q:avatar.getQueteSuivie()) {
+                                for (int j=0;j<q.getObjectifs().size();j++) {
+                                    if (q.getObjectifs().get(j).getId()==ids.get(i)) {
+                                        q.getObjectifs().get(j).update();
+                                        ObjectifsDAO.setobj(avatar,q.getObjectifs().get(j));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    case PICK -> {
+
+                    }
             /*
             case TALK -> break;
             case FIGTH -> break;
@@ -385,6 +420,9 @@ public class Client extends Thread implements Serializable{
             case DROP -> break;
             */
                 }
+                } catch (IOException | ClassNotFoundException | SQLException e) {
+                    throw new RuntimeException(e);
+                }
             } while (connected);
             try {
                 input.close();
@@ -394,6 +432,21 @@ public class Client extends Thread implements Serializable{
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+
+    }
+
+    public void write(Object objet) throws IOException {
+        output.writeObject(objet);
+        output.reset();
+    }
+
+    public <T> T read() throws IOException, ClassNotFoundException {
+        return (T) input.readObject();
+    }
+
+    private void exploreCoffre(){
+        int coffrelvl;
+        Coffre openedcoffre;
 
     }
 

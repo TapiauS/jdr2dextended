@@ -300,11 +300,17 @@ public class GameInterface extends JFrame  implements KeyListener {
                 if (p.distance(player) < 1&&p.getpV()>0) {
                     p.setInteract(true);
                     for (Echange ech : this.getEchanges()) {
-                        if (ech.getParleur() == p) {
+                        if (ech.getParleur().getId() == p.getId()) {
                             this.getDialogdealer().setPresentechange(ech);
                             this.getDialogdealer().setVisible(true);
                             this.getDialogdealer().buildObserver();
                             this.defaultInteractionInterface.setVisible(false);
+                            try {
+                                ClientPart.write(OutputType.TALK);
+                                ClientPart.write(p.getId());
+                            } catch (IOException ex) {
+                                throw new RuntimeException(ex);
+                            }
                             this.setInteraction(true);
                             break;
                         }
@@ -336,20 +342,14 @@ public class GameInterface extends JFrame  implements KeyListener {
 
 
     private  void mapload() throws SQLException {
-        carte=player.getLieux();
-        System.out.println("id lieu="+carte.getId());
-        MapGraph graph=new MapGraph();
-        pnjs=new ArrayList<>();
-        echanges=new ArrayList<>();
-        coffres= MapDAO.getcoffres(carte);
-        sorties= PorteDAO.getPorte(carte);
-        for (Personnage p: PersonnageDAO.getPersonnages(carte,util)) {
-            if(p instanceof PNJ){
-                pnjs.add((PNJ) p);
-                Echange start= EchangeDAO.getEchangetree((PNJ) p);
-                if(start!=null)
-                    echanges.add(start);
-            }
+        try {
+            carte=ClientPart.read();
+            pnjs=ClientPart.read();
+            echanges=ClientPart.read();
+            coffres=ClientPart.read();
+            sorties=ClientPart.read();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
         if(mapPanel!=null) {
             mapPanel.setPnjs(pnjs);

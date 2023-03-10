@@ -1,17 +1,20 @@
 package Graphic;
 
-import ServerPart.DAO.QueteDAO;
+import Control.ClientPart;
 import jdr2dcore.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.sql.SQLException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
 public class DialogueInterface extends InteractionInterface {
     private Echange presentechange;
 
+    private ArrayList<Quete> quetesdonnees;
+
+    private ArrayList<Integer> objectifrealisesisid;
     private String[] reponses;
 
     private Personnage player;
@@ -34,7 +37,8 @@ public class DialogueInterface extends InteractionInterface {
         super(fenetre,player);
         //this.setLayout(null);
         this.setVisible(false);
-
+        quetesdonnees=new ArrayList<>();
+        objectifrealisesisid =new ArrayList<>();
         question=new JLabel();
         question.setBounds(MapPanel.MAP_WIDTH,INTERACTION_HEIGH,INTERACTION_WIDTH,INTERACTION_HEIGH/10);
         this.add(question);
@@ -53,7 +57,7 @@ public class DialogueInterface extends InteractionInterface {
             for (int i=0;i<observerT.size();i++) {
                 if (observerT.get(i) instanceof ObjectifT) {
                     if (((ObjectifT) observerT.get(i)).getConvaincre() == presentechange.getId()) {
-                        observerT.get(i).update();
+                        objectifrealisesisid.add(((ObjectifT) observerT.get(i)).getId());
                         observerT.remove(i);
                     }
                 }
@@ -61,14 +65,8 @@ public class DialogueInterface extends InteractionInterface {
             if (presentechange.isQuete()) {
                 if(!player.getQueteSuivie().contains(presentechange.getQuete())) {
                     player.addsQuete(presentechange.getQuete());
-                    try {
-                        QueteDAO.update(presentechange.getQuete(),player);
-                        fenetre.getEventHistory().addLine("Vous venez de revoir la quête "+presentechange.getQuete().getNomQuete());
-                    } catch (SQLException ex) {
-                        player.removesQuete(presentechange.getQuete());
-                        setPresentechange(new Echange(presentechange.getParleur(),presentechange.getQuestion(),
-                                " Vous avez déja recu ce travail ",null));
-                    }
+                    quetesdonnees.add(presentechange.getQuete());
+                    fenetre.getEventHistory().addLine("Vous venez de revoir la quête "+presentechange.getQuete().getNomQuete());
                 }
                 else {
                     setPresentechange(new Echange(presentechange.getParleur(),presentechange.getQuestion(),
@@ -95,10 +93,18 @@ public class DialogueInterface extends InteractionInterface {
         else{
          this.presentechange=presentechange;
          fenetre.getEventHistory().addLine(presentechange.getParleur().getNomPersonnage()+":"+presentechange.getReponse());
-         this.setVisible(false);
+            try {
+                ClientPart.write(quetesdonnees);
+                ClientPart.write(objectifrealisesisid);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            this.setVisible(false);
          fenetre.setInteraction(false);
          fenetre.getDefaultInteractionInterface().setVisible(true);
          presentechange.getParleur().setInteract(false);
+         quetesdonnees.removeAll(quetesdonnees);
+         objectifrealisesisid.removeAll(objectifrealisesisid);
          refreshfocus();
         }
     }

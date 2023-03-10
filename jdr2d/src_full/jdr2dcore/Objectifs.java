@@ -11,6 +11,7 @@ public abstract class Objectifs implements Serializable {
     protected int id;
 
 
+    public abstract void update();
     //getters
 
     public boolean isValide() {

@@ -4,6 +4,7 @@ import Control.OutputType;
 import ServerPart.GameZone;
 import ServerPart.MapPool;
 import ServerPart.ServerGameOutputType;
+import jdr2dcore.ObjectifK;
 import jdr2dcore.PNJ;
 import jdr2dcore.Personnage;
 
@@ -11,7 +12,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Objects;
 
-public class IAProtocolServer extends Thread{
+public class IAProtocolServer{
 
     private Socket socket;
 
@@ -44,20 +45,46 @@ public class IAProtocolServer extends Thread{
 
     //methode
 
-    public void figth(Personnage joueur, PNJ adversaire, GameZone zone) throws IOException {
-        output.writeObject(ServerGameOutputType.PNJATK);
-        output.writeObject(adversaire);
+    public void write(Object objet) throws IOException {
+        output.writeObject(objet);
         output.reset();
-        try {
-            System.out.println("avant les PV");
-            joueur.setpV((Integer) input.readObject());
-            System.out.println("avant les premierPV");
-            adversaire.setpV((Integer) input.readObject());
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+    }
 
-        if (joueur.getpV() <= 0)
-            zone.getClient(joueur).setInteragit(true);
+    public <T> T read() throws IOException, ClassNotFoundException {
+        return (T) input.readObject();
+    }
+
+    public void figth(Personnage joueur, PNJ adversaire, GameZone zone) throws IOException {
+        Thread t = new Thread(() -> {
+            try {
+                write(ServerGameOutputType.PNJATK);
+                write(adversaire);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                System.out.println("avant les PV");
+                joueur.setpV(read());
+                System.out.println("avant les premierPV");
+                adversaire.setpV(read());
+            } catch (ClassNotFoundException | IOException e) {
+                throw new RuntimeException(e);
+            }
+            if (joueur.getpV() <= 0)
+                zone.getClient(joueur).setInteragit(true);
+            else{
+                for (int i = 0; i < joueur.getQueteSuivie().size(); i++) {
+                    for(int j=0;j<joueur.getQueteSuivie().get(i).getObjectifs().size();j++){
+                        if (joueur.getQueteSuivie().get(i).getObjectifs().get(j) instanceof ObjectifK){
+                            if ( ((ObjectifK) joueur.getQueteSuivie().get(i).getObjectifs().get(j)).getTarget().getId()==adversaire.getId()) {
+                                joueur.getQueteSuivie().get(i).getObjectifs().get(j).update();
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        t.start();
     }
 }

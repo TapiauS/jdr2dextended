@@ -6,6 +6,7 @@ import jdr2dcore.Utilisateur;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Hashtable;
 
@@ -15,17 +16,19 @@ public class CharSelectionButton extends AbstractAction {
 
     private Utilisateur util;
 
-    public CharSelectionButton(String texte,Utilisateur util,FullLogInterface fenetre){
+    private Hashtable<String,Integer> refperso;
+
+    public CharSelectionButton(String texte,Utilisateur util,FullLogInterface fenetre,Hashtable<String,Integer> refperso){
         super(texte);
         this.fenetre=fenetre;
+        this.refperso=refperso;
         this.util=util;
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-        Hashtable<String,Integer> refperso;
         try {
-            refperso= UtilisateurDAO.displaypersonnage(util);
-        } catch (SQLException ex) {
+            ClientPart.write(ConnexionOutput.PICKCHAR);
+        } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
         if(!refperso.isEmpty()) {
@@ -42,7 +45,7 @@ public class CharSelectionButton extends AbstractAction {
         }
         this.fenetre.getBottomtextfield().setVisible(false);
         this.fenetre.getBottomlabel().setVisible(false);
-        this.fenetre.setBottom(new JButton(new CreateCharButton("Creer un personnage",this.fenetre,util)));
+        this.fenetre.setBottom(new JButton(new CreateCharButton("Creer un personnage",this.fenetre,util,refperso)));
         this.fenetre.refresh();
     }
 }

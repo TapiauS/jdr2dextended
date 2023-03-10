@@ -62,7 +62,7 @@ public class LogButton extends AbstractAction {
         }
         this.fenetre.getBottomtextfield().setVisible(false);
         this.fenetre.getBottomlabel().setVisible(false);
-        this.fenetre.setBottom(new JButton(new CreateCharButton("Creer un personnage",this.fenetre,util)));
+        this.fenetre.setBottom(new JButton(new CreateCharButton("Creer un personnage",this.fenetre,util,refperso)));
         this.fenetre.refresh();
     }
 }
