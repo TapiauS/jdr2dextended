@@ -1,6 +1,6 @@
 package Graphic;
 
-import DAO.QueteDAO;
+import ServerPart.DAO.QueteDAO;
 import jdr2dcore.*;
 
 import javax.swing.*;

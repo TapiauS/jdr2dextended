@@ -1,5 +1,7 @@
 package DAO;
 
+import ServerPart.DAO.PersonnageDAO;
+import ServerPart.DAO.UtilisateurDAO;
 import jdr2dcore.Race;
 import jdr2dcore.Utilisateur;
 import org.junit.jupiter.api.Test;

@@ -1,14 +1,18 @@
 package ServerPart;
 
-import DAO.EchangeDAO;
-import DAO.MapDAO;
-import DAO.PersonnageDAO;
-import DAO.PorteDAO;
+import Control.PNJiaProtocol;
+import ServerPart.Control.GameZonePersoThread;
+import ServerPart.Control.IAProtocolServer;
+import ServerPart.DAO.EchangeDAO;
+import ServerPart.DAO.MapDAO;
+import ServerPart.DAO.PersonnageDAO;
+import ServerPart.DAO.PorteDAO;
 import jdr2dcore.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class GameZone {
 
@@ -26,6 +30,8 @@ public class GameZone {
 
     private ArrayList<Porte> sorties;
 
+    private Hashtable<Integer, IAProtocolServer> communicationadresses;
+
 
     private MapState statut;
     //builder
@@ -34,6 +40,7 @@ public class GameZone {
         try {
             carte=MapDAO.getmap(id);
             clients=new ArrayList<>();
+            communicationadresses=new Hashtable<>();
             mapload();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -100,6 +107,14 @@ public class GameZone {
         this.joueurs.remove(client.getAvatar());
     }
 
+    public void addAdress(int idperso, IAProtocolServer adress){
+        communicationadresses.put(idperso,adress);
+        System.out.println("je rajoute l'adresse");
+    }
+
+    public IAProtocolServer getChannel(Personnage joueur){
+        return communicationadresses.get(joueur.getId());
+    }
 
     //builder et setters
 

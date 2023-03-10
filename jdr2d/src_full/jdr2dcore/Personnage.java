@@ -1,9 +1,8 @@
 package jdr2dcore;
 
-import Control.PersoThread;
-import DAO.ObjectifsDAO;
-import DAO.ObjetDAO;
-import DAO.QueteDAO;
+import ServerPart.Control.PersoThread;
+import ServerPart.DAO.ObjectifsDAO;
+import ServerPart.DAO.ObjetDAO;
 import Graphic.GameInterface;
 
 import java.sql.SQLException;

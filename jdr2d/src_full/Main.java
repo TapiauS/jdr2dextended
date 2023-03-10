@@ -2,21 +2,8 @@
 
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
 
 import Control.ClientPart;
-import Control.ThreadDealer;
-import DAO.PersonnageDAO;
-import Graphic.EventHistory;
-import Graphic.FullLogInterface;
-import Graphic.GameInterface;
-import gamegenerator.Verslaby;
-import jdr2dcore.Coffre;
-import jdr2dcore.Map;
-import jdr2dcore.Personnage;
-import jdr2dcore.Race;
-
-import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) throws SQLException, InterruptedException, IOException, ClassNotFoundException {

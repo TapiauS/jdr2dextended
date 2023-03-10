@@ -16,7 +16,7 @@ public class ConnexionButton extends AbstractAction {
     public void actionPerformed(ActionEvent e) {
         this.fenetre.setToplabel(new JLabel("Entrer un pseudo"));
         try {
-            ClientPart.getServeroutput().writeObject(ConnexionOutput.CONNEXION);
+            ClientPart.write(ConnexionOutput.CONNEXION);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

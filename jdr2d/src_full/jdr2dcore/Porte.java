@@ -1,6 +1,6 @@
 package jdr2dcore;
 
-import DAO.PorteDAO;
+import ServerPart.DAO.PorteDAO;
 
 import java.sql.SQLException;
 

@@ -1,4 +1,4 @@
-package DAO;
+package ServerPart.DAO;
 import jdr2dcore.Objectifs;
 import jdr2dcore.Objet;
 import jdr2dcore.Personnage;

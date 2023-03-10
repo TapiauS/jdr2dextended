@@ -32,9 +32,7 @@ public class MapUpdaterProtocol extends Thread{
         while (this.running) {
             try {
                 AutoUpdateSocket.getServeroutput().writeObject(fenetre.getCarte().getId());
-                System.out.println("je passe le write");
                 MapState ref= (MapState) AutoUpdateSocket.getServerinput().readObject();
-                System.out.println("x = "+ref.getPnjs().get(0).getX()+"y= "+ref.getPnjs().get(0).getY());
                 fenetre.updatstate(ref);
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);

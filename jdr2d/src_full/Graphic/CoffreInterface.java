@@ -1,10 +1,9 @@
 package Graphic;
 
-import DAO.ObjetDAO;
+import ServerPart.DAO.ObjetDAO;
 import jdr2dcore.Coffre;
 import jdr2dcore.Objet;
 import jdr2dcore.Personnage;
-import jdr2dcore.Quete;
 
 import javax.swing.*;
 import java.awt.*;

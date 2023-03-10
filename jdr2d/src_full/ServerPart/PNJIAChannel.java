@@ -1,36 +1,35 @@
 package ServerPart;
 
 import ServerPart.Control.AutoUpdater;
+import ServerPart.Control.IAProtocolServer;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class AutoUpdateChannel extends Thread{
-
-    private final int updateportNumber=5000;
+public class PNJIAChannel extends Thread{
+    private static final int portnumber=5010;
 
     private Socket clientSocket;
 
     private ServerSocket serverSocket;
 
-    public AutoUpdateChannel(){
+    public PNJIAChannel(){
         try {
-            serverSocket=new ServerSocket(updateportNumber);
+            serverSocket=new ServerSocket(portnumber);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         start();
     }
 
-    @Override
+
     public void run() {
         super.run();
         while (true) {
             try {
                 clientSocket = serverSocket.accept();
-                System.out.println("je passe ici ");
-                new AutoUpdater(clientSocket);
+                new IAProtocolServer(clientSocket);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

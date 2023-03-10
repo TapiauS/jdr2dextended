@@ -1,13 +1,5 @@
 package gamegenerator;
 
-import DAO.DAOObject;
-import DAO.MapDAO;
-import jdr2dcore.Map;
-
-import java.io.File;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class Verslaby {

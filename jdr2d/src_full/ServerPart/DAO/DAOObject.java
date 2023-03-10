@@ -1,4 +1,4 @@
-package DAO;
+package ServerPart.DAO;
 
 import javax.swing.*;
 import java.io.*;

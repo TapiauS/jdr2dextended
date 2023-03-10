@@ -1,4 +1,4 @@
-package DAO;
+package ServerPart.DAO;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -6,8 +6,6 @@ import java.io.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Hashtable;
 
 public abstract class ImageDAO extends DAOObject{

@@ -64,7 +64,14 @@ public abstract class ClientPart {
         return imginput;
     }
 */
+    public static void write(Object envoie) throws IOException {
+        serveroutput.writeObject(envoie);
+        serveroutput.reset();
+    }
 
+    public static <T> T read() throws IOException, ClassNotFoundException {
+        return (T) serverinput.readObject();
+    }
 
     //setters
 
@@ -73,6 +80,8 @@ public abstract class ClientPart {
     public static void setServerinput(ObjectInputStream serverinput) {
         ClientPart.serverinput = serverinput;
     }
+
+
 
 
 }

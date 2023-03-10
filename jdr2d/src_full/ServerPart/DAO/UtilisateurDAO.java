@@ -1,4 +1,4 @@
-package DAO;
+package ServerPart.DAO;
 import jdr2dcore.Utilisateur;
 
 import java.sql.*;

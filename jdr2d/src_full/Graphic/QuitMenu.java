@@ -1,6 +1,6 @@
 package Graphic;
 
-import DAO.PersonnageDAO;
+import ServerPart.DAO.PersonnageDAO;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -46,7 +46,7 @@ public class QuitMenu extends JMenu {
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
                     }
-                    fenetre.getIas().setSwitchmap(false);
+                    fenetre.getIa().setSwitchmap(false);
                     fenetre.dispose();
                 }
             }

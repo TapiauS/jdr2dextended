@@ -1,4 +1,4 @@
-package Control;
+package ServerPart.Control;
 
 import Graphic.GameInterface;
 import jdr2dcore.Coffre;

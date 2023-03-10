@@ -1,4 +1,4 @@
-package DAO;
+package ServerPart.DAO;
 import jdr2dcore.Map;
 import jdr2dcore.Personnage;
 import jdr2dcore.Porte;

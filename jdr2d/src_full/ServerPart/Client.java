@@ -2,10 +2,10 @@ package ServerPart;
 
 import Control.ConnexionOutput;
 import Control.OutputType;
-import DAO.DAOObject;
-import DAO.ImageDAO;
-import DAO.PersonnageDAO;
-import DAO.UtilisateurDAO;
+import ServerPart.DAO.DAOObject;
+import ServerPart.DAO.ImageDAO;
+import ServerPart.DAO.PersonnageDAO;
+import ServerPart.DAO.UtilisateurDAO;
 import jdr2dcore.Coffre;
 import jdr2dcore.Direction;
 import jdr2dcore.Personnage;

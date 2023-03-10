@@ -1,8 +1,9 @@
 package Graphic;
 
 import Control.*;
-import DAO.*;
-import ServerPart.AutoUpdateChannel;
+import ServerPart.Control.Interaction;
+import ServerPart.Control.PersoThread;
+import ServerPart.DAO.*;
 import ServerPart.MapState;
 import jdr2dcore.*;
 
@@ -73,7 +74,7 @@ public class GameInterface extends JFrame  implements KeyListener {
 
     private DialogueInterface dialogdealer;
 
-    private PersoThread ias;
+    private PersoThread ia;
 
     public GameInterface(Personnage player,Utilisateur util,FullLogInterface log) throws SQLException {
         super();
@@ -86,7 +87,7 @@ public class GameInterface extends JFrame  implements KeyListener {
         this.setSize(new Dimension(WINDOW_WIDTH,WINDOWS_HEIGH));
         this.setLocationRelativeTo(null);
         mapload();
-        ias=new PersoThread(pnjs,this);
+        ia =new PersoThread(pnjs,this);
         //on definit tout les élements
         thisInfo=new PlayerInfo(this.player,this);
         mapPanel=new MapPanel(this.player,this.pnjs,this);
@@ -160,7 +161,7 @@ public class GameInterface extends JFrame  implements KeyListener {
                 try {
                     System.out.println("On sauvegarde en fermant");
                     PersonnageDAO.updatedatabase(player);
-                    ias.setSwitchmap(false);
+                    ia.setSwitchmap(false);
                     //music.getClip().stop();
                     for (PNJ ps: pnjs) {
                         if(ps.isNomme())
@@ -212,10 +213,10 @@ public class GameInterface extends JFrame  implements KeyListener {
         this.requestFocus();
         try {
             AutoUpdateSocket.launch(this);
+            PNJIASocket.launch(this);
         } catch (IOException | ClassNotFoundException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-        new PNJiaProtocol(this);
     }
 
 
@@ -377,7 +378,7 @@ public class GameInterface extends JFrame  implements KeyListener {
                         mapload();
                         File source=new File("music\\"+player.getLieux().getNomLieu()+".wav");
                         music.setSource(source);
-                        ias.setPnjs(pnjs);
+                        ia.setPnjs(pnjs);
                     } catch (SQLException | UnsupportedAudioFileException | LineUnavailableException | IOException e) {
                         throw new RuntimeException(e);}
                     this.revalidate();
@@ -400,8 +401,8 @@ public class GameInterface extends JFrame  implements KeyListener {
         return music;
     }
 
-    public PersoThread getIas() {
-        return ias;
+    public PersoThread getIa() {
+        return ia;
     }
 
     public DialogueInterface getDialogdealer() {

@@ -1,4 +1,4 @@
-package DAO;
+package ServerPart.DAO;
 
 public class StringClassPair {
     private String key;

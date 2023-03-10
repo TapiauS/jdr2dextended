@@ -1,4 +1,7 @@
-package ServerPart;
+package ServerPart.Control;
+
+import ServerPart.MapPool;
+import ServerPart.MapState;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -32,8 +35,7 @@ public class AutoUpdater extends Thread{
         while (client.isConnected()) {
             try {
                 idmap= (int) input.readObject();
-                System.out.println("je passe le read");
-                MapState state=MapPool.getGameZone(idmap).getStatut();
+                MapState state= MapPool.getGameZone(idmap).getStatut();
                 output.writeObject(state);
                 output.reset();
                 sleep(30);

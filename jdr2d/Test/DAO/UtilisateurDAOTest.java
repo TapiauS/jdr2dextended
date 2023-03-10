@@ -1,5 +1,5 @@
 package DAO;
-import jdr2dcore.*;
+import ServerPart.DAO.UtilisateurDAO;
 
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +11,7 @@ class UtilisateurDAOTest {
 
     @Test
     void connectcompte() throws SQLException {
-        assertEquals(1,UtilisateurDAO.connectcompte("j","g").getId());
+        assertEquals(1, UtilisateurDAO.connectcompte("j","g").getId());
     }
 
     @Test

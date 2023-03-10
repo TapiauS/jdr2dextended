@@ -1,4 +1,4 @@
-package DAO;
+package ServerPart.DAO;
 import jdr2dcore.Echange;
 import jdr2dcore.ObjectifT;
 import jdr2dcore.PNJ;

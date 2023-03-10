@@ -1,6 +1,6 @@
 package ServerPart;
 
-import DAO.MapDAO;
+import ServerPart.DAO.MapDAO;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

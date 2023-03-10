@@ -1,4 +1,4 @@
-package DAO;
+package ServerPart.DAO;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-import Control.Drones;
+import ServerPart.Control.Drones;
 import jdr2dcore.*;
 
 public abstract class PersonnageDAO extends DAOObject {

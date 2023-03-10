@@ -1,5 +1,6 @@
 package DAO;
 
+import ServerPart.DAO.QueteDAO;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
@@ -10,7 +11,7 @@ class QueteDAOTest {
 
     @Test
     void getqueteSuivie() throws SQLException {
-        assertEquals(1,QueteDAO.getqueteSuivie(1).get(0).getId());
+        assertEquals(1, QueteDAO.getqueteSuivie(1).get(0).getId());
         assertEquals(2,QueteDAO.getqueteSuivie(1).get(0).getObjectifs().size());
         assertEquals(1,QueteDAO.getqueteSuivie(1).get(0).getObjectifs().get(0).getId());
         assertEquals(2,QueteDAO.getqueteSuivie(1).size());

@@ -1,7 +1,7 @@
-package Control;
+package ServerPart.Control;
 
-import DAO.ObjectifsDAO;
-import DAO.QueteDAO;
+import ServerPart.DAO.ObjectifsDAO;
+import ServerPart.DAO.QueteDAO;
 import Graphic.GameInterface;
 import jdr2dcore.*;
 

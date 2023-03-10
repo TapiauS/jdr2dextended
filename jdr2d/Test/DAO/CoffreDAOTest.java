@@ -1,5 +1,6 @@
 package DAO;
 
+import ServerPart.DAO.CoffreDAO;
 import jdr2dcore.Coffre;
 import org.junit.jupiter.api.Test;
 

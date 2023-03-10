@@ -1,6 +1,6 @@
 package Control;
 
-import DAO.UtilisateurDAO;
+import ServerPart.DAO.UtilisateurDAO;
 import Graphic.FullLogInterface;
 import jdr2dcore.Utilisateur;
 

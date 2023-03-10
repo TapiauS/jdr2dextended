@@ -1,4 +1,5 @@
 package DAO;
+import ServerPart.DAO.ObjectifsDAO;
 import jdr2dcore.ObjectifK;
 import org.junit.jupiter.api.Test;
 

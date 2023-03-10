@@ -46,9 +46,9 @@ public class ValideCharSelButton extends AbstractAction {
         String charname= (String) list.getSelectedValue();
         Personnage perso;
         try {
-            ClientPart.getServeroutput().writeObject(ConnexionOutput.PICKCHAR);
-            ClientPart.getServeroutput().writeObject(charname);
-            perso= (Personnage) ClientPart.getServerinput().readObject();
+            ClientPart.write(ConnexionOutput.PICKCHAR);
+            ClientPart.write(charname);
+            perso=ClientPart.read();
         } catch (IOException | ClassNotFoundException ex) {
             throw new RuntimeException(ex);
         }

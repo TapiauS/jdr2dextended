@@ -1,7 +1,7 @@
 package jdr2dcore;
 
-import Control.Interaction;
-import DAO.*;
+import ServerPart.Control.Interaction;
+import ServerPart.DAO.*;
 
 import java.sql.*;
 import java.util.*;
@@ -245,11 +245,11 @@ public abstract class Input {
             pnjs=new ArrayList<>();
             echanges=new ArrayList<>();
             coffres= MapDAO.getcoffres(carte);
-            sorties=PorteDAO.getPorte(carte);
+            sorties= PorteDAO.getPorte(carte);
             for (Personnage p:PersonnageDAO.getPersonnages(carte,util)) {
                 if(p instanceof PNJ){
                     pnjs.add((PNJ) p);
-                    Echange start=EchangeDAO.getEchangetree((PNJ) p);
+                    Echange start= EchangeDAO.getEchangetree((PNJ) p);
                     if(start!=null)
                         echanges.add(start);
                 }

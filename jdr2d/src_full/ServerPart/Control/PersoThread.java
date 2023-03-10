@@ -1,16 +1,14 @@
-package Control;
+package ServerPart.Control;
 
-import DAO.PersonnageDAO;
+import Control.ClientPart;
+import Control.OutputType;
 import Graphic.GameInterface;
 import ServerPart.GameZone;
-import jdr2dcore.Direction;
 import jdr2dcore.PNJ;
 import jdr2dcore.Personnage;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class PersoThread extends Thread{
 

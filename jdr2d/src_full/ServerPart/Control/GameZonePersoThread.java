@@ -1,7 +1,9 @@
-package ServerPart;
+package ServerPart.Control;
 
-import Control.Interaction;
-import DAO.PersonnageDAO;
+import ServerPart.Client;
+import ServerPart.DAO.PersonnageDAO;
+import ServerPart.GameZone;
+import ServerPart.ServerGameOutputType;
 import jdr2dcore.Direction;
 import jdr2dcore.PNJ;
 import jdr2dcore.Personnage;
@@ -41,15 +43,10 @@ public class GameZonePersoThread extends Thread{
         int closestdst = 4;
         for (Personnage player : gameZone.getJoueurs()) {
             Client client = gameZone.getClient(player);
-            /*if (player.distance(perso) < 1 && !perso.isNomme() && !client.isInteragit()) {
-                client.getInteractioniaoutput().writeObject(ServerGameOutputType.PNJATK);
-                client.getInteractioniaoutput().writeObject(perso);
-                client.getAvatar().setpV(client.getInteractioniainput().readInt());
-                perso.setpV(client.getInteractioniainput().readInt());
-                if (client.getAvatar().getpV() <= 0)
-                    client.setInteragit(true);
+            if (player.distance(perso) < 1 && !perso.isNomme() && !client.isInteragit()) {
+                gameZone.getChannel(player).figth(player,perso,gameZone);
                 return;
-            }*/
+            }
             if (!perso.isNomme() && perso.distance(player) < closestdst && !client.isInteragit()) {
                 closestdst = perso.distance(player);
                 closestsclients.add(player);
