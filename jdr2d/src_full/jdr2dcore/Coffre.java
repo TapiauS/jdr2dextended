@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 public class Coffre extends Objet {
+
+    protected boolean opened;
     protected ArrayList<Objet> contenu;
     protected boolean tas;
 //getters
@@ -13,9 +15,26 @@ public class Coffre extends Objet {
     }
     //setters
 
+
+    public void setOpened(boolean opened) {
+        this.opened = opened;
+    }
+
+    public void setTas(boolean tas) {
+        this.tas = tas;
+    }
+
     public Coffre setContenu(ArrayList<Objet> contenu){
         this.contenu=contenu;
         return this;
+    }
+
+    public boolean isOpened() {
+        return opened;
+    }
+
+    public boolean isTas() {
+        return tas;
     }
 
     //methodes

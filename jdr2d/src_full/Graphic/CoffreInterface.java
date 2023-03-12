@@ -1,5 +1,7 @@
 package Graphic;
 
+import Control.ClientPart;
+import Control.OutputType;
 import ServerPart.DAO.ObjetDAO;
 import jdr2dcore.Coffre;
 import jdr2dcore.Objet;
@@ -9,6 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -62,30 +65,30 @@ public class CoffreInterface extends InteractionInterface {
         pick.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(choix.getSelectedIndex()>-1) {
-                    Objet selectobjet=openedcoffre.getContenu().get(choix.getSelectedIndex());
-                    if (!(selectobjet instanceof Coffre)) {
-                        try {
-                            player.addObjet(selectobjet);
-                            ObjetDAO.pickObjet(player, selectobjet);
-                            fenetre.getEventHistory().addLine(player.getNomPersonnage() + " a ramassé :" + selectobjet.getNomObjet());
-                            openedcoffre.remove(choix.getSelectedIndex());
+                try {
+                    if(choix.getSelectedIndex()>-1) {
+                        ClientPart.write(OutputType.PICK);
+                        //Objet selectobjet=openedcoffre.getContenu().get(choix.getSelectedIndex());
+                        ClientPart.write(choix.getSelectedIndex());
+                        boolean iscoffre=ClientPart.read();
+                        if (!iscoffre) {
+                            fenetre.getPlayer().setInventaire(ClientPart.read());
+                            fenetre.getEventHistory().addLine(ClientPart.read());
+                            setOpenedcoffre(ClientPart.read());
+                            udpateref();
+                        } else {
+                            //parentcoffres.add(openedcoffre);
+                            Coffre newcoffre = ClientPart.read();
+                            setOpenedcoffre(newcoffre);
+                            coffrelvl++;
+                            exit.setVisible(false);
+                            goBack.setVisible(true);
                         }
-                        catch (SQLException es){
-                            //TODO gerer les bug bdd
-                        }
-                        udpateref();
-                        choix.setListData(data);
-                    } else {
-                        parentcoffres.add(openedcoffre);
-                        Coffre newcoffre = (Coffre) selectobjet;
-                        setOpenedcoffre(newcoffre);
-                        coffrelvl++;
-                        exit.setVisible(false);
-                        goBack.setVisible(true);
                     }
+                    refreshfocus();
+                } catch (IOException | ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
                 }
-                refreshfocus();
             }
         });
         pick.setBounds(MapPanel.MAP_WIDTH+ INTERACTION_WIDTH /5, (int) (INTERACTION_HEIGH +9.01*INTERACTION_HEIGH /10),
@@ -97,6 +100,11 @@ public class CoffreInterface extends InteractionInterface {
         exit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                try {
+                    ClientPart.write(OutputType.QUIT);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
                 returndefault();
                 fenetre.setInteraction(false);
                 openedcoffre=null;
@@ -113,6 +121,11 @@ public class CoffreInterface extends InteractionInterface {
         goBack.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                try {
+                    ClientPart.write(OutputType.GOBACK);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
                 setOpenedcoffre(parentcoffres.get(parentcoffres.size()-1));
                 parentcoffres.remove(parentcoffres.size()-1);
                 coffrelvl--;

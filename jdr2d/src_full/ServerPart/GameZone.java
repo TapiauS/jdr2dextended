@@ -1,6 +1,5 @@
 package ServerPart;
 
-import Control.PNJiaProtocol;
 import ServerPart.Control.GameZonePersoThread;
 import ServerPart.Control.IAProtocolServer;
 import ServerPart.DAO.EchangeDAO;
@@ -18,7 +17,7 @@ public class GameZone {
 
     private Map carte;
 
-    private ArrayList<Client> clients;
+    private ArrayList<ClientMainChannel> clients;
 
     private ArrayList<PNJ> pnjs;
 
@@ -52,7 +51,7 @@ public class GameZone {
 
 
     public void updateClients(){
-        for (Client c:clients) {
+        for (ClientMainChannel c:clients) {
             try {
                 c.getOutput().writeObject(statut);
             } catch (IOException e) {
@@ -63,8 +62,8 @@ public class GameZone {
 
     //methodes
 
-    public Client getClient(Personnage player){
-        for (Client c: clients) {
+    public ClientMainChannel getClient(Personnage player){
+        for (ClientMainChannel c: clients) {
             for (Personnage perso: joueurs) {
                 if(c.getAvatar().equals(perso))
                     return c;
@@ -97,12 +96,12 @@ public class GameZone {
         }
     }
 
-    public void addClient(Client client){
+    public void addClient(ClientMainChannel client){
         this.clients.add(client);
         this.joueurs.add(client.getAvatar());
     }
 
-    public void removeClient(Client client){
+    public void removeClient(ClientMainChannel client){
         this.clients.remove(client);
         this.joueurs.remove(client.getAvatar());
     }

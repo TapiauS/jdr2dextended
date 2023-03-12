@@ -37,7 +37,7 @@ public abstract class MapPool {
         return maps;
     }
 
-    public static void addClient(Client client){
+    public static void addClient(ClientMainChannel client){
         for (GameZone m: listmaps) {
             if(client.getAvatar().getLieux().getId()==m.getCarte().getId()) {
                 m.addClient(client);

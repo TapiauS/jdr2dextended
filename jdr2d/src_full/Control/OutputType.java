@@ -16,5 +16,6 @@ public enum OutputType implements Serializable {
     QUEST,
     INVENTAIRE,
     RESPAWN,
-    QUIT
+    QUIT,
+    GOBACK
 }

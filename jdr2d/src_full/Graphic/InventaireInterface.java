@@ -1,11 +1,14 @@
 package Graphic;
 
+import Control.ClientPart;
+import Control.OutputType;
 import jdr2dcore.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -52,50 +55,51 @@ public class InventaireInterface extends InteractionInterface{
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(itemdisplay.getSelectedIndex()>-1) {
-                    Objet selecteobjet=openedcoffre.getContenu().get(itemdisplay.getSelectedIndex());
-                    if (!(selecteobjet instanceof Coffre newcoffre)) {
-                        if(selecteobjet instanceof Arme){
-                            try {
-                                player.removeObjet(selecteobjet);
-                                player.addArme((Arme) selecteobjet);
-                                fenetre.getEventHistory().addLine(player.getNomPersonnage() + " a equipé l'arme:"
-                                        + selecteobjet.getNomObjet());
-                                fenetre.getFenetreInfo().update();
-                            } catch (SQLException ex) {
-                                //TODO gere exception
-                                throw new RuntimeException(ex);
+                    try {
+                        ClientPart.write(OutputType.EQUIP);
+                        ClientPart.write(itemdisplay.getSelectedIndex());
+                        boolean iscoffre=ClientPart.read();
+                        if (!iscoffre) {
+                            Objet selecteobjet=ClientPart.read();
+                            if (selecteobjet instanceof Arme) {
+                                try {
+                                    fenetre.getEventHistory().addLine(ClientPart.read());
+                                    fenetre.getPlayer().setInventaire(ClientPart.read());
+                                    fenetre.getPlayer().setArmes(ClientPart.read());
+                                    fenetre.getFenetreInfo().update();
+                                } catch (ClassNotFoundException ex) {
+                                    throw new RuntimeException(ex);
+                                }
                             }
-                        }
-                        if(selecteobjet instanceof Armure) {
-                            try {
-                                player.removeObjet(selecteobjet);
-                                player.addArmure((Armure) selecteobjet);
-                                fenetre.getEventHistory().addLine(player.getNomPersonnage() + " a equipé l'armure:"
-                                        + selecteobjet.getNomObjet());
+                            if (selecteobjet instanceof Armure) {
+                                fenetre.getEventHistory().addLine(ClientPart.read());
+                                fenetre.getPlayer().setInventaire(ClientPart.read());
+                                fenetre.getPlayer().setArmes(ClientPart.read());
                                 fenetre.getFenetreInfo().update();
-                            } catch (SQLException ex) {
-                                //TODO gere exception
-                                throw new RuntimeException(ex);
                             }
+                            if (selecteobjet instanceof Potion) {
+                                Time.drinkpotion((Potion) selecteobjet, player);
+                                player.removeObjet(selecteobjet);
+                                fenetre.getEventHistory().addLine(player.getNomPersonnage() + " a bu la potion :"
+                                        + selecteobjet.getNomObjet());
+                            }
+                            udpateref();
+                            itemdisplay.setListData(data);
+                        } else {
+                            parentscoffre.add(openedcoffre);
+                            setOpenedcoffre(ClientPart.read());
+                            coffrelvl++;
+                            exit.setVisible(false);
+                            goback.setVisible(true);
                         }
-                        if(selecteobjet instanceof Potion) {
-                            Time.drinkpotion((Potion) selecteobjet, player);
-                            player.removeObjet(selecteobjet);
-                            fenetre.getEventHistory().addLine(player.getNomPersonnage() + " a bu la potion :"
-                                    + selecteobjet.getNomObjet());
-                        }
-                        udpateref();
-                        itemdisplay.setListData(data);
-                    } else {
-                        parentscoffre.add((Coffre) selecteobjet);
-                        setOpenedcoffre(newcoffre);
-                        coffrelvl++;
-                        exit.setVisible(false);
-                        goback.setVisible(true);
                     }
+                    catch (IOException | ClassNotFoundException io){
+                        throw new RuntimeException(io);
+                    }
+                    refreshfocus();
                 }
-                refreshfocus();
             }
+
         });
         equip.setVisible(true);
         this.add(equip);
@@ -107,33 +111,22 @@ public class InventaireInterface extends InteractionInterface{
                 new ActionListener(){
                 @Override
                 public void actionPerformed(ActionEvent e){
-                    if(itemdisplay.getSelectedIndex()>-1){
-                        Objet selecteobjet=openedcoffre.getContenu().get(itemdisplay.getSelectedIndex());
-                        System.out.println("objet jeté="+selecteobjet.getNomObjet());
-                        try {
-                            boolean incoffre=false;
-                            player.dropObjet(selecteobjet);
-                            for (Coffre c: fenetre.getCoffres()) {
-                                if (player.distance(c) == 0) {
-                                    c.add(selecteobjet);
-                                    incoffre=true;
-                                    break;
-                                }
-                            }
-                            if(!incoffre)
-                                fenetre.getCoffres().add((Coffre) ((Coffre) (new Coffre(selecteobjet))
-                                    .setLieux(player.getLieux()).setX(player.getX()).setY(player.getY())).setNomObjet("tas"));
-                        } catch (SQLException ex) {
-                            throw new RuntimeException(ex);
+                    try {
+                        if (itemdisplay.getSelectedIndex() > -1) {
+                            ClientPart.write(OutputType.DROP);
+                            ClientPart.write(itemdisplay.getSelectedIndex());
+                            openedcoffre.setContenu(ClientPart.read());
+                            udpateref();
+                            fenetre.getMapPanel().repaint();
+                            fenetre.getMapPanel().revalidate();
+                            itemdisplay.setListData(data);
+                            refreshfocus();
                         }
-                        udpateref();
-                        fenetre.getMapPanel().repaint();
-                        fenetre.getMapPanel().revalidate();
-                        itemdisplay.setListData(data);
-                        refreshfocus();
                     }
-                }
-                });
+                    catch (IOException | ClassNotFoundException io){
+                        throw new RuntimeException(io);
+                    }
+                }});
         drop.setVisible(true);
         this.add(drop);
         //creation du bouton exit

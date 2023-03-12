@@ -32,7 +32,7 @@ public abstract class ClientPart {
         in=echoSocket.getInputStream();
         out=echoSocket.getOutputStream();
         //Loggy.init();
-        //Loggy.writlog("Check Client",LogLevel.ERROR);
+        //Loggy.writlog("Check ClientMainChannel",LogLevel.ERROR);
         serveroutput=new ObjectOutputStream(out);
         serverinput=new ObjectInputStream(in);
         ThreadDealer t=new ThreadDealer();

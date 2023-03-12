@@ -275,17 +275,34 @@ public class GameInterface extends JFrame  implements KeyListener {
         if(e.getKeyCode()==80 &&!interaction) {
             for (Coffre c: coffres) {
                 if(c.distance(player)<2){
-                    defaultInteractionInterface.setVisible(false);
-                    coffredealer.setOpenedcoffre(c);
-                    this.setInteraction(true);
-                    break;
+                    try {
+                        ClientPart.write(OutputType.PICK);
+                        boolean available;
+                        available=ClientPart.read();
+                        if (available) {
+                            coffredealer.setOpenedcoffre(c);
+                            defaultInteractionInterface.setVisible(false);
+                            this.setInteraction(true);
+                            break;
+                        }
+                        else {
+                            eventHistory.addLine("Ce coffre est déja fouillé par quelqu'un");
+                        }
+                    } catch (IOException  | ClassNotFoundException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
             }
         }
         if (e.getKeyCode()==73&&!interaction){
             defaultInteractionInterface.setVisible(false);
-            inventdealer.setOpenedcoffre(player.getInventaire());
-            this.setInteraction(true);
+            try {
+                ClientPart.write(OutputType.INVENTAIRE);
+                inventdealer.setOpenedcoffre(player.getInventaire());
+                this.setInteraction(true);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         }
         if(e.getKeyCode()==81&&!interaction){
             try {
@@ -390,7 +407,11 @@ public class GameInterface extends JFrame  implements KeyListener {
 
     public void updatstate(MapState mapState){
         this.setPnjs(mapState.getPnjs());
+        this.setCoffres(mapState.getCoffres());
+
+
         this.mapPanel.setPnjs(this.pnjs);
+
         repaint();
         revalidate();
     }

@@ -3,7 +3,6 @@ package ServerPart;
 import jdr2dcore.Personnage;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
@@ -27,7 +26,7 @@ public class InputReceiver extends Thread{
             MapPool.init();
             while (true) {
                 clientSocket = serverSocket.accept();
-                new Client(clientSocket);
+                new ClientMainChannel(clientSocket);
             }
         }
         catch (IOException | SQLException e) {

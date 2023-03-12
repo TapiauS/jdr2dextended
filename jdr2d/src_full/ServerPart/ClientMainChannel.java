@@ -16,8 +16,9 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Objects;
 
+@SuppressWarnings("unchecked")
 
-public class Client extends Thread implements Serializable{
+public class ClientMainChannel extends Thread implements Serializable{
 
     private final Socket socket;
 
@@ -100,7 +101,7 @@ public class Client extends Thread implements Serializable{
         this.util = util;
     }
 
-    public Client(Socket socket) throws IOException {
+    public ClientMainChannel(Socket socket) throws IOException {
         this.socket=socket;
         connected=true;
         avatar=null;
@@ -405,9 +406,8 @@ public class Client extends Thread implements Serializable{
                             }
                         }
                     }
-                    case PICK -> {
-
-                    }
+                    case PICK -> exploreCoffre();
+                    case INVENTAIRE -> explorInvent();
             /*
             case TALK -> break;
             case FIGTH -> break;
@@ -440,13 +440,145 @@ public class Client extends Thread implements Serializable{
         output.reset();
     }
 
+
     public <T> T read() throws IOException, ClassNotFoundException {
         return (T) input.readObject();
     }
 
-    private void exploreCoffre(){
-        int coffrelvl;
-        Coffre openedcoffre;
+    private void exploreCoffre() throws IOException, ClassNotFoundException, SQLException {
+        int coffrelvl=0;
+        Coffre openedcoffre = null;
+        int idopenedcoffre=read();
+        int indicepicked;
+        OutputType commande=null;
+        ArrayList<Coffre> parentcoffre=new ArrayList<>();
+        for (Coffre coffre: map.getCoffres()) {
+            if(idopenedcoffre==coffre.getId()) {
+                openedcoffre = coffre;
+                if(!openedcoffre.isOpened()) {
+                    write(true);
+                    openedcoffre.setOpened(true);
+                    break;
+                }
+                else {
+                    write(false);
+                    return;
+                }
+
+            }
+        }
+        while (true){
+            commande=read();
+            switch (commande){
+                case PICK -> {
+                    indicepicked=read();
+                    Objet pickedobjet=openedcoffre.getContenu().get(indicepicked);
+                    boolean iscoffre;
+                    iscoffre=pickedobjet instanceof Coffre;
+                    write(iscoffre);
+                    if (!iscoffre){
+                        avatar.addObjet(pickedobjet);
+                        ObjetDAO.pickObjet(avatar,openedcoffre.getContenu().get(indicepicked));
+                        write(avatar.getInventaire());
+                        write(avatar.getNomPersonnage()+" a ramassé "+pickedobjet.getNomObjet());
+                        openedcoffre.remove(indicepicked);
+                        write(openedcoffre);
+                    }
+                    else {
+                        parentcoffre.add(openedcoffre);
+                        openedcoffre= (Coffre) pickedobjet;
+                        write(openedcoffre);
+                        coffrelvl++;
+                    }
+                }
+                case GOBACK -> {
+                    openedcoffre=parentcoffre.get(parentcoffre.size()-1);
+                    parentcoffre.remove(parentcoffre.size()-1);
+                    coffrelvl--;
+                }
+                case QUIT -> {
+                    return;
+                }
+            }
+        }
+    }
+
+    private void explorInvent() throws IOException, ClassNotFoundException {
+        ArrayList<Coffre> parentscoffre=new ArrayList<>();
+        Coffre openedcoffre=avatar.getInventaire();
+        Objet selectedobjet;
+        OutputType instruction=null;
+        int idobjet;
+        while (true){
+            instruction=read();
+            switch (instruction){
+                case EQUIP -> {
+                    idobjet=read();
+                    selectedobjet=openedcoffre.getContenu().get(idobjet);
+                    boolean iscoffre=selectedobjet instanceof Coffre;
+                    if(!iscoffre){
+                        write(selectedobjet);
+                        if (selectedobjet instanceof Arme) {
+                            try {
+                                avatar.removeObjet(selectedobjet);
+                                avatar.addArme((Arme) selectedobjet);
+                                write(avatar.getNomPersonnage() + " a equipé l'arme:"
+                                        + selectedobjet.getNomObjet());
+                                write(avatar.getInventaire());
+                                write(avatar.getArme());
+
+                            } catch (SQLException ex) {
+                                //TODO gere exception
+                                throw new RuntimeException(ex);
+                            }
+                        }
+                        if(selectedobjet instanceof Armure){
+                            try {
+                                avatar.removeObjet(selectedobjet);
+                                avatar.addArmure((Armure) selectedobjet);
+                                write(avatar.getNomPersonnage() + " a equipé l'arme:"
+                                        + selectedobjet.getNomObjet());
+                                write(avatar.getInventaire());
+                                write(avatar.getArme());
+                            }
+                            catch (SQLException sq){
+                                throw new RuntimeException(sq);
+                            }
+                        }
+                        if (selectedobjet instanceof Potion){
+                            avatar.removeObjet(selectedobjet);
+                            Time.drinkpotion((Potion) selectedobjet,avatar);
+                        }
+                    }
+                    else {
+                        write(selectedobjet);
+                        parentscoffre.add((Coffre) selectedobjet);
+                        openedcoffre= (Coffre) selectedobjet;
+                    }
+                }
+                case DROP -> {
+                    idobjet=read();
+                    selectedobjet=openedcoffre.getContenu().get(idobjet);
+                    write(openedcoffre.getContenu());
+                    try {
+                        boolean incoffre = false;
+                        avatar.dropObjet(selectedobjet);
+                        for (Coffre c : map.getCoffres()) {
+                            if (avatar.distance(c) == 0) {
+                                c.add(selectedobjet);
+                                incoffre = true;
+                                break;
+                            }
+                        }
+                        if (!incoffre)
+                            map.getCoffres().add((Coffre) ((Coffre) (new Coffre(selectedobjet))
+                                    .setLieux(avatar.getLieux()).setX(avatar.getX()).setY(avatar.getY())).setNomObjet("tas"));
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }
+        }
 
     }
 
