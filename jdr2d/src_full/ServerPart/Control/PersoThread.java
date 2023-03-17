@@ -199,11 +199,13 @@ public class PersoThread extends Thread{
     }
     */
     public static void respawn(Personnage p){
-        fenetre.setInteraction(true);
+        if (fenetre!=null)
+            fenetre.setInteraction(true);
         Thread t = new Thread(() -> {
             //super.run();
             for (int i = 0; i < DEATHRESPAWNDELAYMSEC / 1000; i++) {
-                fenetre.getEventHistory().addLine(String.valueOf(10-i));
+                if (fenetre!=null)
+                    fenetre.getEventHistory().addLine(String.valueOf(10-i));
                 try {
                     sleep(1000);
                 } catch (InterruptedException e) {
@@ -216,8 +218,10 @@ public class PersoThread extends Thread{
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            fenetre.getFenetreInfo().update();
-            fenetre.setInteraction(false);
+            if(fenetre!=null) {
+                fenetre.getFenetreInfo().update();
+                fenetre.setInteraction(false);
+            }
         });
         t.start();
     }

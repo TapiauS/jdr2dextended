@@ -1,6 +1,8 @@
 package Graphic;
 
 import Control.*;
+import Log.LogLevel;
+import Log.Loggy;
 import ServerPart.Control.Interaction;
 import ServerPart.Control.PersoThread;
 import ServerPart.DAO.*;
@@ -231,7 +233,7 @@ public class GameInterface extends JFrame  implements KeyListener {
         if (e.getKeyCode() == 38 && !interaction && Instant.now().isAfter(nextmactiontime)) {
             nextmactiontime=Instant.now().plus(timestepms, ChronoUnit.MILLIS);
             try {
-                ClientPart.getServeroutput().writeObject(OutputType.MOUVNORD);
+                ClientPart.write(OutputType.MOUVNORD);
                 player.depl(Direction.NORD);
                 SoundEffect.playSound("walk");
             } catch (UnsupportedAudioFileException |  LineUnavailableException | IOException ex) {
@@ -243,7 +245,7 @@ public class GameInterface extends JFrame  implements KeyListener {
             nextmactiontime=Instant.now().plus(timestepms, ChronoUnit.MILLIS);
             player.depl(Direction.OUEST);
             try {
-                ClientPart.getServeroutput().writeObject(OutputType.MOUVWEST);
+                ClientPart.write(OutputType.MOUVWEST);
                 SoundEffect.playSound("walk");
             } catch (UnsupportedAudioFileException | javax.sound.sampled.LineUnavailableException  | IOException ex) {
                 throw new RuntimeException(ex);
@@ -254,7 +256,7 @@ public class GameInterface extends JFrame  implements KeyListener {
             nextmactiontime=Instant.now().plus(timestepms, ChronoUnit.MILLIS);
             player.depl(Direction.EST);
             try {
-                ClientPart.getServeroutput().writeObject(OutputType.MOUVEAST);
+                ClientPart.write(OutputType.MOUVEAST);
                 SoundEffect.playSound("walk");
             } catch (UnsupportedAudioFileException |  LineUnavailableException | IOException ex) {
                 throw new RuntimeException(ex);
@@ -266,7 +268,7 @@ public class GameInterface extends JFrame  implements KeyListener {
             player.depl(Direction.SUD);
             try {
                 SoundEffect.playSound("walk");
-                ClientPart.getServeroutput().writeObject(OutputType.MOUVSOUTH);
+                ClientPart.write(OutputType.MOUVSOUTH);
             } catch (UnsupportedAudioFileException |  LineUnavailableException | IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -277,9 +279,12 @@ public class GameInterface extends JFrame  implements KeyListener {
                 if(c.distance(player)<2){
                     try {
                         ClientPart.write(OutputType.PICK);
+                        ClientPart.write(c.getId());
                         boolean available;
                         available=ClientPart.read();
+                        Loggy.writlog(String.valueOf(available),LogLevel.NOTICE);
                         if (available) {
+                            Loggy.writlog("test des coffres", LogLevel.NOTICE);
                             coffredealer.setOpenedcoffre(c);
                             defaultInteractionInterface.setVisible(false);
                             this.setInteraction(true);
@@ -338,9 +343,27 @@ public class GameInterface extends JFrame  implements KeyListener {
         if(e.getKeyCode()==70&&!interaction){
             for (PNJ p: this.getPnjs()) {
                 if (p.distance(player) < 1 && p.getpV() > 0) {
-                    Interaction inter = new Interaction(player, p,this);
-                    inter.combat();
-                    p.setInteract(false);
+                    try {
+                        ClientPart.write(OutputType.FIGTH);
+                        ClientPart.write(p.getId());
+                        boolean stillfigthing=true;
+                        interaction=true;
+                        while (stillfigthing){
+                            stillfigthing=ClientPart.read();
+                            if (stillfigthing) {
+                                eventHistory.addLine(ClientPart.read());
+                                eventHistory.addLine(ClientPart.read());
+                                getFenetreInfo().update();
+                            }
+                        }
+                        player.setpV(ClientPart.read());
+                        if(player.getpV()<=0)
+                            PersoThread.respawn(player);
+                        interaction=false;
+                    } catch (IOException | ClassNotFoundException ex) {
+                        throw new RuntimeException(ex);
+                    }
+
                     thisInfo.update();
                 }
             }

@@ -83,10 +83,8 @@ public class InventaireInterface extends InteractionInterface{
                                 fenetre.getEventHistory().addLine(player.getNomPersonnage() + " a bu la potion :"
                                         + selecteobjet.getNomObjet());
                             }
-                            udpateref();
-                            itemdisplay.setListData(data);
+                            setOpenedcoffre(ClientPart.read());
                         } else {
-                            parentscoffre.add(openedcoffre);
                             setOpenedcoffre(ClientPart.read());
                             coffrelvl++;
                             exit.setVisible(false);
@@ -137,6 +135,11 @@ public class InventaireInterface extends InteractionInterface{
                 new ActionListener(){
                     @Override
                     public void actionPerformed(ActionEvent e){
+                        try {
+                            ClientPart.write(OutputType.QUIT);
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
                         returndefault();
                         fenetre.setInteraction(false);
                         openedcoffre=null;
@@ -154,14 +157,24 @@ public class InventaireInterface extends InteractionInterface{
                 new ActionListener() {
                     @Override
                         public void actionPerformed(ActionEvent e) {
-                            setOpenedcoffre(parentscoffre.get(parentscoffre.size()-1));
-                            parentscoffre.remove(parentscoffre.size()-1);
-                            coffrelvl--;
-                            if(coffrelvl==0){
-                                goback.setVisible(false);
-                                exit.setVisible(true);
-                            }
-                            refreshfocus();
+                        try {
+                            ClientPart.write(OutputType.GOBACK);
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                        try {
+                            setOpenedcoffre(ClientPart.read());
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        } catch (ClassNotFoundException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                        coffrelvl--;
+                        if(coffrelvl==0){
+                            goback.setVisible(false);
+                            exit.setVisible(true);
+                        }
+                        refreshfocus();
                         }
         });
         goback.setVisible(false);

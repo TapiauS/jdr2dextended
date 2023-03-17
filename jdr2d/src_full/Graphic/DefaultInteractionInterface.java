@@ -1,5 +1,9 @@
 package Graphic;
 
+import Control.ClientPart;
+import Control.OutputType;
+import Log.LogLevel;
+import Log.Loggy;
 import jdr2dcore.*;
 
 
@@ -7,6 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class DefaultInteractionInterface extends InteractionInterface{
@@ -59,11 +64,24 @@ public class DefaultInteractionInterface extends InteractionInterface{
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         for (Coffre c : fenetre.getCoffres()) {
-                            if (player.distance(c) < 2) {
-                                fenetre.getCoffredealer().setOpenedcoffre(c);
-                                setVisible(false);
-                                fenetre.setInteraction(true);
-                                break;
+                            if(c.distance(player)<2){
+                                try {
+                                    ClientPart.write(OutputType.PICK);
+                                    ClientPart.write(c.getId());
+                                    boolean available;
+                                    available=ClientPart.read();
+                                    if (available) {
+                                        fenetre.getCoffredealer().setOpenedcoffre(c);
+                                        setVisible(false);
+                                        fenetre.setInteraction(true);
+                                        break;
+                                    }
+                                    else {
+                                        fenetre.getEventHistory().addLine("Ce coffre est déja fouillé par quelqu'un");
+                                    }
+                                } catch (IOException | ClassNotFoundException ex) {
+                                    throw new RuntimeException(ex);
+                                }
                             }
                         }
                         refreshfocus();
@@ -109,10 +127,14 @@ public class DefaultInteractionInterface extends InteractionInterface{
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        fenetre.getInventdealer().setOpenedcoffre(player.getInventaire());
-                        fenetre.setInteraction(true);
-                        setVisible(false);
-                        refreshfocus();
+                        fenetre.getDefaultInteractionInterface().setVisible(false);
+                        try {
+                            ClientPart.write(OutputType.INVENTAIRE);
+                            fenetre.getInventdealer().setOpenedcoffre(player.getInventaire());
+                            fenetre.setInteraction(true);
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
                     }
                 }
         );

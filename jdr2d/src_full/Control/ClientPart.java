@@ -1,9 +1,6 @@
 package Control;
 
-
-
-//import Log.LogLevel;
-//import Log.Loggy;
+import  Log.*;
 
 import java.io.*;
 import java.net.Socket;
@@ -31,8 +28,8 @@ public abstract class ClientPart {
         Socket echoSocket = new Socket(hostName, port);
         in=echoSocket.getInputStream();
         out=echoSocket.getOutputStream();
-        //Loggy.init();
-        //Loggy.writlog("Check ClientMainChannel",LogLevel.ERROR);
+        Loggy.init();
+        Loggy.writlog("Check ClientMainChannel", LogLevel.ERROR);
         serveroutput=new ObjectOutputStream(out);
         serverinput=new ObjectInputStream(in);
         ThreadDealer t=new ThreadDealer();
@@ -65,6 +62,7 @@ public abstract class ClientPart {
     }
 */
     public static void write(Object envoie) throws IOException {
+        Loggy.writlog("CLIENT WRITED "+ envoie,LogLevel.NOTICE);
         serveroutput.writeObject(envoie);
         serveroutput.reset();
     }

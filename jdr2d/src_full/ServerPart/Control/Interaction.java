@@ -1,10 +1,12 @@
 package ServerPart.Control;
 
+import ServerPart.ClientMainChannel;
 import ServerPart.DAO.ObjectifsDAO;
 import ServerPart.DAO.QueteDAO;
 import Graphic.GameInterface;
 import jdr2dcore.*;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ public class Interaction implements Serializable {
 
     protected boolean agressif;
 
-    protected GameInterface fenetre;
+    protected ClientMainChannel fenetre;
     protected ArrayList<EventListenerK> observerK;
 
     protected ArrayList<EventListenerTalk> observerT;
@@ -60,7 +62,7 @@ public class Interaction implements Serializable {
     //setters
 
 
-    public void setFenetre(GameInterface fenetre) {
+    public void setFenetre(ClientMainChannel fenetre) {
         this.fenetre = fenetre;
     }
 
@@ -136,7 +138,7 @@ public class Interaction implements Serializable {
     }
 
 
-    public Interaction(Personnage joueur,PNJ opposant,GameInterface fenetre){
+    public Interaction(Personnage joueur,PNJ opposant,ClientMainChannel fenetre){
         this.setObserverK(new ArrayList<EventListenerK>())
                 .setObserverT(new ArrayList<EventListenerTalk>())
                 .setJoueur(joueur)
@@ -180,21 +182,30 @@ public class Interaction implements Serializable {
     }
 
     public void combat() {
-        Thread t = new Thread(() -> {
-            fenetre.setInteraction(true);
+        Thread t = new Thread(() -> {;
             while (getJoueur().getpV() > 0 && getOpposant().getpV() > 0) {
                 getOpposant().setpV(getOpposant().getpV() - getJoueur().bagarre(getOpposant()));
-                fenetre.getEventHistory().addLine(joueur.getNomPersonnage() +" à infligé a "+opposant.getNomPersonnage()+" "+getJoueur().bagarre(getOpposant())+" degats");
+                try {
+                    fenetre.write(true);
+                    fenetre.write(joueur.getNomPersonnage() +" à infligé a "+opposant.getNomPersonnage()+" "+getJoueur().bagarre(getOpposant())+" degats");
+                    fenetre.write(opposant.getNomPersonnage() +" à infligé a "+joueur.getNomPersonnage()+" "+getOpposant().bagarre(getJoueur())+" degats");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 getJoueur().setpV(getJoueur().getpV() - getOpposant().bagarre(getJoueur()));
-                fenetre.getEventHistory().addLine(opposant.getNomPersonnage() +" à infligé a "+joueur.getNomPersonnage()+" "+getOpposant().bagarre(getJoueur())+" degats");
-                fenetre.getFenetreInfo().update();
                 try {
                     sleep(200);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                System.out.println("Je passe ici");
             }
+            try {
+                fenetre.write(joueur.getpV());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            if (joueur.getpV()<0)
+                PersoThread.respawn(joueur);
             if (getOpposant().getpV() <= 0) {
                 for (EventListenerK e : getObserverK()) {
                     if (e instanceof ObjectifK) {
@@ -209,13 +220,7 @@ public class Interaction implements Serializable {
                         }
                     }
                 }
-                fenetre.getEventHistory().addLine(joueur.getNomPersonnage() + " a vaincu un " + opposant.getNomPersonnage());
-                fenetre.getFenetreInfo().update();
-            } else{
-                fenetre.getEventHistory().addLine(joueur.getNomPersonnage() + " a ete vaincu par un " + opposant.getNomPersonnage());
-                fenetre.getFenetreInfo().update();
             }
-            fenetre.setInteraction(false);
         });
         t.start();
     }

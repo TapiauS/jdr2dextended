@@ -77,8 +77,8 @@ public class CoffreInterface extends InteractionInterface {
                             setOpenedcoffre(ClientPart.read());
                             udpateref();
                         } else {
-                            //parentcoffres.add(openedcoffre);
                             Coffre newcoffre = ClientPart.read();
+                            parentcoffres.add(openedcoffre);
                             setOpenedcoffre(newcoffre);
                             coffrelvl++;
                             exit.setVisible(false);

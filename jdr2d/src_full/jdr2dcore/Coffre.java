@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 
 public class Coffre extends Objet {
 
-    protected boolean opened;
+    protected boolean opened=false;
     protected ArrayList<Objet> contenu;
     protected boolean tas;
 //getters

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class InputReceiver extends Thread{
 
@@ -22,14 +23,15 @@ public class InputReceiver extends Thread{
     public void run() {
         super.run();
         try {
+            ArrayList<GameZone> maps=MapPool.getLismaps();
             serverSocket = new ServerSocket(portNumber);
-            MapPool.init();
+            //MapPool.init();
             while (true) {
                 clientSocket = serverSocket.accept();
                 new ClientMainChannel(clientSocket);
             }
         }
-        catch (IOException | SQLException e) {
+        catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

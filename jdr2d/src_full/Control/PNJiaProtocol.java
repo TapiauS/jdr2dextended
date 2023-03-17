@@ -35,7 +35,7 @@ public class PNJiaProtocol extends Thread{
                 System.out.println("ici ?");
                 if(action==ServerGameOutputType.PNJATK){
                     PNJ adversaire=PNJIASocket.read();
-                    Interaction inter=new Interaction(fenetre.getPlayer(),adversaire,fenetre);
+                    Interaction inter=new Interaction(fenetre.getPlayer(),adversaire);
                     inter.combat();
                     PNJIASocket.write(fenetre.getPlayer().getpV());
                     PNJIASocket.write(adversaire.getpV());

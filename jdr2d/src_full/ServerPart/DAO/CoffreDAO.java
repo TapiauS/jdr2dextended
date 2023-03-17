@@ -22,6 +22,7 @@ public abstract class CoffreDAO extends DAOObject {
                     retour.setNomObjet(rs.getString("nom_objet")).setLieux(MapDAO.getmap(rs.getInt("id_lieu")))
                             .setX(rs.getInt("y"))
                             .setY(rs.getInt("x"));
+                    retour.setId(id);
                     System.out.println("coffre posX= "+retour.getX());
                     System.out.println("coffre posY= "+retour.getY());
                 }

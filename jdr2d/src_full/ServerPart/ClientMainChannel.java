@@ -2,6 +2,10 @@ package ServerPart;
 
 import Control.ConnexionOutput;
 import Control.OutputType;
+import Log.LogLevel;
+import Log.Loggy;
+import ServerPart.Control.Interaction;
+import ServerPart.Control.PersoThread;
 import ServerPart.DAO.*;
 import jdr2dcore.*;
 
@@ -408,6 +412,24 @@ public class ClientMainChannel extends Thread implements Serializable{
                     }
                     case PICK -> exploreCoffre();
                     case INVENTAIRE -> explorInvent();
+                    case FIGTH -> {
+                        int idadversaire=read();
+                        PNJ adversaire=null;
+                        for (PNJ perso: map.getPnjs()) {
+                            if(perso.getId()==idadversaire)
+                                if(!perso.isInteract())
+                                {
+                                    write(perso.isInteract());
+                                    Interaction inter=new Interaction(avatar,perso);
+                                    inter.combat();
+                                    if(avatar.getpV()<0)
+                                        PersoThread.respawn(avatar);
+                                    if(perso.getpV()>0)
+                                        PersoThread.respawn(perso);
+                                    write(avatar.getpV());
+                                }
+                        }
+                    }
             /*
             case TALK -> break;
             case FIGTH -> break;
@@ -437,6 +459,7 @@ public class ClientMainChannel extends Thread implements Serializable{
 
     public void write(Object objet) throws IOException {
         output.writeObject(objet);
+        Loggy.writlog("SERVER WRITED"+objet.toString(),LogLevel.NOTICE);
         output.reset();
     }
 
@@ -450,21 +473,22 @@ public class ClientMainChannel extends Thread implements Serializable{
         Coffre openedcoffre = null;
         int idopenedcoffre=read();
         int indicepicked;
-        OutputType commande=null;
+        OutputType commande;
         ArrayList<Coffre> parentcoffre=new ArrayList<>();
+        Loggy.writlog("idopended= "+idopenedcoffre,LogLevel.NOTICE);
         for (Coffre coffre: map.getCoffres()) {
             if(idopenedcoffre==coffre.getId()) {
                 openedcoffre = coffre;
                 if(!openedcoffre.isOpened()) {
                     write(true);
                     openedcoffre.setOpened(true);
+                    Loggy.writlog("Check coffre", LogLevel.NOTICE);
                     break;
                 }
                 else {
                     write(false);
                     return;
                 }
-
             }
         }
         while (true){
@@ -472,11 +496,13 @@ public class ClientMainChannel extends Thread implements Serializable{
             switch (commande){
                 case PICK -> {
                     indicepicked=read();
+                    Loggy.writlog("INDICE PICKED "+indicepicked,LogLevel.NOTICE);
                     Objet pickedobjet=openedcoffre.getContenu().get(indicepicked);
                     boolean iscoffre;
                     iscoffre=pickedobjet instanceof Coffre;
                     write(iscoffre);
                     if (!iscoffre){
+                        Loggy.writlog("OBJET NORMAL",LogLevel.NOTICE);
                         avatar.addObjet(pickedobjet);
                         ObjetDAO.pickObjet(avatar,openedcoffre.getContenu().get(indicepicked));
                         write(avatar.getInventaire());
@@ -485,6 +511,7 @@ public class ClientMainChannel extends Thread implements Serializable{
                         write(openedcoffre);
                     }
                     else {
+                        Loggy.writlog("OBJET COFFRE",LogLevel.NOTICE);
                         parentcoffre.add(openedcoffre);
                         openedcoffre= (Coffre) pickedobjet;
                         write(openedcoffre);
@@ -497,6 +524,7 @@ public class ClientMainChannel extends Thread implements Serializable{
                     coffrelvl--;
                 }
                 case QUIT -> {
+                    openedcoffre.setOpened(false);
                     return;
                 }
             }
@@ -514,8 +542,10 @@ public class ClientMainChannel extends Thread implements Serializable{
             switch (instruction){
                 case EQUIP -> {
                     idobjet=read();
+                    System.out.println(avatar.getInventaire().getContenu().size());
                     selectedobjet=openedcoffre.getContenu().get(idobjet);
                     boolean iscoffre=selectedobjet instanceof Coffre;
+                    write(iscoffre);
                     if(!iscoffre){
                         write(selectedobjet);
                         if (selectedobjet instanceof Arme) {
@@ -524,7 +554,7 @@ public class ClientMainChannel extends Thread implements Serializable{
                                 avatar.addArme((Arme) selectedobjet);
                                 write(avatar.getNomPersonnage() + " a equipé l'arme:"
                                         + selectedobjet.getNomObjet());
-                                write(avatar.getInventaire());
+                                write(openedcoffre);
                                 write(avatar.getArme());
 
                             } catch (SQLException ex) {
@@ -549,6 +579,7 @@ public class ClientMainChannel extends Thread implements Serializable{
                             avatar.removeObjet(selectedobjet);
                             Time.drinkpotion((Potion) selectedobjet,avatar);
                         }
+                        write(openedcoffre);
                     }
                     else {
                         write(selectedobjet);
@@ -576,6 +607,15 @@ public class ClientMainChannel extends Thread implements Serializable{
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
                     }
+                }
+                case GOBACK -> {
+                    openedcoffre=parentscoffre.get(parentscoffre.size()-1);
+                    parentscoffre.remove(parentscoffre.size()-1);
+                    write(openedcoffre);
+                }
+                case QUIT -> {
+
+                    return;
                 }
             }
         }
