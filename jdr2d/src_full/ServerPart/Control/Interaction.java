@@ -22,7 +22,7 @@ public class Interaction implements Serializable {
 
     protected boolean agressif;
 
-    protected ClientMainChannel fenetre;
+    protected JDRDSocket fenetre;
     protected ArrayList<EventListenerK> observerK;
 
     protected ArrayList<EventListenerTalk> observerT;
@@ -62,7 +62,7 @@ public class Interaction implements Serializable {
     //setters
 
 
-    public void setFenetre(ClientMainChannel fenetre) {
+    public void setFenetre(JDRDSocket fenetre) {
         this.fenetre = fenetre;
     }
 
@@ -138,7 +138,7 @@ public class Interaction implements Serializable {
     }
 
 
-    public Interaction(Personnage joueur,PNJ opposant,ClientMainChannel fenetre){
+    public Interaction(Personnage joueur,PNJ opposant,JDRDSocket fenetre){
         this.setObserverK(new ArrayList<EventListenerK>())
                 .setObserverT(new ArrayList<EventListenerTalk>())
                 .setJoueur(joueur)
@@ -188,6 +188,7 @@ public class Interaction implements Serializable {
                 try {
                     fenetre.write(true);
                     fenetre.write(joueur.getNomPersonnage() +" à infligé a "+opposant.getNomPersonnage()+" "+getJoueur().bagarre(getOpposant())+" degats");
+                    System.out.println("JE PASSE ICI");
                     fenetre.write(opposant.getNomPersonnage() +" à infligé a "+joueur.getNomPersonnage()+" "+getOpposant().bagarre(getJoueur())+" degats");
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -200,6 +201,7 @@ public class Interaction implements Serializable {
                 }
             }
             try {
+                fenetre.write(false);
                 fenetre.write(joueur.getpV());
             } catch (IOException e) {
                 throw new RuntimeException(e);

@@ -1,6 +1,8 @@
 package ServerPart.Control;
 
 import Control.OutputType;
+import Log.LogLevel;
+import Log.Loggy;
 import ServerPart.GameZone;
 import ServerPart.MapPool;
 import ServerPart.ServerGameOutputType;
@@ -12,7 +14,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Objects;
 
-public class IAProtocolServer{
+public class IAProtocolServer  implements JDRDSocket{
 
     private Socket socket;
 
@@ -58,33 +60,27 @@ public class IAProtocolServer{
         Thread t = new Thread(() -> {
             try {
                 write(ServerGameOutputType.PNJATK);
-                write(adversaire);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                System.out.println("avant les PV");
-                joueur.setpV(read());
-                System.out.println("avant les premierPV");
-                adversaire.setpV(read());
-            } catch (ClassNotFoundException | IOException e) {
-                throw new RuntimeException(e);
-            }
-            if (joueur.getpV() <= 0)
-                zone.getClient(joueur).setInteragit(true);
-            else{
-                for (int i = 0; i < joueur.getQueteSuivie().size(); i++) {
-                    for(int j=0;j<joueur.getQueteSuivie().get(i).getObjectifs().size();j++){
-                        if (joueur.getQueteSuivie().get(i).getObjectifs().get(j) instanceof ObjectifK){
-                            if ( ((ObjectifK) joueur.getQueteSuivie().get(i).getObjectifs().get(j)).getTarget().getId()==adversaire.getId()) {
-                                joueur.getQueteSuivie().get(i).getObjectifs().get(j).update();
-                                break;
-                            }
-                        }
-                    }
+                boolean isinteract = read();
+                if (!isinteract) {
+                    write(adversaire.getId());
+                    write(adversaire.getNomPersonnage());
+                    Interaction inter = new Interaction(joueur, adversaire, this);
+                    inter.combat();
+                    if (joueur.getpV() < 0)
+                        PersoThread.respawn(joueur);
+                    if (joueur.getpV() > 0)
+                        PersoThread.respawn(adversaire);
+                    write(joueur.getpV());
+                    if (joueur.getpV() <= 0)
+                        zone.getClient(joueur).setInteragit(true);
                 }
+            }
+            catch(IOException | ClassNotFoundException e){
+                Loggy.writlog("ERREUR DE DECONNEXION SERVER" +e.getMessage(), LogLevel.DEBUG);
+                throw new RuntimeException(e);
             }
         });
         t.start();
     }
+
 }

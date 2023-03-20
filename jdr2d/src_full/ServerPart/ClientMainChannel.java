@@ -5,6 +5,7 @@ import Control.OutputType;
 import Log.LogLevel;
 import Log.Loggy;
 import ServerPart.Control.Interaction;
+import ServerPart.Control.JDRDSocket;
 import ServerPart.Control.PersoThread;
 import ServerPart.DAO.*;
 import jdr2dcore.*;
@@ -22,7 +23,7 @@ import java.util.Objects;
 
 @SuppressWarnings("unchecked")
 
-public class ClientMainChannel extends Thread implements Serializable{
+public class ClientMainChannel extends Thread implements Serializable, JDRDSocket {
 
     private final Socket socket;
 

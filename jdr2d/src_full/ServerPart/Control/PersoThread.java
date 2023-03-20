@@ -213,11 +213,12 @@ public class PersoThread extends Thread{
                 }
             }
             p.setpV(p.getpVmax());
+            /*
             try {
-                ClientPart.getServeroutput().writeObject(OutputType.RESPAWN);
+                ClientPart.write(OutputType.RESPAWN);
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            }
+            }*/
             if(fenetre!=null) {
                 fenetre.getFenetreInfo().update();
                 fenetre.setInteraction(false);
