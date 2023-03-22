@@ -334,7 +334,7 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
     public void run(){
             ConnexionOutput connect;
             try {
-                connect = (ConnexionOutput) input.readObject();
+                connect =read();
                 switch (connect) {
                     case CONNEXION -> connect();
                     case CREATION -> create();

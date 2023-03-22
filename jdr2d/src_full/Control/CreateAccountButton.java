@@ -3,6 +3,7 @@ package Control;
 import Graphic.FullLogInterface;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -19,7 +20,7 @@ public class CreateAccountButton extends AbstractAction {
     public void actionPerformed(ActionEvent e) {
         JTextField create = new JTextField();
         try {
-            new ObjectOutputStream(ClientPart.getServeroutput()).writeObject(ConnexionOutput.CREATION);
+            ClientPart.write(ConnexionOutput.CREATION);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

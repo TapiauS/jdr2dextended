@@ -44,6 +44,7 @@ import java.lang.reflect.Method;
             if(forcing){
                 config = loadConfig(fileName);
                 try {
+
                     conn = DriverManager.getConnection(config.getProperty("connexion"), config);
                 }
                 catch (SQLException sqe){
