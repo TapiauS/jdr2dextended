@@ -19,7 +19,7 @@ public class CreateAccountButton extends AbstractAction {
     public void actionPerformed(ActionEvent e) {
         JTextField create = new JTextField();
         try {
-            new ObjectOutputStream(ClientPart.getServeroutput()).writeObject(ConnexionOutput.CREATION);
+            ClientPart.write(ConnexionOutput.CREATION);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

@@ -421,7 +421,7 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
                                 if(!perso.isInteract())
                                 {
                                     write(perso.isInteract());
-                                    Interaction inter=new Interaction(avatar,perso);
+                                    Interaction inter=new Interaction(avatar,perso,this);
                                     inter.combat();
                                     if(avatar.getpV()<0)
                                         PersoThread.respawn(avatar);

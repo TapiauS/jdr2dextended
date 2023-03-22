@@ -1,5 +1,6 @@
 package ServerPart.Control;
 
+import Log.Loggy;
 import ServerPart.ClientMainChannel;
 import ServerPart.DAO.ObjectifsDAO;
 import ServerPart.DAO.QueteDAO;
@@ -182,50 +183,49 @@ public class Interaction implements Serializable {
     }
 
     public void combat() {
-        Thread t = new Thread(() -> {;
-            while (getJoueur().getpV() > 0 && getOpposant().getpV() > 0) {
-                getOpposant().setpV(getOpposant().getpV() - getJoueur().bagarre(getOpposant()));
-                try {
-                    fenetre.write(true);
-                    fenetre.write(joueur.getNomPersonnage() +" à infligé a "+opposant.getNomPersonnage()+" "+getJoueur().bagarre(getOpposant())+" degats");
-                    System.out.println("JE PASSE ICI");
-                    fenetre.write(opposant.getNomPersonnage() +" à infligé a "+joueur.getNomPersonnage()+" "+getOpposant().bagarre(getJoueur())+" degats");
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                getJoueur().setpV(getJoueur().getpV() - getOpposant().bagarre(getJoueur()));
-                try {
-                    sleep(200);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+        while (getJoueur().getpV() > 0 && getOpposant().getpV() > 0) {
+            getOpposant().setpV(getOpposant().getpV() - getJoueur().bagarre(getOpposant()));
             try {
-                fenetre.write(false);
-                fenetre.write(joueur.getpV());
+                fenetre.write(true);
+                System.out.println("je passe dans combat");
+                fenetre.write(joueur.getNomPersonnage() +" à infligé a "+opposant.getNomPersonnage()+" "+getJoueur().bagarre(getOpposant())+" degats");
+                System.out.println("JE PASSE ICI");
+                fenetre.write(opposant.getNomPersonnage() +" à infligé a "+joueur.getNomPersonnage()+" "+getOpposant().bagarre(getJoueur())+" degats");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            if (joueur.getpV()<0)
-                PersoThread.respawn(joueur);
-            if (getOpposant().getpV() <= 0) {
-                for (EventListenerK e : getObserverK()) {
-                    if (e instanceof ObjectifK) {
-                        if (((ObjectifK) e).getTarget().getId() == opposant.getId()) {
-                            notifyOneobs(e);
-                            try {
-                                ObjectifsDAO.setobj(joueur, (ObjectifK) e);
-                            } catch (SQLException ex) {
-                                throw new RuntimeException(ex);
-                            }
-                            removeObserK(e);
+            getJoueur().setpV(getJoueur().getpV() - getOpposant().bagarre(getJoueur()));
+            try {
+                sleep(200);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        try {
+            fenetre.write(false);
+            fenetre.write(joueur.getpV());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        if (joueur.getpV()<0)
+            PersoThread.respawn(joueur);
+        if (getOpposant().getpV() <= 0) {
+            for (EventListenerK e : getObserverK()) {
+                if (e instanceof ObjectifK) {
+                    if (((ObjectifK) e).getTarget().getId() == opposant.getId()) {
+                        notifyOneobs(e);
+                        try {
+                            ObjectifsDAO.setobj(joueur, (ObjectifK) e);
+                        } catch (SQLException ex) {
+                            throw new RuntimeException(ex);
                         }
+                        removeObserK(e);
                     }
                 }
             }
-        });
-        t.start();
+        }
     }
+
 
 
 

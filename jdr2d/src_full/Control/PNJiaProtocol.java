@@ -46,22 +46,23 @@ public class PNJiaProtocol extends Thread{
                     PNJIASocket.write(fenetre.isInteraction());
                     if (!fenetre.isInteraction()) {
                         idaversaire = PNJIASocket.read();
+                        System.out.println("ia adversaire= "+idaversaire);
                         fenetre.getEventHistory().addLine(fenetre.getPlayer().getNomPersonnage() + " est attaqué par " + PNJIASocket.read());
                         boolean stillfigthing = true;
                         fenetre.setInteraction(true);
                         while (stillfigthing) {
                             try {
-                                stillfigthing = ClientPart.read();
-                                System.out.println(stillfigthing);
-                            } catch (IOException | ClassNotFoundException e) {
+                                stillfigthing = PNJIASocket.read();
+                                System.out.println("stillfigthing= "+stillfigthing);
+                            } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
                             if (stillfigthing) {
                                 try {
-                                    String newline=ClientPart.read();
+                                    String newline=PNJIASocket.read();
                                     System.out.println(newline);
                                     fenetre.getEventHistory().addLine(newline);
-                                    fenetre.getEventHistory().addLine(ClientPart.read());
+                                    fenetre.getEventHistory().addLine(PNJIASocket.read());
                                 } catch (IOException | ClassNotFoundException e) {
                                     throw new RuntimeException(e);
                                 }
