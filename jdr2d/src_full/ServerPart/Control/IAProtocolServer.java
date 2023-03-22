@@ -48,6 +48,7 @@ public class IAProtocolServer  implements JDRDSocket{
     //methode
 
     public void write(Object objet) throws IOException {
+        Loggy.writlog("IAPROTOCOLSERVER WRITED"+objet,LogLevel.NOTICE);
         output.writeObject(objet);
         output.reset();
     }
@@ -57,20 +58,22 @@ public class IAProtocolServer  implements JDRDSocket{
     }
 
     public void figth(Personnage joueur, PNJ adversaire, GameZone zone) throws IOException {
+        IAProtocolServer me=this;
         Thread t = new Thread(() -> {
             try {
                 write(ServerGameOutputType.PNJATK);
                 boolean isinteract = read();
+                System.out.println(isinteract);
                 if (!isinteract) {
                     write(adversaire.getId());
                     write(adversaire.getNomPersonnage());
-                    Interaction inter = new Interaction(joueur, adversaire, this);
+                    Interaction inter = new Interaction(joueur, adversaire, me);
                     inter.combat();
                     if (joueur.getpV() < 0)
                         PersoThread.respawn(joueur);
                     if (joueur.getpV() > 0)
                         PersoThread.respawn(adversaire);
-                    write(joueur.getpV());
+
                     if (joueur.getpV() <= 0)
                         zone.getClient(joueur).setInteragit(true);
                 }
