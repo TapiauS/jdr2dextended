@@ -343,27 +343,29 @@ public class GameInterface extends JFrame  implements KeyListener {
         if(e.getKeyCode()==70&&!interaction){
             for (PNJ p: this.getPnjs()) {
                 if (p.distance(player) < 1 && p.getpV() > 0) {
+                    interaction = true;
                     try {
                         ClientPart.write(OutputType.FIGTH);
                         ClientPart.write(p.getId());
-                        boolean stillfigthing=true;
-                        interaction=true;
-                        while (stillfigthing){
-                            stillfigthing=ClientPart.read();
-                            if (stillfigthing) {
-                                eventHistory.addLine(ClientPart.read());
-                                eventHistory.addLine(ClientPart.read());
-                                getFenetreInfo().update();
+                        boolean isinteract=ClientPart.read();
+                        if(!isinteract) {
+                            boolean stillfigthing = true;
+                            while (stillfigthing) {
+                                stillfigthing = ClientPart.read();
+                                if (stillfigthing) {
+                                    eventHistory.addLine(ClientPart.read());
+                                    eventHistory.addLine(ClientPart.read());
+                                    getFenetreInfo().update();
+                                }
                             }
+                            player.setpV(ClientPart.read());
+                            if (player.getpV() <= 0)
+                                PersoThread.respawn(player);
                         }
-                        player.setpV(ClientPart.read());
-                        if(player.getpV()<=0)
-                            PersoThread.respawn(player);
-                        interaction=false;
                     } catch (IOException | ClassNotFoundException ex) {
                         throw new RuntimeException(ex);
                     }
-
+                    interaction = false;
                     thisInfo.update();
                 }
             }

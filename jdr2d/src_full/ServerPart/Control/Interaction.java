@@ -187,9 +187,7 @@ public class Interaction implements Serializable {
             getOpposant().setpV(getOpposant().getpV() - getJoueur().bagarre(getOpposant()));
             try {
                 fenetre.write(true);
-                System.out.println("je passe dans combat");
                 fenetre.write(joueur.getNomPersonnage() +" à infligé a "+opposant.getNomPersonnage()+" "+getJoueur().bagarre(getOpposant())+" degats");
-                System.out.println("JE PASSE ICI");
                 fenetre.write(opposant.getNomPersonnage() +" à infligé a "+joueur.getNomPersonnage()+" "+getOpposant().bagarre(getJoueur())+" degats");
             } catch (IOException e) {
                 throw new RuntimeException(e);

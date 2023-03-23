@@ -41,7 +41,9 @@ public class Drones extends ArrayList<PNJ>{
         int pos;
         for (int i = 0; i < size; i++) {
             pos=rand.nextInt(this.limits.size());
-            this.add(new PNJ(limits.get(pos).getX(),limits.get(pos).getY(),seed.getLieux(),seed.getArme(),seed.getArmure(),seed.getNomPersonnage(),seed.getpV(),new Coffre(),seed.getpVmax(),seed.getRace(),false));
+            PNJ drone=new PNJ(limits.get(pos).getX(),limits.get(pos).getY(),seed.getLieux(),seed.getArme(),seed.getArmure(),seed.getNomPersonnage(),seed.getpV(),new Coffre(),seed.getpVmax(),seed.getRace(),false);
+            drone.setId(seed.getId());
+            this.add(drone);
         }
     }
 
