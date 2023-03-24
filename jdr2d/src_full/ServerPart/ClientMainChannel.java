@@ -417,18 +417,18 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
                         int idadversaire=read();
                         PNJ adversaire=null;
                         for (PNJ perso: map.getPnjs()) {
-                            if(perso.getId()==idadversaire)
-                                if(!perso.isInteract())
-                                {
-                                    write(perso.isInteract());
-                                    Interaction inter=new Interaction(avatar,perso,this);
+                            if(perso.getId()==idadversaire&&avatar.distance(perso)<1) {
+                                write(perso.isInteract());
+                                if (!perso.isInteract()) {
+                                    Interaction inter = new Interaction(avatar, perso, this);
                                     inter.combat();
-                                    if(avatar.getpV()<0)
+                                    if (avatar.getpV() < 0)
                                         PersoThread.respawn(avatar);
-                                    if(perso.getpV()>0)
+                                    if (perso.getpV() > 0)
                                         PersoThread.respawn(perso);
-                                    write(avatar.getpV());
                                 }
+                                break;
+                            }
                         }
                     }
             /*

@@ -73,7 +73,6 @@ public class IAProtocolServer  implements JDRDSocket{
                         PersoThread.respawn(joueur);
                     if (joueur.getpV() > 0)
                         PersoThread.respawn(adversaire);
-
                     if (joueur.getpV() <= 0)
                         zone.getClient(joueur).setInteragit(true);
                 }
