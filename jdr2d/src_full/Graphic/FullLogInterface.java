@@ -207,9 +207,9 @@ public class FullLogInterface extends JFrame  {
         panel.setLayout(group);
         group.setAutoCreateGaps(true);
         group.setAutoCreateContainerGaps(true);
-        JButton create=new JButton(new CreateAccountButton(this,"Creer un compte"));
+        JButton create=new JButton(new CreateAccountAction(this,"Creer un compte"));
         top = create;
-        bottom = new JButton(new ConnexionButton(this, "Connexion"));
+        bottom = new JButton(new ConnexionAction(this, "Connexion"));
         bottomlabel = new JLabel();
         bottomtextfield = new JTextField();
         toptextfield = new JTextField(10);
@@ -250,8 +250,8 @@ public class FullLogInterface extends JFrame  {
     }
 
     public void reset(){
-        setTop(new JButton(new CreateAccountButton(this,"Creer un compte")));
-        setBottom(new JButton(new ConnexionButton(this, "Connexion")));
+        setTop(new JButton(new CreateAccountAction(this,"Creer un compte")));
+        setBottom(new JButton(new ConnexionAction(this, "Connexion")));
         setBottomlabel(new JLabel());
         setToptextfield(new JTextField(10));
         setToplabel(new JLabel());

@@ -9,7 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class ValidePictureChoice extends AbstractAction {
+public class ValidePictureChoiceAction extends AbstractAction {
 
     private FullLogInterface fenetre;
 
@@ -20,7 +20,7 @@ public class ValidePictureChoice extends AbstractAction {
     private BufferedImage actualportraits;
 
 
-    public ValidePictureChoice(FullLogInterface fenetre, Utilisateur util, Personnage personnage,BufferedImage actualportraits, String message){
+    public ValidePictureChoiceAction(FullLogInterface fenetre, Utilisateur util, Personnage personnage, BufferedImage actualportraits, String message){
         super(message);
         this.fenetre=fenetre;
         this.util=util;

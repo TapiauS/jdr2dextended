@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 
-public class MdpValidationButton extends AbstractAction {
+public class MdpValidationAction extends AbstractAction {
 
 
     private FullLogInterface fenetre;
@@ -26,7 +26,7 @@ public class MdpValidationButton extends AbstractAction {
         this.fenetre = fenetre;
     }
 
-    public MdpValidationButton(FullLogInterface fenetre, String texte,String pseudo){
+    public MdpValidationAction(FullLogInterface fenetre, String texte, String pseudo){
         super(texte);
         this.setFenetre(fenetre);
         this.pseudo=pseudo;
@@ -50,7 +50,7 @@ public class MdpValidationButton extends AbstractAction {
             JTextField zone=new JTextField();
             zone.setColumns(10);
             this.fenetre.setToptextfield(zone);
-            this.fenetre.setTop(new JButton(new MailButton(this.fenetre,"Validation",this.pseudo,mdp)));
+            this.fenetre.setTop(new JButton(new MailAction(this.fenetre,"Validation",this.pseudo,mdp)));
             this.fenetre.setToptextfield(zone);
             this.fenetre.refresh();
         }

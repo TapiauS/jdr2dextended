@@ -17,5 +17,6 @@ public enum OutputType implements Serializable {
     INVENTAIRE,
     RESPAWN,
     QUIT,
-    GOBACK
+    GOBACK,
+    DOOR
 }

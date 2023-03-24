@@ -10,7 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.*;
 
-public class FirstCharButton extends AbstractAction {
+public class FirstCharAction extends AbstractAction {
 
     private Utilisateur util;
 
@@ -29,7 +29,7 @@ public class FirstCharButton extends AbstractAction {
 
     //builders
 
-    public FirstCharButton(FullLogInterface fenetre, String texte, Utilisateur util){
+    public FirstCharAction(FullLogInterface fenetre, String texte, Utilisateur util){
         super(texte);
         this.fenetre=fenetre;
         this.util=util;
@@ -65,9 +65,9 @@ public class FirstCharButton extends AbstractAction {
                 fenetre.getToptextfield().setVisible(false);
                 fenetre.getBottomtextfield().setVisible(false);
                 fenetre.getBottomlabel().setVisible(false);
-                ValidePictureChoice valid=new ValidePictureChoice(this.fenetre,util,perso,firstportraits,"Valider");
+                ValidePictureChoiceAction valid=new ValidePictureChoiceAction(this.fenetre,util,perso,firstportraits,"Valider");
                 fenetre.setBottom(new JButton(valid));
-                NextPictureButton next=new NextPictureButton(this.fenetre,perso,this.util,firstportraits,"Option Suivante",valid);
+                NextPictureAction next=new NextPictureAction(this.fenetre,perso,this.util,firstportraits,"Option Suivante",valid);
                 fenetre.setTop(new JButton(next));
                 fenetre.refresh();
             } else {

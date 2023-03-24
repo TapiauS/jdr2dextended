@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 
-public class MailButton extends AbstractAction {
+public class MailAction extends AbstractAction {
 
     private FullLogInterface fenetre;
 
@@ -32,7 +32,7 @@ public class MailButton extends AbstractAction {
 
     //builder
 
-    public MailButton(FullLogInterface fenetre,String message,String pseudo,String mdp){
+    public MailAction(FullLogInterface fenetre, String message, String pseudo, String mdp){
         super(message);
         this.fenetre=fenetre;
         this.pseudo=pseudo;
@@ -66,7 +66,7 @@ public class MailButton extends AbstractAction {
             } catch ( IOException | ClassNotFoundException ex) {
                 throw new RuntimeException(ex);
             }
-            this.fenetre.setTop(new JButton(new FirstCharButton(this.fenetre,"Validation",util)));
+            this.fenetre.setTop(new JButton(new FirstCharAction(this.fenetre,"Validation",util)));
             this.fenetre.setToptextfield(zone);
             this.fenetre.refresh();
         }

@@ -6,9 +6,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 
-public class ConnexionButton extends AbstractAction {
+public class ConnexionAction extends AbstractAction {
     FullLogInterface fenetre;
-    public ConnexionButton(FullLogInterface fenetre,String text){
+    public ConnexionAction(FullLogInterface fenetre, String text){
         super(text);
         this.fenetre=fenetre;
     }
@@ -21,8 +21,8 @@ public class ConnexionButton extends AbstractAction {
             throw new RuntimeException(ex);
         }
         this.fenetre.setToptextfield(new JTextField(10));
-        this.fenetre.setTop(new JButton(new LogButton(this.fenetre,"Validate")));
-        this.fenetre.setBottom(new JButton(new CreateAccountButton(this.fenetre,"Creer un compte")));
+        this.fenetre.setTop(new JButton(new LogAction(this.fenetre,"Validate")));
+        this.fenetre.setBottom(new JButton(new CreateAccountAction(this.fenetre,"Creer un compte")));
         this.fenetre.setBottomlabel(new JLabel("Entrer un mot de passe"));
         this.fenetre.setBottomtextfield(new JPasswordField());
         this.fenetre.getBottomtextfield().setVisible(true);

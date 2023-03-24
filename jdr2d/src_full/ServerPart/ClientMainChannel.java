@@ -354,16 +354,7 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
 
             System.out.println(avatar.getLieux().getId());
             MapPool.addClient(this);
-        try {
-            GameZone zone=Objects.requireNonNull(MapPool.getGameZone(avatar.getLieux().getId()));
-            write(avatar.getLieux());
-            write(zone.getPnjs());
-            write(zone.getEchanges());
-            write(zone.getCoffres());
-            write(zone.getSorties());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        sendMap();
         OutputType outputType;
             do {
                 try {
@@ -398,6 +389,7 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
                         ArrayList<Quete> quetes=read();
                         for (Quete q: quetes) {
                             avatar.addsQuete(q);
+                            QueteDAO.update(q,avatar);
                         }
                         ArrayList<Integer> ids=read();
                         for (int i=0;i<ids.size();i++){
@@ -431,8 +423,22 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
                             }
                         }
                     }
+                    case DOOR ->
+                    {
+                        int idporte=read();
+                        ArrayList<Porte> sorties=map.getSorties();
+                        Porte door=null;
+                        for (Porte p: sorties) {
+                            if(p.getId()==idporte){
+                                door=p;
+                                break;
+                            }
+                        }
+                        door.traverse(avatar);
+                        sendMap();
+                    }
             /*
-            case TALK -> break;
+
             case FIGTH -> break;
             case PICK -> break;
             case QUEST -> break;
@@ -464,6 +470,18 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
         output.reset();
     }
 
+    private void sendMap(){
+        try {
+            map=Objects.requireNonNull(MapPool.getGameZone(avatar.getLieux().getId()));
+            write(avatar.getLieux());
+            write(map.getPnjs());
+            write(map.getEchanges());
+            write(map.getCoffres());
+            write(map.getSorties());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public <T> T read() throws IOException, ClassNotFoundException {
         return (T) input.readObject();

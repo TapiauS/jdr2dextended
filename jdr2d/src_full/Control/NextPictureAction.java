@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Hashtable;
 
-public class NextPictureButton extends AbstractAction {
+public class NextPictureAction extends AbstractAction {
 
     private FullLogInterface fenetre;
 
@@ -23,10 +23,10 @@ public class NextPictureButton extends AbstractAction {
 
     private int indexportrait;
 
-    private ValidePictureChoice observer;
+    private ValidePictureChoiceAction observer;
 
 
-    public NextPictureButton(FullLogInterface fenetre,Personnage nomperso,Utilisateur util,BufferedImage availableportrait,String message,ValidePictureChoice observer){
+    public NextPictureAction(FullLogInterface fenetre, Personnage nomperso, Utilisateur util, BufferedImage availableportrait, String message, ValidePictureChoiceAction observer){
         super(message);
         this.fenetre=fenetre;
         this.personnage=nomperso;

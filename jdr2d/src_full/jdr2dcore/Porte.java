@@ -15,8 +15,16 @@ public class Porte extends Point {
         return portelie;
     }
 
+    public int getId() {
+        return id;
+    }
+
     //setters
 
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public Porte setPortelie(Porte portelie) {
         this.portelie = portelie;

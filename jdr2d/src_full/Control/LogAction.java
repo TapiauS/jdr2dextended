@@ -8,10 +8,10 @@ import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.Hashtable;
 
-public class LogButton extends AbstractAction {
+public class LogAction extends AbstractAction {
 
     private FullLogInterface fenetre;
-    public LogButton(FullLogInterface fenetre,String texte){
+    public LogAction(FullLogInterface fenetre, String texte){
         super(texte);
         this.fenetre=fenetre;
     }
@@ -53,7 +53,7 @@ public class LogButton extends AbstractAction {
             JList<String> lisperso = new JList<>(data);
             this.fenetre.setToptextfield(lisperso);
             this.fenetre.setToplabel(new JLabel("Choisissez un personnage ou creez en un nouveau"));
-            this.fenetre.setTop(new JButton(new ValideCharSelButton(this.fenetre, util, "Validation", refperso)));
+            this.fenetre.setTop(new JButton(new ValideCharSelAction(this.fenetre, util, "Validation", refperso)));
         }
         else{
             this.fenetre.getTop().setVisible(false);
@@ -62,7 +62,7 @@ public class LogButton extends AbstractAction {
         }
         this.fenetre.getBottomtextfield().setVisible(false);
         this.fenetre.getBottomlabel().setVisible(false);
-        this.fenetre.setBottom(new JButton(new CreateCharButton("Creer un personnage",this.fenetre,util,refperso)));
+        this.fenetre.setBottom(new JButton(new CreateCharAction("Creer un personnage",this.fenetre,util,refperso)));
         this.fenetre.refresh();
     }
 }

@@ -1,16 +1,14 @@
 package Control;
 
-import ServerPart.DAO.UtilisateurDAO;
 import Graphic.FullLogInterface;
 import jdr2dcore.Utilisateur;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Hashtable;
 
-public class CharSelectionButton extends AbstractAction {
+public class CharSelectionAction extends AbstractAction {
 
     private FullLogInterface fenetre;
 
@@ -18,7 +16,7 @@ public class CharSelectionButton extends AbstractAction {
 
     private Hashtable<String,Integer> refperso;
 
-    public CharSelectionButton(String texte,Utilisateur util,FullLogInterface fenetre,Hashtable<String,Integer> refperso){
+    public CharSelectionAction(String texte, Utilisateur util, FullLogInterface fenetre, Hashtable<String,Integer> refperso){
         super(texte);
         this.fenetre=fenetre;
         this.refperso=refperso;
@@ -36,7 +34,7 @@ public class CharSelectionButton extends AbstractAction {
             JList<String> lisperso = new JList<>(data);
             this.fenetre.setToptextfield(lisperso);
             this.fenetre.setToplabel(new JLabel("Choisissez un personnage ou creez en un nouveau"));
-            this.fenetre.setTop(new JButton(new ValideCharSelButton(this.fenetre, util, "Validation", refperso)));
+            this.fenetre.setTop(new JButton(new ValideCharSelAction(this.fenetre, util, "Validation", refperso)));
         }
         else{
             this.fenetre.getTop().setVisible(false);
@@ -45,7 +43,7 @@ public class CharSelectionButton extends AbstractAction {
         }
         this.fenetre.getBottomtextfield().setVisible(false);
         this.fenetre.getBottomlabel().setVisible(false);
-        this.fenetre.setBottom(new JButton(new CreateCharButton("Creer un personnage",this.fenetre,util,refperso)));
+        this.fenetre.setBottom(new JButton(new CreateCharAction("Creer un personnage",this.fenetre,util,refperso)));
         this.fenetre.refresh();
     }
 }

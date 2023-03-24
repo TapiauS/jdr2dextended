@@ -12,11 +12,14 @@ public abstract class PorteDAO extends DAOObject{
     public static ArrayList<Porte> getPorte(Map m) throws SQLException {
         ArrayList<Object> args=new ArrayList<>(List.of(m.getId()));
         ArrayList<Porte> retour=new ArrayList<>();
-        ResultSet rs=query("SELECT p.x as x,p.y as y,p.id_porte_relie,p1.x as x1,p1.y as y1,p1.id_lieu as lieu FROM porte AS p JOIN" +
+        ResultSet rs=query("SELECT p.id_porte as id,p.x as x,p.y as y,p.id_porte_relie,p1.x as x1,p1.y as y1,p1.id_lieu as lieu FROM porte AS p JOIN" +
                 "                      porte AS p1 ON p.id_porte_relie=p1.id_porte AND p.id_lieu=?",args);
         while (rs.next()){
             Porte porterelie=new Porte(MapDAO.getmap(rs.getInt("lieu")),rs.getInt("y1"),rs.getInt("x1"));
-            retour.add(new Porte(m,rs.getInt("y"),rs.getInt("x"),porterelie));
+            porterelie.setId(rs.getInt("id_porte_relie"));
+            Porte door=new Porte(m,rs.getInt("y"),rs.getInt("x"),porterelie);
+            door.setId(rs.getInt("id"));
+            retour.add(door);
         }
         rs.getStatement().close();
 

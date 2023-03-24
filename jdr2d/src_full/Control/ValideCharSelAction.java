@@ -9,7 +9,7 @@ import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.Hashtable;
 
-public class ValideCharSelButton extends AbstractAction {
+public class ValideCharSelAction extends AbstractAction {
     private FullLogInterface fenetre;
 
     private Utilisateur util;
@@ -33,7 +33,7 @@ public class ValideCharSelButton extends AbstractAction {
 
     //builder
 
-    public ValideCharSelButton(FullLogInterface fenetre,Utilisateur util,String text,Hashtable<String,Integer> reperso){
+    public ValideCharSelAction(FullLogInterface fenetre, Utilisateur util, String text, Hashtable<String,Integer> reperso){
         super(text);
         this.fenetre=fenetre;
         this.util=util;

@@ -20,11 +20,14 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Properties;
 
 public class GameInterface extends JFrame  implements KeyListener {
     private final Thread save;
@@ -62,6 +65,8 @@ public class GameInterface extends JFrame  implements KeyListener {
     private ArrayList<Echange> echanges;
     protected ArrayList<Coffre> coffres;
 
+    protected Properties properties;
+
     public static final int WINDOWS_HEIGH=1000;
 
     public static final int WINDOW_WIDTH=1000;
@@ -80,6 +85,17 @@ public class GameInterface extends JFrame  implements KeyListener {
 
     public GameInterface(Personnage player,Utilisateur util,FullLogInterface log) throws SQLException {
         super();
+        try {
+            FileInputStream in = new FileInputStream("control.properties");
+            properties= new Properties();
+            properties.load(in);
+            in.close();
+        }
+        catch (IOException ioe){
+            Loggy.writlog("PROPERTIES LOST",LogLevel.NOTICE);
+            JOptionPane.showMessageDialog(null,"control.properties introuvable","Erreur Fatale",JOptionPane.ERROR_MESSAGE);
+            throw new RuntimeException(ioe);
+        }
         this.log=log;
         this.nextmactiontime=Instant.now();
         this.interaction=false;
@@ -383,7 +399,7 @@ public class GameInterface extends JFrame  implements KeyListener {
 
 
 
-    private  void mapload() throws SQLException {
+    private  void mapload(){
         try {
             carte=ClientPart.read();
             pnjs=ClientPart.read();
@@ -403,28 +419,32 @@ public class GameInterface extends JFrame  implements KeyListener {
     private void checkdoor(){
         for (Porte p: sorties) {
             System.out.println("distance porte= " +p.distance(player));
-            if(p.distance(player)<1){
-                int res=JOptionPane.showConfirmDialog(this,"Il y a une porte ici voulez vous traverser?","Porte",JOptionPane.YES_NO_OPTION);
-                if(res==0){
-                    p.traverse(player);
-                    for (PNJ pn: pnjs) {
-                        if (pn.isNomme()) {
-                            try {
-                                PersonnageDAO.updatepnj(pn);
-                            } catch (SQLException e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-                    }
-                    try {
+            if(p.distance(player)<1) {
+                try {
+                    int res = JOptionPane.showConfirmDialog(this, "Il y a une porte ici voulez vous traverser?", "Porte", JOptionPane.YES_NO_OPTION);
+                    if (res == 0) {
+                        interaction = true;
+                        ClientPart.write(OutputType.DOOR);
+                        ClientPart.write(p.getId());
+                        p.traverse(player);
                         mapload();
-                        File source=new File("music\\"+player.getLieux().getNomLieu()+".wav");
-                        music.setSource(source);
+                        File source = new File("music\\" + player.getLieux().getNomLieu() + ".wav");
+                        try {
+                            music.setSource(source);
+                        }
+                        catch (FileNotFoundException | LineUnavailableException | UnsupportedAudioFileException lue){
+                            Loggy.writlog(lue.getMessage(),LogLevel.WARNING);
+                        }
+                        interaction=false;
                         ia.setPnjs(pnjs);
-                    } catch (SQLException | UnsupportedAudioFileException | LineUnavailableException | IOException e) {
-                        throw new RuntimeException(e);}
-                    this.revalidate();
-                    this.repaint();
+                        this.revalidate();
+                        this.repaint();
+                    }
+                }
+                catch (IOException ioe){
+                    Loggy.writlog("ERREUR DE CONNEXION",LogLevel.ERROR);
+                    JOptionPane.showMessageDialog(null,"UNE ERREUR DE CONNEXION INATENDUE A EU LIEU VEUILLEZ CONTACTER LE SERVICE CLIENT","Erreur",JOptionPane.ERROR_MESSAGE);
+                    throw new RuntimeException(ioe);
                 }
             }
         }

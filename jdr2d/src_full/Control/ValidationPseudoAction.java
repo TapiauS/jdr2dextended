@@ -8,7 +8,7 @@ import Graphic.FullLogInterface;
 
 public class
 
-ValidationPseudoButton extends AbstractAction {
+ValidationPseudoAction extends AbstractAction {
     private FullLogInterface fenetre;
 
 
@@ -24,7 +24,7 @@ ValidationPseudoButton extends AbstractAction {
         this.fenetre = fenetre;
     }
 
-    public ValidationPseudoButton(FullLogInterface fenetre, String texte){
+    public ValidationPseudoAction(FullLogInterface fenetre, String texte){
         super(texte);
         this.setFenetre(fenetre);
 
@@ -48,7 +48,7 @@ ValidationPseudoButton extends AbstractAction {
             JLabel create=new JLabel("Choisir un mot de passe");
             this.fenetre.setToplabel(create);
             this.fenetre.setToptextfield(createchar);
-            this.fenetre.setTop(new JButton(new MdpValidationButton(this.fenetre,"Validation",pseudo)));
+            this.fenetre.setTop(new JButton(new MdpValidationAction(this.fenetre,"Validation",pseudo)));
             this.fenetre.refresh();
         }
         else {
