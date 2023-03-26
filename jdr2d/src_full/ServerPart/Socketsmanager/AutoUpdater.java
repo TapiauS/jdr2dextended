@@ -1,5 +1,7 @@
-package ServerPart.Control;
+package ServerPart.Socketsmanager;
 
+import Log.LogLevel;
+import Log.Loggy;
 import ServerPart.Socketsmanager.MapPool;
 import ServerPart.Socketsmanager.MapState;
 
@@ -8,7 +10,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class AutoUpdater extends Thread{
+public class AutoUpdater extends Thread implements JDRDSocket{
 
     private final Socket client;
 
@@ -34,14 +36,32 @@ public class AutoUpdater extends Thread{
         super.run();
         while (client.isConnected()) {
             try {
-                idmap= (int) input.readObject();
+                idmap= read();
                 MapState state= MapPool.getGameZone(idmap).getStatut();
-                output.writeObject(state);
-                output.reset();
+                write(state);
                 sleep(30);
             } catch (IOException | InterruptedException | ClassNotFoundException e) {
+                Loggy.writlog("CONNEXION ENDED", LogLevel.NOTICE);
                 throw new RuntimeException(e);
             }
+            finally {
+                try {
+                    client.close();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
+    }
+
+    @Override
+    public void write(Object o) throws IOException {
+        output.writeObject(o);
+        output.reset();
+    }
+
+    @Override
+    public <T> T read() throws IOException, ClassNotFoundException {
+        return (T) input.readObject();
     }
 }

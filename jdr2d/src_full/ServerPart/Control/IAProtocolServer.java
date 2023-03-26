@@ -79,6 +79,13 @@ public class IAProtocolServer  implements JDRDSocket {
                 Loggy.writlog("ERREUR DE DECONNEXION SERVER" +e.getMessage(), LogLevel.DEBUG);
                 throw new RuntimeException(e);
             }
+            finally {
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         });
         t.start();
     }

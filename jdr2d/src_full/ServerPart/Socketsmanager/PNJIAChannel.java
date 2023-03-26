@@ -1,6 +1,5 @@
 package ServerPart.Socketsmanager;
 
-import ServerPart.Control.AutoUpdater;
 import ServerPart.Control.IAProtocolServer;
 
 import java.io.IOException;

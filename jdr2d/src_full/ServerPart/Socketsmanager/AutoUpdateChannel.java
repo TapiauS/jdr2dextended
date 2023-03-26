@@ -1,7 +1,5 @@
 package ServerPart.Socketsmanager;
 
-import ServerPart.Control.AutoUpdater;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;

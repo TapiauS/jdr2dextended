@@ -47,6 +47,7 @@ public class SettingsDisplayer extends JFrame {
     //builder
     public SettingsDisplayer(GameInterface fenetre){
         super();
+        this.setIconImage(new ImageIcon("Portraits/gamicon.png").getImage());
         this.fenetre=fenetre;
         JPanel panel=new JPanel();
         panel.setLayout(new GridBagLayout());
@@ -181,7 +182,7 @@ public class SettingsDisplayer extends JFrame {
             Properties fenetreprop=fenetre.getProperties();
             fenetreprop.setProperty("MUSICVOLUME", String.valueOf((float) volume.getValue()/100));
             fenetreprop.setProperty("EFFECTVOLUME",String.valueOf((float) effectvalue.getValue()/100));
-            try (FileOutputStream fos = new FileOutputStream("control.properties")) {
+            try (FileOutputStream fos = new FileOutputStream("control"+fenetre.getUtil().getNomUtilisateur()+".properties")) {
                 fenetreprop.store(fos,"");
             } catch (IOException ioe) {
                 ioe.printStackTrace();
@@ -201,11 +202,12 @@ public class SettingsDisplayer extends JFrame {
             fenetre.setInteraction(false);
             fenetre.setProperties(previousversion);
             try {
-                OutputStream outputStream=new FileOutputStream("control.properties");
+                OutputStream outputStream=new FileOutputStream("control"+fenetre.getUtil().getNomUtilisateur()+".properties");
                 fenetre.getProperties().store(outputStream,"");
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
+            fenetre.setInteraction(false);
             dispose();
         });
         constraints.gridx=0;
@@ -231,6 +233,45 @@ public class SettingsDisplayer extends JFrame {
         constraints.gridwidth=2;
         panel.add(defaultsettings,constraints);
         iniate();
+
+
+        addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                System.out.println("je fais bien cette action");
+                fenetre.setInteraction(false);
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+        });
         this.pack();
         this.setVisible(true);
     }

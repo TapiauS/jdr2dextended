@@ -18,10 +18,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -89,10 +86,25 @@ public class GameInterface extends JFrame  implements KeyListener {
         super();
         this.setIconImage(new ImageIcon("Portraits/gamicon.png").getImage());
         try {
-            FileInputStream in = new FileInputStream("control.properties");
+            FileInputStream in = new FileInputStream("control"+util.getNomUtilisateur()+".properties");
             properties= new Properties();
             properties.load(in);
             in.close();
+        }
+        catch (FileNotFoundException fne){
+            try {
+                FileInputStream in = new FileInputStream("defaultcontrol.properties");
+                properties= new Properties();
+                properties.load(in);
+                in.close();
+                FileOutputStream fos=new FileOutputStream("control"+util.getNomUtilisateur()+".properties");
+                properties.store(fos,"Initianalisation");
+                fos.close();
+            } catch (IOException e) {
+                Loggy.writlog("DEFAULT PROPERTIES LOST",LogLevel.NOTICE);
+                JOptionPane.showMessageDialog(null,"control.properties introuvable","Erreur Fatale",JOptionPane.ERROR_MESSAGE);
+                throw new RuntimeException(e);
+            }
         }
         catch (IOException ioe){
             Loggy.writlog("PROPERTIES LOST",LogLevel.NOTICE);
