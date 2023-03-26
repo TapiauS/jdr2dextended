@@ -1,5 +1,6 @@
-package ServerPart;
+package ServerPart.Socketsmanager;
 
+import ServerPart.Control.GameZone;
 import jdr2dcore.*;
 
 import java.io.Serializable;

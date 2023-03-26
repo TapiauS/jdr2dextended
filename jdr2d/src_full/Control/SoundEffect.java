@@ -13,6 +13,8 @@ public class SoundEffect {
 
     private static Clip clip;
 
+    private static float volumevalue;
+
 
     private static AudioInputStream audioInputStream;
     private static GameInterface fenetre;
@@ -33,7 +35,7 @@ public class SoundEffect {
         clip=AudioSystem.getClip();
         clip.open(audioInputStream);
         clip.loop(1);
-        setVolume(1f);
+        setVolume(volumevalue);
     }
 
     public static void setVolume(float volume) {
@@ -41,6 +43,10 @@ public class SoundEffect {
             throw new IllegalArgumentException("Volume not valid: " + volume);
         FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
         gainControl.setValue(20f * (float) Math.log10(volume));
+    }
+
+    public static void setVolumevalue(float volumevalue) {
+        SoundEffect.volumevalue = volumevalue;
     }
 
     public static float getVolume() {

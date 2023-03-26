@@ -1,6 +1,8 @@
-package ServerPart;
+package ServerPart.Socketsmanager;
 
+import ServerPart.Control.GameZone;
 import ServerPart.DAO.MapDAO;
+import ServerPart.Socketsmanager.ClientMainChannel;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

@@ -45,23 +45,25 @@ public class ValideCharSelAction extends AbstractAction {
         JList list=(JList) this.fenetre.getToptextfield();
         String charname= (String) list.getSelectedValue();
         Personnage perso;
-        try {
-            ClientPart.write(ConnexionOutput.PICKCHAR);
-            ClientPart.write(charname);
-            perso=ClientPart.read();
-        } catch (IOException | ClassNotFoundException ex) {
-            throw new RuntimeException(ex);
+        if(list.getSelectedIndex()>-1) {
+            try {
+                ClientPart.write(ConnexionOutput.PICKCHAR);
+                ClientPart.write(charname);
+                perso = ClientPart.read();
+            } catch (IOException | ClassNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+            this.fenetre.getToptextfield().setVisible(false);
+            this.fenetre.getBottomlabel().setVisible(false);
+            this.fenetre.getBottom().setVisible(false);
+            this.fenetre.getTop().setVisible(false);
+            try {
+                this.fenetre.setPerso(perso);
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex);
+            }
+            this.fenetre.setVisible(false);
+            this.fenetre.refresh();
         }
-        this.fenetre.getToptextfield().setVisible(false);
-        this.fenetre.getBottomlabel().setVisible(false);
-        this.fenetre.getBottom().setVisible(false);
-        this.fenetre.getTop().setVisible(false);
-        try {
-            this.fenetre.setPerso(perso);
-        } catch ( InterruptedException ex) {
-            throw new RuntimeException(ex);
-        }
-        this.fenetre.setVisible(false);
-        this.fenetre.refresh();
     }
 }

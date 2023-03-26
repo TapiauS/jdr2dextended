@@ -1,7 +1,6 @@
 package Control;
 
 import Graphic.GameInterface;
-import ServerPart.GameZone;
 
 import java.io.*;
 import java.net.Socket;

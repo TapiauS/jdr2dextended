@@ -1,4 +1,4 @@
-package ServerPart.Control;
+package ServerPart.Socketsmanager;
 
 import java.io.IOException;
 

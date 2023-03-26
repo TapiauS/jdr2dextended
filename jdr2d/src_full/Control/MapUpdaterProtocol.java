@@ -1,12 +1,9 @@
 package Control;
 
 import Graphic.GameInterface;
-import ServerPart.AutoUpdateChannel;
-import ServerPart.MapState;
-import jdr2dcore.PNJ;
+import ServerPart.Socketsmanager.MapState;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class MapUpdaterProtocol extends Thread{
     private GameInterface fenetre;

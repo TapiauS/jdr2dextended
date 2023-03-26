@@ -1,4 +1,4 @@
-package ServerPart;
+package ServerPart.Socketsmanager;
 
 public enum ServerGameOutputType {
     PNJATK,PERSOATK

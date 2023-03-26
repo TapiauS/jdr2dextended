@@ -1,13 +1,9 @@
 package ServerPart.Control;
 
-import Control.ClientPart;
-import Control.OutputType;
 import Graphic.GameInterface;
-import ServerPart.GameZone;
 import jdr2dcore.PNJ;
 import jdr2dcore.Personnage;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class PersoThread extends Thread{

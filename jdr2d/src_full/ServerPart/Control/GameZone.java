@@ -1,11 +1,11 @@
-package ServerPart;
+package ServerPart.Control;
 
-import ServerPart.Control.GameZonePersoThread;
-import ServerPart.Control.IAProtocolServer;
 import ServerPart.DAO.EchangeDAO;
 import ServerPart.DAO.MapDAO;
 import ServerPart.DAO.PersonnageDAO;
 import ServerPart.DAO.PorteDAO;
+import ServerPart.Socketsmanager.MapState;
+import ServerPart.Socketsmanager.ClientMainChannel;
 import jdr2dcore.*;
 
 import java.io.IOException;

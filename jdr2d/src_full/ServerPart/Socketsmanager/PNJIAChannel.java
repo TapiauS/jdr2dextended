@@ -1,4 +1,4 @@
-package ServerPart;
+package ServerPart.Socketsmanager;
 
 import ServerPart.Control.AutoUpdater;
 import ServerPart.Control.IAProtocolServer;

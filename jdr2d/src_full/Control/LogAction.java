@@ -21,13 +21,13 @@ public class LogAction extends AbstractAction {
         JTextField textField= (JTextField) fenetre.getToptextfield();
         String pseudo=textField.getText();
         String mdp=this.fenetre.getBottomtextfield().getText();
-        Utilisateur util = new Utilisateur();
+        Utilisateur util ;
         boolean success;
         try {
-            ClientPart.getServeroutput().writeObject(ConnexionOutput.CONNEXION);
-            ClientPart.getServeroutput().writeObject(pseudo);
-            ClientPart.getServeroutput().writeObject(mdp);
-            success= (boolean) ClientPart.getServerinput().readObject();
+            ClientPart.write(ConnexionOutput.CONNEXION);
+            ClientPart.write(pseudo);
+            ClientPart.write(mdp);
+            success=ClientPart.read();
         } catch (IOException | ClassNotFoundException ex) {
         throw new RuntimeException(ex);
         }

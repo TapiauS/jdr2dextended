@@ -1,11 +1,11 @@
-package ServerPart;
+package ServerPart.Socketsmanager;
 
+import ServerPart.Control.GameZone;
 import jdr2dcore.Personnage;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class InputReceiver extends Thread{
@@ -23,7 +23,7 @@ public class InputReceiver extends Thread{
     public void run() {
         super.run();
         try {
-            ArrayList<GameZone> maps=MapPool.getLismaps();
+            ArrayList<GameZone> maps= MapPool.getLismaps();
             serverSocket = new ServerSocket(portNumber);
             //MapPool.init();
             while (true) {

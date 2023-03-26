@@ -3,11 +3,9 @@ package Control;
 import Graphic.GameInterface;
 import Log.LogLevel;
 import Log.Loggy;
-import ServerPart.Control.Interaction;
 import ServerPart.Control.PersoThread;
-import ServerPart.ServerGameOutputType;
+import ServerPart.Socketsmanager.ServerGameOutputType;
 import jdr2dcore.ObjectifK;
-import jdr2dcore.PNJ;
 import jdr2dcore.Personnage;
 
 import java.io.IOException;

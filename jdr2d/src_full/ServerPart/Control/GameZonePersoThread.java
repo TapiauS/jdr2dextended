@@ -1,8 +1,7 @@
 package ServerPart.Control;
 
-import ServerPart.ClientMainChannel;
+import ServerPart.Socketsmanager.ClientMainChannel;
 import ServerPart.DAO.PersonnageDAO;
-import ServerPart.GameZone;
 import jdr2dcore.Direction;
 import jdr2dcore.PNJ;
 import jdr2dcore.Personnage;

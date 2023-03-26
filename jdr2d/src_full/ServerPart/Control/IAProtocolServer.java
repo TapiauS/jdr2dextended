@@ -1,12 +1,10 @@
 package ServerPart.Control;
 
-import Control.OutputType;
 import Log.LogLevel;
 import Log.Loggy;
-import ServerPart.GameZone;
-import ServerPart.MapPool;
-import ServerPart.ServerGameOutputType;
-import jdr2dcore.ObjectifK;
+import ServerPart.Socketsmanager.JDRDSocket;
+import ServerPart.Socketsmanager.MapPool;
+import ServerPart.Socketsmanager.ServerGameOutputType;
 import jdr2dcore.PNJ;
 import jdr2dcore.Personnage;
 
@@ -14,7 +12,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Objects;
 
-public class IAProtocolServer  implements JDRDSocket{
+public class IAProtocolServer  implements JDRDSocket {
 
     private Socket socket;
 

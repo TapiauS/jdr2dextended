@@ -1,13 +1,13 @@
-package ServerPart;
+package ServerPart.Socketsmanager;
 
 import Control.ConnexionOutput;
 import Control.OutputType;
 import Log.LogLevel;
 import Log.Loggy;
 import ServerPart.Control.Interaction;
-import ServerPart.Control.JDRDSocket;
 import ServerPart.Control.PersoThread;
 import ServerPart.DAO.*;
+import ServerPart.Control.GameZone;
 import jdr2dcore.*;
 
 import javax.imageio.ImageIO;
@@ -120,16 +120,16 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
         start();
     }
 
-    private void connect() throws IOException, ClassNotFoundException {
+    private void connect() throws IOException, ClassNotFoundException, SQLException {
         String pseudo;
         String mdp;
         ConnexionOutput conn=null;
         while (util==null&&conn!= ConnexionOutput.QUIT) {
-            conn=(ConnexionOutput) input.readObject();
+            conn=read();
             switch (conn) {
                 case CONNEXION -> {
-                    pseudo = (String) input.readObject();
-                    mdp = (String) input.readObject();
+                    pseudo = read();
+                    mdp = read();
                     try {
                         util = UtilisateurDAO.connectcompte(pseudo, mdp);
                         output.writeObject(true);
@@ -144,16 +144,12 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
                 case QUIT -> connected=false;
             }
         }
-        Hashtable<String,Integer> display= null;
-        try {
-            display = UtilisateurDAO.displaypersonnage(util);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        Hashtable<String,Integer> display;
+        display = UtilisateurDAO.displaypersonnage(util);
         output.writeObject(display);
     }
 
-    private void create() throws IOException, ClassNotFoundException {
+    private void create() throws IOException, ClassNotFoundException, SQLException {
         String pseudo="";
         String mdp="";
         ConnexionOutput conn = null;
@@ -216,12 +212,8 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
             switch (conn) {
                 case VALIDCHOICE -> {
                     String teste_mail;
-                    try {
-                        teste_mail = (String) input.readObject();
-                        success = UtilisateurDAO.checkmail(teste_mail);
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }
+                    teste_mail = (String) input.readObject();
+                    success = UtilisateurDAO.checkmail(teste_mail);
                     if (success)
                         mail = teste_mail;
                     output.writeObject(success);
@@ -236,129 +228,107 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
                 }
             }
         }
-        try {
-            UtilisateurDAO.createcompte(pseudo,mdp,mail);
-            util=UtilisateurDAO.connectcompte(pseudo,mdp);
-            output.writeObject(util);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        UtilisateurDAO.createcompte(pseudo,mdp,mail);
+        util=UtilisateurDAO.connectcompte(pseudo,mdp);
+        output.writeObject(util);
     }
 
-    private void pick(){
-        try {
-            Hashtable<String,Integer> display=UtilisateurDAO.displaypersonnage(util);
-            String nomperso=read();
-            avatar= PersonnageDAO.getchar(display.get(nomperso));
-            output.writeObject(avatar);
-        } catch (SQLException | IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+    private void pick() throws IOException, SQLException, ClassNotFoundException {
+        Hashtable<String,Integer> display=UtilisateurDAO.displaypersonnage(util);
+        String nomperso=read();
+        avatar= PersonnageDAO.getchar(display.get(nomperso));
+        output.writeObject(avatar);
     }
 
-    private void createchar(){
+
+    private void createchar() throws IOException, ClassNotFoundException, SQLException {
         String charname="";
         boolean success=false;
         ConnexionOutput conn;
         while (!success){
-            try {
-                conn= read();
-                switch (conn){
-                    case VALIDCHOICE -> {
-                        charname= (String) input.readObject();
-                        success=PersonnageDAO.checkcharname(charname);
-                        output.writeObject(success);
-                        if(success) {
-                            int id=PersonnageDAO.createchar(charname,util);
-                            avatar=PersonnageDAO.getchar(id);
-                            output.writeObject(avatar);
-                            pickpicture();
-                        }
-                    }
-                    case PICKCHAR -> {
-                        conn = read();
-                        switch (conn) {
-                            case PICKCHAR -> pick();
-                            case CREATECHAR -> createchar();
-                        }
-                        return;
-                    }
-                    case QUIT -> {
-                        connected=false;
-                        return;
+            conn= read();
+            switch (conn){
+                case VALIDCHOICE -> {
+                    charname= (String) input.readObject();
+                    success=PersonnageDAO.checkcharname(charname);
+                    output.writeObject(success);
+                    if(success) {
+                        int id=PersonnageDAO.createchar(charname,util);
+                        avatar=PersonnageDAO.getchar(id);
+                        output.writeObject(avatar);
+                        pickpicture();
                     }
                 }
-            } catch (IOException | ClassNotFoundException | SQLException e) {
-                throw new RuntimeException(e);
+                case PICKCHAR -> {
+                    conn = read();
+                    switch (conn) {
+                        case PICKCHAR -> pick();
+                        case CREATECHAR -> createchar();
+                    }
+                    return;
+                }
+                case QUIT -> {
+                    connected=false;
+                    return;
+                }
             }
         }
     }
 
-    private void pickpicture(){
-        try {
-            Hashtable<Integer, BufferedImage> caroussel= ImageDAO.loadfullimagebank("portrait");
-            int indexportrait=0;
-            List<Integer> keystoarray= caroussel.keySet().stream().toList();
-            System.out.println("Oscour "+keystoarray);
-            boolean valid=false;
-            ConnexionOutput choice;
-            while (!valid){
-                bytestream=new ByteArrayOutputStream();
-                ImageIO.write(caroussel.get(keystoarray.get(indexportrait)),"png",bytestream);
-                byte [] imgbyte= bytestream.toByteArray();
-                output.writeObject(imgbyte.length);
-                out.write(imgbyte);
-                choice=read();
-                switch (choice){
-                    case NEXTPICTURE -> {
-                        if(indexportrait+1<keystoarray.size())
-                            indexportrait++;
-                        else
-                            indexportrait=0;
-                    }
-                    case VALIDPICTURE -> {
-                        DAOObject.queryUDC("UPDATE personnage SET id_portrait=? WHERE id_personnage=?;",new ArrayList<>(List.of(keystoarray.get(indexportrait),avatar.getId())));
-                        valid=true;
-                    }
-                    case QUIT -> {
-                        connected=false;
-                        return;
-                    }
+    private void pickpicture() throws SQLException, IOException, ClassNotFoundException {
+        Hashtable<Integer, BufferedImage> caroussel= ImageDAO.loadfullimagebank("portrait");
+        int indexportrait=0;
+        List<Integer> keystoarray= caroussel.keySet().stream().toList();
+        System.out.println("Oscour "+keystoarray);
+        boolean valid=false;
+        ConnexionOutput choice;
+        while (!valid){
+            bytestream=new ByteArrayOutputStream();
+            ImageIO.write(caroussel.get(keystoarray.get(indexportrait)),"png",bytestream);
+            byte [] imgbyte= bytestream.toByteArray();
+            output.writeObject(imgbyte.length);
+            out.write(imgbyte);
+            choice=read();
+            switch (choice){
+                case NEXTPICTURE -> {
+                    if(indexportrait+1<keystoarray.size())
+                        indexportrait++;
+                    else
+                        indexportrait=0;
+                }
+                case VALIDPICTURE -> {
+                    DAOObject.queryUDC("UPDATE personnage SET id_portrait=? WHERE id_personnage=?;",new ArrayList<>(List.of(keystoarray.get(indexportrait),avatar.getId())));
+                    valid=true;
+                }
+                case QUIT -> {
+                    connected=false;
+                    return;
                 }
             }
-        } catch (SQLException | IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
         }
     }
 
     public void run(){
-            ConnexionOutput connect;
-            try {
-                connect =read();
-                switch (connect) {
-                    case CONNEXION -> connect();
-                    case CREATION -> create();
-                }
-            } catch (IOException | ClassNotFoundException ex) {
-                throw new RuntimeException(ex);
-            }
-            try {
-                connect = (ConnexionOutput) input.readObject();
-                switch (connect) {
-                    case PICKCHAR -> pick();
-                    case CREATECHAR -> createchar();
-                }
-            } catch (IOException | ClassNotFoundException e) {
-                throw new RuntimeException(e);
+        ConnexionOutput connect;
+        try {
+            connect = read();
+            switch (connect) {
+                case CONNEXION -> connect();
+                case CREATION -> create();
             }
 
+            connect = (ConnexionOutput) input.readObject();
+            switch (connect) {
+                case PICKCHAR -> pick();
+                case CREATECHAR -> createchar();
+            }
             System.out.println(avatar.getLieux().getId());
             MapPool.addClient(this);
-        sendMap();
-        OutputType outputType;
+            sendMap();
+            OutputType outputType;
             do {
-                try {
-                    outputType = (OutputType) input.readObject();
+
+                outputType = (OutputType) input.readObject();
                 switch (outputType) {
                     case MOUVNORD -> {
                         avatar.depl(Direction.NORD);
@@ -374,30 +344,30 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
                     }
                     case QUIT -> connected = false;
                     case RESPAWN -> {
-                        interagit=false;
+                        interagit = false;
                         avatar.setpV(avatar.getpVmax());
                     }
                     case TALK -> {
-                            this.interagit=true;
-                            int id=read();
-                        for (PNJ p: map.getPnjs()) {
-                            if(p.getId()==id) {
+                        this.interagit = true;
+                        int id = read();
+                        for (PNJ p : map.getPnjs()) {
+                            if (p.getId() == id) {
                                 p.setInteract(true);
                                 break;
                             }
                         }
-                        ArrayList<Quete> quetes=read();
-                        for (Quete q: quetes) {
+                        ArrayList<Quete> quetes = read();
+                        for (Quete q : quetes) {
                             avatar.addsQuete(q);
-                            QueteDAO.update(q,avatar);
+                            QueteDAO.update(q, avatar);
                         }
-                        ArrayList<Integer> ids=read();
-                        for (int i=0;i<ids.size();i++){
-                            for (Quete q:avatar.getQueteSuivie()) {
-                                for (int j=0;j<q.getObjectifs().size();j++) {
-                                    if (q.getObjectifs().get(j).getId()==ids.get(i)) {
+                        ArrayList<Integer> ids = read();
+                        for (int i = 0; i < ids.size(); i++) {
+                            for (Quete q : avatar.getQueteSuivie()) {
+                                for (int j = 0; j < q.getObjectifs().size(); j++) {
+                                    if (q.getObjectifs().get(j).getId() == ids.get(i)) {
                                         q.getObjectifs().get(j).update();
-                                        ObjectifsDAO.setobj(avatar,q.getObjectifs().get(j));
+                                        ObjectifsDAO.setobj(avatar, q.getObjectifs().get(j));
                                     }
                                 }
                             }
@@ -406,10 +376,10 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
                     case PICK -> exploreCoffre();
                     case INVENTAIRE -> explorInvent();
                     case FIGTH -> {
-                        int idadversaire=read();
-                        PNJ adversaire=null;
-                        for (PNJ perso: map.getPnjs()) {
-                            if(perso.getId()==idadversaire&&avatar.distance(perso)<1) {
+                        int idadversaire = read();
+                        PNJ adversaire = null;
+                        for (PNJ perso : map.getPnjs()) {
+                            if (perso.getId() == idadversaire && avatar.distance(perso) < 1) {
                                 write(perso.isInteract());
                                 if (!perso.isInteract()) {
                                     Interaction inter = new Interaction(avatar, perso, this);
@@ -423,45 +393,46 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
                             }
                         }
                     }
-                    case DOOR ->
-                    {
-                        int idporte=read();
-                        ArrayList<Porte> sorties=map.getSorties();
-                        Porte door=null;
-                        for (Porte p: sorties) {
-                            if(p.getId()==idporte){
-                                door=p;
+                    case DOOR -> {
+                        int idporte = read();
+                        ArrayList<Porte> sorties = map.getSorties();
+                        Porte door = null;
+                        for (Porte p : sorties) {
+                            if (p.getId() == idporte) {
+                                door = p;
                                 break;
                             }
                         }
                         door.traverse(avatar);
                         sendMap();
                     }
-            /*
-
-            case FIGTH -> break;
-            case PICK -> break;
-            case QUEST -> break;
-
-            case INVENTAIRE -> break;
-            case EQUIP -> break;
-            case USE -> break;
-            case DROP -> break;
-            */
-                }
-                } catch (IOException | ClassNotFoundException | SQLException e) {
-                    throw new RuntimeException(e);
+        /*
+        case FIGTH -> break;
+        case PICK -> break;
+        case QUEST -> break;
+        case INVENTAIRE -> break;
+        case EQUIP -> break;
+        case USE -> break;
+        case DROP -> break;
+        */
                 }
             } while (connected);
+        }
+        catch (IOException | ClassNotFoundException | SQLException e) {
+            throw new RuntimeException(e);
+        }
+        finally {
             try {
+                System.out.println("finnally");
                 input.close();
-                map.removeClient(this);
                 output.close();
                 socket.close();
+                System.out.println("une reussite");
+                map.removeClient(this);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
+        }
     }
 
     public void write(Object objet) throws IOException {
@@ -470,17 +441,13 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
         output.reset();
     }
 
-    private void sendMap(){
-        try {
-            map=Objects.requireNonNull(MapPool.getGameZone(avatar.getLieux().getId()));
-            write(avatar.getLieux());
-            write(map.getPnjs());
-            write(map.getEchanges());
-            write(map.getCoffres());
-            write(map.getSorties());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    private void sendMap() throws IOException {
+        map=Objects.requireNonNull(MapPool.getGameZone(avatar.getLieux().getId()));
+        write(avatar.getLieux());
+        write(map.getPnjs());
+        write(map.getEchanges());
+        write(map.getCoffres());
+        write(map.getSorties());
     }
 
     public <T> T read() throws IOException, ClassNotFoundException {

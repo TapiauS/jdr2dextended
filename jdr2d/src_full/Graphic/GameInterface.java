@@ -3,10 +3,9 @@ package Graphic;
 import Control.*;
 import Log.LogLevel;
 import Log.Loggy;
-import ServerPart.Control.Interaction;
 import ServerPart.Control.PersoThread;
 import ServerPart.DAO.*;
-import ServerPart.MapState;
+import ServerPart.Socketsmanager.MapState;
 import jdr2dcore.*;
 
 
@@ -32,6 +31,7 @@ import java.util.Properties;
 public class GameInterface extends JFrame  implements KeyListener {
     private final Thread save;
 
+
     private FullLogInterface log;
     private PlayerInfo thisInfo;
 
@@ -44,8 +44,11 @@ public class GameInterface extends JFrame  implements KeyListener {
     private CoffreInterface coffredealer;
     private Personnage player;
 
+
+
     private MapPanel mapPanel;
 
+    private float effectvolume=0.3f;
     private ArrayList<PNJ> pnjs;
 
     private Utilisateur util;
@@ -219,10 +222,7 @@ public class GameInterface extends JFrame  implements KeyListener {
         addKeyListener(this);
         try {
             music=new Soundtrackscontroller(player.getLieux().getNomLieu()+".wav");
-        } catch (UnsupportedAudioFileException e) {
-            System.err.println(e.getMessage());
-            JOptionPane.showMessageDialog(null,"Erreur lors du chargement de la musique du jeu");
-        } catch (IOException e) {
+        } catch (UnsupportedAudioFileException | IOException e) {
             System.err.println(e.getMessage());
             JOptionPane.showMessageDialog(null,"Erreur lors du chargement de la musique du jeu");
         } catch (LineUnavailableException e) {
@@ -235,6 +235,7 @@ public class GameInterface extends JFrame  implements KeyListener {
         } catch (IOException | ClassNotFoundException | InterruptedException e) {
             throw new RuntimeException(e);
         }
+        SoundEffect.setVolumevalue(effectvolume);
     }
 
 
@@ -246,7 +247,7 @@ public class GameInterface extends JFrame  implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
 
-        if (e.getKeyCode() == 38 && !interaction && Instant.now().isAfter(nextmactiontime)) {
+        if (e.getKeyCode() == readtable("MOVENORTH") && !interaction && Instant.now().isAfter(nextmactiontime)) {
             nextmactiontime=Instant.now().plus(timestepms, ChronoUnit.MILLIS);
             try {
                 ClientPart.write(OutputType.MOUVNORD);
@@ -257,7 +258,7 @@ public class GameInterface extends JFrame  implements KeyListener {
             }
             checkdoor();
         }
-        if (e.getKeyCode() == 37 && !interaction && Instant.now().isAfter(nextmactiontime)) {
+        if (e.getKeyCode() == readtable("MOVEWEST") && !interaction && Instant.now().isAfter(nextmactiontime)) {
             nextmactiontime=Instant.now().plus(timestepms, ChronoUnit.MILLIS);
             player.depl(Direction.OUEST);
             try {
@@ -268,7 +269,7 @@ public class GameInterface extends JFrame  implements KeyListener {
             }
             checkdoor();
         }
-        if (e.getKeyCode() == 39 && !interaction && Instant.now().isAfter(nextmactiontime)) {
+        if (e.getKeyCode() == readtable("MOVEEAST") && !interaction && Instant.now().isAfter(nextmactiontime)) {
             nextmactiontime=Instant.now().plus(timestepms, ChronoUnit.MILLIS);
             player.depl(Direction.EST);
             try {
@@ -279,7 +280,7 @@ public class GameInterface extends JFrame  implements KeyListener {
             }
             checkdoor();
         }
-        if (e.getKeyCode() == 40 && !interaction && Instant.now().isAfter(nextmactiontime)) {
+        if (e.getKeyCode() == readtable("MOVESOUTH") && !interaction && Instant.now().isAfter(nextmactiontime)) {
             nextmactiontime=Instant.now().plus(timestepms, ChronoUnit.MILLIS);
             player.depl(Direction.SUD);
             try {
@@ -290,7 +291,7 @@ public class GameInterface extends JFrame  implements KeyListener {
             }
             checkdoor();
         }
-        if(e.getKeyCode()==80 &&!interaction) {
+        if(e.getKeyCode()==readtable("COFFRE") &&!interaction) {
             for (Coffre c: coffres) {
                 if(c.distance(player)<2){
                     try {
@@ -315,7 +316,7 @@ public class GameInterface extends JFrame  implements KeyListener {
                 }
             }
         }
-        if (e.getKeyCode()==73&&!interaction){
+        if (e.getKeyCode()==readtable("INVENTAIRE")&&!interaction){
             defaultInteractionInterface.setVisible(false);
             try {
                 ClientPart.write(OutputType.INVENTAIRE);
@@ -325,7 +326,7 @@ public class GameInterface extends JFrame  implements KeyListener {
                 throw new RuntimeException(ex);
             }
         }
-        if(e.getKeyCode()==81&&!interaction){
+        if(e.getKeyCode()==readtable("QUETE")&&!interaction){
             try {
                 defaultInteractionInterface.setVisible(false);
                 quetedisplayer.updateQuete();
@@ -333,7 +334,7 @@ public class GameInterface extends JFrame  implements KeyListener {
                 throw new RuntimeException(ex);
             }
         }
-        if(e.getKeyCode()==84&&!interaction){
+        if(e.getKeyCode()==readtable("TALK")&&!interaction){
             for (PNJ p: this.getPnjs()) {
                 if (p.distance(player) < 1&&p.getpV()>0) {
                     p.setInteract(true);
@@ -356,7 +357,7 @@ public class GameInterface extends JFrame  implements KeyListener {
                 }
             }
         }
-        if(e.getKeyCode()==70&&!interaction){
+        if(e.getKeyCode()==readtable("FIGTH")&&!interaction){
             for (PNJ p: this.getPnjs()) {
                 if (p.distance(player) < 1 && p.getpV() > 0) {
                     interaction = true;
@@ -561,6 +562,10 @@ public class GameInterface extends JFrame  implements KeyListener {
         return carte;
     }
 
+    public Properties getProperties() {
+        return properties;
+    }
+
     //setters
 
 
@@ -595,6 +600,18 @@ public class GameInterface extends JFrame  implements KeyListener {
 
     public void setCarte(Map carte) {
         this.carte = carte;
+    }
+
+    public void setEffectvolume(float lvl){
+        if(lvl<0)
+            lvl=0;
+        if(lvl>1)
+            lvl=1;
+        effectvolume=lvl;
+    }
+
+    public void setProperties(Properties properties) {
+        this.properties = properties;
     }
 
     public void setEventHistory(EventHistory eventHistory) {
@@ -651,5 +668,9 @@ public class GameInterface extends JFrame  implements KeyListener {
 
     public PlayerInfo getFenetreInfo() {
         return thisInfo;
+    }
+
+    private int readtable(String key){
+        return Integer.parseInt(properties.getProperty(key));
     }
 }

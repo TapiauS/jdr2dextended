@@ -1,7 +1,7 @@
 package ServerPart.Control;
 
-import ServerPart.MapPool;
-import ServerPart.MapState;
+import ServerPart.Socketsmanager.MapPool;
+import ServerPart.Socketsmanager.MapState;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
