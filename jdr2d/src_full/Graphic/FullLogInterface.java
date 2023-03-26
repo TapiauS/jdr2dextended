@@ -154,7 +154,8 @@ public class FullLogInterface extends JFrame  {
 
     private void build() {
         setTitle("Afpanums"); //On donne un titre à l'application
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //On dit à l'application de se fermer lors du clic sur la croix
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//On dit à l'application de se fermer lors du clic sur la croix
+        this.setIconImage(new ImageIcon("Portraits/gamicon.png").getImage());
         addWindowListener(new WindowListener() {
             @Override
             public void windowOpened(WindowEvent e) {

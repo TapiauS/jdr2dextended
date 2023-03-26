@@ -31,7 +31,6 @@ import java.util.Properties;
 public class GameInterface extends JFrame  implements KeyListener {
     private final Thread save;
 
-
     private FullLogInterface log;
     private PlayerInfo thisInfo;
 
@@ -88,6 +87,7 @@ public class GameInterface extends JFrame  implements KeyListener {
 
     public GameInterface(Personnage player,Utilisateur util,FullLogInterface log) throws SQLException {
         super();
+        this.setIconImage(new ImageIcon("Portraits/gamicon.png").getImage());
         try {
             FileInputStream in = new FileInputStream("control.properties");
             properties= new Properties();
