@@ -11,7 +11,7 @@ import java.net.UnknownHostException;
 public class ChatClientProtocol implements Runnable{
     private static final int chatportnumber=5020;
 
-    private static final String groupIp="203.0.113.0";
+    private static final String groupIp="224.0.0.1";
 
     private static final InetAddress group;
 
@@ -48,13 +48,18 @@ public class ChatClientProtocol implements Runnable{
             multicastSocket.joinGroup(group);
             byte[] buffer=new byte[1024];
             while (running){
+                String msg="ah";
+                byte[] msgbyte=msg.getBytes();
+                DatagramPacket packetsend=new DatagramPacket(msgbyte,msgbyte.length,group,chatportnumber);
+                multicastSocket.send(packetsend);
                 DatagramPacket packet=new DatagramPacket(buffer, buffer.length);
                 multicastSocket.receive(packet);
-                chats.add
+                System.out.println(new String(packet.getData()));
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
     }
+
 }

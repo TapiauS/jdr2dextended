@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class ChatChannels{
     private static final int chatportnumber=5020;
 
-    private static final String groupIp="203.0.113.0";
+    private static final String groupIp="224.0.0.1";
 
     private static final InetAddress group;
 
@@ -41,10 +41,12 @@ public class ChatChannels{
             DatagramPacket packet=new DatagramPacket(buffer, buffer.length);
             multicastSocket.receive(packet);
             String msg=new String(packet.getData());
+            System.out.println(msg);
             byte[] msgbyte=msg.getBytes();
             DatagramPacket packetsend=new DatagramPacket(buffer,buffer.length,group,chatportnumber);
             multicastSocket.send(packetsend);
         }
     }
+
 
 }
