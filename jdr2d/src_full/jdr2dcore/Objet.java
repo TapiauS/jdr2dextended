@@ -2,7 +2,7 @@ package jdr2dcore;
 
 public class Objet extends Point {
     protected String nomObjet;
-    protected int Poid;
+    protected int poid=0;
 
     protected int id;
 
@@ -14,7 +14,7 @@ public class Objet extends Point {
     }
 
     public int getPoid() {
-        return Poid;
+        return poid;
     }
 
     public int getId() {
@@ -29,7 +29,7 @@ public class Objet extends Point {
     }
 
     public Objet setPoid(int poid) {
-        Poid = poid;
+        this.poid = poid;
         return this;
     }
 
@@ -42,7 +42,7 @@ public class Objet extends Point {
 
     public Objet(){
         super();
-        this.setNomObjet("neant").setPoid(1);
+        this.setNomObjet("neant").setPoid(0);
     }
 
     public Objet(String nomObjet,int poid){

@@ -34,25 +34,26 @@ public class AutoUpdater extends Thread implements JDRDSocket{
     @Override
     public void run() {
         super.run();
+        try {
         while (client.isConnected()) {
-            try {
-                idmap= read();
-                MapState state= MapPool.getGameZone(idmap).getStatut();
+                idmap = read();
+                MapState state = MapPool.getGameZone(idmap).getStatut();
                 write(state);
                 sleep(30);
-            } catch (IOException | InterruptedException | ClassNotFoundException e) {
-                Loggy.writlog("CONNEXION ENDED", LogLevel.NOTICE);
+        }
+        } catch (IOException | InterruptedException | ClassNotFoundException e) {
+            Loggy.writlog("CONNEXION ENDED", LogLevel.NOTICE);
+            throw new RuntimeException(e);
+        }
+        finally {
+            try {
+                client.close();
+            } catch (IOException e) {
                 throw new RuntimeException(e);
-            }
-            finally {
-                try {
-                    client.close();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
             }
         }
     }
+
 
     @Override
     public void write(Object o) throws IOException {

@@ -1,6 +1,8 @@
 package Control;
 
 import Graphic.GameInterface;
+import Log.LogLevel;
+import Log.Loggy;
 
 import java.io.*;
 import java.net.Socket;
@@ -31,6 +33,15 @@ public class AutoUpdateSocket {
     }
 
     //getters
+    public static void write(Object envoie) throws IOException {
+        Loggy.writlog("CLIENT WRITED "+ envoie, LogLevel.NOTICE);
+        serveroutput.writeObject(envoie);
+        serveroutput.reset();
+    }
+
+    public static <T> T read() throws IOException, ClassNotFoundException {
+        return (T) serverinput.readObject();
+    }
 
 
     public static OutputStream getOut() {

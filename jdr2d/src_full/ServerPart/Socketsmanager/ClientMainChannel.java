@@ -24,88 +24,60 @@ import java.util.Objects;
 @SuppressWarnings("unchecked")
 
 public class ClientMainChannel extends Thread implements Serializable, JDRDSocket {
-
     private final Socket socket;
-
     private boolean connected;
-
     private InputStream in;
-
     private OutputStream out;
-
     private ObjectInputStream input;
-
     private ObjectOutputStream output;
     private Personnage avatar;
-
     private Coffre openedcoffre;
-
     private ByteArrayOutputStream bytestream;
     private Utilisateur util;
     private GameZone map;
-
     private boolean interagit;
-
-
-
-
 
     //getters et setters
 
     public boolean isInteragit() {
         return interagit;
     }
-
-
     public InputStream getIn() {
         return in;
     }
-
     public OutputStream getOut() {
         return out;
     }
-
     public ObjectOutputStream getOutput() {
         return output;
     }
-
     public ByteArrayOutputStream getBytestream() {
         return bytestream;
     }
-
     public Utilisateur getUtil() {
         return util;
     }
 
-
-
     //setters
-
 
     public void setInteragit(boolean interagit) {
         this.interagit = interagit;
     }
-
     public void setIn(InputStream in) {
         this.in = in;
     }
-
     public void setOut(OutputStream out) {
         this.out = out;
     }
-
     public void setOutput(ObjectOutputStream output) {
         this.output = output;
     }
-
     public void setBytestream(ByteArrayOutputStream bytestream) {
         this.bytestream = bytestream;
     }
-
     public void setUtil(Utilisateur util) {
         this.util = util;
     }
-
     public ClientMainChannel(Socket socket) throws IOException {
         this.socket=socket;
         connected=true;
@@ -125,6 +97,7 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
         String mdp;
         ConnexionOutput conn=null;
         while (util==null&&conn!= ConnexionOutput.QUIT) {
+
             conn=read();
             switch (conn) {
                 case CONNEXION -> {
@@ -461,7 +434,6 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
         int indicepicked;
         OutputType commande;
         ArrayList<Coffre> parentcoffre=new ArrayList<>();
-        Loggy.writlog("idopended= "+idopenedcoffre,LogLevel.NOTICE);
         for (Coffre coffre: map.getCoffres()) {
             if(idopenedcoffre==coffre.getId()) {
                 openedcoffre = coffre;
@@ -489,12 +461,16 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
                     write(iscoffre);
                     if (!iscoffre){
                         Loggy.writlog("OBJET NORMAL",LogLevel.NOTICE);
-                        avatar.addObjet(pickedobjet);
-                        ObjetDAO.pickObjet(avatar,openedcoffre.getContenu().get(indicepicked));
-                        write(avatar.getInventaire());
-                        write(avatar.getNomPersonnage()+" a ramassé "+pickedobjet.getNomObjet());
-                        openedcoffre.remove(indicepicked);
-                        write(openedcoffre);
+                        boolean cantake=(avatar.getInventaire().getPoid()+pickedobjet.getPoid())<=avatar.getMaxpoid();
+                        write(cantake);
+                        if (cantake) {
+                            avatar.addObjet(pickedobjet);
+                            ObjetDAO.pickObjet(avatar, openedcoffre.getContenu().get(indicepicked));
+                            write(avatar.getInventaire());
+                            write(avatar.getNomPersonnage() + " a ramassé " + pickedobjet.getNomObjet());
+                            openedcoffre.remove(indicepicked);
+                            write(openedcoffre);
+                        }
                     }
                     else {
                         Loggy.writlog("OBJET COFFRE",LogLevel.NOTICE);
@@ -517,7 +493,7 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
         }
     }
 
-    private void explorInvent() throws IOException, ClassNotFoundException {
+    private void explorInvent() throws IOException, ClassNotFoundException, SQLException {
         ArrayList<Coffre> parentscoffre=new ArrayList<>();
         Coffre openedcoffre=avatar.getInventaire();
         Objet selectedobjet;
@@ -534,22 +510,15 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
                     write(iscoffre);
                     if(!iscoffre){
                         write(selectedobjet);
-                        if (selectedobjet instanceof Arme) {
-                            try {
+                            if (selectedobjet instanceof Arme) {
                                 avatar.removeObjet(selectedobjet);
                                 avatar.addArme((Arme) selectedobjet);
                                 write(avatar.getNomPersonnage() + " a equipé l'arme:"
                                         + selectedobjet.getNomObjet());
                                 write(openedcoffre);
                                 write(avatar.getArme());
-
-                            } catch (SQLException ex) {
-                                //TODO gere exception
-                                throw new RuntimeException(ex);
                             }
-                        }
-                        if(selectedobjet instanceof Armure){
-                            try {
+                            if (selectedobjet instanceof Armure) {
                                 avatar.removeObjet(selectedobjet);
                                 avatar.addArmure((Armure) selectedobjet);
                                 write(avatar.getNomPersonnage() + " a equipé l'arme:"
@@ -557,16 +526,12 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
                                 write(avatar.getInventaire());
                                 write(avatar.getArme());
                             }
-                            catch (SQLException sq){
-                                throw new RuntimeException(sq);
+                            if (selectedobjet instanceof Potion) {
+                                avatar.removeObjet(selectedobjet);
+                                Time.drinkpotion((Potion) selectedobjet, avatar);
                             }
+                            write(openedcoffre);
                         }
-                        if (selectedobjet instanceof Potion){
-                            avatar.removeObjet(selectedobjet);
-                            Time.drinkpotion((Potion) selectedobjet,avatar);
-                        }
-                        write(openedcoffre);
-                    }
                     else {
                         write(selectedobjet);
                         parentscoffre.add((Coffre) selectedobjet);
@@ -577,22 +542,18 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
                     idobjet=read();
                     selectedobjet=openedcoffre.getContenu().get(idobjet);
                     write(openedcoffre.getContenu());
-                    try {
-                        boolean incoffre = false;
-                        avatar.dropObjet(selectedobjet);
-                        for (Coffre c : map.getCoffres()) {
-                            if (avatar.distance(c) == 0) {
-                                c.add(selectedobjet);
-                                incoffre = true;
-                                break;
-                            }
+                    boolean incoffre = false;
+                    avatar.dropObjet(selectedobjet);
+                    for (Coffre c : map.getCoffres()) {
+                        if (avatar.distance(c) == 0) {
+                            c.add(selectedobjet);
+                            incoffre = true;
+                            break;
                         }
-                        if (!incoffre)
-                            map.getCoffres().add((Coffre) ((Coffre) (new Coffre(selectedobjet))
-                                    .setLieux(avatar.getLieux()).setX(avatar.getX()).setY(avatar.getY())).setNomObjet("tas"));
-                    } catch (SQLException ex) {
-                        throw new RuntimeException(ex);
                     }
+                    if (!incoffre)
+                        map.getCoffres().add((Coffre) ((Coffre) (new Coffre(selectedobjet))
+                                    .setLieux(avatar.getLieux()).setX(avatar.getX()).setY(avatar.getY())).setNomObjet("tas"));
                 }
                 case GOBACK -> {
                     openedcoffre=parentscoffre.get(parentscoffre.size()-1);

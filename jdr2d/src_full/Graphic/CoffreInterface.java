@@ -72,10 +72,16 @@ public class CoffreInterface extends InteractionInterface {
                         ClientPart.write(choix.getSelectedIndex());
                         boolean iscoffre=ClientPart.read();
                         if (!iscoffre) {
-                            fenetre.getPlayer().setInventaire(ClientPart.read());
-                            fenetre.getEventHistory().addLine(ClientPart.read());
-                            setOpenedcoffre(ClientPart.read());
-                            udpateref();
+                            boolean cantake=ClientPart.read();
+                            if(cantake) {
+                                fenetre.getPlayer().setInventaire(ClientPart.read());
+                                fenetre.getEventHistory().addLine(ClientPart.read());
+                                setOpenedcoffre(ClientPart.read());
+                                udpateref();
+                            }
+                            else{
+                                fenetre.getEventHistory().addLine("Vous ne pouvez pas porter autant");
+                            }
                         } else {
                             Coffre newcoffre = ClientPart.read();
                             parentcoffres.add(openedcoffre);

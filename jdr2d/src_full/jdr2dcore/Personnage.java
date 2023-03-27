@@ -29,9 +29,15 @@ public class Personnage extends Point implements EventListenerQuete {
 
     private GameInterface fenetre;
 
+    protected int maxpoid=20;
+
 
     //getters
 
+
+    public int getMaxpoid() {
+        return maxpoid;
+    }
 
     public GameInterface getFenetre() {
         return fenetre;

@@ -41,12 +41,12 @@ public class Coffre extends Objet {
 
     public Coffre(){
         super();
-        this.contenu=new ArrayList<Objet>();
+        this.contenu=new ArrayList<>();
     }
 
     public Coffre(Objet o){
         super();
-        this.contenu = new ArrayList<Objet>();
+        this.contenu = new ArrayList<>();
         this.add(o);
     }
 
@@ -196,5 +196,14 @@ public class Coffre extends Objet {
     }
 
 
+    @Override
+    public int getPoid(){
+        System.err.println("poid= "+this.poid);
+        int poid=this.poid;
+        for (Objet o: this.getContenu()) {
+            poid+=o.getPoid();
+        }
+        return poid;
+    }
 
 }
