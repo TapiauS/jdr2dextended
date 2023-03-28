@@ -8,7 +8,7 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.UnknownHostException;
 
-public class ChatClientProtocol implements Runnable{
+public class ChatClientProtocol extends Thread{
     private static final int chatportnumber=5020;
 
     private static final String groupIp="224.0.0.1";
@@ -35,11 +35,12 @@ public class ChatClientProtocol implements Runnable{
         }
     }
 
-    private static ChatGraphicInterface chats;
+    private ChatGraphicInterface chat;
 
-    public void begin(ChatGraphicInterface chat) throws IOException {
-        chats=chat;
-        this.run();
+
+    public ChatClientProtocol(ChatGraphicInterface chat) throws IOException {
+        this.chat=chat;
+        this.start();
     }
 
     @Override
@@ -48,18 +49,21 @@ public class ChatClientProtocol implements Runnable{
             multicastSocket.joinGroup(group);
             byte[] buffer=new byte[1024];
             while (running){
-                String msg="ah";
-                byte[] msgbyte=msg.getBytes();
-                DatagramPacket packetsend=new DatagramPacket(msgbyte,msgbyte.length,group,chatportnumber);
-                multicastSocket.send(packetsend);
                 DatagramPacket packet=new DatagramPacket(buffer, buffer.length);
                 multicastSocket.receive(packet);
-                System.out.println(new String(packet.getData()));
+                String msgrecu=new String(buffer);
+                chat.addline(msgrecu);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
+
+    public void sendmessage(String message) throws IOException {
+        byte[] msgbyte=message.getBytes();
+        DatagramPacket packetsend=new DatagramPacket(msgbyte,msgbyte.length,group,chatportnumber);
+        multicastSocket.send(packetsend);
+    }
+
 
 }

@@ -20,8 +20,8 @@ public class MapPanel extends JPanel {
     private ArrayList<PNJ> pnjs;
 
 
-    static public final int MAP_WIDTH = (int) (GameInterface.WINDOW_WIDTH*0.6);
-    static public final int MAP_HEIGH =(int) (GameInterface.WINDOWS_HEIGH*0.6);
+    static public final int MAP_WIDTH = (GameInterface.WINDOW_WIDTH*2/3);
+    static public final int MAP_HEIGH =(GameInterface.WINDOWS_HEIGH*2/3);
 
     private  int unit_size;
 
@@ -69,11 +69,12 @@ public class MapPanel extends JPanel {
 
     MapPanel(Personnage player,ArrayList<PNJ> pnjs,GameInterface fenetre){
         super();
+        this.setLayout(new FlowLayout());
         this.pnjs=pnjs;
         this.fenetre=fenetre;
         this.sorties=fenetre.getSorties();
         this.setPlayer(player);
-        this.setBounds(0,0,MAP_WIDTH,MAP_HEIGH);
+        //this.setPreferredSize(new Dimension(MAP_WIDTH,MAP_HEIGH));
         this.setBackground(Color.white);
         this.setVisible(true);
     }

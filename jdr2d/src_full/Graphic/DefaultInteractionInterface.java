@@ -37,7 +37,7 @@ public class DefaultInteractionInterface extends InteractionInterface{
         afficheQuete=new JButton("Journal de quete");
         afficheQuete.setVisible(true);
         afficheQuete.setPreferredSize(new Dimension(BUTTON_WIDTH,BUTTON_HEIGH));
-        afficheQuete.setLocation(INTERACTION_WIDTH+BUTTON_WIDTH,INTERACTION_HEIGH+BUTTON_HEIGH);
+        //afficheQuete.setLocation(INTERACTION_WIDTH+BUTTON_WIDTH,INTERACTION_HEIGH+BUTTON_HEIGH);
         afficheQuete.addActionListener(
                 new ActionListener() {
                     @Override
@@ -58,7 +58,7 @@ public class DefaultInteractionInterface extends InteractionInterface{
         openCoffre=new JButton("Ouvrir un coffre");
         openCoffre.setVisible(true);
         openCoffre.setPreferredSize(new Dimension(BUTTON_WIDTH,BUTTON_HEIGH));
-        openCoffre.setLocation(INTERACTION_WIDTH+BUTTON_WIDTH,INTERACTION_HEIGH+BUTTON_HEIGH*3);
+        //openCoffre.setLocation(INTERACTION_WIDTH+BUTTON_WIDTH,INTERACTION_HEIGH+BUTTON_HEIGH*3);
         openCoffre.addActionListener(
                 new ActionListener() {
                     @Override
@@ -92,7 +92,7 @@ public class DefaultInteractionInterface extends InteractionInterface{
         talk=new JButton("Parler");
         talk.setVisible(true);
         talk.setPreferredSize(new Dimension(BUTTON_WIDTH,BUTTON_HEIGH));
-        talk.setLocation(INTERACTION_WIDTH+BUTTON_WIDTH,INTERACTION_HEIGH+BUTTON_HEIGH*5);
+        //talk.setLocation(INTERACTION_WIDTH+BUTTON_WIDTH,INTERACTION_HEIGH+BUTTON_HEIGH*5);
         talk.addActionListener(
                 new ActionListener() {
                     @Override
@@ -122,7 +122,7 @@ public class DefaultInteractionInterface extends InteractionInterface{
         afficheInventaire=new JButton("Inventaire");
         afficheInventaire.setVisible(true);
         afficheInventaire.setPreferredSize(new Dimension(BUTTON_WIDTH,BUTTON_HEIGH));
-        afficheInventaire.setLocation(INTERACTION_WIDTH+BUTTON_WIDTH,INTERACTION_HEIGH+7*BUTTON_HEIGH);
+        //afficheInventaire.setLocation(INTERACTION_WIDTH+BUTTON_WIDTH,INTERACTION_HEIGH+7*BUTTON_HEIGH);
         afficheInventaire.addActionListener(
                 new ActionListener() {
                     @Override
@@ -171,4 +171,6 @@ public class DefaultInteractionInterface extends InteractionInterface{
     public void setOpenCoffre(JButton openCoffre) {
         this.openCoffre = openCoffre;
     }
+
+
 }

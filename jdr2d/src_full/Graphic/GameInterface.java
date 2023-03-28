@@ -82,8 +82,11 @@ public class GameInterface extends JFrame  implements KeyListener {
 
     private PersoThread ia;
 
+    private ChatGraphicInterface chat;
+
     public GameInterface(Personnage player,Utilisateur util,FullLogInterface log) throws SQLException {
         super();
+        this.setLayout(new FlowLayout());
         this.setIconImage(new ImageIcon("Portraits/gamicon.png").getImage());
         try {
             FileInputStream in = new FileInputStream("control"+util.getNomUtilisateur()+".properties");
@@ -98,7 +101,7 @@ public class GameInterface extends JFrame  implements KeyListener {
                 properties.load(in);
                 in.close();
                 FileOutputStream fos=new FileOutputStream("control"+util.getNomUtilisateur()+".properties");
-                properties.store(fos,"Initianalisation");
+                properties.store(fos,"Initialisation");
                 fos.close();
             } catch (IOException e) {
                 Loggy.writlog("DEFAULT PROPERTIES LOST",LogLevel.NOTICE);
@@ -114,7 +117,7 @@ public class GameInterface extends JFrame  implements KeyListener {
         this.log=log;
         this.nextmactiontime=Instant.now();
         this.interaction=false;
-        this.setLayout(null);
+        //this.setLayout(new GridBagLayout());
         this.player=player;
         this.util=util;
         this.setSize(new Dimension(WINDOW_WIDTH,WINDOWS_HEIGH));
@@ -124,6 +127,7 @@ public class GameInterface extends JFrame  implements KeyListener {
         //on definit tout les élements
         thisInfo=new PlayerInfo(this.player,this);
         mapPanel=new MapPanel(this.player,this.pnjs,this);
+        mapPanel.setVisible(true);
         defaultInteractionInterface=new DefaultInteractionInterface(this,this.player);
         defaultInteractionInterface.setVisible(true);
         eventHistory=new EventHistory();
@@ -148,29 +152,43 @@ public class GameInterface extends JFrame  implements KeyListener {
             throw new RuntimeException(e);
         }
         portrait = new JLabel(new ImageIcon(myPicture));
-        portrait.setBounds(MapPanel.MAP_WIDTH,MapPanel.MAP_HEIGH,WINDOW_WIDTH-MapPanel.MAP_WIDTH,WINDOWS_HEIGH-MapPanel.MAP_HEIGH);
         portrait.setVisible(true);
         /* on définit la fenétre globale et lui donne tout les élements */
 
 
         //JScrollPane contevent=new JScrollPane(eventHistory);
         //contevent.setVisible(true);
-        this.container=new JPanel();
-        container.setBounds(0,menubar.getHeight(),WINDOW_WIDTH,WINDOWS_HEIGH);
+        this.container=new JPanel(new GridLayout(3,3,5,5));
+        GridBagConstraints constraints=new GridBagConstraints();
+        container.setPreferredSize(new Dimension(WINDOW_WIDTH,WINDOWS_HEIGH));
+        //constraints.insets=new Insets(0,0,0,0);
+        //container.setBounds(0,menubar.getHeight(),WINDOW_WIDTH,WINDOWS_HEIGH);
         this.setJMenuBar(menubar);
+        /*constraints.weightx =WINDOW_WIDTH/3;
+        constraints.weighty=WINDOWS_HEIGH/3;
+        constraints.ipady=WINDOWS_HEIGH/3;
+        constraints.ipadx=WINDOW_WIDTH/3;*/
+        constraints.gridwidth=2;
+        constraints.gridheight=2;
+        container.add(mapPanel,constraints);
+
+        constraints.gridwidth=1;
+        constraints.gridheight=1;
         container.add(thisInfo);
-        container.add(eventHistory);
-        container.setVisible(true);
-        container.add(mapPanel);
+
         container.add(dialogdealer);
-        container.setLayout(null);
-        //container.add(eventHistory);
         container.add(inventdealer);
         container.add(coffredealer);
         container.add(quetedisplayer);
         container.add(defaultInteractionInterface);
+
+        constraints.gridwidth=2;
+
+        container.add(eventHistory,constraints);
+        constraints.gridwidth=1;
         container.add(portrait);
         container.setBackground(Color.black);
+        container.setVisible(true);
         this.setContentPane(container);
         this.setResizable(false);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -194,6 +212,7 @@ public class GameInterface extends JFrame  implements KeyListener {
                 try {
                     System.out.println("On sauvegarde en fermant");
                     PersonnageDAO.updatedatabase(player);
+                    chat.dispose();
                     ia.setSwitchmap(false);
                     //music.getClip().stop();
                     for (PNJ ps: pnjs) {
@@ -248,6 +267,13 @@ public class GameInterface extends JFrame  implements KeyListener {
             throw new RuntimeException(e);
         }
         SoundEffect.setVolumevalue(effectvolume);
+        try {
+            System.out.println("J'arrive dans le try");
+            chat=new ChatGraphicInterface(this);
+            System.out.println("J'arrive a lancer cette interface");
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
 
@@ -399,6 +425,7 @@ public class GameInterface extends JFrame  implements KeyListener {
                 }
             }
         }
+
         revalidate();
         repaint();
     }
@@ -685,4 +712,6 @@ public class GameInterface extends JFrame  implements KeyListener {
     private int readtable(String key){
         return Integer.parseInt(properties.getProperty(key));
     }
+
 }
+

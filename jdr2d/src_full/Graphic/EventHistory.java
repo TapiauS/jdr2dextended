@@ -12,9 +12,9 @@ public class EventHistory extends JTextArea {
 
     //JTextArea historydisplayer;
 
-    public static final int EVENT_WIDTH= (int) (GameInterface.WINDOW_WIDTH*0.6);
+    public static final int EVENT_WIDTH= (int) (GameInterface.WINDOW_WIDTH*2/3);
 
-    public static final int EVENT_HEIGH= (int) (GameInterface.WINDOWS_HEIGH*0.4);
+    public static final int EVENT_HEIGH= (int) (GameInterface.WINDOWS_HEIGH*1/3);
 
     //builders
 
@@ -25,7 +25,7 @@ public class EventHistory extends JTextArea {
         nb_displayed_line=0;
         this.setText(events);
         this.setRequestFocusEnabled(false);
-        this.setBounds(0,GameInterface.WINDOW_WIDTH-EVENT_HEIGH,EVENT_WIDTH,EVENT_HEIGH);
+        this.setPreferredSize(new Dimension(EVENT_WIDTH,EVENT_HEIGH));
         this.setVisible(true);
     }
 

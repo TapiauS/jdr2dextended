@@ -24,15 +24,15 @@ public class PlayerInfo extends JPanel {
 
     private Personnage player;
 
-    public static final int PLAYERINFO_WIDTH=GameInterface.WINDOW_WIDTH*4/10;
+    public static final int PLAYERINFO_WIDTH=GameInterface.WINDOW_WIDTH/3;
 
-    public static final int PLAYERINFO_HEIGH= (int) (GameInterface.WINDOWS_HEIGH*2.9/10);
+    public static final int PLAYERINFO_HEIGH= (int) (GameInterface.WINDOWS_HEIGH/3);
 
     //builders
 
     public PlayerInfo(Personnage player,GameInterface fenetre){
         super();
-        this.setLayout(new BoxLayout(this,BoxLayout.LINE_AXIS));
+        this.setLayout(new FlowLayout());
         this.player=player;
         this.fenetre=fenetre;
         //on gere infodiplayer
@@ -40,7 +40,7 @@ public class PlayerInfo extends JPanel {
         infodisplayer.setBackground(Color.white);
         infodisplayer.setEditable(false);
         infodisplayer.setRequestFocusEnabled(false);
-        infodisplayer.setBounds(MapPanel.MAP_WIDTH,0,PLAYERINFO_WIDTH/2,PLAYERINFO_HEIGH);
+        infodisplayer.setPreferredSize(new Dimension(PLAYERINFO_WIDTH/2,PLAYERINFO_HEIGH));
         infodisplayer.setVisible(true);
         infodisplayer.setFont(new Font("Segoe Script", Font.BOLD, 15));
         infodisplayer.setForeground(Color.red);
@@ -49,12 +49,12 @@ public class PlayerInfo extends JPanel {
         equipement.setBackground(Color.white);
         equipement.setEditable(false);
         equipement.setRequestFocusEnabled(false);
-        equipement.setBounds(MapPanel.MAP_WIDTH+PLAYERINFO_WIDTH/2,0,PLAYERINFO_WIDTH/2,PLAYERINFO_HEIGH);
+        equipement.setPreferredSize(new Dimension(PLAYERINFO_WIDTH/2,PLAYERINFO_HEIGH));
         equipement.setVisible(true);
         equipement.setFont(new Font("Segoe Script", Font.BOLD, 15));
         equipement.setForeground(Color.red);
         this.update();
-        this.setBounds(MapPanel.MAP_WIDTH,0,PLAYERINFO_WIDTH,PLAYERINFO_HEIGH);
+        this.setPreferredSize(new Dimension(PLAYERINFO_WIDTH,PLAYERINFO_HEIGH));
         this.add(equipement);
         this.add(infodisplayer);
         this.setVisible(true);

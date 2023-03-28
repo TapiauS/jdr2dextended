@@ -7,7 +7,7 @@ import java.net.MulticastSocket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
-public class ChatChannels{
+public class ChatChannels implements Runnable{
     private static final int chatportnumber=5020;
 
     private static final String groupIp="224.0.0.1";
@@ -34,19 +34,32 @@ public class ChatChannels{
         }
     }
 
-    public static void begin() throws IOException {
-        multicastSocket.joinGroup(group);
-        byte[] buffer=new byte[1024];
-        while (running){
-            DatagramPacket packet=new DatagramPacket(buffer, buffer.length);
-            multicastSocket.receive(packet);
-            String msg=new String(packet.getData());
-            System.out.println(msg);
-            byte[] msgbyte=msg.getBytes();
-            DatagramPacket packetsend=new DatagramPacket(buffer,buffer.length,group,chatportnumber);
-            multicastSocket.send(packetsend);
-        }
+    public ChatChannels(){
+        run();
     }
 
 
+
+    @Override
+    public void run() {
+        try {
+            multicastSocket.joinGroup(group);
+            while (running){
+                byte[] buffer=new byte[1024];
+                DatagramPacket packet=new DatagramPacket(buffer, buffer.length);
+                multicastSocket.receive(packet);
+                String msg=new String(packet.getData());
+                System.out.println(msg);
+                //byte[] msgbyte=msg.getBytes();
+                //DatagramPacket packetsend=new DatagramPacket(buffer,buffer.length,group,chatportnumber);
+                //multicastSocket.send(packetsend);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void main(String[] args){
+        new ChatChannels();
+    }
 }

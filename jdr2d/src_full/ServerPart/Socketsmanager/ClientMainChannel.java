@@ -421,6 +421,7 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
         write(map.getEchanges());
         write(map.getCoffres());
         write(map.getSorties());
+
     }
 
     public <T> T read() throws IOException, ClassNotFoundException {

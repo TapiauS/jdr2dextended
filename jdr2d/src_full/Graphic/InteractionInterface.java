@@ -7,8 +7,8 @@ import java.awt.*;
 import java.sql.SQLException;
 
 public class InteractionInterface extends JPanel {
-    protected static final int INTERACTION_WIDTH = (int) (GameInterface.WINDOW_WIDTH*0.4);
-    protected static final int INTERACTION_HEIGH = (int) (GameInterface.WINDOW_WIDTH*0.3);
+    protected static final int INTERACTION_WIDTH = (GameInterface.WINDOW_WIDTH /3);
+    protected static final int INTERACTION_HEIGH = (GameInterface.WINDOW_WIDTH /3);
 
     protected GameInterface fenetre;
 
@@ -27,7 +27,7 @@ public class InteractionInterface extends JPanel {
             throw new RuntimeException(e);
         }
         this.setBackground(Color.white);
-        this.setBounds(MapPanel.MAP_WIDTH, INTERACTION_HEIGH, INTERACTION_WIDTH, INTERACTION_HEIGH);
+        this.setPreferredSize(new Dimension(INTERACTION_WIDTH, INTERACTION_HEIGH));
         this.setVisible(false);
     }
 

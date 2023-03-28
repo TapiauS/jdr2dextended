@@ -49,8 +49,8 @@ public class InventaireInterface extends InteractionInterface{
         parentscoffre=new ArrayList<>();
         //on rajoute le bouton pick
         equip=new JButton("Equiper ou utiliser");
-        equip.setBounds(MapPanel.MAP_WIDTH+INTERACTION_WIDTH/7, (int) (INTERACTION_HEIGH+INTERACTION_HEIGH*9/10),
-                INTERACTION_WIDTH/7, (int) (INTERACTION_HEIGH*0.5/10));
+        //equip.setBounds(MapPanel.MAP_WIDTH+INTERACTION_WIDTH/7, (int) (INTERACTION_HEIGH+INTERACTION_HEIGH*9/10),
+                //INTERACTION_WIDTH/7, (int) (INTERACTION_HEIGH*0.5/10));
         equip.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
