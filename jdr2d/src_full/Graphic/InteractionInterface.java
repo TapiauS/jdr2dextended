@@ -27,7 +27,6 @@ public class InteractionInterface extends JPanel {
             throw new RuntimeException(e);
         }
         this.setBackground(Color.white);
-        this.setPreferredSize(new Dimension(INTERACTION_WIDTH, INTERACTION_HEIGH));
         this.setVisible(false);
     }
 

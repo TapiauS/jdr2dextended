@@ -38,7 +38,7 @@ public class InventaireInterface extends InteractionInterface{
         super(fenetre, player);
         //on rajoute la Jlist
         itemdisplay=new JList<>();
-        itemdisplay.setBounds(MapPanel.MAP_WIDTH,INTERACTION_HEIGH,INTERACTION_WIDTH,INTERACTION_HEIGH*9/10);
+        //itemdisplay.setBounds(MapPanel.MAP_WIDTH,INTERACTION_HEIGH,INTERACTION_WIDTH,INTERACTION_HEIGH*9/10);
         itemdisplay.setVisible(true);
         itemdisplay.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         itemdisplay.setLayoutOrientation(JList.HORIZONTAL_WRAP);
@@ -103,8 +103,9 @@ public class InventaireInterface extends InteractionInterface{
         this.add(equip);
         // on cree drop
         drop=new JButton("Jeter");
-        drop.setBounds(MapPanel.MAP_WIDTH+INTERACTION_WIDTH*3/7, (int) (INTERACTION_HEIGH+INTERACTION_HEIGH*9/10),
+        /*drop.setBounds(MapPanel.MAP_WIDTH+INTERACTION_WIDTH*3/7, (int) (INTERACTION_HEIGH+INTERACTION_HEIGH*9/10),
                 INTERACTION_WIDTH/7, (int) (INTERACTION_HEIGH*0.5/10));
+        */
         drop.addActionListener(
                 new ActionListener(){
                 @Override
@@ -129,8 +130,9 @@ public class InventaireInterface extends InteractionInterface{
         this.add(drop);
         //creation du bouton exit
         exit=new JButton("Quitter");
+        /*
         exit.setBounds(MapPanel.MAP_WIDTH+INTERACTION_WIDTH*5/7, (int) (INTERACTION_HEIGH+INTERACTION_HEIGH*9/10),
-                INTERACTION_WIDTH/7, (int) (INTERACTION_HEIGH*0.5/10));
+                INTERACTION_WIDTH/7, (int) (INTERACTION_HEIGH*0.5/10));*/
         exit.addActionListener(
                 new ActionListener(){
                     @Override
@@ -151,8 +153,8 @@ public class InventaireInterface extends InteractionInterface{
         this.add(exit);
         //creation du bouton goback
         goback=new JButton("Revenir en arriére");
-        goback.setBounds(MapPanel.MAP_WIDTH+INTERACTION_WIDTH*5/7, (int) (INTERACTION_HEIGH+INTERACTION_HEIGH*9.5/10),
-                INTERACTION_WIDTH/7, (int) (INTERACTION_HEIGH*0.5/10));
+        /*goback.setBounds(MapPanel.MAP_WIDTH+INTERACTION_WIDTH*5/7, (int) (INTERACTION_HEIGH+INTERACTION_HEIGH*9.5/10),
+                INTERACTION_WIDTH/7, (int) (INTERACTION_HEIGH*0.5/10));*/
         goback.addActionListener(
                 new ActionListener() {
                     @Override

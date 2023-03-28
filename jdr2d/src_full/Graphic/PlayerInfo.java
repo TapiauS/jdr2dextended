@@ -40,7 +40,7 @@ public class PlayerInfo extends JPanel {
         infodisplayer.setBackground(Color.white);
         infodisplayer.setEditable(false);
         infodisplayer.setRequestFocusEnabled(false);
-        infodisplayer.setPreferredSize(new Dimension(PLAYERINFO_WIDTH/2,PLAYERINFO_HEIGH));
+        //infodisplayer.setPreferredSize(new Dimension(PLAYERINFO_WIDTH/2,PLAYERINFO_HEIGH));
         infodisplayer.setVisible(true);
         infodisplayer.setFont(new Font("Segoe Script", Font.BOLD, 15));
         infodisplayer.setForeground(Color.red);
@@ -49,12 +49,12 @@ public class PlayerInfo extends JPanel {
         equipement.setBackground(Color.white);
         equipement.setEditable(false);
         equipement.setRequestFocusEnabled(false);
-        equipement.setPreferredSize(new Dimension(PLAYERINFO_WIDTH/2,PLAYERINFO_HEIGH));
+        //equipement.setPreferredSize(new Dimension(PLAYERINFO_WIDTH/2,PLAYERINFO_HEIGH));
         equipement.setVisible(true);
         equipement.setFont(new Font("Segoe Script", Font.BOLD, 15));
         equipement.setForeground(Color.red);
         this.update();
-        this.setPreferredSize(new Dimension(PLAYERINFO_WIDTH,PLAYERINFO_HEIGH));
+        //this.setPreferredSize(new Dimension(PLAYERINFO_WIDTH,PLAYERINFO_HEIGH));
         this.add(equipement);
         this.add(infodisplayer);
         this.setVisible(true);

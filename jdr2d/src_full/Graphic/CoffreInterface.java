@@ -55,8 +55,8 @@ public class CoffreInterface extends InteractionInterface {
         //on initialise le panneau de choix
         choix.setLayoutOrientation(JList.HORIZONTAL_WRAP);
         choix.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        choix.setVisibleRowCount(-1);
-        choix.setBounds(MapPanel.MAP_WIDTH, (int) (INTERACTION_HEIGH + 1.01*INTERACTION_HEIGH /10), INTERACTION_WIDTH, (int) (INTERACTION_HEIGH *0.8));
+        choix.setVisibleRowCount(-1);/*
+        choix.setBounds(MapPanel.MAP_WIDTH, (int) (INTERACTION_HEIGH + 1.01*INTERACTION_HEIGH /10), INTERACTION_WIDTH, (int) (INTERACTION_HEIGH *0.8));*/
         choix.setPreferredSize(new Dimension(INTERACTION_WIDTH,(int) (INTERACTION_HEIGH *0.8)));
         choix.setVisible(true);
         this.add(choix);
@@ -96,9 +96,9 @@ public class CoffreInterface extends InteractionInterface {
                     throw new RuntimeException(ex);
                 }
             }
-        });
+        });/*
         pick.setBounds(MapPanel.MAP_WIDTH+ INTERACTION_WIDTH /5, (int) (INTERACTION_HEIGH +9.01*INTERACTION_HEIGH /10),
-                INTERACTION_WIDTH /5,(int) (INTERACTION_HEIGH *0.1));
+                INTERACTION_WIDTH /5,(int) (INTERACTION_HEIGH *0.1));*/
         pick.setVisible(true);
         this.add(pick);
         //on definit exit
@@ -119,9 +119,9 @@ public class CoffreInterface extends InteractionInterface {
             }
         });
         this.add(exit);
-        exit.setVisible(true);
+        exit.setVisible(true);/*
         exit.setBounds(MapPanel.MAP_WIDTH+3* INTERACTION_WIDTH /5, (int) (INTERACTION_HEIGH +9.01* INTERACTION_HEIGH /10),
-                INTERACTION_WIDTH /5,(int) (INTERACTION_HEIGH *0.05));
+                INTERACTION_WIDTH /5,(int) (INTERACTION_HEIGH *0.05));*/
         //on définit goback
         goBack=new JButton("Go back");
         goBack.addActionListener(new ActionListener() {
@@ -144,8 +144,10 @@ public class CoffreInterface extends InteractionInterface {
         });
         goBack.setVisible(false);
         this.add(goBack);
+/*
         goBack.setBounds(MapPanel.MAP_WIDTH+3* INTERACTION_WIDTH /5, (int) (INTERACTION_HEIGH +9.01* INTERACTION_HEIGH /10)
                 , INTERACTION_WIDTH /5,(int) (INTERACTION_HEIGH *0.05));
+*/
 
         this.fenetre.requestFocus();
     }

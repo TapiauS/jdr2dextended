@@ -155,38 +155,60 @@ public class GameInterface extends JFrame  implements KeyListener {
         portrait.setVisible(true);
         /* on définit la fenétre globale et lui donne tout les élements */
 
-
-        //JScrollPane contevent=new JScrollPane(eventHistory);
+        JPanel panelrigth=new JPanel(new GridBagLayout());
+        panelrigth.setPreferredSize(new Dimension(2*WINDOW_WIDTH/3,WINDOWS_HEIGH));
+        JPanel panelLeft=new JPanel(new GridBagLayout());
+        panelLeft.setPreferredSize(new Dimension(WINDOW_WIDTH/3,WINDOWS_HEIGH));
+        JScrollPane contevent=new JScrollPane(eventHistory);
         //contevent.setVisible(true);
-        this.container=new JPanel(new GridLayout(3,3,5,5));
+        this.container=new JPanel(new BorderLayout());
         GridBagConstraints constraints=new GridBagConstraints();
         container.setPreferredSize(new Dimension(WINDOW_WIDTH,WINDOWS_HEIGH));
-        //constraints.insets=new Insets(0,0,0,0);
+        constraints.fill=GridBagConstraints.BOTH;
         //container.setBounds(0,menubar.getHeight(),WINDOW_WIDTH,WINDOWS_HEIGH);
         this.setJMenuBar(menubar);
-        /*constraints.weightx =WINDOW_WIDTH/3;
-        constraints.weighty=WINDOWS_HEIGH/3;
-        constraints.ipady=WINDOWS_HEIGH/3;
-        constraints.ipadx=WINDOW_WIDTH/3;*/
-        constraints.gridwidth=2;
-        constraints.gridheight=2;
-        container.add(mapPanel,constraints);
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.weightx = 0.67;
+        constraints.weighty = 0.67;
+        panelrigth.add(mapPanel,constraints);
 
-        constraints.gridwidth=1;
-        constraints.gridheight=1;
-        container.add(thisInfo);
 
-        container.add(dialogdealer);
-        container.add(inventdealer);
-        container.add(coffredealer);
-        container.add(quetedisplayer);
-        container.add(defaultInteractionInterface);
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.weightx = 0.67;
+        constraints.weighty = 0.33;
+        panelrigth.add(contevent,constraints);
 
-        constraints.gridwidth=2;
 
-        container.add(eventHistory,constraints);
-        constraints.gridwidth=1;
-        container.add(portrait);
+
+        container.add(panelrigth,BorderLayout.WEST);
+
+
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        panelLeft.add(thisInfo,constraints);
+
+
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        panelLeft.add(dialogdealer,constraints);
+        panelLeft.add(inventdealer,constraints);
+        panelLeft.add(coffredealer,constraints);
+        panelLeft.add(quetedisplayer,constraints);
+        panelLeft.add(defaultInteractionInterface,constraints);
+
+
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        panelLeft.add(portrait,constraints);
+
+
+        constraints.gridwidth=GridBagConstraints.RELATIVE;
+
+        container.add(panelLeft,BorderLayout.CENTER);
+
+
         container.setBackground(Color.black);
         container.setVisible(true);
         this.setContentPane(container);

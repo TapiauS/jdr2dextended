@@ -40,7 +40,7 @@ public class DialogueInterface extends InteractionInterface {
         quetesdonnees=new ArrayList<>();
         objectifrealisesisid =new ArrayList<>();
         question=new JLabel();
-        question.setBounds(MapPanel.MAP_WIDTH,INTERACTION_HEIGH,INTERACTION_WIDTH,INTERACTION_HEIGH/10);
+        //question.setBounds(MapPanel.MAP_WIDTH,INTERACTION_HEIGH,INTERACTION_WIDTH,INTERACTION_HEIGH/10);
         this.add(question);
         data=new String[0];
         linkrepEchange=new Hashtable<>();
@@ -48,8 +48,8 @@ public class DialogueInterface extends InteractionInterface {
         choix.setLayoutOrientation(JList.VERTICAL_WRAP);
         choix.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         choix.setVisibleRowCount(-1);
-        choix.setBounds(MapPanel.MAP_WIDTH, (int) (INTERACTION_HEIGH + 1.01*INTERACTION_HEIGH /10), INTERACTION_WIDTH, (int) (INTERACTION_HEIGH *0.8));
-        choix.setPreferredSize(new Dimension(INTERACTION_WIDTH,(int) (INTERACTION_HEIGH *0.8)));
+        /*choix.setBounds(MapPanel.MAP_WIDTH, (int) (INTERACTION_HEIGH + 1.01*INTERACTION_HEIGH /10), INTERACTION_WIDTH, (int) (INTERACTION_HEIGH *0.8));
+        */choix.setPreferredSize(new Dimension(INTERACTION_WIDTH,(int) (INTERACTION_HEIGH *0.8)));
         this.add(choix);
         valider=new JButton("Répondre");
         valider.addActionListener(e -> {
@@ -75,7 +75,8 @@ public class DialogueInterface extends InteractionInterface {
             }
             refreshfocus();
         });
-        valider.setBounds(MapPanel.MAP_WIDTH+INTERACTION_WIDTH/3,INTERACTION_HEIGH+INTERACTION_HEIGH*9/10,INTERACTION_WIDTH/3, (int) (INTERACTION_HEIGH*0.1));
+        /*valider.setBounds(MapPanel.MAP_WIDTH+INTERACTION_WIDTH/3,INTERACTION_HEIGH+INTERACTION_HEIGH*9/10,INTERACTION_WIDTH/3, (int) (INTERACTION_HEIGH*0.1));
+        */
         this.add(valider);
         }
 

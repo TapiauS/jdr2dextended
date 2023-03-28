@@ -46,13 +46,14 @@ public class QueteInterface extends InteractionInterface{
         recompenses.setVisible(false);
         //on initialise description fenetre
         descriptionfenetre=new JLabel();
-        descriptionfenetre.setBounds((int) (MapPanel.MAP_WIDTH*1.0),  INTERACTION_HEIGH, INTERACTION_WIDTH, INTERACTION_HEIGH /10);
+        /*descriptionfenetre.setBounds((int) (MapPanel.MAP_WIDTH*1.0),  INTERACTION_HEIGH, INTERACTION_WIDTH, INTERACTION_HEIGH /10);
+        */
         descriptionfenetre.setText("Quetes en cours");
         descriptionfenetre.setVisible(true);
         //on cree montrecompense
-        montrerecompense=new JButton("Recompense");
+        montrerecompense=new JButton("Recompense");/*
         montrerecompense.setBounds(MapPanel.MAP_WIDTH+INTERACTION_WIDTH/5,INTERACTION_HEIGH+INTERACTION_HEIGH*9/10
-                ,INTERACTION_WIDTH/5,INTERACTION_HEIGH/10);
+                ,INTERACTION_WIDTH/5,INTERACTION_HEIGH/10);*/
         montrerecompense.addActionListener(
                 new ActionListener() {
                     @Override
@@ -73,9 +74,9 @@ public class QueteInterface extends InteractionInterface{
         montrerecompense.setVisible(true);
         this.add(montrerecompense);
         //goback
-        goback=new JButton("Revenir en arriére");
+        goback=new JButton("Revenir en arriére");/*
         goback.setBounds(MapPanel.MAP_WIDTH+INTERACTION_WIDTH/3,INTERACTION_HEIGH+INTERACTION_HEIGH*9/10
-                ,INTERACTION_WIDTH/3,INTERACTION_HEIGH/10);
+                ,INTERACTION_WIDTH/3,INTERACTION_HEIGH/10);*/
         goback.addActionListener(
                 new ActionListener() {
                     @Override
@@ -91,9 +92,9 @@ public class QueteInterface extends InteractionInterface{
         goback.setVisible(false);
         this.add(goback);
         //quit
-        quit=new JButton("Quitter");
+        quit=new JButton("Quitter");/*
         quit.setBounds(MapPanel.MAP_WIDTH+INTERACTION_WIDTH*3/5,INTERACTION_HEIGH+INTERACTION_HEIGH*9/10
-                ,INTERACTION_WIDTH/5,INTERACTION_HEIGH/10);
+                ,INTERACTION_WIDTH/5,INTERACTION_HEIGH/10);*/
         quit.addActionListener(
                 new ActionListener() {
                     @Override
