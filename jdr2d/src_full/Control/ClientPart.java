@@ -63,8 +63,14 @@ public abstract class ClientPart {
 */
     public static void write(Object envoie) throws IOException {
         Loggy.writlog("CLIENT WRITED "+ envoie,LogLevel.NOTICE);
-        serveroutput.writeObject(envoie);
-        serveroutput.reset();
+        System.out.println(" ???????????????? "+envoie.getClass().getName());
+        try {
+            serveroutput.writeObject(envoie);
+            serveroutput.reset();
+        }
+        catch (NotSerializableException NSE){
+            System.out.println(" WUT "+envoie.getClass().getName());
+        }
     }
 
     public static <T> T read() throws IOException, ClassNotFoundException {

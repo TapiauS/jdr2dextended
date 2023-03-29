@@ -1,6 +1,8 @@
 package jdr2dcore;
 
-public class Objet extends Point {
+import java.io.Serializable;
+
+public class Objet extends Point implements Serializable {
     protected String nomObjet;
     protected int poid=0;
 

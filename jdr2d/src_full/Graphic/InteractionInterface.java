@@ -20,6 +20,7 @@ public class InteractionInterface extends JPanel {
     public InteractionInterface(GameInterface fenetre,Personnage player){
         super();
         this.setFenetre(fenetre);
+        this.setPreferredSize(new Dimension(INTERACTION_WIDTH,INTERACTION_HEIGH));
         try {
             this.setPlayer(player);
         } catch (SQLException e) {

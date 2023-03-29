@@ -36,11 +36,6 @@ public class InputReceiver extends Thread{
         }
     }
 
-    /*public static void main(String[] args){
-        InputReceiver server=new InputReceiver();
-    }*/
-
-
 
 
     //getters

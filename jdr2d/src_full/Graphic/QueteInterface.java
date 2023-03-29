@@ -37,23 +37,25 @@ public class QueteInterface extends InteractionInterface{
         dataobjet=new String[0];
         //on cree les Jlists
         //listquete
-
+        this.setLayout(new BorderLayout());
         setjlist(listequete);
         listequete.setVisible(true);
+        add(listequete,BorderLayout.CENTER);
         //listrecompense
         recompenses=new JList<>();
         setjlist(recompenses);
         recompenses.setVisible(false);
+        add(recompenses,BorderLayout.EAST);
         //on initialise description fenetre
         descriptionfenetre=new JLabel();
-        /*descriptionfenetre.setBounds((int) (MapPanel.MAP_WIDTH*1.0),  INTERACTION_HEIGH, INTERACTION_WIDTH, INTERACTION_HEIGH /10);
-        */
         descriptionfenetre.setText("Quetes en cours");
         descriptionfenetre.setVisible(true);
+        add(descriptionfenetre,BorderLayout.NORTH);
+        JPanel buttonpanel=new JPanel();
+        buttonpanel.setPreferredSize(new Dimension(INTERACTION_WIDTH,INTERACTION_HEIGH/10));
+        add(buttonpanel,BorderLayout.SOUTH);
         //on cree montrecompense
-        montrerecompense=new JButton("Recompense");/*
-        montrerecompense.setBounds(MapPanel.MAP_WIDTH+INTERACTION_WIDTH/5,INTERACTION_HEIGH+INTERACTION_HEIGH*9/10
-                ,INTERACTION_WIDTH/5,INTERACTION_HEIGH/10);*/
+        montrerecompense=new JButton("Recompense");
         montrerecompense.addActionListener(
                 new ActionListener() {
                     @Override
@@ -72,11 +74,9 @@ public class QueteInterface extends InteractionInterface{
                     }
                 });
         montrerecompense.setVisible(true);
-        this.add(montrerecompense);
+        buttonpanel.add(montrerecompense);
         //goback
-        goback=new JButton("Revenir en arriére");/*
-        goback.setBounds(MapPanel.MAP_WIDTH+INTERACTION_WIDTH/3,INTERACTION_HEIGH+INTERACTION_HEIGH*9/10
-                ,INTERACTION_WIDTH/3,INTERACTION_HEIGH/10);*/
+        goback=new JButton("Revenir en arriére");
         goback.addActionListener(
                 new ActionListener() {
                     @Override
@@ -90,7 +90,7 @@ public class QueteInterface extends InteractionInterface{
                     }
                 });
         goback.setVisible(false);
-        this.add(goback);
+        buttonpanel.add(goback);
         //quit
         quit=new JButton("Quitter");/*
         quit.setBounds(MapPanel.MAP_WIDTH+INTERACTION_WIDTH*3/5,INTERACTION_HEIGH+INTERACTION_HEIGH*9/10
@@ -104,7 +104,7 @@ public class QueteInterface extends InteractionInterface{
                     }
                 });
         quit.setVisible(true);
-        this.add(quit);
+        buttonpanel.add(quit);
 
     }
 
@@ -190,11 +190,8 @@ public class QueteInterface extends InteractionInterface{
 
     //methodes
     private void setjlist(JList<Object> ref){
-        int ListPosWidth=MapPanel.MAP_WIDTH;
-        int ListPosHeigh=INTERACTION_HEIGH+INTERACTION_HEIGH*9/10;
         int ListWidth=INTERACTION_WIDTH;
         int ListHeigh=INTERACTION_HEIGH*8/10;
-        ref.setBounds(ListPosWidth,ListPosHeigh,ListWidth,ListHeigh);
         ref.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         ref.setLayoutOrientation(JList.HORIZONTAL_WRAP);
         ref.setVisibleRowCount(-1);

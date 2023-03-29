@@ -7,8 +7,11 @@ import java.util.Properties;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.lang.reflect.Method;
+import static ServerPart.Jdr2dLogger.LOGGER;
 
     abstract public class DAOObject {
+
+
         protected static String filename = "app.config";
         protected static Properties config = null;
         protected static Connection conn = null;
@@ -27,11 +30,13 @@ import java.lang.reflect.Method;
             }
             catch (FileNotFoundException ex){
                 System.err.println(ex);
+                LOGGER.severe("FICHIER DE CONFIG PERDU :"+ex.getMessage());
                 System.exit(-1);
             }
             catch (IOException ex) {
                 System.err.println("Unknown IOException");
                 System.err.println(ex);
+                LOGGER.severe("TRES MAUVAIS :"+ex.getMessage());
                 System.exit(-2);
             }
             filename = fileName;
@@ -48,8 +53,7 @@ import java.lang.reflect.Method;
                     conn = DriverManager.getConnection(config.getProperty("connexion"), config);
                 }
                 catch (SQLException sqe){
-                    JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","Erreur",JOptionPane.ERROR_MESSAGE);
-                    System.err.println(sqe.getMessage());
+                    LOGGER.severe("TRES MAUVAIS :"+sqe.getMessage());
                     System.exit(-1);
                 }
             }

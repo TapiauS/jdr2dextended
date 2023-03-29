@@ -15,7 +15,7 @@ public class DialogueInterface extends InteractionInterface {
     private ArrayList<Quete> quetesdonnees;
 
     private ArrayList<Integer> objectifrealisesisid;
-    private String[] reponses;
+
 
     private Personnage player;
     private Hashtable<String,Echange> linkrepEchange;
@@ -37,20 +37,20 @@ public class DialogueInterface extends InteractionInterface {
         super(fenetre,player);
         //this.setLayout(null);
         this.setVisible(false);
+        this.setLayout(new BorderLayout());
         quetesdonnees=new ArrayList<>();
         objectifrealisesisid =new ArrayList<>();
         question=new JLabel();
         //question.setBounds(MapPanel.MAP_WIDTH,INTERACTION_HEIGH,INTERACTION_WIDTH,INTERACTION_HEIGH/10);
-        this.add(question);
+        this.add(question,BorderLayout.NORTH);
         data=new String[0];
         linkrepEchange=new Hashtable<>();
         choix=new JList<>();
         choix.setLayoutOrientation(JList.VERTICAL_WRAP);
         choix.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         choix.setVisibleRowCount(-1);
-        /*choix.setBounds(MapPanel.MAP_WIDTH, (int) (INTERACTION_HEIGH + 1.01*INTERACTION_HEIGH /10), INTERACTION_WIDTH, (int) (INTERACTION_HEIGH *0.8));
-        */choix.setPreferredSize(new Dimension(INTERACTION_WIDTH,(int) (INTERACTION_HEIGH *0.8)));
-        this.add(choix);
+        choix.setPreferredSize(new Dimension(INTERACTION_WIDTH,(int) (INTERACTION_HEIGH *0.8)));
+        this.add(choix,BorderLayout.CENTER);
         valider=new JButton("Répondre");
         valider.addActionListener(e -> {
             setPresentechange(linkrepEchange.get(choix.getSelectedValue().toString()));
@@ -75,9 +75,8 @@ public class DialogueInterface extends InteractionInterface {
             }
             refreshfocus();
         });
-        /*valider.setBounds(MapPanel.MAP_WIDTH+INTERACTION_WIDTH/3,INTERACTION_HEIGH+INTERACTION_HEIGH*9/10,INTERACTION_WIDTH/3, (int) (INTERACTION_HEIGH*0.1));
-        */
-        this.add(valider);
+
+        this.add(valider,BorderLayout.SOUTH);
         }
 
 
@@ -95,7 +94,8 @@ public class DialogueInterface extends InteractionInterface {
          this.presentechange=presentechange;
          fenetre.getEventHistory().addLine(presentechange.getParleur().getNomPersonnage()+":"+presentechange.getReponse());
             try {
-                ClientPart.write(quetesdonnees);
+                Quete q=quetesdonnees.get(0);
+                ClientPart.write(q.getId());
                 ClientPart.write(objectifrealisesisid);
             } catch (IOException e) {
                 throw new RuntimeException(e);

@@ -68,6 +68,7 @@ id INT;
 BEGIN
 
 SELECT ARRAY_AGG(id_objectif) FROM objectif WHERE id_interaction=NEW.id_interaction INTO id_obj;
+RAISE NOTICE :
     FOREACH id IN ARRAY id_obj LOOP
         INSERT INTO valide(id_objectif,id_personnage,validation) VALUES(id,NEW.id_personnage,false);
 END LOOP ;

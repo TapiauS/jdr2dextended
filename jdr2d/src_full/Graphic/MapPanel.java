@@ -74,7 +74,7 @@ public class MapPanel extends JPanel {
         this.fenetre=fenetre;
         this.sorties=fenetre.getSorties();
         this.setPlayer(player);
-        //this.setPreferredSize(new Dimension(MAP_WIDTH,MAP_HEIGH));
+        this.setPreferredSize(new Dimension(MAP_WIDTH,MAP_HEIGH));
         this.setBackground(Color.white);
         this.setVisible(true);
     }

@@ -51,6 +51,8 @@ public class ChatGraphicInterface extends JFrame{
                     try {
                         String msg=fenetre.getUtil().getNomUtilisateur()+" : "+chat.getText();
                         chatprotocol.sendmessage(msg);
+                        chat.setText("");
+                        chat.setColumns(10);
                         repaint();
                         revalidate();
                         pack();
@@ -84,6 +86,8 @@ public class ChatGraphicInterface extends JFrame{
             if(!chat.getText().isEmpty()&&!isfirstmodification) {
                 try {
                     chatprotocol.sendmessage(fenetre.getUtil().getNomUtilisateur()+" : "+chat.getText());
+                    chat.setText("");
+                    chat.setColumns(10);
                     repaint();
                     revalidate();
                     pack();

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Objects;
+import static ServerPart.Jdr2dLogger.LOGGER;
 
 @SuppressWarnings("unchecked")
 
@@ -91,7 +92,6 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
         openedcoffre=null;
         start();
     }
-
     private void connect() throws IOException, ClassNotFoundException, SQLException {
         String pseudo;
         String mdp;
@@ -121,7 +121,6 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
         display = UtilisateurDAO.displaypersonnage(util);
         output.writeObject(display);
     }
-
     private void create() throws IOException, ClassNotFoundException, SQLException {
         String pseudo="";
         String mdp="";
@@ -205,14 +204,12 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
         util=UtilisateurDAO.connectcompte(pseudo,mdp);
         output.writeObject(util);
     }
-
     private void pick() throws IOException, SQLException, ClassNotFoundException {
         Hashtable<String,Integer> display=UtilisateurDAO.displaypersonnage(util);
         String nomperso=read();
         avatar= PersonnageDAO.getchar(display.get(nomperso));
         output.writeObject(avatar);
     }
-
 
     private void createchar() throws IOException, ClassNotFoundException, SQLException {
         String charname="";
@@ -252,7 +249,6 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
         Hashtable<Integer, BufferedImage> caroussel= ImageDAO.loadfullimagebank("portrait");
         int indexportrait=0;
         List<Integer> keystoarray= caroussel.keySet().stream().toList();
-        System.out.println("Oscour "+keystoarray);
         boolean valid=false;
         ConnexionOutput choice;
         while (!valid){
@@ -300,7 +296,6 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
             sendMap();
             OutputType outputType;
             do {
-
                 outputType = (OutputType) input.readObject();
                 switch (outputType) {
                     case MOUVNORD -> {
@@ -329,11 +324,10 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
                                 break;
                             }
                         }
-                        ArrayList<Quete> quetes = read();
-                        for (Quete q : quetes) {
-                            avatar.addsQuete(q);
-                            QueteDAO.update(q, avatar);
-                        }
+                        int idquete = read();
+                        Quete quete=QueteDAO.getQuete(idquete);
+                        avatar.addsQuete(quete);
+                        QueteDAO.update(quete, avatar);
                         ArrayList<Integer> ids = read();
                         for (int i = 0; i < ids.size(); i++) {
                             for (Quete q : avatar.getQueteSuivie()) {
@@ -379,38 +373,38 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
                         door.traverse(avatar);
                         sendMap();
                     }
-        /*
-        case FIGTH -> break;
-        case PICK -> break;
-        case QUEST -> break;
-        case INVENTAIRE -> break;
-        case EQUIP -> break;
-        case USE -> break;
-        case DROP -> break;
-        */
                 }
             } while (connected);
         }
-        catch (IOException | ClassNotFoundException | SQLException e) {
+        catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
+        }
+        catch (IOException cne){
+            LOGGER.warning("FERMETURE BRUTALE CAUSEE PAR :"+cne.getMessage());
+        }
+        catch (SQLException sqe){
+            if(!(22000<sqe.getErrorCode()&&sqe.getErrorCode()<23000)) {
+                LOGGER.warning("PROBLEME AVEC LA BASE DE DONNEE :"+sqe.getMessage());
+                System.exit(-1);
+            }
+        }
+        catch (Exception e){
+            LOGGER.severe("ERREUR TR2S IMPREVISIBLE "+e.getMessage());
         }
         finally {
             try {
-                System.out.println("finnally");
                 input.close();
                 output.close();
                 socket.close();
-                System.out.println("une reussite");
                 map.removeClient(this);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                LOGGER.info("FERMETURE BRUTALE");
             }
         }
     }
 
     public void write(Object objet) throws IOException {
         output.writeObject(objet);
-        Loggy.writlog("SERVER WRITED"+objet.toString(),LogLevel.NOTICE);
         output.reset();
     }
 
@@ -455,13 +449,11 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
             switch (commande){
                 case PICK -> {
                     indicepicked=read();
-                    Loggy.writlog("INDICE PICKED "+indicepicked,LogLevel.NOTICE);
                     Objet pickedobjet=openedcoffre.getContenu().get(indicepicked);
                     boolean iscoffre;
                     iscoffre=pickedobjet instanceof Coffre;
                     write(iscoffre);
                     if (!iscoffre){
-                        Loggy.writlog("OBJET NORMAL",LogLevel.NOTICE);
                         boolean cantake=(avatar.getInventaire().getPoid()+pickedobjet.getPoid())<=avatar.getMaxpoid();
                         write(cantake);
                         if (cantake) {
@@ -474,7 +466,6 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
                         }
                     }
                     else {
-                        Loggy.writlog("OBJET COFFRE",LogLevel.NOTICE);
                         parentcoffre.add(openedcoffre);
                         openedcoffre= (Coffre) pickedobjet;
                         write(openedcoffre);

@@ -34,10 +34,10 @@ public class DefaultInteractionInterface extends InteractionInterface{
         super(fenetre, player);
         //on definit les boutons
         //affichequete
+        this.setLayout(new GridLayout(2,2));
         afficheQuete=new JButton("Journal de quete");
         afficheQuete.setVisible(true);
         afficheQuete.setPreferredSize(new Dimension(BUTTON_WIDTH,BUTTON_HEIGH));
-        //afficheQuete.setLocation(INTERACTION_WIDTH+BUTTON_WIDTH,INTERACTION_HEIGH+BUTTON_HEIGH);
         afficheQuete.addActionListener(
                 new ActionListener() {
                     @Override
@@ -92,7 +92,6 @@ public class DefaultInteractionInterface extends InteractionInterface{
         talk=new JButton("Parler");
         talk.setVisible(true);
         talk.setPreferredSize(new Dimension(BUTTON_WIDTH,BUTTON_HEIGH));
-        //talk.setLocation(INTERACTION_WIDTH+BUTTON_WIDTH,INTERACTION_HEIGH+BUTTON_HEIGH*5);
         talk.addActionListener(
                 new ActionListener() {
                     @Override
@@ -122,16 +121,17 @@ public class DefaultInteractionInterface extends InteractionInterface{
         afficheInventaire=new JButton("Inventaire");
         afficheInventaire.setVisible(true);
         afficheInventaire.setPreferredSize(new Dimension(BUTTON_WIDTH,BUTTON_HEIGH));
-        //afficheInventaire.setLocation(INTERACTION_WIDTH+BUTTON_WIDTH,INTERACTION_HEIGH+7*BUTTON_HEIGH);
         afficheInventaire.addActionListener(
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         fenetre.getDefaultInteractionInterface().setVisible(false);
+                        fenetre.getInventdealer().setVisible(true);
                         try {
                             ClientPart.write(OutputType.INVENTAIRE);
                             fenetre.getInventdealer().setOpenedcoffre(player.getInventaire());
                             fenetre.setInteraction(true);
+                            fenetre.pack();
                         } catch (IOException ex) {
                             throw new RuntimeException(ex);
                         }

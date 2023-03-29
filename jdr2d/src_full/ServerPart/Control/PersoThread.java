@@ -4,6 +4,7 @@ import Graphic.GameInterface;
 import jdr2dcore.PNJ;
 import jdr2dcore.Personnage;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class PersoThread extends Thread{

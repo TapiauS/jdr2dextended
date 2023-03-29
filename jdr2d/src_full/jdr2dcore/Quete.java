@@ -8,15 +8,14 @@ public class Quete implements EventListenerO, Serializable {
     protected String descriptionQuete;
 
     protected ArrayList<Objectifs> objectifs;
-    /*protected jdr2dcore.Echange declencheur;*/
+
     protected Objet[] recompenses;
 
-    protected ArrayList<EventListenerQuete> observer;
+    protected  ArrayList<EventListenerQuete> observer;
 
     protected int id;
 
     //getters
-
 
     public int getId() {
         return id;

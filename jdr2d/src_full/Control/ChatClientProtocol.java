@@ -3,12 +3,13 @@ package Control;
 import Graphic.ChatGraphicInterface;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.UnknownHostException;
 
-public class ChatClientProtocol extends Thread{
+public class ChatClientProtocol extends Thread {
     private static final int chatportnumber=5020;
 
     private static final String groupIp="224.0.0.1";

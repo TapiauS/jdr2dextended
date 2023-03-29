@@ -66,9 +66,9 @@ public class GameInterface extends JFrame  implements KeyListener {
 
     protected Properties properties;
 
-    public static final int WINDOWS_HEIGH=1000;
+    public static final int WINDOWS_HEIGH=900;
 
-    public static final int WINDOW_WIDTH=1000;
+    public static final int WINDOW_WIDTH=WINDOWS_HEIGH;
     
     private JPanel container;
 
@@ -120,7 +120,6 @@ public class GameInterface extends JFrame  implements KeyListener {
         //this.setLayout(new GridBagLayout());
         this.player=player;
         this.util=util;
-        this.setSize(new Dimension(WINDOW_WIDTH,WINDOWS_HEIGH));
         this.setLocationRelativeTo(null);
         mapload();
         ia =new PersoThread(pnjs,this);
@@ -155,58 +154,44 @@ public class GameInterface extends JFrame  implements KeyListener {
         portrait.setVisible(true);
         /* on définit la fenétre globale et lui donne tout les élements */
 
-        JPanel panelrigth=new JPanel(new GridBagLayout());
+        JPanel panelrigth=new JPanel(new BorderLayout());
         panelrigth.setPreferredSize(new Dimension(2*WINDOW_WIDTH/3,WINDOWS_HEIGH));
-        JPanel panelLeft=new JPanel(new GridBagLayout());
+        JPanel panelLeft=new JPanel(new BorderLayout());
         panelLeft.setPreferredSize(new Dimension(WINDOW_WIDTH/3,WINDOWS_HEIGH));
+        thisInfo.setPreferredSize(new Dimension(WINDOW_WIDTH/3,WINDOWS_HEIGH/3));
+        portrait.setPreferredSize(new Dimension(WINDOW_WIDTH/3,WINDOWS_HEIGH/3));
         JScrollPane contevent=new JScrollPane(eventHistory);
+        contevent.setPreferredSize(new Dimension(2*WINDOW_WIDTH/3,WINDOWS_HEIGH/3));
         //contevent.setVisible(true);
         this.container=new JPanel(new BorderLayout());
-        GridBagConstraints constraints=new GridBagConstraints();
+
         container.setPreferredSize(new Dimension(WINDOW_WIDTH,WINDOWS_HEIGH));
-        constraints.fill=GridBagConstraints.BOTH;
+
         //container.setBounds(0,menubar.getHeight(),WINDOW_WIDTH,WINDOWS_HEIGH);
         this.setJMenuBar(menubar);
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.weightx = 0.67;
-        constraints.weighty = 0.67;
-        panelrigth.add(mapPanel,constraints);
 
-
-        constraints.gridx = 0;
-        constraints.gridy = 1;
-        constraints.weightx = 0.67;
-        constraints.weighty = 0.33;
-        panelrigth.add(contevent,constraints);
-
-
+        panelrigth.add(mapPanel,BorderLayout.NORTH);
+        panelrigth.add(contevent,BorderLayout.CENTER);
 
         container.add(panelrigth,BorderLayout.WEST);
 
+        panelLeft.add(thisInfo,BorderLayout.NORTH);
 
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        panelLeft.add(thisInfo,constraints);
+        JPanel containersupp=new JPanel();
 
-
-        constraints.gridx = 0;
-        constraints.gridy = 1;
-        panelLeft.add(dialogdealer,constraints);
-        panelLeft.add(inventdealer,constraints);
-        panelLeft.add(coffredealer,constraints);
-        panelLeft.add(quetedisplayer,constraints);
-        panelLeft.add(defaultInteractionInterface,constraints);
+        containersupp.add(dialogdealer);
+        containersupp.add(inventdealer);
+        containersupp.add(coffredealer);
+        panelLeft.add(containersupp,BorderLayout.WEST);
+        panelLeft.add(quetedisplayer,BorderLayout.CENTER);
+        panelLeft.add(defaultInteractionInterface,BorderLayout.EAST);
 
 
-        constraints.gridx = 0;
-        constraints.gridy = 2;
-        panelLeft.add(portrait,constraints);
+
+        panelLeft.add(portrait,BorderLayout.SOUTH);
 
 
-        constraints.gridwidth=GridBagConstraints.RELATIVE;
-
-        container.add(panelLeft,BorderLayout.CENTER);
+        container.add(panelLeft,BorderLayout.EAST);
 
 
         container.setBackground(Color.black);
@@ -296,6 +281,8 @@ public class GameInterface extends JFrame  implements KeyListener {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
+        System.out.println("avatar liste quete size"+player.getQueteSuivie().size());
+        pack();
     }
 
 
@@ -311,6 +298,7 @@ public class GameInterface extends JFrame  implements KeyListener {
             nextmactiontime=Instant.now().plus(timestepms, ChronoUnit.MILLIS);
             try {
                 ClientPart.write(OutputType.MOUVNORD);
+                eventHistory.addLine("north");
                 player.depl(Direction.NORD);
                 SoundEffect.playSound("walk");
             } catch (UnsupportedAudioFileException |  LineUnavailableException | IOException ex) {
@@ -447,6 +435,7 @@ public class GameInterface extends JFrame  implements KeyListener {
                 }
             }
         }
+
 
         revalidate();
         repaint();

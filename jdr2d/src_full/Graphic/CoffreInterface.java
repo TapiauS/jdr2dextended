@@ -47,11 +47,12 @@ public class CoffreInterface extends InteractionInterface {
         coffrelvl=0;
         data=new String[0];
         choix=new JList<>();
+        this.setLayout(new BorderLayout());
         //on initialise le label
         cofrename=new JLabel();
-        cofrename.setBounds((int) (MapPanel.MAP_WIDTH*1.0), (int) (INTERACTION_HEIGH*1.01), INTERACTION_WIDTH, INTERACTION_HEIGH /10);
+        cofrename.setPreferredSize(new Dimension(INTERACTION_WIDTH, INTERACTION_HEIGH /10));
         cofrename.setVisible(true);
-        this.add(cofrename);
+        this.add(cofrename,BorderLayout.NORTH);
         //on initialise le panneau de choix
         choix.setLayoutOrientation(JList.HORIZONTAL_WRAP);
         choix.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -59,7 +60,9 @@ public class CoffreInterface extends InteractionInterface {
         choix.setBounds(MapPanel.MAP_WIDTH, (int) (INTERACTION_HEIGH + 1.01*INTERACTION_HEIGH /10), INTERACTION_WIDTH, (int) (INTERACTION_HEIGH *0.8));*/
         choix.setPreferredSize(new Dimension(INTERACTION_WIDTH,(int) (INTERACTION_HEIGH *0.8)));
         choix.setVisible(true);
-        this.add(choix);
+        this.add(choix,BorderLayout.EAST);
+
+        JPanel bottompanel=new JPanel();
         //on définit pick
         pick=new JButton("Pick");
         pick.addActionListener(new ActionListener() {
@@ -100,7 +103,7 @@ public class CoffreInterface extends InteractionInterface {
         pick.setBounds(MapPanel.MAP_WIDTH+ INTERACTION_WIDTH /5, (int) (INTERACTION_HEIGH +9.01*INTERACTION_HEIGH /10),
                 INTERACTION_WIDTH /5,(int) (INTERACTION_HEIGH *0.1));*/
         pick.setVisible(true);
-        this.add(pick);
+        bottompanel.add(pick);
         //on definit exit
         exit=new JButton("Quit");
         exit.addActionListener(new ActionListener() {
@@ -118,7 +121,7 @@ public class CoffreInterface extends InteractionInterface {
                 refreshfocus();
             }
         });
-        this.add(exit);
+        bottompanel.add(exit);
         exit.setVisible(true);/*
         exit.setBounds(MapPanel.MAP_WIDTH+3* INTERACTION_WIDTH /5, (int) (INTERACTION_HEIGH +9.01* INTERACTION_HEIGH /10),
                 INTERACTION_WIDTH /5,(int) (INTERACTION_HEIGH *0.05));*/
@@ -143,12 +146,9 @@ public class CoffreInterface extends InteractionInterface {
             }
         });
         goBack.setVisible(false);
-        this.add(goBack);
-/*
-        goBack.setBounds(MapPanel.MAP_WIDTH+3* INTERACTION_WIDTH /5, (int) (INTERACTION_HEIGH +9.01* INTERACTION_HEIGH /10)
-                , INTERACTION_WIDTH /5,(int) (INTERACTION_HEIGH *0.05));
-*/
+        bottompanel.add(goBack);
 
+        this.add(bottompanel,BorderLayout.SOUTH);
         this.fenetre.requestFocus();
     }
 

@@ -38,78 +38,69 @@ public class InventaireInterface extends InteractionInterface{
         super(fenetre, player);
         //on rajoute la Jlist
         itemdisplay=new JList<>();
+        this.setLayout(new BorderLayout());
         //itemdisplay.setBounds(MapPanel.MAP_WIDTH,INTERACTION_HEIGH,INTERACTION_WIDTH,INTERACTION_HEIGH*9/10);
         itemdisplay.setVisible(true);
         itemdisplay.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         itemdisplay.setLayoutOrientation(JList.HORIZONTAL_WRAP);
         itemdisplay.setVisibleRowCount(-1);
         itemdisplay.setPreferredSize(new Dimension(INTERACTION_WIDTH,INTERACTION_HEIGH*9/10));
-        this.add(itemdisplay);
+        this.add(itemdisplay,BorderLayout.NORTH);
+        JPanel bottompane=new JPanel();
         //on initialise parentcoffre
         parentscoffre=new ArrayList<>();
         //on rajoute le bouton pick
         equip=new JButton("Equiper ou utiliser");
-        //equip.setBounds(MapPanel.MAP_WIDTH+INTERACTION_WIDTH/7, (int) (INTERACTION_HEIGH+INTERACTION_HEIGH*9/10),
-                //INTERACTION_WIDTH/7, (int) (INTERACTION_HEIGH*0.5/10));
-        equip.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(itemdisplay.getSelectedIndex()>-1) {
-                    try {
-                        ClientPart.write(OutputType.EQUIP);
-                        ClientPart.write(itemdisplay.getSelectedIndex());
-                        boolean iscoffre=ClientPart.read();
-                        if (!iscoffre) {
-                            Objet selecteobjet=ClientPart.read();
-                            if (selecteobjet instanceof Arme) {
-                                try {
-                                    fenetre.getEventHistory().addLine(ClientPart.read());
-                                    fenetre.getPlayer().setInventaire(ClientPart.read());
-                                    fenetre.getPlayer().setArmes(ClientPart.read());
-                                    fenetre.getFenetreInfo().update();
-                                } catch (ClassNotFoundException ex) {
-                                    throw new RuntimeException(ex);
-                                }
-                            }
-                            if (selecteobjet instanceof Armure) {
+        equip.addActionListener(e -> {
+            if(itemdisplay.getSelectedIndex()>-1) {
+                try {
+                    ClientPart.write(OutputType.EQUIP);
+                    ClientPart.write(itemdisplay.getSelectedIndex());
+                    boolean iscoffre=ClientPart.read();
+                    if (!iscoffre) {
+                        Objet selecteobjet=ClientPart.read();
+                        if (selecteobjet instanceof Arme) {
+                            try {
                                 fenetre.getEventHistory().addLine(ClientPart.read());
                                 fenetre.getPlayer().setInventaire(ClientPart.read());
                                 fenetre.getPlayer().setArmes(ClientPart.read());
                                 fenetre.getFenetreInfo().update();
+                            } catch (ClassNotFoundException ex) {
+                                throw new RuntimeException(ex);
                             }
-                            if (selecteobjet instanceof Potion) {
-                                Time.drinkpotion((Potion) selecteobjet, player);
-                                player.removeObjet(selecteobjet);
-                                fenetre.getEventHistory().addLine(player.getNomPersonnage() + " a bu la potion :"
-                                        + selecteobjet.getNomObjet());
-                            }
-                            setOpenedcoffre(ClientPart.read());
-                        } else {
-                            setOpenedcoffre(ClientPart.read());
-                            coffrelvl++;
-                            exit.setVisible(false);
-                            goback.setVisible(true);
                         }
+                        if (selecteobjet instanceof Armure) {
+                            fenetre.getEventHistory().addLine(ClientPart.read());
+                            fenetre.getPlayer().setInventaire(ClientPart.read());
+                            fenetre.getPlayer().setArmes(ClientPart.read());
+                            fenetre.getFenetreInfo().update();
+                        }
+                        if (selecteobjet instanceof Potion) {
+                            Time.drinkpotion((Potion) selecteobjet, player);
+                            player.removeObjet(selecteobjet);
+                            fenetre.getEventHistory().addLine(player.getNomPersonnage() + " a bu la potion :"
+                                    + selecteobjet.getNomObjet());
+                        }
+                        setOpenedcoffre(ClientPart.read());
+                    } else {
+                        setOpenedcoffre(ClientPart.read());
+                        coffrelvl++;
+                        exit.setVisible(false);
+                        goback.setVisible(true);
                     }
-                    catch (IOException | ClassNotFoundException io){
-                        throw new RuntimeException(io);
-                    }
-                    refreshfocus();
                 }
+                catch (IOException | ClassNotFoundException io){
+                    throw new RuntimeException(io);
+                }
+                refreshfocus();
             }
-
         });
         equip.setVisible(true);
-        this.add(equip);
+        bottompane.add(equip);
         // on cree drop
         drop=new JButton("Jeter");
-        /*drop.setBounds(MapPanel.MAP_WIDTH+INTERACTION_WIDTH*3/7, (int) (INTERACTION_HEIGH+INTERACTION_HEIGH*9/10),
-                INTERACTION_WIDTH/7, (int) (INTERACTION_HEIGH*0.5/10));
-        */
         drop.addActionListener(
-                new ActionListener(){
-                @Override
-                public void actionPerformed(ActionEvent e){
+                e -> {
                     try {
                         if (itemdisplay.getSelectedIndex() > -1) {
                             ClientPart.write(OutputType.DROP);
@@ -125,14 +116,11 @@ public class InventaireInterface extends InteractionInterface{
                     catch (IOException | ClassNotFoundException io){
                         throw new RuntimeException(io);
                     }
-                }});
+                });
         drop.setVisible(true);
-        this.add(drop);
+        bottompane.add(drop);
         //creation du bouton exit
         exit=new JButton("Quitter");
-        /*
-        exit.setBounds(MapPanel.MAP_WIDTH+INTERACTION_WIDTH*5/7, (int) (INTERACTION_HEIGH+INTERACTION_HEIGH*9/10),
-                INTERACTION_WIDTH/7, (int) (INTERACTION_HEIGH*0.5/10));*/
         exit.addActionListener(
                 new ActionListener(){
                     @Override
@@ -150,11 +138,8 @@ public class InventaireInterface extends InteractionInterface{
                     }
                 });
         exit.setVisible(true);
-        this.add(exit);
-        //creation du bouton goback
+        bottompane.add(exit);
         goback=new JButton("Revenir en arriére");
-        /*goback.setBounds(MapPanel.MAP_WIDTH+INTERACTION_WIDTH*5/7, (int) (INTERACTION_HEIGH+INTERACTION_HEIGH*9.5/10),
-                INTERACTION_WIDTH/7, (int) (INTERACTION_HEIGH*0.5/10));*/
         goback.addActionListener(
                 new ActionListener() {
                     @Override
@@ -166,9 +151,7 @@ public class InventaireInterface extends InteractionInterface{
                         }
                         try {
                             setOpenedcoffre(ClientPart.read());
-                        } catch (IOException ex) {
-                            throw new RuntimeException(ex);
-                        } catch (ClassNotFoundException ex) {
+                        } catch (IOException | ClassNotFoundException ex) {
                             throw new RuntimeException(ex);
                         }
                         coffrelvl--;
@@ -180,7 +163,10 @@ public class InventaireInterface extends InteractionInterface{
                         }
         });
         goback.setVisible(false);
-        this.add(goback);
+        bottompane.add(goback);
+        bottompane.setVisible(true);
+        this.add(bottompane,BorderLayout.SOUTH);
+        System.out.println();
     }
 
 

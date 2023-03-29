@@ -32,7 +32,7 @@ public class PlayerInfo extends JPanel {
 
     public PlayerInfo(Personnage player,GameInterface fenetre){
         super();
-        this.setLayout(new FlowLayout());
+        this.setLayout(new GridLayout());
         this.player=player;
         this.fenetre=fenetre;
         //on gere infodiplayer

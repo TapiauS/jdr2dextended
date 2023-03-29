@@ -21,7 +21,7 @@ public abstract class QueteDAO extends DAOObject {
         ArrayList<Object> args=new ArrayList<>(List.of(id,id));
         ResultSet rs=query("SELECT interaction.id_interaction,ordre,nom_interaction,description_interaction,nom_objectif,objectif.id_personnage as target,objectif.id_objet as find,objet.id_objet as recompense,objectif.id_objectif,objectif.id_dialogue as talk,validation FROM queste \n" +
                 "    JOIN interaction ON id_personnage=? AND interaction.id_interaction=queste.id_interaction                                             \n" +
-                "    JOIN objet ON interaction.id_interaction=objet.id_quete                                                    \n" +
+                "    LEFT JOIN objet ON interaction.id_interaction=objet.id_quete                                                    \n" +
                 "    JOIN objectif on objectif.id_interaction=interaction.id_interaction                                              \n" +
                 "    JOIN valide ON objectif.id_objectif=valide.id_objectif and valide.id_personnage=? ORDER BY id_interaction,ordre ;",args);
         ArrayList<Quete> retour=new ArrayList<>();
@@ -72,6 +72,10 @@ public abstract class QueteDAO extends DAOObject {
                 descript=rs.getString("description_interaction");
         }
     }
+        for(int i=0;i<listo.size();i++){
+            if(listo.get(i)==0)
+                listo.remove(i);
+        }
         Objet[] rec = new Objet[listo.size()];
         for (int i=0;i<listo.size();i++) {
             rec[i]=ObjetDAO.getObjet(listo.get(i));
@@ -88,7 +92,7 @@ public abstract class QueteDAO extends DAOObject {
     public static Quete getQuete(int id) throws SQLException {
         ArrayList<Object> args=new ArrayList<>(List.of(id));
         ResultSet rs=query("SELECT nom_interaction,accorde.id_objet,objectif.id_objectif,ordre FROM interaction" +
-                "                   JOIN accorde ON accorde.id_interaction=interaction.id_interaction" +
+                "                   LEFT JOIN JOIN accorde ON accorde.id_interaction=interaction.id_interaction" +
                 "                   JOIN objectif ON objectif.id_interaction=interaction.id_interaction" +
                 "                   WHERE interaction.id_interaction=? ORDER BY ordre;",args);
         ArrayList<Integer> idsobjets=new ArrayList<>();
