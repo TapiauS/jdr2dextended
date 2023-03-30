@@ -39,7 +39,7 @@ public class NextPictureAction extends AbstractAction {
     public void actionPerformed(ActionEvent e) {
         BufferedImage myPicture ;
         try {
-            (ClientPart.getServeroutput()).writeObject(ConnexionOutput.NEXTPICTURE);
+            ClientPart.write(ConnexionOutput.NEXTPICTURE);
             int length= (int) ClientPart.getServerinput().readObject();
             byte [] imgbyte=ClientPart.getIn().readNBytes(length);
             myPicture= ImageIO.read(new ByteArrayInputStream(imgbyte));

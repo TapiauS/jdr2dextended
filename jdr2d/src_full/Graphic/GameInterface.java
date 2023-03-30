@@ -3,6 +3,7 @@ package Graphic;
 import Control.*;
 import Log.LogLevel;
 import Log.Loggy;
+import Logging.Jdr2dLogger;
 import ServerPart.Control.PersoThread;
 import ServerPart.DAO.*;
 import ServerPart.Socketsmanager.MapState;
@@ -15,8 +16,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.sql.SQLException;
@@ -24,9 +23,8 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Properties;
-
+import static Logging.Jdr2dLogger.LOGGER;
 public class GameInterface extends JFrame  implements KeyListener {
-    private final Thread save;
 
     private FullLogInterface log;
     private PlayerInfo thisInfo;
@@ -61,6 +59,8 @@ public class GameInterface extends JFrame  implements KeyListener {
     private ArrayList<Personnage> players;
     private ArrayList<Porte> sorties;
 
+    private SettingsDisplayer settingsDisplayer=null;
+
     private ArrayList<Echange> echanges;
     protected ArrayList<Coffre> coffres;
 
@@ -86,203 +86,155 @@ public class GameInterface extends JFrame  implements KeyListener {
 
     public GameInterface(Personnage player,Utilisateur util,FullLogInterface log) throws SQLException {
         super();
-        this.setLayout(new FlowLayout());
-        this.setIconImage(new ImageIcon("Portraits/gamicon.png").getImage());
         try {
-            FileInputStream in = new FileInputStream("control"+util.getNomUtilisateur()+".properties");
-            properties= new Properties();
-            properties.load(in);
-            in.close();
-        }
-        catch (FileNotFoundException fne){
+            this.setLayout(new FlowLayout());
+            this.setIconImage(new ImageIcon("Portraits/gamicon.png").getImage());
             try {
-                FileInputStream in = new FileInputStream("defaultcontrol.properties");
-                properties= new Properties();
+                FileInputStream in = new FileInputStream("control" + util.getNomUtilisateur() + ".properties");
+                properties = new Properties();
                 properties.load(in);
                 in.close();
-                FileOutputStream fos=new FileOutputStream("control"+util.getNomUtilisateur()+".properties");
-                properties.store(fos,"Initialisation");
-                fos.close();
-            } catch (IOException e) {
-                Loggy.writlog("DEFAULT PROPERTIES LOST",LogLevel.NOTICE);
-                JOptionPane.showMessageDialog(null,"control.properties introuvable","Erreur Fatale",JOptionPane.ERROR_MESSAGE);
-                throw new RuntimeException(e);
-            }
-        }
-        catch (IOException ioe){
-            Loggy.writlog("PROPERTIES LOST",LogLevel.NOTICE);
-            JOptionPane.showMessageDialog(null,"control.properties introuvable","Erreur Fatale",JOptionPane.ERROR_MESSAGE);
-            throw new RuntimeException(ioe);
-        }
-        this.log=log;
-        this.nextmactiontime=Instant.now();
-        this.interaction=false;
-        //this.setLayout(new GridBagLayout());
-        this.player=player;
-        this.util=util;
-        this.setLocationRelativeTo(null);
-        mapload();
-        ia =new PersoThread(pnjs,this);
-        //on definit tout les élements
-        thisInfo=new PlayerInfo(this.player,this);
-        mapPanel=new MapPanel(this.player,this.pnjs,this);
-        mapPanel.setVisible(true);
-        defaultInteractionInterface=new DefaultInteractionInterface(this,this.player);
-        defaultInteractionInterface.setVisible(true);
-        eventHistory=new EventHistory();
-        coffredealer=new CoffreInterface(this.player,this);
-        inventdealer=new InventaireInterface(this,this.player);
-        quetedisplayer=new QueteInterface(this,this.player);
-        menubar=new JMenuBar();
-        menubar.setVisible(true);
-        quitter = new QuitMenu(this,"Menu");
-        menubar.add(quitter);
-        JMenuItem settings=new JMenuItem("Parametres");
-        settings.addActionListener(e->{
-            SettingsDisplayer setings=new SettingsDisplayer(this);
-            interaction=true;
-        });
-        menubar.add(settings);
-        dialogdealer=new DialogueInterface(this,player);
-        BufferedImage myPicture = null;
-        try {
-            myPicture = PersonnageDAO.getcharportrait(player.getId());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        portrait = new JLabel(new ImageIcon(myPicture));
-        portrait.setVisible(true);
-        /* on définit la fenétre globale et lui donne tout les élements */
-
-        JPanel panelrigth=new JPanel(new BorderLayout());
-        panelrigth.setPreferredSize(new Dimension(2*WINDOW_WIDTH/3,WINDOWS_HEIGH));
-        JPanel panelLeft=new JPanel(new BorderLayout());
-        panelLeft.setPreferredSize(new Dimension(WINDOW_WIDTH/3,WINDOWS_HEIGH));
-        thisInfo.setPreferredSize(new Dimension(WINDOW_WIDTH/3,WINDOWS_HEIGH/3));
-        portrait.setPreferredSize(new Dimension(WINDOW_WIDTH/3,WINDOWS_HEIGH/3));
-        JScrollPane contevent=new JScrollPane(eventHistory);
-        contevent.setPreferredSize(new Dimension(2*WINDOW_WIDTH/3,WINDOWS_HEIGH/3));
-        //contevent.setVisible(true);
-        this.container=new JPanel(new BorderLayout());
-
-        container.setPreferredSize(new Dimension(WINDOW_WIDTH,WINDOWS_HEIGH));
-
-        //container.setBounds(0,menubar.getHeight(),WINDOW_WIDTH,WINDOWS_HEIGH);
-        this.setJMenuBar(menubar);
-
-        panelrigth.add(mapPanel,BorderLayout.NORTH);
-        panelrigth.add(contevent,BorderLayout.CENTER);
-
-        container.add(panelrigth,BorderLayout.WEST);
-
-        panelLeft.add(thisInfo,BorderLayout.NORTH);
-
-        JPanel containersupp=new JPanel();
-
-        containersupp.add(dialogdealer);
-        containersupp.add(inventdealer);
-        containersupp.add(coffredealer);
-        panelLeft.add(containersupp,BorderLayout.WEST);
-        panelLeft.add(quetedisplayer,BorderLayout.CENTER);
-        panelLeft.add(defaultInteractionInterface,BorderLayout.EAST);
-
-
-
-        panelLeft.add(portrait,BorderLayout.SOUTH);
-
-
-        container.add(panelLeft,BorderLayout.EAST);
-
-
-        container.setBackground(Color.black);
-        container.setVisible(true);
-        this.setContentPane(container);
-        this.setResizable(false);
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setVisible(true);
-        save = new Thread(() -> {
-            try {
-                DAOObject.close();
-            } catch (SQLException e) {
-                //TODO gérer cette exception
-                throw new RuntimeException(e);
-            }
-        });
-        this.addWindowListener(new WindowListener() {
-            @Override
-            public void windowOpened(WindowEvent e) {
-
-            }
-
-            @Override
-            public void windowClosing(WindowEvent e) {
+            } catch (FileNotFoundException fne) {
                 try {
-                    System.out.println("On sauvegarde en fermant");
-                    PersonnageDAO.updatedatabase(player);
-                    chat.dispose();
-                    ia.setSwitchmap(false);
-                    //music.getClip().stop();
-                    for (PNJ ps: pnjs) {
-                        if(ps.isNomme())
-                            PersonnageDAO.updatepnj(ps);
-                    }
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
+                    FileInputStream in = new FileInputStream("defaultcontrol.properties");
+                    properties = new Properties();
+                    properties.load(in);
+                    in.close();
+                    FileOutputStream fos = new FileOutputStream("control" + util.getNomUtilisateur() + ".properties");
+                    properties.store(fos, "Initialisation");
+                    fos.close();
+                } catch (IOException e) {
+                    LOGGER.severe("DEFAULT PROPERTIES LOST");
+                    JOptionPane.showMessageDialog(null, "control.properties introuvable", "Erreur Fatale", JOptionPane.ERROR_MESSAGE);
+                    throw new RuntimeException(e);
                 }
+            } catch (IOException ioe) {
+                Loggy.writlog("PROPERTIES LOST", LogLevel.NOTICE);
+                JOptionPane.showMessageDialog(null, "control.properties introuvable", "Erreur Fatale", JOptionPane.ERROR_MESSAGE);
+                throw new RuntimeException(ioe);
             }
+            this.log = log;
+            this.nextmactiontime = Instant.now();
+            this.interaction = false;
+            //this.setLayout(new GridBagLayout());
+            this.player = player;
+            this.util = util;
+            this.setLocationRelativeTo(null);
+            mapload();
+            ia = new PersoThread(pnjs, this);
+            //on definit tout les élements
+            thisInfo = new PlayerInfo(this.player, this);
+            mapPanel = new MapPanel(this.player, this.pnjs, this);
+            mapPanel.setVisible(true);
+            defaultInteractionInterface = new DefaultInteractionInterface(this, this.player);
+            defaultInteractionInterface.setVisible(true);
+            eventHistory = new EventHistory();
+            coffredealer = new CoffreInterface(this.player, this);
+            inventdealer = new InventaireInterface(this, this.player);
+            quetedisplayer = new QueteInterface(this, this.player);
+            menubar = new JMenuBar();
+            menubar.setVisible(true);
 
-            @Override
-            public void windowClosed(WindowEvent e) {
+            quitter = new QuitMenu(this, "Menu");
+            JMenuItem settings = new JMenuItem("Parametres");
+            settings.addActionListener(e -> {
+                System.out.println("buggué ??");
+                if (settingsDisplayer == null)
+                    settingsDisplayer = new SettingsDisplayer(this);
+                interaction = true;
+            });
+            settings.setMaximumSize(new Dimension(100, 20));
+            menubar.add(quitter, BorderLayout.WEST);
+            menubar.add(settings, BorderLayout.CENTER);
+            this.setJMenuBar(menubar);
+            dialogdealer = new DialogueInterface(this, player);
+            BufferedImage myPicture = null;
+            myPicture = PersonnageDAO.getcharportrait(player.getId());
+            portrait = new JLabel(new ImageIcon(myPicture));
+            portrait.setVisible(true);
+            /* on définit la fenétre globale et lui donne tout les élements */
 
-            }
+            JPanel panelrigth = new JPanel(new BorderLayout());
+            panelrigth.setPreferredSize(new Dimension(2 * WINDOW_WIDTH / 3, WINDOWS_HEIGH));
+            JPanel panelLeft = new JPanel(new BorderLayout());
+            panelLeft.setPreferredSize(new Dimension(WINDOW_WIDTH / 3, WINDOWS_HEIGH));
+            thisInfo.setPreferredSize(new Dimension(WINDOW_WIDTH / 3, WINDOWS_HEIGH / 3));
+            portrait.setPreferredSize(new Dimension(WINDOW_WIDTH / 3, WINDOWS_HEIGH / 3));
+            JScrollPane contevent = new JScrollPane(eventHistory);
+            contevent.setPreferredSize(new Dimension(2 * WINDOW_WIDTH / 3, WINDOWS_HEIGH / 3));
+            //contevent.setVisible(true);
+            this.container = new JPanel(new BorderLayout());
 
-            @Override
-            public void windowIconified(WindowEvent e) {
+            container.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOWS_HEIGH));
 
-            }
+            //container.setBounds(0,menubar.getHeight(),WINDOW_WIDTH,WINDOWS_HEIGH);
 
-            @Override
-            public void windowDeiconified(WindowEvent e) {
+            panelrigth.add(mapPanel, BorderLayout.NORTH);
+            panelrigth.add(contevent, BorderLayout.CENTER);
 
-            }
+            container.add(panelrigth, BorderLayout.WEST);
 
-            @Override
-            public void windowActivated(WindowEvent e) {
+            panelLeft.add(thisInfo, BorderLayout.NORTH);
 
-            }
+            JPanel containersupp = new JPanel();
 
-            @Override
-            public void windowDeactivated(WindowEvent e) {
+            containersupp.add(dialogdealer);
+            containersupp.add(inventdealer);
+            containersupp.add(coffredealer);
+            containersupp.add(quetedisplayer);
+            containersupp.add(defaultInteractionInterface);
+            panelLeft.add(containersupp, BorderLayout.CENTER);
 
-            }
-        });
-        Runtime.getRuntime().addShutdownHook(save);
-        addKeyListener(this);
-        try {
-            music=new Soundtrackscontroller(player.getLieux().getNomLieu()+".wav");
-        } catch (UnsupportedAudioFileException | IOException e) {
-            System.err.println(e.getMessage());
-            JOptionPane.showMessageDialog(null,"Erreur lors du chargement de la musique du jeu");
-        } catch (LineUnavailableException e) {
-            JOptionPane.showMessageDialog(null,"Erreur lors de la lecture de la musique du jeu");
-        }
-        this.requestFocus();
-        try {
+
+            panelLeft.add(portrait, BorderLayout.SOUTH);
+
+
+            container.add(panelLeft, BorderLayout.EAST);
+
+
+            container.setBackground(Color.black);
+            container.setVisible(true);
+            this.setContentPane(container);
+            this.setResizable(false);
+            this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+            this.setVisible(true);
+            addKeyListener(this);
+            music = new Soundtrackscontroller(player.getLieux().getNomLieu() + ".wav");
+            this.requestFocus();
             AutoUpdateSocket.launch(this);
             PNJIASocket.launch(this);
-        } catch (IOException | ClassNotFoundException | InterruptedException e) {
-            throw new RuntimeException(e);
+            SoundEffect.setVolumevalue(effectvolume);
+            chat = new ChatGraphicInterface(this);
+            System.out.println("avatar liste quete size" + player.getQueteSuivie().size());
+            pack();
         }
-        SoundEffect.setVolumevalue(effectvolume);
-        try {
-            System.out.println("J'arrive dans le try");
-            chat=new ChatGraphicInterface(this);
-            System.out.println("J'arrive a lancer cette interface");
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
+        catch (FileNotFoundException fne){
+            LOGGER.severe(fne.getMessage());
+            JOptionPane.showMessageDialog(null,"Un fichier de configuration semble manquer","",JOptionPane.ERROR_MESSAGE);
+            System.exit(-3);
         }
-        System.out.println("avatar liste quete size"+player.getQueteSuivie().size());
-        pack();
+        catch (IOException e) {
+            LOGGER.severe(e.getMessage());
+            JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+            System.exit(-4);
+        } catch (ClassNotFoundException e) {
+            LOGGER.severe(e.getMessage());
+            JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+            System.exit(-2);
+        } catch (InterruptedException e) {
+            LOGGER.severe(e.getMessage());
+            JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+            System.exit(-1);
+        } catch (UnsupportedAudioFileException uofe) {
+        JOptionPane.showMessageDialog(null, "Erreur lors du chargement de la musique du jeu");
+        } catch (LineUnavailableException e) {
+            JOptionPane.showMessageDialog(null, "Erreur lors de la lecture de la musique du jeu");
+        }
+        catch (Exception e){
+            LOGGER.severe(e.getMessage());
+            JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+            System.exit(-5);
+        }
     }
 
 
@@ -293,98 +245,69 @@ public class GameInterface extends JFrame  implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-
+    try{
         if (e.getKeyCode() == readtable("MOVENORTH") && !interaction && Instant.now().isAfter(nextmactiontime)) {
-            nextmactiontime=Instant.now().plus(timestepms, ChronoUnit.MILLIS);
-            try {
-                ClientPart.write(OutputType.MOUVNORD);
-                eventHistory.addLine("north");
-                player.depl(Direction.NORD);
-                SoundEffect.playSound("walk");
-            } catch (UnsupportedAudioFileException |  LineUnavailableException | IOException ex) {
-                throw new RuntimeException(ex);
-            }
+            nextmactiontime = Instant.now().plus(timestepms, ChronoUnit.MILLIS);
+            ClientPart.write(OutputType.MOUVNORD);
+            eventHistory.addLine("north");
+            player.depl(Direction.NORD);
+            SoundEffect.playSound("walk");
             checkdoor();
         }
         if (e.getKeyCode() == readtable("MOVEWEST") && !interaction && Instant.now().isAfter(nextmactiontime)) {
-            nextmactiontime=Instant.now().plus(timestepms, ChronoUnit.MILLIS);
+            nextmactiontime = Instant.now().plus(timestepms, ChronoUnit.MILLIS);
             player.depl(Direction.OUEST);
-            try {
-                ClientPart.write(OutputType.MOUVWEST);
-                SoundEffect.playSound("walk");
-            } catch (UnsupportedAudioFileException | javax.sound.sampled.LineUnavailableException  | IOException ex) {
-                throw new RuntimeException(ex);
-            }
+            ClientPart.write(OutputType.MOUVWEST);
+            SoundEffect.playSound("walk");
             checkdoor();
         }
         if (e.getKeyCode() == readtable("MOVEEAST") && !interaction && Instant.now().isAfter(nextmactiontime)) {
-            nextmactiontime=Instant.now().plus(timestepms, ChronoUnit.MILLIS);
+            nextmactiontime = Instant.now().plus(timestepms, ChronoUnit.MILLIS);
             player.depl(Direction.EST);
-            try {
-                ClientPart.write(OutputType.MOUVEAST);
-                SoundEffect.playSound("walk");
-            } catch (UnsupportedAudioFileException |  LineUnavailableException | IOException ex) {
-                throw new RuntimeException(ex);
-            }
+            ClientPart.write(OutputType.MOUVEAST);
+            SoundEffect.playSound("walk");
             checkdoor();
         }
         if (e.getKeyCode() == readtable("MOVESOUTH") && !interaction && Instant.now().isAfter(nextmactiontime)) {
-            nextmactiontime=Instant.now().plus(timestepms, ChronoUnit.MILLIS);
+            nextmactiontime = Instant.now().plus(timestepms, ChronoUnit.MILLIS);
             player.depl(Direction.SUD);
-            try {
-                SoundEffect.playSound("walk");
-                ClientPart.write(OutputType.MOUVSOUTH);
-            } catch (UnsupportedAudioFileException |  LineUnavailableException | IOException ex) {
-                throw new RuntimeException(ex);
-            }
+            SoundEffect.playSound("walk");
+            ClientPart.write(OutputType.MOUVSOUTH);
             checkdoor();
         }
-        if(e.getKeyCode()==readtable("COFFRE") &&!interaction) {
-            for (Coffre c: coffres) {
-                if(c.distance(player)<2){
-                    try {
-                        ClientPart.write(OutputType.PICK);
-                        ClientPart.write(c.getId());
-                        boolean available;
-                        available=ClientPart.read();
-                        Loggy.writlog(String.valueOf(available),LogLevel.NOTICE);
-                        if (available) {
-                            Loggy.writlog("test des coffres", LogLevel.NOTICE);
-                            coffredealer.setOpenedcoffre(c);
-                            defaultInteractionInterface.setVisible(false);
-                            this.setInteraction(true);
-                            break;
-                        }
-                        else {
-                            eventHistory.addLine("Ce coffre est déja fouillé par quelqu'un");
-                        }
-                    } catch (IOException  | ClassNotFoundException ex) {
-                        throw new RuntimeException(ex);
+        if (e.getKeyCode() == readtable("COFFRE") && !interaction) {
+            for (Coffre c : coffres) {
+                if (c.distance(player) < 2) {
+                    ClientPart.write(OutputType.PICK);
+                    ClientPart.write(c.getId());
+                    boolean available;
+                    available = ClientPart.read();
+                    Loggy.writlog(String.valueOf(available), LogLevel.NOTICE);
+                    if (available) {
+                        Loggy.writlog("test des coffres", LogLevel.NOTICE);
+                        coffredealer.setOpenedcoffre(c);
+                        defaultInteractionInterface.setVisible(false);
+                        this.setInteraction(true);
+                        break;
+                    } else {
+                        eventHistory.addLine("Ce coffre est déja fouillé par quelqu'un");
                     }
                 }
             }
         }
-        if (e.getKeyCode()==readtable("INVENTAIRE")&&!interaction){
+        if (e.getKeyCode() == readtable("INVENTAIRE") && !interaction) {
             defaultInteractionInterface.setVisible(false);
-            try {
-                ClientPart.write(OutputType.INVENTAIRE);
-                inventdealer.setOpenedcoffre(player.getInventaire());
-                this.setInteraction(true);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
+            ClientPart.write(OutputType.INVENTAIRE);
+            inventdealer.setOpenedcoffre(player.getInventaire());
+            this.setInteraction(true);
         }
-        if(e.getKeyCode()==readtable("QUETE")&&!interaction){
-            try {
-                defaultInteractionInterface.setVisible(false);
-                quetedisplayer.updateQuete();
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
+        if (e.getKeyCode() == readtable("QUETE") && !interaction) {
+            defaultInteractionInterface.setVisible(false);
+            quetedisplayer.updateQuete();
         }
-        if(e.getKeyCode()==readtable("TALK")&&!interaction){
-            for (PNJ p: this.getPnjs()) {
-                if (p.distance(player) < 1&&p.getpV()>0) {
+        if (e.getKeyCode() == readtable("TALK") && !interaction) {
+            for (PNJ p : this.getPnjs()) {
+                if (p.distance(player) < 1 && p.getpV() > 0) {
                     p.setInteract(true);
                     for (Echange ech : this.getEchanges()) {
                         if (ech.getParleur().getId() == p.getId()) {
@@ -392,12 +315,8 @@ public class GameInterface extends JFrame  implements KeyListener {
                             this.getDialogdealer().setVisible(true);
                             this.getDialogdealer().buildObserver();
                             this.defaultInteractionInterface.setVisible(false);
-                            try {
-                                ClientPart.write(OutputType.TALK);
-                                ClientPart.write(p.getId());
-                            } catch (IOException ex) {
-                                throw new RuntimeException(ex);
-                            }
+                            ClientPart.write(OutputType.TALK);
+                            ClientPart.write(p.getId());
                             this.setInteraction(true);
                             break;
                         }
@@ -405,38 +324,56 @@ public class GameInterface extends JFrame  implements KeyListener {
                 }
             }
         }
-        if(e.getKeyCode()==readtable("FIGTH")&&!interaction){
-            for (PNJ p: this.getPnjs()) {
+        if (e.getKeyCode() == readtable("FIGTH") && !interaction) {
+            for (PNJ p : this.getPnjs()) {
                 if (p.distance(player) < 1 && p.getpV() > 0) {
                     interaction = true;
-                    try {
-                        ClientPart.write(OutputType.FIGTH);
-                        ClientPart.write(p.getId());
-                        boolean isinteract=ClientPart.read();
-                        if(!isinteract) {
-                            boolean stillfigthing = true;
-                            while (stillfigthing) {
-                                stillfigthing = ClientPart.read();
-                                if (stillfigthing) {
-                                    eventHistory.addLine(ClientPart.read());
-                                    eventHistory.addLine(ClientPart.read());
-                                    getFenetreInfo().update();
-                                }
+                    ClientPart.write(OutputType.FIGTH);
+                    ClientPart.write(p.getId());
+                    boolean isinteract = ClientPart.read();
+                    if (!isinteract) {
+                        boolean stillfigthing = true;
+                        while (stillfigthing) {
+                            stillfigthing = ClientPart.read();
+                            if (stillfigthing) {
+                                eventHistory.addLine(ClientPart.read());
+                                eventHistory.addLine(ClientPart.read());
+                                getFenetreInfo().update();
                             }
-                            player.setpV(ClientPart.read());
-                            if (player.getpV() <= 0)
-                                PersoThread.respawn(player);
                         }
-                    } catch (IOException | ClassNotFoundException ex) {
-                        throw new RuntimeException(ex);
+                        player.setpV(ClientPart.read());
+                        if (player.getpV() <= 0)
+                            PersoThread.respawn(player);
                     }
                     interaction = false;
                     thisInfo.update();
                 }
             }
         }
-
-
+    }
+    catch (UnsupportedAudioFileException ex) {
+        JOptionPane.showMessageDialog(null, "Erreur lors du chargement de la musique du jeu");
+    } catch (LineUnavailableException ex) {
+        JOptionPane.showMessageDialog(null, "Erreur lors de la lecture de la musique du jeu");
+    }
+    catch (FileNotFoundException fne){
+        JOptionPane.showMessageDialog(null, "Erreur lors de la lecture de la musique du jeu");
+    }
+    catch (IOException ex) {
+        LOGGER.severe(ex.getMessage());
+        JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+        System.exit(-4);
+    }
+    catch (ClassNotFoundException cne) {
+        LOGGER.severe(cne.getMessage());
+        JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+        System.exit(-2);
+    }
+    catch (Exception ex){
+        LOGGER.severe(ex.getMessage());
+        JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+        System.exit(-5);
+    }
         revalidate();
         repaint();
     }
@@ -469,7 +406,6 @@ public class GameInterface extends JFrame  implements KeyListener {
 
     private void checkdoor(){
         for (Porte p: sorties) {
-            System.out.println("distance porte= " +p.distance(player));
             if(p.distance(player)<1) {
                 try {
                     int res = JOptionPane.showConfirmDialog(this, "Il y a une porte ici voulez vous traverser?", "Porte", JOptionPane.YES_NO_OPTION);
@@ -504,15 +440,16 @@ public class GameInterface extends JFrame  implements KeyListener {
     public void updatstate(MapState mapState){
         this.setPnjs(mapState.getPnjs());
         this.setCoffres(mapState.getCoffres());
-
-
         this.mapPanel.setPnjs(this.pnjs);
-
         repaint();
         revalidate();
     }
     //getters
 
+
+    public SettingsDisplayer getSettingsDisplayer() {
+        return settingsDisplayer;
+    }
 
     public Soundtrackscontroller getMusic() {
         return music;
@@ -619,6 +556,9 @@ public class GameInterface extends JFrame  implements KeyListener {
     //setters
 
 
+    public void setSettingsDisplayer(SettingsDisplayer settingsDisplayer) {
+        this.settingsDisplayer = settingsDisplayer;
+    }
 
     public void setDialogdealer(DialogueInterface dialogdealer) {
         this.dialogdealer = dialogdealer;

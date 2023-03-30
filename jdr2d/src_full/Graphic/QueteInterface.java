@@ -207,15 +207,14 @@ public class QueteInterface extends InteractionInterface{
         this.setDataobjet(datar);
     }
 
-    public void updateQuete() throws SQLException {
+    public void updateQuete(){
         String[] retourquete=new String[player.getQueteSuivie().size()];
         ArrayList<Quete> listquete=player.getQueteSuivie();
         for (int i = 0; i < listquete.size(); i++) {
             Objectifs o= player.getQueteSuivie().get(i).getObjectifs().get(0);
             Quete q=listquete.get(i);
             if(o instanceof ObjectifT) {
-                retourquete[i]="Vous suivez la quete " + q.getNomQuete() + " dont l'objectif suivant est de parler a "
-                        + EchangeDAO.getparleur(o.getId());
+                retourquete[i]="Vous suivez la quete " + q.getNomQuete() + " dont l'objectif suivant est de parler a ";
             }
             if(o instanceof ObjectifF){
                 retourquete[i]="Vous suivez la quete " + q.getNomQuete() + " dont l'objectif suivant est de trouver l'objet "

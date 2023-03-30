@@ -1,13 +1,12 @@
 package ServerPart.DAO;
 
-import javax.swing.*;
 import java.io.*;
 import java.sql.*;
 import java.util.Properties;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.lang.reflect.Method;
-import static ServerPart.Jdr2dLogger.LOGGER;
+import static Logging.Jdr2dLogger.LOGGER;
 
     abstract public class DAOObject {
 

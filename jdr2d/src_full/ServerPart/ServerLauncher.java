@@ -10,16 +10,8 @@ import java.util.logging.LogManager;
 public class ServerLauncher {
 
 
-    public static void main(String[] args){
-
-        try {
-            LogManager.getLogManager().readConfiguration(
-                    Jdr2dLogger.class.getResourceAsStream("logging.properties"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
+    public static void main(String[] args) {
+        System.setProperty("java.util.logging.config.file", "logging.properties");
         new InputReceiver();
         new AutoUpdateChannel();
         new PNJIAChannel();

@@ -188,6 +188,7 @@ public class SettingsDisplayer extends JFrame {
                 ioe.printStackTrace();
             }
             fenetre.setInteraction(false);
+            fenetre.setSettingsDisplayer(null);
             dispose();
         });
         constraints.gridx=2;
@@ -195,7 +196,8 @@ public class SettingsDisplayer extends JFrame {
         constraints.gridwidth=2;
         add(valider,constraints);
 
-        previousversion=new Properties(fenetre.getProperties());
+        previousversion= (Properties) fenetre.getProperties().clone();
+        System.out.println(previousversion);
         goback=new JButton("Annuler");
         goback.addActionListener(e->{
             fenetre.getMusic().setVolume(previousvolume/100);
@@ -203,11 +205,13 @@ public class SettingsDisplayer extends JFrame {
             fenetre.setProperties(previousversion);
             try {
                 OutputStream outputStream=new FileOutputStream("control"+fenetre.getUtil().getNomUtilisateur()+".properties");
+                System.out.println(fenetre.getProperties());
                 fenetre.getProperties().store(outputStream,"");
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
             fenetre.setInteraction(false);
+            fenetre.setSettingsDisplayer(null);
             dispose();
         });
         constraints.gridx=0;
@@ -245,6 +249,7 @@ public class SettingsDisplayer extends JFrame {
             public void windowClosing(WindowEvent e) {
                 System.out.println("je fais bien cette action");
                 fenetre.setInteraction(false);
+                fenetre.setSettingsDisplayer(null);
             }
 
             @Override

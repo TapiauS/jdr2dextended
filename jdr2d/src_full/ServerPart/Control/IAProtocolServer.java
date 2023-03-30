@@ -61,14 +61,13 @@ public class IAProtocolServer  implements JDRDSocket {
             try {
                 write(ServerGameOutputType.PNJATK);
                 boolean isinteract = read();
-                System.out.println(isinteract);
                 if (!isinteract) {
                     write(adversaire.getId());
                     write(adversaire.getNomPersonnage());
                     Interaction inter = new Interaction(joueur, adversaire, me);
                     inter.combat();
                     if (joueur.getpV() < 0)
-                        PersoThread.respawn(joueur);
+                        PersoThread.respawn(joueur,zone.getClient(joueur));
                     if (joueur.getpV() > 0)
                         PersoThread.respawn(adversaire);
                     if (joueur.getpV() <= 0)
@@ -77,14 +76,12 @@ public class IAProtocolServer  implements JDRDSocket {
             }
             catch(IOException | ClassNotFoundException e){
                 Loggy.writlog("ERREUR DE DECONNEXION SERVER" +e.getMessage(), LogLevel.DEBUG);
-                throw new RuntimeException(e);
-            }
-            finally {
                 try {
                     socket.close();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
                 }
+                throw new RuntimeException(e);
             }
         });
         t.start();

@@ -92,7 +92,7 @@ public abstract class QueteDAO extends DAOObject {
     public static Quete getQuete(int id) throws SQLException {
         ArrayList<Object> args=new ArrayList<>(List.of(id));
         ResultSet rs=query("SELECT nom_interaction,accorde.id_objet,objectif.id_objectif,ordre FROM interaction" +
-                "                   LEFT JOIN JOIN accorde ON accorde.id_interaction=interaction.id_interaction" +
+                "                   LEFT JOIN accorde ON accorde.id_interaction=interaction.id_interaction" +
                 "                   JOIN objectif ON objectif.id_interaction=interaction.id_interaction" +
                 "                   WHERE interaction.id_interaction=? ORDER BY ordre;",args);
         ArrayList<Integer> idsobjets=new ArrayList<>();

@@ -41,7 +41,7 @@ public class GameZonePersoThread extends Thread{
         int closestdst = 4;
         for (Personnage player : gameZone.getJoueurs()) {
             ClientMainChannel client = gameZone.getClient(player);
-            if (player.distance(perso) < 1 && !perso.isNomme() && !client.isInteragit()) {
+            if (player.distance(perso) < 1 && !perso.isNomme()) {
                 gameZone.getChannel(player).figth(player,perso,gameZone);
                 return;
             }

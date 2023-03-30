@@ -39,17 +39,9 @@ public class QuitMenu extends JMenu {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int retour=showConfirmDialog("Voulez vous vraiment vous deconnecter ?","Deconnexion");
-                if(retour==0){
-                    fenetre.getLog().setVisible(true);
-                    try {
-                        PersonnageDAO.updatedatabase(fenetre.getPlayer());
-                    } catch (SQLException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                    fenetre.getIa().setSwitchmap(false);
-                    fenetre.dispose();
+                fenetre.getIa().setSwitchmap(false);
+                fenetre.dispose();
                 }
-            }
         });
 
         this.add(quitgame);

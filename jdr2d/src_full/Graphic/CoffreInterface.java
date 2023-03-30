@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import static Logging.Jdr2dLogger.LOGGER;
+
 public class CoffreInterface extends InteractionInterface {
 
 
@@ -56,8 +58,7 @@ public class CoffreInterface extends InteractionInterface {
         //on initialise le panneau de choix
         choix.setLayoutOrientation(JList.HORIZONTAL_WRAP);
         choix.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        choix.setVisibleRowCount(-1);/*
-        choix.setBounds(MapPanel.MAP_WIDTH, (int) (INTERACTION_HEIGH + 1.01*INTERACTION_HEIGH /10), INTERACTION_WIDTH, (int) (INTERACTION_HEIGH *0.8));*/
+        choix.setVisibleRowCount(-1);
         choix.setPreferredSize(new Dimension(INTERACTION_WIDTH,(int) (INTERACTION_HEIGH *0.8)));
         choix.setVisible(true);
         this.add(choix,BorderLayout.EAST);
@@ -65,39 +66,47 @@ public class CoffreInterface extends InteractionInterface {
         JPanel bottompanel=new JPanel();
         //on définit pick
         pick=new JButton("Pick");
-        pick.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    if(choix.getSelectedIndex()>-1) {
-                        ClientPart.write(OutputType.PICK);
-                        //Objet selectobjet=openedcoffre.getContenu().get(choix.getSelectedIndex());
-                        ClientPart.write(choix.getSelectedIndex());
-                        boolean iscoffre=ClientPart.read();
-                        if (!iscoffre) {
-                            boolean cantake=ClientPart.read();
-                            if(cantake) {
-                                fenetre.getPlayer().setInventaire(ClientPart.read());
-                                fenetre.getEventHistory().addLine(ClientPart.read());
-                                setOpenedcoffre(ClientPart.read());
-                                udpateref();
-                            }
-                            else{
-                                fenetre.getEventHistory().addLine("Vous ne pouvez pas porter autant");
-                            }
-                        } else {
-                            Coffre newcoffre = ClientPart.read();
-                            parentcoffres.add(openedcoffre);
-                            setOpenedcoffre(newcoffre);
-                            coffrelvl++;
-                            exit.setVisible(false);
-                            goBack.setVisible(true);
+        pick.addActionListener(e -> {
+            try {
+                if(choix.getSelectedIndex()>-1) {
+                    ClientPart.write(OutputType.PICK);
+                    //Objet selectobjet=openedcoffre.getContenu().get(choix.getSelectedIndex());
+                    ClientPart.write(choix.getSelectedIndex());
+                    boolean iscoffre=ClientPart.read();
+                    if (!iscoffre) {
+                        boolean cantake=ClientPart.read();
+                        if(cantake) {
+                            fenetre.getPlayer().setInventaire(ClientPart.read());
+                            fenetre.getEventHistory().addLine(ClientPart.read());
+                            setOpenedcoffre(ClientPart.read());
+                            udpateref();
                         }
+                        else{
+                            fenetre.getEventHistory().addLine("Vous ne pouvez pas porter autant");
+                        }
+                    } else {
+                        Coffre newcoffre = ClientPart.read();
+                        parentcoffres.add(openedcoffre);
+                        setOpenedcoffre(newcoffre);
+                        coffrelvl++;
+                        exit.setVisible(false);
+                        goBack.setVisible(true);
                     }
-                    refreshfocus();
-                } catch (IOException | ClassNotFoundException ex) {
-                    throw new RuntimeException(ex);
                 }
+                refreshfocus();
+            } catch (IOException ioe) {
+                LOGGER.severe(ioe.getMessage());
+                JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+                System.exit(-3);
+            } catch (ClassNotFoundException cne) {
+                LOGGER.severe(cne.getMessage());
+                JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+                System.exit(-2);
+            }
+            catch (Exception ex){
+                LOGGER.severe(ex.getMessage());
+                JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+                System.exit(-5);
             }
         });/*
         pick.setBounds(MapPanel.MAP_WIDTH+ INTERACTION_WIDTH /5, (int) (INTERACTION_HEIGH +9.01*INTERACTION_HEIGH /10),
@@ -111,14 +120,22 @@ public class CoffreInterface extends InteractionInterface {
             public void actionPerformed(ActionEvent e) {
                 try {
                     ClientPart.write(OutputType.QUIT);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
+                    returndefault();
+                    fenetre.setInteraction(false);
+                    openedcoffre = null;
+                    data = null;
+                    refreshfocus();
                 }
-                returndefault();
-                fenetre.setInteraction(false);
-                openedcoffre=null;
-                data=null;
-                refreshfocus();
+                catch (IOException ioe) {
+                    LOGGER.severe(ioe.getMessage());
+                    JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+                    System.exit(-3);
+                }
+                catch (Exception ex){
+                    LOGGER.severe(ex.getMessage());
+                    JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+                    System.exit(-5);
+                }
             }
         });
         bottompanel.add(exit);
@@ -132,15 +149,23 @@ public class CoffreInterface extends InteractionInterface {
             public void actionPerformed(ActionEvent e) {
                 try {
                     ClientPart.write(OutputType.GOBACK);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
+                    setOpenedcoffre(parentcoffres.get(parentcoffres.size() - 1));
+                    parentcoffres.remove(parentcoffres.size() - 1);
+                    coffrelvl--;
+                    if (coffrelvl == 0) {
+                        goBack.setVisible(false);
+                        exit.setVisible(true);
+                    }
                 }
-                setOpenedcoffre(parentcoffres.get(parentcoffres.size()-1));
-                parentcoffres.remove(parentcoffres.size()-1);
-                coffrelvl--;
-                if(coffrelvl==0){
-                    goBack.setVisible(false);
-                    exit.setVisible(true);
+                catch (IOException ioe) {
+                    LOGGER.severe(ioe.getMessage());
+                    JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+                    System.exit(-3);
+                }
+                catch (Exception ex){
+                    LOGGER.severe(ex.getMessage());
+                    JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+                    System.exit(-5);
                 }
                 refreshfocus();
             }

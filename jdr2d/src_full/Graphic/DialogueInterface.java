@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import static Logging.Jdr2dLogger.LOGGER;
+
 public class DialogueInterface extends InteractionInterface {
     private Echange presentechange;
 
@@ -84,29 +86,37 @@ public class DialogueInterface extends InteractionInterface {
 
 
     public void setPresentechange(Echange presentechange) {
-        if(presentechange.getDialogueSuivant()!=null) {
-            this.presentechange = presentechange;
-            udpateref();
-            choix.setListData(data);
-            question.setText(presentechange.getParleur().getNomPersonnage()+":"+presentechange.getReponse());
-        }
-        else{
-         this.presentechange=presentechange;
-         fenetre.getEventHistory().addLine(presentechange.getParleur().getNomPersonnage()+":"+presentechange.getReponse());
-            try {
-                Quete q=quetesdonnees.get(0);
+        try {
+            if (presentechange.getDialogueSuivant() != null) {
+                this.presentechange = presentechange;
+                udpateref();
+                choix.setListData(data);
+                question.setText(presentechange.getParleur().getNomPersonnage() + ":" + presentechange.getReponse());
+            } else {
+                this.presentechange = presentechange;
+                fenetre.getEventHistory().addLine(presentechange.getParleur().getNomPersonnage() + ":" + presentechange.getReponse());
+
+                Quete q = quetesdonnees.get(0);
                 ClientPart.write(q.getId());
                 ClientPart.write(objectifrealisesisid);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                this.setVisible(false);
+                fenetre.setInteraction(false);
+                fenetre.getDefaultInteractionInterface().setVisible(true);
+                presentechange.getParleur().setInteract(false);
+                quetesdonnees.removeAll(quetesdonnees);
+                objectifrealisesisid.removeAll(objectifrealisesisid);
+                refreshfocus();
             }
-            this.setVisible(false);
-         fenetre.setInteraction(false);
-         fenetre.getDefaultInteractionInterface().setVisible(true);
-         presentechange.getParleur().setInteract(false);
-         quetesdonnees.removeAll(quetesdonnees);
-         objectifrealisesisid.removeAll(objectifrealisesisid);
-         refreshfocus();
+        }
+        catch (IOException ioe) {
+            LOGGER.severe(ioe.getMessage());
+            JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+            System.exit(-3);
+        }
+        catch (Exception ex){
+            LOGGER.severe(ex.getMessage());
+            JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+            System.exit(-5);
         }
     }
 

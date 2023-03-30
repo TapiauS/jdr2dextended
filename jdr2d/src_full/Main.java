@@ -14,7 +14,6 @@ import Log.Loggy;
 public class Main {
     public static void main(String[] args) {
         try {
-            Loggy.setDangertreshold(LogLevel.INFORMATION);
             ClientPart.launch();
         } catch (IOException | ClassNotFoundException | InterruptedException e) {
             throw new RuntimeException(e);

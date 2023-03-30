@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Objects;
-import static ServerPart.Jdr2dLogger.LOGGER;
+import static Logging.Jdr2dLogger.LOGGER;
 
 @SuppressWarnings("unchecked")
 
@@ -389,7 +389,7 @@ public class ClientMainChannel extends Thread implements Serializable, JDRDSocke
             }
         }
         catch (Exception e){
-            LOGGER.severe("ERREUR TR2S IMPREVISIBLE "+e.getMessage());
+            LOGGER.severe("ERREUR TRES IMPREVISIBLE "+e.getMessage());
         }
         finally {
             try {

@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import static Logging.Jdr2dLogger.LOGGER;
 
 public class ChatGraphicInterface extends JFrame{
 
@@ -57,7 +58,8 @@ public class ChatGraphicInterface extends JFrame{
                         revalidate();
                         pack();
                     } catch (IOException ex) {
-                        throw new RuntimeException(ex);
+                        LOGGER.severe(ex.getMessage());
+                        System.exit(-1);
                     }
                 }
             }
@@ -92,7 +94,8 @@ public class ChatGraphicInterface extends JFrame{
                     revalidate();
                     pack();
                 } catch (IOException ex) {
-                    throw new RuntimeException(ex);
+                    LOGGER.severe(ex.getMessage());
+                    System.exit(-1);
                 }
             }
         });

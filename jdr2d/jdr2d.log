@@ -1,0 +1,10 @@
+mars 30, 2023 9:15:31 AM ServerPart.Socketsmanager.ClientMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE class jdr2dcore.Quete cannot be cast to class Control.ConnexionOutput (jdr2dcore.Quete and Control.ConnexionOutput are in unnamed module of loader 'app')
+mars 30, 2023 9:17:06 AM ServerPart.Socketsmanager.ClientMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE class jdr2dcore.Quete cannot be cast to class Control.ConnexionOutput (jdr2dcore.Quete and Control.ConnexionOutput are in unnamed module of loader 'app')
+
+
+
+
+
+

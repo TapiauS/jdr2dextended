@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import static Logging.Jdr2dLogger.LOGGER;
+
 public class InventaireInterface extends InteractionInterface{
 
 
@@ -89,8 +91,19 @@ public class InventaireInterface extends InteractionInterface{
                         goback.setVisible(true);
                     }
                 }
-                catch (IOException | ClassNotFoundException io){
-                    throw new RuntimeException(io);
+                catch (IOException ioe) {
+                    LOGGER.severe(ioe.getMessage());
+                    JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+                    System.exit(-3);
+                } catch (ClassNotFoundException cne) {
+                    LOGGER.severe(cne.getMessage());
+                    JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+                    System.exit(-2);
+                }
+                catch (Exception ex){
+                    LOGGER.severe(ex.getMessage());
+                    JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+                    System.exit(-5);
                 }
                 refreshfocus();
             }
@@ -113,8 +126,19 @@ public class InventaireInterface extends InteractionInterface{
                             refreshfocus();
                         }
                     }
-                    catch (IOException | ClassNotFoundException io){
-                        throw new RuntimeException(io);
+                    catch (IOException ioe) {
+                        LOGGER.severe(ioe.getMessage());
+                        JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+                        System.exit(-3);
+                    } catch (ClassNotFoundException cne) {
+                        LOGGER.severe(cne.getMessage());
+                        JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+                        System.exit(-2);
+                    }
+                    catch (Exception ex){
+                        LOGGER.severe(ex.getMessage());
+                        JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+                        System.exit(-5);
                     }
                 });
         drop.setVisible(true);
@@ -127,14 +151,22 @@ public class InventaireInterface extends InteractionInterface{
                     public void actionPerformed(ActionEvent e){
                         try {
                             ClientPart.write(OutputType.QUIT);
-                        } catch (IOException ex) {
-                            throw new RuntimeException(ex);
+                            returndefault();
+                            fenetre.setInteraction(false);
+                            openedcoffre = null;
+                            data = null;
+                            refreshfocus();
                         }
-                        returndefault();
-                        fenetre.setInteraction(false);
-                        openedcoffre=null;
-                        data=null;
-                        refreshfocus();
+                        catch (IOException ioe) {
+                            LOGGER.severe(ioe.getMessage());
+                            JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+                            System.exit(-3);
+                        }
+                        catch (Exception ex){
+                            LOGGER.severe(ex.getMessage());
+                            JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+                            System.exit(-5);
+                        }
                     }
                 });
         exit.setVisible(true);
@@ -146,22 +178,29 @@ public class InventaireInterface extends InteractionInterface{
                         public void actionPerformed(ActionEvent e) {
                         try {
                             ClientPart.write(OutputType.GOBACK);
-                        } catch (IOException ex) {
-                            throw new RuntimeException(ex);
-                        }
-                        try {
                             setOpenedcoffre(ClientPart.read());
-                        } catch (IOException | ClassNotFoundException ex) {
-                            throw new RuntimeException(ex);
+                            coffrelvl--;
+                            if (coffrelvl == 0) {
+                                goback.setVisible(false);
+                                exit.setVisible(true);
+                            }
+                            refreshfocus();
+                        } catch (IOException ioe) {
+                            LOGGER.severe(ioe.getMessage());
+                            JOptionPane.showMessageDialog(null, "Une erreur inconnue a eu lieu", "", JOptionPane.ERROR_MESSAGE);
+                            System.exit(-3);
+                        } catch (ClassNotFoundException cne) {
+                            LOGGER.severe(cne.getMessage());
+                            JOptionPane.showMessageDialog(null, "Une erreur inconnue a eu lieu", "", JOptionPane.ERROR_MESSAGE);
+                            System.exit(-2);
+                        } catch (Exception ex) {
+                            LOGGER.severe(ex.getMessage());
+                            JOptionPane.showMessageDialog(null, "Une erreur inconnue a eu lieu", "", JOptionPane.ERROR_MESSAGE);
+                            System.exit(-5);
                         }
-                        coffrelvl--;
-                        if(coffrelvl==0){
-                            goback.setVisible(false);
-                            exit.setVisible(true);
-                        }
-                        refreshfocus();
-                        }
+                    }
         });
+
         goback.setVisible(false);
         bottompane.add(goback);
         bottompane.setVisible(true);

@@ -3,10 +3,14 @@ package Graphic;
 
 import jdr2dcore.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MapPanel extends JPanel {
@@ -19,6 +23,55 @@ public class MapPanel extends JPanel {
 
     private ArrayList<PNJ> pnjs;
 
+    private static final BufferedImage doorassets;
+
+    static {
+        try {
+            doorassets = ImageIO.read(new File("Assets/door.png"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static final BufferedImage knigthassets;
+
+    static {
+        try {
+            knigthassets = ImageIO.read(new File("Assets/knigth.png"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static final BufferedImage chetasset;
+
+    static {
+        try {
+            chetasset = ImageIO.read(new File("Assets/chest.png"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static final BufferedImage wolfassets;
+
+    static {
+        try {
+            wolfassets = ImageIO.read(new File("Assets/loups.png"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static final BufferedImage playeravatar;
+
+    static {
+        try {
+            playeravatar = ImageIO.read(new File("Assets/malejoueur.png"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     static public final int MAP_WIDTH = (GameInterface.WINDOW_WIDTH*2/3);
     static public final int MAP_HEIGH =(GameInterface.WINDOWS_HEIGH*2/3);
@@ -92,18 +145,15 @@ public class MapPanel extends JPanel {
                     g.fillRect(i * unit_size, j * unit_size, unit_size, unit_size);
                 }
                 if (i == player.getX() && j == player.getY()&&player.getpV()>0) {
-                    g.setColor(Color.green);
-                    g.fillOval(i * unit_size, j * unit_size, unit_size, unit_size);
+                    g.drawImage(playeravatar,i * unit_size,j * unit_size,unit_size,unit_size,null);
                 }
                 for (PNJ p : pnjs) {
                     if (i == p.getX() && j == p.getY()&&p.getpV()>0) {
                         if(p.isNomme()) {
-                            g.setColor(Color.PINK);
-                            g.fillOval(i * unit_size, j * unit_size, unit_size, unit_size);
+                            g.drawImage(knigthassets,i * unit_size,j * unit_size,unit_size,unit_size,null);
                         }
                         else {
-                            g.setColor(Color.RED);
-                            g.fillRect(i * unit_size, j * unit_size, unit_size, unit_size);
+                            g.drawImage(wolfassets,i * unit_size,j * unit_size,unit_size,unit_size,null);
                         }
                     }
                 }
@@ -114,8 +164,7 @@ public class MapPanel extends JPanel {
             for (int i = 0; i < player.getLieux().getCarte()[0].length; i++) {
                 for (int j = 0; j < player.getLieux().getCarte().length; j++) {
                     if (c.getY() == j && c.getX() == i) {
-                        g.setColor(Color.CYAN);
-                        g.fillOval(i * unit_size, j * unit_size, unit_size, unit_size);
+                        g.drawImage(chetasset,i * unit_size,j*unit_size,unit_size,unit_size,null);
                     }
                 }
             }
@@ -137,8 +186,7 @@ public class MapPanel extends JPanel {
             for (int i = 0; i < player.getLieux().getCarte()[0].length; i++) {
                 for (int j = 0; j < player.getLieux().getCarte().length; j++) {
                     if(p.getX()==i&&p.getY()==j){
-                        g.setColor(Color.orange);
-                        g.fillRect(i*unit_size,j*unit_size,unit_size,unit_size);
+                        g.drawImage(doorassets,i*unit_size,j*unit_size,unit_size,unit_size,null);
                     }
                 }
             }

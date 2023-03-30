@@ -13,7 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.sql.SQLException;
-
+import static Logging.Jdr2dLogger.LOGGER;
 public class DefaultInteractionInterface extends InteractionInterface{
 
 
@@ -37,17 +37,11 @@ public class DefaultInteractionInterface extends InteractionInterface{
         this.setLayout(new GridLayout(2,2));
         afficheQuete=new JButton("Journal de quete");
         afficheQuete.setVisible(true);
-        afficheQuete.setPreferredSize(new Dimension(BUTTON_WIDTH,BUTTON_HEIGH));
         afficheQuete.addActionListener(
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        try {
-                            fenetre.getQuetedisplayer().updateQuete();
-                        } catch (SQLException ex) {
-                            //TODO comme d'hab
-                            throw new RuntimeException(ex);
-                        }
+                        fenetre.getQuetedisplayer().updateQuete();
                         setVisible(false);
                         refreshfocus();
                     }
@@ -57,8 +51,6 @@ public class DefaultInteractionInterface extends InteractionInterface{
         //openCoffre
         openCoffre=new JButton("Ouvrir un coffre");
         openCoffre.setVisible(true);
-        openCoffre.setPreferredSize(new Dimension(BUTTON_WIDTH,BUTTON_HEIGH));
-        //openCoffre.setLocation(INTERACTION_WIDTH+BUTTON_WIDTH,INTERACTION_HEIGH+BUTTON_HEIGH*3);
         openCoffre.addActionListener(
                 new ActionListener() {
                     @Override
@@ -79,8 +71,19 @@ public class DefaultInteractionInterface extends InteractionInterface{
                                     else {
                                         fenetre.getEventHistory().addLine("Ce coffre est déja fouillé par quelqu'un");
                                     }
-                                } catch (IOException | ClassNotFoundException ex) {
-                                    throw new RuntimeException(ex);
+                                } catch (IOException ioe) {
+                                    LOGGER.severe(ioe.getMessage());
+                                    JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+                                    System.exit(-3);
+                                } catch (ClassNotFoundException cne) {
+                                    LOGGER.severe(cne.getMessage());
+                                    JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+                                    System.exit(-2);
+                                }
+                                catch (Exception ex){
+                                    LOGGER.severe(ex.getMessage());
+                                    JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+                                    System.exit(-5);
                                 }
                             }
                         }
@@ -91,36 +94,30 @@ public class DefaultInteractionInterface extends InteractionInterface{
         //talk
         talk=new JButton("Parler");
         talk.setVisible(true);
-        talk.setPreferredSize(new Dimension(BUTTON_WIDTH,BUTTON_HEIGH));
         talk.addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        for (PNJ p: fenetre.getPnjs()) {
-                            if(p.distance(player)<1&&p.getpV()>0){
-                                System.out.println("distance=" + p.distance(player));
-                                for (Echange ech: fenetre.getEchanges()) {
-                                    if(ech.getParleur()==p) {
-                                        fenetre.getDialogdealer().setPresentechange(ech);
-                                        fenetre.getDialogdealer().setVisible(true);
-                                        fenetre.getDialogdealer().buildObserver();
-                                        setVisible(false);
-                                        fenetre.setInteraction(true);
-                                        break;
-                                    }
+                e -> {
+                    for (PNJ p: fenetre.getPnjs()) {
+                        if(p.distance(player)<1&&p.getpV()>0){
+                            System.out.println("distance=" + p.distance(player));
+                            for (Echange ech: fenetre.getEchanges()) {
+                                if(ech.getParleur()==p) {
+                                    fenetre.getDialogdealer().setPresentechange(ech);
+                                    fenetre.getDialogdealer().setVisible(true);
+                                    fenetre.getDialogdealer().buildObserver();
+                                    setVisible(false);
+                                    fenetre.setInteraction(true);
+                                    break;
                                 }
                             }
                         }
-                        refreshfocus();
                     }
-
+                    refreshfocus();
                 }
         );
         this.add(talk);
         //inventaire
         afficheInventaire=new JButton("Inventaire");
         afficheInventaire.setVisible(true);
-        afficheInventaire.setPreferredSize(new Dimension(BUTTON_WIDTH,BUTTON_HEIGH));
         afficheInventaire.addActionListener(
                 new ActionListener() {
                     @Override
@@ -132,8 +129,15 @@ public class DefaultInteractionInterface extends InteractionInterface{
                             fenetre.getInventdealer().setOpenedcoffre(player.getInventaire());
                             fenetre.setInteraction(true);
                             fenetre.pack();
-                        } catch (IOException ex) {
-                            throw new RuntimeException(ex);
+                        } catch (IOException ioe) {
+                            LOGGER.severe(ioe.getMessage());
+                            JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+                            System.exit(-3);
+                        }
+                        catch (Exception ex){
+                            LOGGER.severe(ex.getMessage());
+                            JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
+                            System.exit(-5);
                         }
                     }
                 }
