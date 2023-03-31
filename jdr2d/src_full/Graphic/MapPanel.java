@@ -128,7 +128,7 @@ public class MapPanel extends JPanel {
         this.sorties=fenetre.getSorties();
         this.setPlayer(player);
         this.setPreferredSize(new Dimension(MAP_WIDTH,MAP_HEIGH));
-        this.setBackground(Color.white);
+        this.setBackground(new Color(0,0,0,0));
         this.setVisible(true);
     }
     public void paintComponent(Graphics g){
@@ -140,12 +140,15 @@ public class MapPanel extends JPanel {
             //System.out.println(graph.affichmap(player.getLieux().getCarte()));
         for (int i = 0; i < player.getLieux().getCarte()[0].length; i++) {
             for (int j = 0; j < player.getLieux().getCarte().length; j++) {
+                boolean isempty=true;
                 if (player.getLieux().getCarte()[j][i] == '#') {
                     g.setColor(Color.black);
                     g.fillRect(i * unit_size, j * unit_size, unit_size, unit_size);
+                    isempty=false;
                 }
                 if (i == player.getX() && j == player.getY()&&player.getpV()>0) {
                     g.drawImage(playeravatar,i * unit_size,j * unit_size,unit_size,unit_size,null);
+                    isempty=false;
                 }
                 for (PNJ p : pnjs) {
                     if (i == p.getX() && j == p.getY()&&p.getpV()>0) {
@@ -155,7 +158,12 @@ public class MapPanel extends JPanel {
                         else {
                             g.drawImage(wolfassets,i * unit_size,j * unit_size,unit_size,unit_size,null);
                         }
+                        isempty=false;
                     }
+                }
+                if(isempty){
+                    g.setColor(Color.white);
+                    g.fillRect(i*unit_size,j*unit_size,unit_size,unit_size);
                 }
             }
         }
@@ -169,7 +177,7 @@ public class MapPanel extends JPanel {
                 }
             }
         }
-        for (int i = player.getLieux().getCarte()[0].length; i*unit_size <MAP_WIDTH ; i++) {
+/*        for (int i = player.getLieux().getCarte()[0].length; i*unit_size <MAP_WIDTH ; i++) {
             for (int j = 0; j*unit_size <MAP_WIDTH ; j++) {
                 g.setColor(Color.black);
                 g.fillRect(i*unit_size,j*unit_size,unit_size,unit_size);
@@ -181,7 +189,7 @@ public class MapPanel extends JPanel {
                 g.setColor(Color.black);
                 g.fillRect(i*unit_size,j*unit_size,unit_size,unit_size);
             }
-        }
+        }*/
         for (Porte p: sorties) {
             for (int i = 0; i < player.getLieux().getCarte()[0].length; i++) {
                 for (int j = 0; j < player.getLieux().getCarte().length; j++) {

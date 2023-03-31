@@ -163,7 +163,14 @@ public class GameInterface extends JFrame  implements KeyListener {
             JScrollPane contevent = new JScrollPane(eventHistory);
             contevent.setPreferredSize(new Dimension(2 * WINDOW_WIDTH / 3, WINDOWS_HEIGH / 3));
             //contevent.setVisible(true);
-            this.container = new JPanel(new BorderLayout());
+            this.container = new JPanel(new BorderLayout()){
+                @Override
+                protected void paintComponent(Graphics g){
+                    super.paintComponent(g);
+                    Image image=new ImageIcon("Assets/backround.png").getImage();
+                    g.drawImage(image,0,0,this);
+                }
+            };
 
             container.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOWS_HEIGH));
 
@@ -188,11 +195,10 @@ public class GameInterface extends JFrame  implements KeyListener {
 
             panelLeft.add(portrait, BorderLayout.SOUTH);
 
-
             container.add(panelLeft, BorderLayout.EAST);
+            panelLeft.setBackground(new Color(0,0,0,0));
 
 
-            container.setBackground(Color.black);
             container.setVisible(true);
             this.setContentPane(container);
             this.setResizable(false);
