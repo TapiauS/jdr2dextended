@@ -44,6 +44,8 @@ public class PlayerInfo extends JPanel {
         infodisplayer.setVisible(true);
         infodisplayer.setFont(new Font("Segoe Script", Font.BOLD, 15));
         infodisplayer.setForeground(Color.red);
+        infodisplayer.setBackground(new Color(0,0,0,0));
+        infodisplayer.setOpaque(false);
         //on gere equipement
         equipement=new JTextArea();
         equipement.setBackground(Color.white);
@@ -53,10 +55,14 @@ public class PlayerInfo extends JPanel {
         equipement.setVisible(true);
         equipement.setFont(new Font("Segoe Script", Font.BOLD, 15));
         equipement.setForeground(Color.red);
+        equipement.setBackground(new Color(0,0,0,0));
+        equipement.setOpaque(false);
         this.update();
         //this.setPreferredSize(new Dimension(PLAYERINFO_WIDTH,PLAYERINFO_HEIGH));
         this.add(equipement);
         this.add(infodisplayer);
+        this.setBackground(new Color(0,0,0,0));
+        this.setOpaque(false);
         this.setVisible(true);
     }
 

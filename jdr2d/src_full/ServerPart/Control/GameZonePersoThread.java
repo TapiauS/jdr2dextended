@@ -1,6 +1,6 @@
 package ServerPart.Control;
 
-import ServerPart.Socketsmanager.ClientMainChannel;
+import ServerPart.Socketsmanager.ServerMainChannel;
 import ServerPart.DAO.PersonnageDAO;
 import jdr2dcore.Direction;
 import jdr2dcore.PNJ;
@@ -40,7 +40,7 @@ public class GameZonePersoThread extends Thread{
         ArrayList<Personnage> closestsclients = new ArrayList<>();
         int closestdst = 4;
         for (Personnage player : gameZone.getJoueurs()) {
-            ClientMainChannel client = gameZone.getClient(player);
+            ServerMainChannel client = gameZone.getClient(player);
             if (player.distance(perso) < 1 && !perso.isNomme()) {
                 gameZone.getChannel(player).figth(player,perso,gameZone);
                 return;

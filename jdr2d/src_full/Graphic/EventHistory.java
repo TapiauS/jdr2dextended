@@ -25,7 +25,9 @@ public class EventHistory extends JTextArea {
         nb_displayed_line=0;
         this.setText(events);
         this.setRequestFocusEnabled(false);
-        //this.setPreferredSize(new Dimension(EVENT_WIDTH,EVENT_HEIGH));
+        this.setBackground(new Color(0,0,0,0));
+        this.setOpaque(false);
+        this.setForeground(Color.BLACK);
         this.setVisible(true);
     }
 
@@ -34,7 +36,6 @@ public class EventHistory extends JTextArea {
 
     public String getEvents() {
         return events;
-
     }
 
     //setters

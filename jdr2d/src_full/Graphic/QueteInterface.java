@@ -40,6 +40,9 @@ public class QueteInterface extends InteractionInterface{
         this.setLayout(new BorderLayout());
         setjlist(listequete);
         listequete.setVisible(true);
+        listequete.setBackground(new Color(0,0,0,0));
+        listequete.setOpaque(false);
+        listequete.setForeground(Color.white);
         add(listequete,BorderLayout.CENTER);
         //listrecompense
         recompenses=new JList<>();
@@ -74,38 +77,34 @@ public class QueteInterface extends InteractionInterface{
                     }
                 });
         montrerecompense.setVisible(true);
+        montrerecompense.setBackground(new Color(0,0,0,0));
+        montrerecompense.setOpaque(false);
+        montrerecompense.setForeground(Color.white);
         buttonpanel.add(montrerecompense);
         //goback
         goback=new JButton("Revenir en arriére");
         goback.addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        recompenses.setVisible(false);
-                        descriptionfenetre.setText("Quêtes en cours");
-                        montrerecompense.setVisible(true);
-                        quit.setVisible(true);
-                        goback.setVisible(false);
-                        refreshfocus();
-                    }
+                e -> {
+                    recompenses.setVisible(false);
+                    descriptionfenetre.setText("Quêtes en cours");
+                    montrerecompense.setVisible(true);
+                    quit.setVisible(true);
+                    goback.setVisible(false);
+                    refreshfocus();
                 });
         goback.setVisible(false);
         buttonpanel.add(goback);
         //quit
-        quit=new JButton("Quitter");/*
-        quit.setBounds(MapPanel.MAP_WIDTH+INTERACTION_WIDTH*3/5,INTERACTION_HEIGH+INTERACTION_HEIGH*9/10
-                ,INTERACTION_WIDTH/5,INTERACTION_HEIGH/10);*/
+        quit=new JButton("Quitter");
         quit.addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        returndefault();
-                        refreshfocus();
-                    }
+                e -> {
+                    returndefault();
+                    refreshfocus();
                 });
         quit.setVisible(true);
         buttonpanel.add(quit);
-
+        buttonpanel.setBackground(new Color(0,0,0,0));
+        buttonpanel.setOpaque(false);
     }
 
     //getters

@@ -5,7 +5,7 @@ import ServerPart.DAO.MapDAO;
 import ServerPart.DAO.PersonnageDAO;
 import ServerPart.DAO.PorteDAO;
 import ServerPart.Socketsmanager.MapState;
-import ServerPart.Socketsmanager.ClientMainChannel;
+import ServerPart.Socketsmanager.ServerMainChannel;
 import jdr2dcore.*;
 
 import java.io.IOException;
@@ -17,7 +17,7 @@ public class GameZone {
 
     private Map carte;
 
-    private ArrayList<ClientMainChannel> clients;
+    private ArrayList<ServerMainChannel> clients;
 
     private ArrayList<PNJ> pnjs;
 
@@ -51,7 +51,7 @@ public class GameZone {
 
 
     public void updateClients(){
-        for (ClientMainChannel c:clients) {
+        for (ServerMainChannel c:clients) {
             try {
                 c.getOutput().writeObject(statut);
             } catch (IOException e) {
@@ -62,8 +62,8 @@ public class GameZone {
 
     //methodes
 
-    public ClientMainChannel getClient(Personnage player){
-        for (ClientMainChannel c: clients) {
+    public ServerMainChannel getClient(Personnage player){
+        for (ServerMainChannel c: clients) {
             for (Personnage perso: joueurs) {
                 if(c.getAvatar().equals(perso))
                     return c;
@@ -96,12 +96,12 @@ public class GameZone {
         }
     }
 
-    public void addClient(ClientMainChannel client){
+    public void addClient(ServerMainChannel client){
         this.clients.add(client);
         this.joueurs.add(client.getAvatar());
     }
 
-    public void removeClient(ClientMainChannel client){
+    public void removeClient(ServerMainChannel client){
         this.clients.remove(client);
         this.joueurs.remove(client.getAvatar());
     }

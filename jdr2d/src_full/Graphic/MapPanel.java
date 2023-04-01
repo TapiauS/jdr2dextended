@@ -23,6 +23,8 @@ public class MapPanel extends JPanel {
 
     private ArrayList<PNJ> pnjs;
 
+    private static final int CAMERA_WIDTH=30;
+
     private static final BufferedImage doorassets;
 
     static {
@@ -114,7 +116,7 @@ public class MapPanel extends JPanel {
 
     public void setPlayer(Personnage player) {
         this.player = player;
-        this.unit_size = Math.min(MAP_WIDTH /(player.getLieux().getCarte().length), MAP_HEIGH /player.getLieux().getCarte()[0].length);
+        this.unit_size = MAP_WIDTH /CAMERA_WIDTH;
     }
 
 
@@ -129,72 +131,57 @@ public class MapPanel extends JPanel {
         this.setPlayer(player);
         this.setPreferredSize(new Dimension(MAP_WIDTH,MAP_HEIGH));
         this.setBackground(new Color(0,0,0,0));
-        this.setVisible(true);
+        this.setOpaque(false);
+        this.setVisible(false);
     }
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         draw(g);
     }
     public void draw(Graphics g){
-            //MapGraph graph=new MapGraph();
-            //System.out.println(graph.affichmap(player.getLieux().getCarte()));
-        for (int i = 0; i < player.getLieux().getCarte()[0].length; i++) {
-            for (int j = 0; j < player.getLieux().getCarte().length; j++) {
-                boolean isempty=true;
-                if (player.getLieux().getCarte()[j][i] == '#') {
+        for (int i = 0; i < CAMERA_WIDTH; i++) {
+            for (int j = 0; j < CAMERA_WIDTH; j++) {
+                boolean isempty = true;
+                int relativi = player.getX() + (i - 15);
+                int relativj = player.getY() + (j - 15);
+                if (relativi < 0 || relativi >= player.getLieux().getDimensions()[0] || relativj < 0 || relativj >= player.getLieux().getDimensions()[1]) {
                     g.setColor(Color.black);
                     g.fillRect(i * unit_size, j * unit_size, unit_size, unit_size);
-                    isempty=false;
-                }
-                if (i == player.getX() && j == player.getY()&&player.getpV()>0) {
-                    g.drawImage(playeravatar,i * unit_size,j * unit_size,unit_size,unit_size,null);
-                    isempty=false;
-                }
-                for (PNJ p : pnjs) {
-                    if (i == p.getX() && j == p.getY()&&p.getpV()>0) {
-                        if(p.isNomme()) {
-                            g.drawImage(knigthassets,i * unit_size,j * unit_size,unit_size,unit_size,null);
-                        }
-                        else {
-                            g.drawImage(wolfassets,i * unit_size,j * unit_size,unit_size,unit_size,null);
-                        }
-                        isempty=false;
+                } else {
+                    if (player.getLieux().getCarte()[relativj][relativi] == '#') {
+                        g.setColor(Color.black);
+                        g.fillRect(i * unit_size, j * unit_size, unit_size, unit_size);
+                        isempty = false;
                     }
-                }
-                if(isempty){
-                    g.setColor(Color.white);
-                    g.fillRect(i*unit_size,j*unit_size,unit_size,unit_size);
-                }
-            }
-        }
-
-        for (Coffre c:fenetre.getCoffres()) {
-            for (int i = 0; i < player.getLieux().getCarte()[0].length; i++) {
-                for (int j = 0; j < player.getLieux().getCarte().length; j++) {
-                    if (c.getY() == j && c.getX() == i) {
-                        g.drawImage(chetasset,i * unit_size,j*unit_size,unit_size,unit_size,null);
+                    if (relativi == player.getX() && relativj == player.getY() && player.getpV() > 0) {
+                        g.drawImage(playeravatar, i * unit_size, j * unit_size, unit_size, unit_size, null);
+                        isempty = false;
                     }
-                }
-            }
-        }
-/*        for (int i = player.getLieux().getCarte()[0].length; i*unit_size <MAP_WIDTH ; i++) {
-            for (int j = 0; j*unit_size <MAP_WIDTH ; j++) {
-                g.setColor(Color.black);
-                g.fillRect(i*unit_size,j*unit_size,unit_size,unit_size);
-            }
-
-        }
-        for (int j = player.getLieux().getCarte().length; j*unit_size <MAP_HEIGH ; j++) {
-            for (int i = 0; i*unit_size<MAP_HEIGH; i++) {
-                g.setColor(Color.black);
-                g.fillRect(i*unit_size,j*unit_size,unit_size,unit_size);
-            }
-        }*/
-        for (Porte p: sorties) {
-            for (int i = 0; i < player.getLieux().getCarte()[0].length; i++) {
-                for (int j = 0; j < player.getLieux().getCarte().length; j++) {
-                    if(p.getX()==i&&p.getY()==j){
-                        g.drawImage(doorassets,i*unit_size,j*unit_size,unit_size,unit_size,null);
+                    for (PNJ p : pnjs) {
+                        if (relativi == p.getX() && relativj == p.getY() && p.getpV() > 0) {
+                            if (p.isNomme()) {
+                                g.drawImage(knigthassets, i * unit_size, j * unit_size, unit_size, unit_size, null);
+                            } else {
+                                g.drawImage(wolfassets, i * unit_size, j * unit_size, unit_size, unit_size, null);
+                            }
+                            isempty = false;
+                        }
+                    }
+                    for (Coffre c : fenetre.getCoffres()) {
+                        if (c.getY() == relativj && c.getX() == relativi) {
+                            g.drawImage(chetasset, i * unit_size, j * unit_size, unit_size, unit_size, null);
+                            isempty=false;
+                        }
+                    }
+                    for (Porte p : sorties) {
+                        if (p.getX() == relativi && p.getY() == relativj) {
+                            g.drawImage(doorassets, i * unit_size, j * unit_size, unit_size, unit_size, null);
+                            isempty=false;
+                        }
+                    }
+                    if (isempty) {
+                        g.setColor(Color.white);
+                        g.fillRect(i * unit_size, j * unit_size, unit_size, unit_size);
                     }
                 }
             }

@@ -1,6 +1,8 @@
 package Control;
 
 import  Log.*;
+import ServerPart.ServerLauncher;
+import com.sun.tools.javac.Main;
 import jdr2dcore.Quete;
 
 import java.io.*;
@@ -9,8 +11,8 @@ import java.net.Socket;
 
 public abstract class ClientPart {
 
-    private static final String hostName="127.0.0.1";
-    private static final int port=6000;
+    private static final String hostName= ClientStarter.connexionprop.getProperty("ipadress");
+    private static final int port= Integer.parseInt(ClientStarter.connexionprop.getProperty("mainportnumber"));
 
     private static OutputStream out;
 
@@ -30,7 +32,7 @@ public abstract class ClientPart {
         in=echoSocket.getInputStream();
         out=echoSocket.getOutputStream();
         Loggy.init();
-        Loggy.writlog("Check ClientMainChannel", LogLevel.ERROR);
+        Loggy.writlog("Check ServerMainChannel", LogLevel.ERROR);
         serveroutput=new ObjectOutputStream(out);
         serverinput=new ObjectInputStream(in);
         ThreadDealer t=new ThreadDealer();

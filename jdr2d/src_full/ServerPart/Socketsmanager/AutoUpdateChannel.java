@@ -1,12 +1,14 @@
 package ServerPart.Socketsmanager;
 
+import ServerPart.ServerLauncher;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class AutoUpdateChannel extends Thread{
 
-    private final int updateportNumber=5000;
+    private final int updateportNumber= Integer.parseInt(ServerLauncher.connexionprop.getProperty("autoUpdatePort"));
 
     private Socket clientSocket;
 

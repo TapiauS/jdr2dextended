@@ -1,13 +1,14 @@
 package ServerPart.Socketsmanager;
 
 import ServerPart.Control.IAProtocolServer;
+import ServerPart.ServerLauncher;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class PNJIAChannel extends Thread{
-    private static final int portnumber=5010;
+    private static final int portnumber= Integer.parseInt(ServerLauncher.connexionprop.getProperty("pniaport"));
 
     private Socket clientSocket;
 

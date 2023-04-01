@@ -52,6 +52,9 @@ public class DialogueInterface extends InteractionInterface {
         choix.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         choix.setVisibleRowCount(-1);
         choix.setPreferredSize(new Dimension(INTERACTION_WIDTH,(int) (INTERACTION_HEIGH *0.8)));
+        choix.setForeground(Color.white);
+        choix.setBackground(new Color(0,0,0,0));
+        choix.setOpaque(false);
         this.add(choix,BorderLayout.CENTER);
         valider=new JButton("Répondre");
         valider.addActionListener(e -> {
@@ -79,6 +82,8 @@ public class DialogueInterface extends InteractionInterface {
         });
 
         this.add(valider,BorderLayout.SOUTH);
+        this.setBackground(new Color(0,0,0,0));
+        this.setOpaque(false);
         }
 
 

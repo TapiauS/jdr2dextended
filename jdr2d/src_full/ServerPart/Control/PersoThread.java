@@ -1,11 +1,10 @@
 package ServerPart.Control;
 
 import Graphic.GameInterface;
-import ServerPart.Socketsmanager.ClientMainChannel;
+import ServerPart.Socketsmanager.ServerMainChannel;
 import jdr2dcore.PNJ;
 import jdr2dcore.Personnage;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class PersoThread extends Thread{
@@ -89,7 +88,7 @@ public class PersoThread extends Thread{
         t.start();
     }
 
-    public static void respawn(Personnage p, ClientMainChannel client){
+    public static void respawn(Personnage p, ServerMainChannel client){
         if (fenetre!=null)
             fenetre.setInteraction(true);
         Thread t = new Thread(() -> {

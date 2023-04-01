@@ -54,6 +54,10 @@ public class CoffreInterface extends InteractionInterface {
         cofrename=new JLabel();
         cofrename.setPreferredSize(new Dimension(INTERACTION_WIDTH, INTERACTION_HEIGH /10));
         cofrename.setVisible(true);
+        cofrename.setForeground(Color.white);
+        cofrename.setBackground(new Color(0,0,0,0));
+        cofrename.setOpaque(false);
+        cofrename.setForeground(Color.white);
         this.add(cofrename,BorderLayout.NORTH);
         //on initialise le panneau de choix
         choix.setLayoutOrientation(JList.HORIZONTAL_WRAP);
@@ -61,6 +65,9 @@ public class CoffreInterface extends InteractionInterface {
         choix.setVisibleRowCount(-1);
         choix.setPreferredSize(new Dimension(INTERACTION_WIDTH,(int) (INTERACTION_HEIGH *0.8)));
         choix.setVisible(true);
+        choix.setBackground(new Color(0,0,0,0));
+        choix.setOpaque(false);
+        choix.setForeground(Color.white);
         this.add(choix,BorderLayout.EAST);
 
         JPanel bottompanel=new JPanel();
@@ -108,9 +115,7 @@ public class CoffreInterface extends InteractionInterface {
                 JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
                 System.exit(-5);
             }
-        });/*
-        pick.setBounds(MapPanel.MAP_WIDTH+ INTERACTION_WIDTH /5, (int) (INTERACTION_HEIGH +9.01*INTERACTION_HEIGH /10),
-                INTERACTION_WIDTH /5,(int) (INTERACTION_HEIGH *0.1));*/
+        });
         pick.setVisible(true);
         bottompanel.add(pick);
         //on definit exit
@@ -172,7 +177,7 @@ public class CoffreInterface extends InteractionInterface {
         });
         goBack.setVisible(false);
         bottompanel.add(goBack);
-
+        bottompanel.setBackground(new Color(0,0,0,0));
         this.add(bottompanel,BorderLayout.SOUTH);
         this.fenetre.requestFocus();
     }

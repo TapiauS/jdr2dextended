@@ -2,7 +2,6 @@ package ServerPart.Socketsmanager;
 
 import ServerPart.Control.GameZone;
 import ServerPart.DAO.MapDAO;
-import ServerPart.Socketsmanager.ClientMainChannel;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -39,7 +38,7 @@ public abstract class MapPool {
         return maps;
     }
 
-    public static void addClient(ClientMainChannel client){
+    public static void addClient(ServerMainChannel client){
         for (GameZone m: listmaps) {
             if(client.getAvatar().getLieux().getId()==m.getCarte().getId()) {
                 m.addClient(client);

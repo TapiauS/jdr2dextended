@@ -35,8 +35,13 @@ public class DefaultInteractionInterface extends InteractionInterface{
         //on definit les boutons
         //affichequete
         this.setLayout(new GridLayout(2,2));
+
         afficheQuete=new JButton("Journal de quete");
         afficheQuete.setVisible(true);
+        afficheQuete.setMaximumSize(new Dimension(INTERACTION_WIDTH/5,INTERACTION_HEIGH/5));
+        JPanel affichquetepanel=new JPanel();
+        affichquetepanel.setBackground(new Color(0,0,0,0));
+        affichquetepanel.setOpaque(false);
         afficheQuete.addActionListener(
                 new ActionListener() {
                     @Override
@@ -47,10 +52,15 @@ public class DefaultInteractionInterface extends InteractionInterface{
                     }
                 }
         );
-        this.add(afficheQuete);
+        affichquetepanel.add(afficheQuete);
+        this.add(affichquetepanel);
         //openCoffre
         openCoffre=new JButton("Ouvrir un coffre");
         openCoffre.setVisible(true);
+        openCoffre.setMaximumSize(new Dimension(INTERACTION_WIDTH/5,INTERACTION_HEIGH/5));
+        JPanel openCoffrepanel=new JPanel();
+        openCoffrepanel.setBackground(new Color(0,0,0,0));
+        openCoffrepanel.setOpaque(false);
         openCoffre.addActionListener(
                 new ActionListener() {
                     @Override
@@ -90,10 +100,15 @@ public class DefaultInteractionInterface extends InteractionInterface{
                         refreshfocus();
                     }
         });
-        this.add(openCoffre);
+        openCoffrepanel.add(openCoffre);
+        this.add(openCoffrepanel);
         //talk
         talk=new JButton("Parler");
         talk.setVisible(true);
+        talk.setMaximumSize(new Dimension(INTERACTION_WIDTH/5,INTERACTION_HEIGH/5));
+        JPanel talkpanel=new JPanel();
+        talkpanel.setBackground(new Color(0,0,0,0));
+        talkpanel.setOpaque(false);
         talk.addActionListener(
                 e -> {
                     for (PNJ p: fenetre.getPnjs()) {
@@ -114,10 +129,15 @@ public class DefaultInteractionInterface extends InteractionInterface{
                     refreshfocus();
                 }
         );
-        this.add(talk);
+        talkpanel.add(talk);
+        this.add(talkpanel);
         //inventaire
         afficheInventaire=new JButton("Inventaire");
         afficheInventaire.setVisible(true);
+        afficheInventaire.setMaximumSize(new Dimension(INTERACTION_WIDTH/5,INTERACTION_HEIGH/5));
+        JPanel inventpanel=new JPanel();
+        inventpanel.setOpaque(false);
+        inventpanel.setBackground(new Color(0,0,0,0));
         afficheInventaire.addActionListener(
                 new ActionListener() {
                     @Override
@@ -142,7 +162,8 @@ public class DefaultInteractionInterface extends InteractionInterface{
                     }
                 }
         );
-        this.add(afficheInventaire);
+        inventpanel.add(afficheInventaire);
+        this.add(inventpanel);
 
     }
 

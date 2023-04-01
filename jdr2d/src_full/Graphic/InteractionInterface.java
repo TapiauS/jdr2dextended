@@ -29,6 +29,8 @@ public class InteractionInterface extends JPanel {
         }
         this.setBackground(Color.white);
         this.setVisible(false);
+        this.setOpaque(false);
+        this.setBackground(new Color(0,0,0,0));
     }
 
     //getters

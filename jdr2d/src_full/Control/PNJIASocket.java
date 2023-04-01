@@ -7,9 +7,9 @@ import java.net.Socket;
 
 public class PNJIASocket{
 
-    private static final String adressIP="127.0.0.1";
+    private static final String adressIP=ClientStarter.connexionprop.getProperty("ipadress");
 
-    private static final int port=5010;
+    private static final int port= Integer.parseInt(ClientStarter.connexionprop.getProperty("pniaport"));
 
     private static Socket socket;
 

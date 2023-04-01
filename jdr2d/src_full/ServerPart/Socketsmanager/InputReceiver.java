@@ -1,6 +1,7 @@
 package ServerPart.Socketsmanager;
 
 import ServerPart.Control.GameZone;
+import ServerPart.ServerLauncher;
 import jdr2dcore.Personnage;
 
 import java.io.IOException;
@@ -13,7 +14,7 @@ public class InputReceiver extends Thread{
     private ServerSocket serverSocket;
     private Personnage avatar;
     private Socket clientSocket;
-    private final int portNumber=6000;
+    private final int portNumber= Integer.parseInt(ServerLauncher.connexionprop.getProperty("mainportnumber"));
 
     public InputReceiver(){
         start();
@@ -28,7 +29,7 @@ public class InputReceiver extends Thread{
             //MapPool.init();
             while (true) {
                 clientSocket = serverSocket.accept();
-                new ClientMainChannel(clientSocket);
+                new ServerMainChannel(clientSocket);
             }
         }
         catch (IOException e) {

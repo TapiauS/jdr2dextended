@@ -138,7 +138,7 @@ Import-Package: javax.sql,javax.transaction.xa,javax.naming,javax.secu
  ptional,org.w3c.dom;resolution:=optional,org.xml.sax;resolution:=opti
  onal,org.xml.sax.helpers;resolution:=optional,waffle.windows.auth;res
  olution:=optional,waffle.windows.auth.impl;resolution:=optional
-jdr2dcore.Objectifs.Main-Class: org.postgresql.util.PGJDBCMain
+jdr2dcore.Objectifs.Control.ClientStarter-Class: org.postgresql.util.PGJDBCMain
 Private-Package: org.postgresql.shaded.com.ongres.saslprep,org.postgre
  sql.shaded.com.ongres.scram.client,org.postgresql.shaded.com.ongres.s
  cram.common,org.postgresql.shaded.com.ongres.scram.common.bouncycastl

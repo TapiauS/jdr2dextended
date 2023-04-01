@@ -47,8 +47,13 @@ public class InventaireInterface extends InteractionInterface{
         itemdisplay.setLayoutOrientation(JList.HORIZONTAL_WRAP);
         itemdisplay.setVisibleRowCount(-1);
         itemdisplay.setPreferredSize(new Dimension(INTERACTION_WIDTH,INTERACTION_HEIGH*9/10));
+        itemdisplay.setBackground(new Color(0,0,0,0));
+        itemdisplay.setOpaque(false);
+        itemdisplay.setForeground(Color.white);
         this.add(itemdisplay,BorderLayout.NORTH);
         JPanel bottompane=new JPanel();
+        bottompane.setBackground(new Color(0,0,0,0));
+        bottompane.setOpaque(false);
         //on initialise parentcoffre
         parentscoffre=new ArrayList<>();
         //on rajoute le bouton pick

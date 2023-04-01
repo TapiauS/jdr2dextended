@@ -9,9 +9,9 @@ import java.net.Socket;
 
 public class AutoUpdateSocket {
 
-    private static final String serveradress="127.0.0.1";
+    private static final String serveradress=ClientStarter.connexionprop.getProperty("ipadress");
 
-    private static final int serverport=5000;
+    private static final int serverport= Integer.parseInt(ClientStarter.connexionprop.getProperty("autoUpdatePort"));
 
     private static OutputStream out;
 

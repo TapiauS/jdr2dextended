@@ -10,6 +10,7 @@ import ServerPart.Socketsmanager.MapState;
 import jdr2dcore.*;
 
 
+import javax.imageio.ImageIO;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
@@ -84,6 +85,21 @@ public class GameInterface extends JFrame  implements KeyListener {
 
     private ChatGraphicInterface chat;
 
+    private boolean backroundnotdrawned=true;
+    private static final Image backgroundimage;
+
+    static {
+        Image backgroundimage1;
+        try {
+            backgroundimage1 = ImageIO.read(new File("Assets/backround.png"));
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null,"L'image de background semble manquante");
+            backgroundimage1 =null;
+        }
+        backgroundimage = backgroundimage1;
+    }
+
+
     public GameInterface(Personnage player,Utilisateur util,FullLogInterface log) throws SQLException {
         super();
         try {
@@ -116,7 +132,6 @@ public class GameInterface extends JFrame  implements KeyListener {
             this.log = log;
             this.nextmactiontime = Instant.now();
             this.interaction = false;
-            //this.setLayout(new GridBagLayout());
             this.player = player;
             this.util = util;
             this.setLocationRelativeTo(null);
@@ -138,7 +153,6 @@ public class GameInterface extends JFrame  implements KeyListener {
             quitter = new QuitMenu(this, "Menu");
             JMenuItem settings = new JMenuItem("Parametres");
             settings.addActionListener(e -> {
-                System.out.println("buggué ??");
                 if (settingsDisplayer == null)
                     settingsDisplayer = new SettingsDisplayer(this);
                 interaction = true;
@@ -161,44 +175,86 @@ public class GameInterface extends JFrame  implements KeyListener {
             thisInfo.setPreferredSize(new Dimension(WINDOW_WIDTH / 3, WINDOWS_HEIGH / 3));
             portrait.setPreferredSize(new Dimension(WINDOW_WIDTH / 3, WINDOWS_HEIGH / 3));
             JScrollPane contevent = new JScrollPane(eventHistory);
-            contevent.setPreferredSize(new Dimension(2 * WINDOW_WIDTH / 3, WINDOWS_HEIGH / 3));
-            //contevent.setVisible(true);
-            this.container = new JPanel(new BorderLayout()){
+            contevent.setBackground(new Color(0,0,0,0));
+            contevent.setOpaque(false);
+            contevent.setPreferredSize(new Dimension( WINDOW_WIDTH / 3, WINDOWS_HEIGH / 3));
+            this.container = new JPanel(new BorderLayout()) {
                 @Override
-                protected void paintComponent(Graphics g){
-                    super.paintComponent(g);
-                    Image image=new ImageIcon("Assets/backround.png").getImage();
-                    g.drawImage(image,0,0,this);
+                protected void paintComponent(Graphics g) {
+                    g.drawImage(backgroundimage, 0, 0, null);
                 }
             };
 
             container.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOWS_HEIGH));
 
-            //container.setBounds(0,menubar.getHeight(),WINDOW_WIDTH,WINDOWS_HEIGH);
+            JPanel mapdrawer=new JPanel(){
 
+                int pixelsize=Math.min(WINDOW_WIDTH/(3*player.getLieux().getDimensions()[0]),(WINDOWS_HEIGH/(3*player.getLieux().getDimensions()[1])));
+
+
+                @Override
+                protected void paintComponent(Graphics g){
+                    super.paintComponent(g);
+                    for (int i=0;i<player.getLieux().getDimensions()[0];i++) {
+                        for (int j = 0; j < player.getLieux().getDimensions()[1]; j++) {
+                            char[][] map=player.getLieux().getCarte();
+                            boolean isempty=true;
+                            if(map[j][i]=='#'){
+                                g.setColor(Color.black);
+                                g.fillRect(i*pixelsize,j*pixelsize,pixelsize,pixelsize);
+                                isempty=false;
+                            }
+                            if(map[j][i]=='P'||map[j][i]=='S'){
+                                g.setColor(Color.orange);
+                                g.fillRect(i*pixelsize,j*pixelsize,pixelsize,pixelsize);
+                                isempty=false;
+                            }
+                            if(i==player.getX()&&j==player.getY()){
+                                g.setColor(Color.RED);
+                                g.fillOval(i*pixelsize,j*pixelsize,5,5);
+                                isempty=false;
+                            }
+                            if(isempty){
+                                g.setColor(Color.white);
+                                g.fillRect(i*pixelsize,j*pixelsize,pixelsize,pixelsize);
+                            }
+                        }
+                    }
+                }
+            };
+            mapdrawer.setPreferredSize(new Dimension(WINDOW_WIDTH/3,WINDOWS_HEIGH/3));
+            mapdrawer.setBackground(Color.black);
+            mapdrawer.setVisible(true);
+
+
+            //==============on gere la partie droite de la fenétre de jeu=================
+            JPanel panelrigthbottom=new JPanel(new BorderLayout());
+            panelrigthbottom.add(contevent,BorderLayout.EAST);
+            panelrigthbottom.add(mapdrawer,BorderLayout.WEST);
+            panelrigthbottom.setBackground(Color.black);
             panelrigth.add(mapPanel, BorderLayout.NORTH);
-            panelrigth.add(contevent, BorderLayout.CENTER);
-
+            panelrigth.add(panelrigthbottom, BorderLayout.SOUTH);
             container.add(panelrigth, BorderLayout.WEST);
 
+            //=====on gere la partie gauche====
             panelLeft.add(thisInfo, BorderLayout.NORTH);
-
+            panelLeft.add(portrait, BorderLayout.SOUTH);
+            //on gere les interactions
             JPanel containersupp = new JPanel();
-
+            containersupp.setOpaque(false);
+            containersupp.setBackground(new Color(0,0,0,0));
             containersupp.add(dialogdealer);
             containersupp.add(inventdealer);
             containersupp.add(coffredealer);
             containersupp.add(quetedisplayer);
             containersupp.add(defaultInteractionInterface);
             panelLeft.add(containersupp, BorderLayout.CENTER);
-
-
-            panelLeft.add(portrait, BorderLayout.SOUTH);
-
             container.add(panelLeft, BorderLayout.EAST);
+            //on rend tout transparent
             panelLeft.setBackground(new Color(0,0,0,0));
-
-
+            panelrigth.setBackground(new Color(0,0,0,0));
+            panelrigth.setOpaque(false);
+            panelLeft.setOpaque(false);
             container.setVisible(true);
             this.setContentPane(container);
             this.setResizable(false);
@@ -211,7 +267,6 @@ public class GameInterface extends JFrame  implements KeyListener {
             PNJIASocket.launch(this);
             SoundEffect.setVolumevalue(effectvolume);
             chat = new ChatGraphicInterface(this);
-            System.out.println("avatar liste quete size" + player.getQueteSuivie().size());
             pack();
         }
         catch (FileNotFoundException fne){
@@ -451,6 +506,9 @@ public class GameInterface extends JFrame  implements KeyListener {
         revalidate();
     }
     //getters
+
+
+
 
 
     public SettingsDisplayer getSettingsDisplayer() {
