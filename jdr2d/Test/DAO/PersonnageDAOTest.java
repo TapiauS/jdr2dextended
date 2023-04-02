@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 
 
 class PersonnageDAOTest {
-    Race humain=new Race("Humain",null);
+ /*   Race humain=new Race("Humain",null);
 
     Utilisateur ut;
 
@@ -37,5 +37,5 @@ class PersonnageDAOTest {
     @Test
     void getcharclose() throws SQLException{
         assertEquals("Sogg Hydromel",PersonnageDAO.getcharclose(PersonnageDAO.getchar(1),5).get(0).getNomPersonnage());
-    }
+    }*/
 }

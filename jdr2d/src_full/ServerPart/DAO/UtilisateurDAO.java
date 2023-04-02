@@ -8,20 +8,30 @@ import java.util.List;
 
 public abstract class UtilisateurDAO extends DAOObject {
 
-    public static Utilisateur connectcompte(String nom, String mdp) throws SQLException {
-        ArrayList<Object> args=new ArrayList<>(List.of(nom,mdp));
-        ResultSet rs=query("SELECT * FROM compte_utilisateur WHERE pseudo_compte=? AND mdp_compte=?",args);
-        Utilisateur retour=new Utilisateur();
-        if(rs.next()){
-            retour=new Utilisateur(rs.getString("couriel_compte"),rs.getString("mdp_compte"),rs.getString("pseudo_compte"),true,rs.getInt("id_compte_utilisateur"));
+    public static Utilisateur connectcompte(String nom, String mdp) throws DAOException {
+        try {
+            ArrayList<Object> args = new ArrayList<>(List.of(nom, mdp));
+            ResultSet rs = query("SELECT * FROM compte_utilisateur WHERE pseudo_compte=? AND mdp_compte=?", args);
+            Utilisateur retour = new Utilisateur();
+            if (rs.next()) {
+                retour = new Utilisateur(rs.getString("couriel_compte"), rs.getString("mdp_compte"), rs.getString("pseudo_compte"), true, rs.getInt("id_compte_utilisateur"));
+            } else {
+                System.err.println("coucou je passe ici");
+                throw new DAOException("AUTHENTIFICATION ERROR",ErrorType.SQLENTRY);
+            }
+            ResultSet rs1=query("SELECT * FROM compte_utilisateur WHERE pseudo_compte=? AND mdp_compte=? AND active=false");
+            if(rs1.next()) {
+                rs.getStatement().close();
+                rs1.getStatement().close();
+                return retour;
+            }
+            else {
+                throw new DAOException("ACCOUNT ALREADY USED",ErrorType.NOTAVAILABLE);
+            }
+        } catch (SQLException sqe) {
+            throw new DAOException(sqe,ErrorType.SQLSEVERE);
         }
-        else {
-            System.err.println("coucou je passe ici");
-            throw new SQLDataException();
-        }
-        rs.getStatement().close();
-       ;
-        return retour;
+
     }
 
 

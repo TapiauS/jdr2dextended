@@ -48,8 +48,9 @@ public class ChatClientProtocol extends Thread {
     public void run() {
         try {
             multicastSocket.joinGroup(group);
-            byte[] buffer=new byte[1024];
+
             while (running){
+                byte[] buffer=new byte[1024];
                 DatagramPacket packet=new DatagramPacket(buffer, buffer.length);
                 multicastSocket.receive(packet);
                 String msgrecu=new String(buffer);

@@ -206,7 +206,11 @@ public abstract class Input {
         System.out.println("Rentrer une adresse mail");
         mail=scanner.next();
         UtilisateurDAO.createcompte(pseudo,mdp,mail);
-        util=UtilisateurDAO.connectcompte(pseudo,mdp);
+        try {
+            util=UtilisateurDAO.connectcompte(pseudo,mdp);
+        } catch (DAOException e) {
+            throw new RuntimeException(e);
+        }
         boolean success=false;
         while (!success) {
             try {

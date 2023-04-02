@@ -92,7 +92,8 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
         openedcoffre=null;
         start();
     }
-    private void connect() throws IOException, ClassNotFoundException, SQLException {
+
+    private void connect() throws IOException, ClassNotFoundException, SQLException, DAOException {
         String pseudo;
         String mdp;
         ConnexionOutput conn=null;
@@ -107,9 +108,19 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
                         util = UtilisateurDAO.connectcompte(pseudo, mdp);
                         output.writeObject(true);
                         output.writeObject(util);
-                    } catch (SQLException e) {
-                        if (e instanceof SQLDataException) {
-                            output.writeObject(false);
+                    } catch (DAOException daoe) {
+                        if (daoe.getErrortype()==ErrorType.IDENTIFICATIONERROR) {
+                            write(false);
+                            write(ErrorType.IDENTIFICATIONERROR);
+                            break;
+                        }
+                        if (daoe.getErrortype()==ErrorType.NOTAVAILABLE){
+                            write(false);
+                            write(ErrorType.NOTAVAILABLE);
+                        }
+                        else{
+                            LOGGER.severe(daoe.getMessage());
+                            System.exit(-1);
                         }
                     }
                 }
@@ -121,7 +132,7 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
         display = UtilisateurDAO.displaypersonnage(util);
         output.writeObject(display);
     }
-    private void create() throws IOException, ClassNotFoundException, SQLException {
+    private void create() throws IOException, ClassNotFoundException, SQLException, DAOException {
         String pseudo="";
         String mdp="";
         ConnexionOutput conn = null;
@@ -387,6 +398,9 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
                 LOGGER.warning("PROBLEME AVEC LA BASE DE DONNEE :"+sqe.getMessage());
                 System.exit(-1);
             }
+        }
+        catch (DAOException daoe){
+            LOGGER.severe("ERREUR TRES IMPREVISIBLE "+daoe.getMessage());
         }
         catch (Exception e){
             LOGGER.severe("ERREUR TRES IMPREVISIBLE "+e.getMessage());
