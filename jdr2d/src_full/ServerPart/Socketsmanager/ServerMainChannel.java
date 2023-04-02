@@ -407,12 +407,21 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
         }
         finally {
             try {
+                if(util!=null)
+                    UtilisateurDAO.update(util.getId());
+                if (avatar!=null)
+                    PersonnageDAO.updatedatabase(avatar);
                 input.close();
                 output.close();
                 socket.close();
-                map.removeClient(this);
+                if(map==null)
+                    map.removeClient(this);
             } catch (IOException e) {
                 LOGGER.info("FERMETURE BRUTALE");
+            } catch (SQLException e) {
+                LOGGER.info("FERMETURE BRUTALE");
+            } catch (DAOException e) {
+                LOGGER.info(e.getMessage());
             }
         }
     }

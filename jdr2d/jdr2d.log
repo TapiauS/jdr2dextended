@@ -2,9 +2,7 @@ mars 30, 2023 9:15:31 AM ServerPart.Socketsmanager.ServerMainChannel run
 GRAVE: ERREUR TRES IMPREVISIBLE class jdr2dcore.Quete cannot be cast to class Control.ConnexionOutput (jdr2dcore.Quete and Control.ConnexionOutput are in unnamed module of loader 'app')
 mars 30, 2023 9:17:06 AM ServerPart.Socketsmanager.ServerMainChannel run
 GRAVE: ERREUR TRES IMPREVISIBLE class jdr2dcore.Quete cannot be cast to class Control.ConnexionOutput (jdr2dcore.Quete and Control.ConnexionOutput are in unnamed module of loader 'app')
-
-
-
-
-
-
+avr. 02, 2023 6:14:51 PM ServerPart.Socketsmanager.ServerMainChannel connect
+GRAVE: org.postgresql.util.PSQLException: Pas de valeur spécifiée pour le paramètre 1.
+avr. 02, 2023 6:16:20 PM ServerPart.Socketsmanager.ServerMainChannel connect
+GRAVE: org.postgresql.util.PSQLException: Plusieurs ResultSets ont été retournés par la requête.

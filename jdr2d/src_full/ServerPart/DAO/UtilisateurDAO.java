@@ -11,27 +11,25 @@ public abstract class UtilisateurDAO extends DAOObject {
     public static Utilisateur connectcompte(String nom, String mdp) throws DAOException {
         try {
             ArrayList<Object> args = new ArrayList<>(List.of(nom, mdp));
-            ResultSet rs = query("SELECT * FROM compte_utilisateur WHERE pseudo_compte=? AND mdp_compte=?", args);
+            ResultSet rs = query("SELECT * FROM compte_utilisateur WHERE pseudo_compte=? AND mdp_compte=?;", args);
             Utilisateur retour = new Utilisateur();
             if (rs.next()) {
-                retour = new Utilisateur(rs.getString("couriel_compte"), rs.getString("mdp_compte"), rs.getString("pseudo_compte"), true, rs.getInt("id_compte_utilisateur"));
+                boolean isavailable=rs.getBoolean("active");
+                if(!isavailable) {
+                    retour = new Utilisateur(rs.getString("couriel_compte"), rs.getString("mdp_compte"), rs.getString("pseudo_compte"), true, rs.getInt("id_compte_utilisateur"));
+                    queryUDC("UPDATE compte_utilisateur SET active=true WHERE pseudo_compte=? AND mdp_compte=?;",args);
+                    return retour;
+                }
+                else {
+                    throw new DAOException("ACCOUNT ALREADY USED",ErrorType.NOTAVAILABLE);
+                }
             } else {
                 System.err.println("coucou je passe ici");
                 throw new DAOException("AUTHENTIFICATION ERROR",ErrorType.SQLENTRY);
             }
-            ResultSet rs1=query("SELECT * FROM compte_utilisateur WHERE pseudo_compte=? AND mdp_compte=? AND active=false");
-            if(rs1.next()) {
-                rs.getStatement().close();
-                rs1.getStatement().close();
-                return retour;
-            }
-            else {
-                throw new DAOException("ACCOUNT ALREADY USED",ErrorType.NOTAVAILABLE);
-            }
         } catch (SQLException sqe) {
             throw new DAOException(sqe,ErrorType.SQLSEVERE);
         }
-
     }
 
 
@@ -101,6 +99,15 @@ public abstract class UtilisateurDAO extends DAOObject {
         }
         rs.getStatement().close();
         return retour;
+    }
+
+    public static void update(int id) throws DAOException {
+        try {
+            System.out.println(id);
+            ResultSet rs=query("UPDATE compte_utilisateur SET active=false WHERE id_compte_utilisateur=?;",new ArrayList<>(List.of(id)));
+        } catch (SQLException e) {
+            throw new DAOException(e,ErrorType.SQLSEVERE);
+        }
     }
 
 }

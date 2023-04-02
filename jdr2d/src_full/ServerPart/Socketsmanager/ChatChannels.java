@@ -50,9 +50,6 @@ public class ChatChannels implements Runnable{
                 multicastSocket.receive(packet);
                 String msg=new String(packet.getData());
                 System.out.println(msg);
-                //byte[] msgbyte=msg.getBytes();
-                //DatagramPacket packetsend=new DatagramPacket(buffer,buffer.length,group,chatportnumber);
-                //multicastSocket.send(packetsend);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
