@@ -1,5 +1,6 @@
 package gamegenerator;
 
+import ServerPart.DAO.DAOException;
 import ServerPart.DAO.ObjetDAO;
 import jdr2dcore.*;
 
@@ -29,7 +30,7 @@ public class CoffreGenerator {
 
     private final static ArrayList<Objet> contenuposs=new ArrayList<>(List.of(epee,marteaudeguerre,bouclier,pavois,casquelourd,gantelet,plastrail,jambiere,bottes,potionsoin,potionforce,potionarmure,potionconstitution));
 
-    public static void filldatabase(Map m) throws SQLException {
+    public static void filldatabase(Map m) throws SQLException, DAOException {
         for (int i = 0; i < m.getDimensions()[0]; i++) {
             for (int j = 0; j < m.getDimensions()[1]; j++) {
                 if(m.getCarte()[i][j]=='C')
@@ -38,7 +39,7 @@ public class CoffreGenerator {
         }
     }
 
-    private static void petit_coffre(int id) throws SQLException {
+    private static void petit_coffre(int id) throws DAOException {
         int taille=(int) (Math.random()*10);
         int idc=ObjetDAO.addcoffre("Coffre",id);
         for (int k = 0; k < taille; k++) {
@@ -52,7 +53,7 @@ public class CoffreGenerator {
         }
     }
 
-    private static void create_fill(int i,int j,Map m) throws SQLException {
+    private static void create_fill(int i,int j,Map m) throws SQLException, DAOException {
         int taille=(int) (Math.random()*10);
         int id=ObjetDAO.addcoffre("Coffre",i,j,m);
         for (int k = 0; k < taille; k++) {

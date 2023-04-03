@@ -65,8 +65,6 @@ public abstract class ClientPart {
     }
 */
     public static void write(Object envoie) throws IOException {
-        Loggy.writlog("CLIENT WRITED "+ envoie,LogLevel.NOTICE);
-        System.out.println(" ???????????????? "+envoie.getClass().getName());
         try {
             serveroutput.writeObject(envoie);
             serveroutput.reset();

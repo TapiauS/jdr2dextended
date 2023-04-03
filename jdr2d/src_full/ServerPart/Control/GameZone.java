@@ -1,8 +1,8 @@
 package ServerPart.Control;
 
+import ServerPart.DAO.DAOException;
 import ServerPart.DAO.EchangeDAO;
-import ServerPart.DAO.MapDAO;
-import ServerPart.DAO.PersonnageDAO;
+import ServerPart.DAO.*;
 import ServerPart.DAO.PorteDAO;
 import ServerPart.Socketsmanager.MapState;
 import ServerPart.Socketsmanager.ServerMainChannel;
@@ -41,7 +41,7 @@ public class GameZone {
             clients=new ArrayList<>();
             communicationadresses=new Hashtable<>();
             mapload();
-        } catch (SQLException e) {
+        } catch (SQLException | DAOException e) {
             throw new RuntimeException(e);
         }
         joueurs=new ArrayList<>();
@@ -81,7 +81,11 @@ public class GameZone {
         this.joueurs.remove(joueur);
     }
 
-    private void mapload() throws SQLException {
+    public ArrayList<ServerMainChannel> getClients() {
+        return clients;
+    }
+
+    private void mapload() throws SQLException, DAOException {
         pnjs=new ArrayList<>();
         echanges=new ArrayList<>();
         coffres= MapDAO.getcoffres(carte);

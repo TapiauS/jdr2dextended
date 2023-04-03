@@ -6,3 +6,19 @@ avr. 02, 2023 6:14:51 PM ServerPart.Socketsmanager.ServerMainChannel connect
 GRAVE: org.postgresql.util.PSQLException: Pas de valeur spécifiée pour le paramètre 1.
 avr. 02, 2023 6:16:20 PM ServerPart.Socketsmanager.ServerMainChannel connect
 GRAVE: org.postgresql.util.PSQLException: Plusieurs ResultSets ont été retournés par la requête.
+avr. 03, 2023 9:40:01 AM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE org.postgresql.util.PSQLException: ERROR: column "id_objet" does not exist
+  Indice : There is a column named "id_objet" in table "affecte", but it cannot be referenced from this part of the query.
+  Où : PL/pgSQL function getrecomp() line 38 at SQL statement
+avr. 03, 2023 3:01:14 PM Graphic.GameInterface <init>
+GRAVE: Cannot invoke "java.awt.Image.getProperty(String, java.awt.image.ImageObserver)" because "image" is null
+avr. 03, 2023 3:03:36 PM Graphic.GameInterface <init>
+GRAVE: Cannot invoke "java.awt.Image.getProperty(String, java.awt.image.ImageObserver)" because "image" is null
+avr. 03, 2023 3:17:24 PM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE class java.lang.String cannot be cast to class Control.ConnexionOutput (java.lang.String is in module java.base of loader 'bootstrap'; Control.ConnexionOutput is in unnamed module of loader 'app')
+avr. 03, 2023 3:45:27 PM Graphic.GameInterface keyPressed
+GRAVE: Connection reset by peer
+avr. 03, 2023 4:07:39 PM Graphic.DialogueInterface setPresentechange
+GRAVE: Index 0 out of bounds for length 0
+avr. 03, 2023 4:11:01 PM Graphic.DialogueInterface setPresentechange
+GRAVE: Index 0 out of bounds for length 0

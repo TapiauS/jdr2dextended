@@ -1,5 +1,6 @@
 package gamegenerator;
 
+import ServerPart.DAO.DAOException;
 import ServerPart.DAO.ImageDAO;
 
 import java.io.File;
@@ -8,7 +9,7 @@ import java.sql.SQLException;
 import java.util.Objects;
 
 public class MainGameGenerator {
-    public static void main (String[]args) throws SQLException, IOException {
+    public static void main (String[]args) throws SQLException, IOException, DAOException {
 
         /*Path target= Paths.get("C:\\Users\\SimTa\\Documents\\Projet_afpa\\jdr2d\\code_java\\jdr2d\\Portraits\\test.png");
 

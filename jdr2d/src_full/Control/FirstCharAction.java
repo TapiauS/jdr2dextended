@@ -45,7 +45,7 @@ public class FirstCharAction extends AbstractAction {
             try {
                 ClientPart.getServeroutput().writeObject(ConnexionOutput.VALIDCHOICE);
                 ClientPart.getServeroutput().writeObject(charname);
-                validation= (boolean) ClientPart.getServerinput().readObject();
+                validation= ClientPart.read();
             } catch (IOException | ClassNotFoundException ex) {
                 throw new RuntimeException(ex);
             }
@@ -54,7 +54,7 @@ public class FirstCharAction extends AbstractAction {
                 try {
                     perso= (Personnage) ClientPart.getServerinput().readObject();
                     System.out.println("j'arrive ici");
-                    int length= (int) ClientPart.getServerinput().readObject();
+                    int length=ClientPart.read();
                     byte [] imgbyte=ClientPart.getIn().readNBytes(length);
                     firstportraits= ImageIO.read(new ByteArrayInputStream(imgbyte));
                 } catch (IOException | ClassNotFoundException ex) {

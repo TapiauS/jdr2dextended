@@ -9,7 +9,7 @@ import ServerPart.DAO.*;
 import ServerPart.Socketsmanager.MapState;
 import jdr2dcore.*;
 
-
+import jdr2dcore.*;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Properties;
 import static Logging.Jdr2dLogger.LOGGER;
 public class GameInterface extends JFrame  implements KeyListener {
@@ -163,8 +164,18 @@ public class GameInterface extends JFrame  implements KeyListener {
             this.setJMenuBar(menubar);
             dialogdealer = new DialogueInterface(this, player);
             BufferedImage myPicture = null;
-            myPicture = PersonnageDAO.getcharportrait(player.getId());
-            portrait = new JLabel(new ImageIcon(myPicture));
+            int length=ClientPart.read();
+            System.out.println("length="+length);
+            byte [] imgbyte=ClientPart.getIn().readNBytes(length);
+            //System.out.println(Arrays.toString(imgbyte));
+            myPicture= ImageIO.read(new ByteArrayInputStream(imgbyte));
+            try {
+                portrait = new JLabel(new ImageIcon(myPicture));
+            }
+            catch (Exception e){
+                JOptionPane.showMessageDialog(null,"Erreur lors de la définition du portrait");
+            }
+            System.out.println("je depasse?");
             portrait.setVisible(true);
             /* on définit la fenétre globale et lui donne tout les élements */
 
@@ -215,8 +226,14 @@ public class GameInterface extends JFrame  implements KeyListener {
                                 isempty=false;
                             }
                             if(isempty){
-                                g.setColor(Color.white);
-                                g.fillRect(i*pixelsize,j*pixelsize,pixelsize,pixelsize);
+                                if(((i-player.getX())*(i-player.getX())+(j-player.getY())*(j-player.getY()))<14*14) {
+                                    g.setColor(Color.white);
+                                    g.fillRect(i * pixelsize, j * pixelsize, pixelsize, pixelsize);
+                                }
+                                else{
+                                    g.setColor(Color.lightGray);
+                                    g.fillRect(i * pixelsize, j * pixelsize, pixelsize, pixelsize);
+                                }
                             }
                         }
                     }
@@ -310,7 +327,6 @@ public class GameInterface extends JFrame  implements KeyListener {
         if (e.getKeyCode() == readtable("MOVENORTH") && !interaction && Instant.now().isAfter(nextmactiontime)) {
             nextmactiontime = Instant.now().plus(timestepms, ChronoUnit.MILLIS);
             ClientPart.write(OutputType.MOUVNORD);
-            eventHistory.addLine("north");
             player.depl(Direction.NORD);
             SoundEffect.playSound("walk");
             checkdoor();
@@ -458,7 +474,7 @@ public class GameInterface extends JFrame  implements KeyListener {
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        if(mapPanel!=null) {
+       if(mapPanel!=null) {
             mapPanel.setPnjs(pnjs);
             mapPanel.setPlayer(player);
             mapPanel.setSorties(sorties);

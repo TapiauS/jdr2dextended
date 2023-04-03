@@ -1,6 +1,7 @@
 package jdr2dcore;
 
 import ServerPart.Control.PersoThread;
+import ServerPart.DAO.DAOException;
 import ServerPart.DAO.ObjectifsDAO;
 import ServerPart.DAO.ObjetDAO;
 import Graphic.GameInterface;
@@ -196,7 +197,7 @@ public class Personnage extends Point implements EventListenerQuete {
 
     //addition d'une arme en gérant le nombre de mains équipée
 
-    public Personnage addArme(Arme arme) throws SQLException {
+    public Personnage addArme(Arme arme) throws SQLException, DAOException {
         int compteurmain=0;
         ObjetDAO.equip(this,arme);
         for(Arme a:this.getArme()){
@@ -243,14 +244,14 @@ public class Personnage extends Point implements EventListenerQuete {
         return this;
     }
 
-    public Personnage removeArme(Arme arme) throws SQLException {
+    public Personnage removeArme(Arme arme) throws SQLException, DAOException {
         this.armes.remove(arme);
         ObjetDAO.desequip(arme);
         this.addObjet(arme);
         return this;
     }
 
-    public Personnage addArmure(Armure armure) throws SQLException {
+    public Personnage addArmure(Armure armure) throws SQLException, DAOException {
         boolean emplacementlibre=true;
         Armure armurer=new Armure();
         ObjetDAO.equip(this,armure);
@@ -272,17 +273,13 @@ public class Personnage extends Point implements EventListenerQuete {
 
 
 
-    public Personnage addObjet(Objet objet){
+    public Personnage addObjet(Objet objet) throws DAOException {
         this.inventaire.add(objet);
         for (int j=0;j<this.observerF.size();j++) {
             if(observerF.get(j) instanceof ObjectifF){
                 if(objet.getId()==((ObjectifF) observerF.get(j)).getObjetquete().getId()) {
                     notifyoneEventF(observerF.get(j));
-                    try {
-                        ObjectifsDAO.setobj(this,(ObjectifF) observerF.get(j));
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }
+                    ObjectifsDAO.setobj(this,(ObjectifF) observerF.get(j));
                     this.removeObserver(observerF.get(j));
                 }
             }
@@ -290,7 +287,7 @@ public class Personnage extends Point implements EventListenerQuete {
         return this;
     }
 
-    public Personnage dropObjet(Objet objet) throws SQLException {
+    public Personnage dropObjet(Objet objet) throws DAOException {
         this.inventaire.remove(objet);
         ObjetDAO.dropObjet(objet,this);
         return this;
@@ -302,7 +299,7 @@ public class Personnage extends Point implements EventListenerQuete {
     }
 
 
-    public Personnage removArmure(Armure armure) throws SQLException {
+    public Personnage removArmure(Armure armure) throws DAOException, SQLException {
         this.armure.remove(armure);
         ObjetDAO.desequip(armure);
         this.inventaire.add(armure);
@@ -416,8 +413,11 @@ public class Personnage extends Point implements EventListenerQuete {
     public void update(Quete q) {
         this.removesQuete(q);
         for (Objet o: q.getRecompenses()) {
-            this.addObjet(o);
-           System.out.println(o.getNomObjet());
+            try {
+                this.addObjet(o);
+            } catch (DAOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

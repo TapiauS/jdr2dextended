@@ -1,5 +1,6 @@
 package ServerPart.Control;
 
+import ServerPart.DAO.DAOException;
 import ServerPart.DAO.ObjectifsDAO;
 import ServerPart.DAO.QueteDAO;
 import ServerPart.Socketsmanager.JDRDSocket;
@@ -180,7 +181,7 @@ public class Interaction implements Serializable {
         ev.update();
     }
 
-    public void combat() {
+    public void combat() throws DAOException {
         while (getJoueur().getpV() > 0 && getOpposant().getpV() > 0) {
             getOpposant().setpV(getOpposant().getpV() - getJoueur().bagarre(getOpposant()));
             try {
@@ -210,11 +211,7 @@ public class Interaction implements Serializable {
                 if (e instanceof ObjectifK) {
                     if (((ObjectifK) e).getTarget().getId() == opposant.getId()) {
                         notifyOneobs(e);
-                        try {
-                            ObjectifsDAO.setobj(joueur, (ObjectifK) e);
-                        } catch (SQLException ex) {
-                            throw new RuntimeException(ex);
-                        }
+                        ObjectifsDAO.setobj(joueur, (ObjectifK) e);
                         removeObserK(e);
                     }
                 }
@@ -225,7 +222,7 @@ public class Interaction implements Serializable {
 
 
 
-    public void dialogue() throws SQLException {
+    public void dialogue() throws SQLException, DAOException {
         // Attention ! quand on crée un arbre de dialogue la position des dialogues donneurs de quete et des dialogues objectifs d'une quete doit être bien reflechie.
         //le point d'acces
         Scanner scanner = new Scanner(System.in);

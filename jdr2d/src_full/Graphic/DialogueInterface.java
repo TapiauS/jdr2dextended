@@ -100,9 +100,10 @@ public class DialogueInterface extends InteractionInterface {
             } else {
                 this.presentechange = presentechange;
                 fenetre.getEventHistory().addLine(presentechange.getParleur().getNomPersonnage() + ":" + presentechange.getReponse());
-
-                Quete q = quetesdonnees.get(0);
-                ClientPart.write(q.getId());
+                Quete q;
+                if(!quetesdonnees.isEmpty())
+                    q = quetesdonnees.get(0);
+                ClientPart.write(quetesdonnees);
                 ClientPart.write(objectifrealisesisid);
                 this.setVisible(false);
                 fenetre.setInteraction(false);
@@ -121,7 +122,8 @@ public class DialogueInterface extends InteractionInterface {
         catch (Exception ex){
             LOGGER.severe(ex.getMessage());
             JOptionPane.showMessageDialog(null,"Une erreur inconnue a eu lieu","",JOptionPane.ERROR_MESSAGE);
-            System.exit(-5);
+            throw new RuntimeException(ex);
+            //System.exit(-5);
         }
     }
 

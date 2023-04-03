@@ -2,6 +2,7 @@ package ServerPart.Control;
 
 import Log.LogLevel;
 import Log.Loggy;
+import ServerPart.DAO.DAOException;
 import ServerPart.Socketsmanager.JDRDSocket;
 import ServerPart.Socketsmanager.MapPool;
 import ServerPart.Socketsmanager.ServerGameOutputType;
@@ -81,6 +82,8 @@ public class IAProtocolServer  implements JDRDSocket {
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
+                throw new RuntimeException(e);
+            } catch (DAOException e) {
                 throw new RuntimeException(e);
             }
         });

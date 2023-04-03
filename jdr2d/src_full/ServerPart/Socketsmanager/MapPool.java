@@ -1,6 +1,7 @@
 package ServerPart.Socketsmanager;
 
 import ServerPart.Control.GameZone;
+import ServerPart.DAO.DAOException;
 import ServerPart.DAO.MapDAO;
 
 import java.sql.SQLException;
@@ -15,7 +16,7 @@ public abstract class MapPool {
     static {
         try {
             listmaps = init();
-        } catch (SQLException e) {
+        } catch (SQLException | DAOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -24,7 +25,7 @@ public abstract class MapPool {
     //methodes
 
 
-    public static ArrayList<GameZone> init() throws SQLException {
+    public static ArrayList<GameZone> init() throws SQLException, DAOException {
         int idmap=1;
         while (MapDAO.getmap(idmap)==null) {
             idmap++;

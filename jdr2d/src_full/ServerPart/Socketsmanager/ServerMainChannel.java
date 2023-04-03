@@ -143,15 +143,11 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
             switch (conn) {
                 case VALIDCHOICE -> {
                     String teste_pseudo;
-                    try {
-                        teste_pseudo = (String) input.readObject();
-                        success = UtilisateurDAO.checkpseudo(teste_pseudo);
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }
+                    teste_pseudo =  read();
+                    success = UtilisateurDAO.checkpseudo(teste_pseudo);
                     if (success)
                         pseudo = teste_pseudo;
-                    output.writeObject(success);
+                    write(success);
                 }
                 case CONNEXION -> {
                     connect();
@@ -169,12 +165,8 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
             switch (conn) {
                 case VALIDCHOICE -> {
                     String teste_mdp;
-                    try {
-                        teste_mdp = (String) input.readObject();
-                        success = UtilisateurDAO.checkmdp(teste_mdp);
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }
+                    teste_mdp = (String) input.readObject();
+                    success = UtilisateurDAO.checkmdp(teste_mdp);
                     if (success)
                         mdp = teste_mdp;
                     output.writeObject(success);
@@ -211,18 +203,17 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
                 }
             }
         }
-        UtilisateurDAO.createcompte(pseudo,mdp,mail);
-        util=UtilisateurDAO.connectcompte(pseudo,mdp);
+        util=UtilisateurDAO.createcompte(pseudo,mdp,mail);
         output.writeObject(util);
     }
-    private void pick() throws IOException, SQLException, ClassNotFoundException {
+    private void pick() throws IOException, SQLException, ClassNotFoundException, DAOException {
         Hashtable<String,Integer> display=UtilisateurDAO.displaypersonnage(util);
         String nomperso=read();
         avatar= PersonnageDAO.getchar(display.get(nomperso));
         output.writeObject(avatar);
     }
 
-    private void createchar() throws IOException, ClassNotFoundException, SQLException {
+    private void createchar() throws IOException, ClassNotFoundException, SQLException, DAOException {
         String charname="";
         boolean success=false;
         ConnexionOutput conn;
@@ -231,7 +222,7 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
             switch (conn){
                 case VALIDCHOICE -> {
                     charname= (String) input.readObject();
-                    success=PersonnageDAO.checkcharname(charname);
+                    success= PersonnageDAO.checkcharname(charname);
                     output.writeObject(success);
                     if(success) {
                         int id=PersonnageDAO.createchar(charname,util);
@@ -256,7 +247,7 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
         }
     }
 
-    private void pickpicture() throws SQLException, IOException, ClassNotFoundException {
+    private void pickpicture() throws SQLException, IOException, ClassNotFoundException, DAOException {
         Hashtable<Integer, BufferedImage> caroussel= ImageDAO.loadfullimagebank("portrait");
         int indexportrait=0;
         List<Integer> keystoarray= caroussel.keySet().stream().toList();
@@ -305,12 +296,18 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
             System.out.println(avatar.getLieux().getId());
             MapPool.addClient(this);
             sendMap();
+            bytestream=new ByteArrayOutputStream();
+            ImageIO.write(PersonnageDAO.getcharportrait(avatar.getId()),"png",bytestream);
+            byte [] imgbyte= bytestream.toByteArray();
+            output.writeObject(imgbyte.length);
+            out.write(imgbyte);
             OutputType outputType;
             do {
                 outputType = (OutputType) input.readObject();
                 switch (outputType) {
                     case MOUVNORD -> {
                         avatar.depl(Direction.NORD);
+                        System.out.println("x="+avatar.getX()+" y="+avatar.getY());
                     }
                     case MOUVWEST -> {
                         avatar.depl(Direction.OUEST);
@@ -335,10 +332,13 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
                                 break;
                             }
                         }
-                        int idquete = read();
-                        Quete quete=QueteDAO.getQuete(idquete);
-                        avatar.addsQuete(quete);
-                        QueteDAO.update(quete, avatar);
+                        ArrayList<Quete> quetes= read();
+                        Quete quete;
+                        if (!quetes.isEmpty()) {
+                            quete = quetes.get(0);
+                            avatar.addsQuete(quete);
+                            QueteDAO.update(quete, avatar);
+                        }
                         ArrayList<Integer> ids = read();
                         for (int i = 0; i < ids.size(); i++) {
                             for (Quete q : avatar.getQueteSuivie()) {
@@ -383,12 +383,17 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
                         }
                         door.traverse(avatar);
                         sendMap();
+                        map.removeClient(this);
+                        map=MapPool.getGameZone(avatar.getLieux().getId());
+                        assert map != null;
+                        map.addClient(this);
+                        System.out.println("mapname= "+avatar.getLieux().getNomLieu());
                     }
                 }
             } while (connected);
         }
         catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            LOGGER.severe(e.getMessage());
         }
         catch (IOException cne){
             LOGGER.warning("FERMETURE BRUTALE CAUSEE PAR :"+cne.getMessage());
@@ -396,6 +401,9 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
         catch (SQLException sqe){
             if(!(22000<sqe.getErrorCode()&&sqe.getErrorCode()<23000)) {
                 LOGGER.warning("PROBLEME AVEC LA BASE DE DONNEE :"+sqe.getMessage());
+            }
+            else {
+                LOGGER.severe(sqe.getMessage());
                 System.exit(-1);
             }
         }
@@ -403,7 +411,7 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
             LOGGER.severe("ERREUR TRES IMPREVISIBLE "+daoe.getMessage());
         }
         catch (Exception e){
-            LOGGER.severe("ERREUR TRES IMPREVISIBLE "+e.getMessage());
+            LOGGER.severe("ERREUR TRES IMPREVISIBLE "+e.getLocalizedMessage());
         }
         finally {
             try {
@@ -411,15 +419,13 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
                     UtilisateurDAO.update(util.getId());
                 if (avatar!=null)
                     PersonnageDAO.updatedatabase(avatar);
+                if(map==null)
+                    map.removeClient(this);
                 input.close();
                 output.close();
                 socket.close();
-                if(map==null)
-                    map.removeClient(this);
             } catch (IOException e) {
-                LOGGER.info("FERMETURE BRUTALE");
-            } catch (SQLException e) {
-                LOGGER.info("FERMETURE BRUTALE");
+                LOGGER.info("FERMETURE BRUTALE "+e.getMessage());
             } catch (DAOException e) {
                 LOGGER.info(e.getMessage());
             }
@@ -445,7 +451,7 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
         return (T) input.readObject();
     }
 
-    private void exploreCoffre() throws IOException, ClassNotFoundException, SQLException {
+    private void exploreCoffre() throws IOException, ClassNotFoundException, SQLException, DAOException {
         int coffrelvl=0;
         Coffre openedcoffre = null;
         int idopenedcoffre=read();
@@ -508,7 +514,7 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
         }
     }
 
-    private void explorInvent() throws IOException, ClassNotFoundException, SQLException {
+    private void explorInvent() throws IOException, ClassNotFoundException, SQLException, DAOException {
         ArrayList<Coffre> parentscoffre=new ArrayList<>();
         Coffre openedcoffre=avatar.getInventaire();
         Objet selectedobjet;

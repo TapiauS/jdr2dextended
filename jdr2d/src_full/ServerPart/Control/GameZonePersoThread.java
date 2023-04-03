@@ -1,7 +1,7 @@
 package ServerPart.Control;
 
 import ServerPart.Socketsmanager.ServerMainChannel;
-import ServerPart.DAO.PersonnageDAO;
+import ServerPart.DAO.*;
 import jdr2dcore.Direction;
 import jdr2dcore.PNJ;
 import jdr2dcore.Personnage;
@@ -41,6 +41,8 @@ public class GameZonePersoThread extends Thread{
         int closestdst = 4;
         for (Personnage player : gameZone.getJoueurs()) {
             ServerMainChannel client = gameZone.getClient(player);
+            System.out.println("j'ai trouve quelqun");
+            System.out.println("distance= "+player.distance(perso));
             if (player.distance(perso) < 1 && !perso.isNomme()) {
                 gameZone.getChannel(player).figth(player,perso,gameZone);
                 return;
@@ -156,6 +158,8 @@ public class GameZonePersoThread extends Thread{
             try {
                 PersonnageDAO.updatepnj(p);
             } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } catch (DAOException e) {
                 throw new RuntimeException(e);
             }
             p.setInteract(false);

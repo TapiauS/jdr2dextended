@@ -40,7 +40,7 @@ public class NextPictureAction extends AbstractAction {
         BufferedImage myPicture ;
         try {
             ClientPart.write(ConnexionOutput.NEXTPICTURE);
-            int length= (int) ClientPart.getServerinput().readObject();
+            int length=ClientPart.read();
             byte [] imgbyte=ClientPart.getIn().readNBytes(length);
             myPicture= ImageIO.read(new ByteArrayInputStream(imgbyte));
         } catch (IOException | ClassNotFoundException ex) {

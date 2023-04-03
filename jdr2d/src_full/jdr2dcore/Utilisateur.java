@@ -80,5 +80,14 @@ public class Utilisateur implements Serializable {
     //methodes
 
 
-
+    @Override
+    public String toString() {
+        return "Utilisateur{" +
+                "id=" + id +
+                ", nomUtilisateur='" + nomUtilisateur + '\'' +
+                ", mdpUtilisateur='" + mdpUtilisateur + '\'' +
+                ", mailUtilisateur='" + mailUtilisateur + '\'' +
+                ", Validation=" + Validation +
+                '}';
+    }
 }

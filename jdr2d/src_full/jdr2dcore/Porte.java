@@ -1,8 +1,5 @@
 package jdr2dcore;
 
-import ServerPart.DAO.PorteDAO;
-
-import java.sql.SQLException;
 
 public class Porte extends Point {
     private Porte portelie;
@@ -51,11 +48,6 @@ public class Porte extends Point {
         joueur.setLieux(portelie.getLieux());
         joueur.setX(portelie.getX());
         joueur.setY(portelie.getY());
-        try {
-            PorteDAO.updatedtabase(joueur,this);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 
 
