@@ -64,6 +64,7 @@ public class DialogueInterface extends InteractionInterface {
                     if (((ObjectifT) observerT.get(i)).getConvaincre() == presentechange.getId()) {
                         objectifrealisesisid.add(((ObjectifT) observerT.get(i)).getId());
                         observerT.remove(i);
+                        observerT.get(i).update();
                     }
                 }
             }
