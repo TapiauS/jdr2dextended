@@ -63,7 +63,7 @@ public class FirstCharAction extends AbstractAction {
                 fenetre.getToplabel().setIcon(new ImageIcon(firstportraits));
                 fenetre.getToplabel().setText("");
                 fenetre.getToptextfield().setVisible(false);
-                fenetre.getBottomtextfield().setVisible(false);
+                fenetre.getBottommidlecomponent().setVisible(false);
                 fenetre.getBottomlabel().setVisible(false);
                 ValidePictureChoiceAction valid=new ValidePictureChoiceAction(this.fenetre,util,perso,firstportraits,"Valider");
                 fenetre.setBottom(new JButton(valid));

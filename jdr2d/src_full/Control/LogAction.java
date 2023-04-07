@@ -22,7 +22,7 @@ public class LogAction extends AbstractAction {
         try {
             JTextField textField = (JTextField) fenetre.getToptextfield();
             String pseudo = textField.getText();
-            String mdp = this.fenetre.getBottomtextfield().getText();
+            String mdp = ((JTextField) this.fenetre.getBottommidlecomponent()).getText();
             Utilisateur util;
             boolean success;
 
@@ -53,7 +53,9 @@ public class LogAction extends AbstractAction {
             }
             if (!refperso.isEmpty()) {
                 String[] data = refperso.keySet().toArray(new String[0]);
-                JList<String> lisperso = new JList<>(data);
+                DefaultListModel<String> defaultListModel = new DefaultListModel<>();
+                JList<String> lisperso = new JList<>(defaultListModel);
+                lisperso.setListData(data);
                 this.fenetre.setToptextfield(lisperso);
                 this.fenetre.setToplabel(new JLabel("Choisissez un personnage ou creez en un nouveau"));
                 this.fenetre.setTop(new JButton(new ValideCharSelAction(this.fenetre, util, "Validation", refperso)));
@@ -62,7 +64,7 @@ public class LogAction extends AbstractAction {
                 this.fenetre.getToplabel().setText("Aucun personnage pour ce compte, veuillez creer un personnage");
                 this.fenetre.getToptextfield().setVisible(false);
             }
-            this.fenetre.getBottomtextfield().setVisible(false);
+            this.fenetre.setBottommidlecomponent(new JButton(new DeleteCharAction(this.fenetre,"Supprimer")));
             this.fenetre.getBottomlabel().setVisible(false);
             this.fenetre.setBottom(new JButton(new CreateCharAction("Creer un personnage", this.fenetre, util, refperso)));
             this.fenetre.refresh();

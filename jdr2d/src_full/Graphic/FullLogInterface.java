@@ -19,7 +19,7 @@ public class FullLogInterface extends JFrame  {
     private ThreadDealer observer;
     private JButton top;
 
-    private JTextField bottomtextfield;
+    private Component bottommidlecomponent;
 
     private JLabel bottomlabel;
 
@@ -75,8 +75,8 @@ public class FullLogInterface extends JFrame  {
         return bottomlabel;
     }
 
-    public JTextField getBottomtextfield() {
-        return bottomtextfield;
+    public Component getBottommidlecomponent() {
+        return bottommidlecomponent;
     }
 
     public ThreadDealer getObserver() {
@@ -126,9 +126,9 @@ public class FullLogInterface extends JFrame  {
         this.bottomlabel = bottomlabel;
     }
 
-    public void setBottomtextfield(JTextField bottomtextfield) {
-        swap(this.bottomtextfield,bottomtextfield);
-        this.bottomtextfield = bottomtextfield;
+    public void setBottommidlecomponent(Component bottommidlecomponent) {
+        swap(this.bottommidlecomponent, bottommidlecomponent);
+        this.bottommidlecomponent = bottommidlecomponent;
     }
 
     public void setPerso(Personnage perso) throws InterruptedException {
@@ -212,13 +212,13 @@ public class FullLogInterface extends JFrame  {
         top = create;
         bottom = new JButton(new ConnexionAction(this, "Connexion"));
         bottomlabel = new JLabel();
-        bottomtextfield = new JTextField();
+        bottommidlecomponent = new JTextField();
         toptextfield = new JTextField(10);
         toplabel = new JLabel();
         toplabel.setVisible(false);
         toptextfield.setVisible(false);
         bottomlabel.setVisible(false);
-        bottomtextfield.setVisible(false);
+        bottommidlecomponent.setVisible(false);
         bottom.setVisible(true);
         group.setHorizontalGroup(group.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGroup(group.createSequentialGroup()
@@ -227,7 +227,7 @@ public class FullLogInterface extends JFrame  {
                         .addComponent(top))
                 .addGroup(group.createSequentialGroup()
                         .addComponent(bottomlabel)
-                        .addComponent(bottomtextfield)
+                        .addComponent(bottommidlecomponent)
                         .addComponent(bottom)
                 ));
 
@@ -238,7 +238,7 @@ public class FullLogInterface extends JFrame  {
                         .addComponent(top))
                 .addGroup(group.createParallelGroup()
                         .addComponent(bottomlabel)
-                        .addComponent(bottomtextfield)
+                        .addComponent(bottommidlecomponent)
                         .addComponent(bottom)));
 
         return panel;
@@ -256,11 +256,11 @@ public class FullLogInterface extends JFrame  {
         setBottomlabel(new JLabel());
         setToptextfield(new JTextField(10));
         setToplabel(new JLabel());
-        setBottomtextfield(new JTextField());
+        setBottommidlecomponent(new JTextField());
         toplabel.setVisible(false);
         toptextfield.setVisible(false);
         bottomlabel.setVisible(false);
-        bottomtextfield.setVisible(false);
+        bottommidlecomponent.setVisible(false);
         bottom.setVisible(true);
         this.setVisible(false);
         this.refresh();

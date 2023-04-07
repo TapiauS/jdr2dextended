@@ -24,9 +24,9 @@ public class ConnexionAction extends AbstractAction {
         this.fenetre.setTop(new JButton(new LogAction(this.fenetre,"Validate")));
         this.fenetre.setBottom(new JButton(new CreateAccountAction(this.fenetre,"Creer un compte")));
         this.fenetre.setBottomlabel(new JLabel("Entrer un mot de passe"));
-        this.fenetre.setBottomtextfield(new JPasswordField());
-        this.fenetre.getBottomtextfield().setVisible(true);
-        this.fenetre.getBottomtextfield().setColumns(10);
+        this.fenetre.setBottommidlecomponent(new JPasswordField());
+        this.fenetre.getBottommidlecomponent().setVisible(true);
+        ((JTextField) this.fenetre.getBottommidlecomponent()).setColumns(10);
         this.fenetre.refresh();
     }
 }

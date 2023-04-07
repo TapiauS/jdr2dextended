@@ -34,7 +34,6 @@ public class AutoUpdateSocket {
 
     //getters
     public static void write(Object envoie) throws IOException {
-        Loggy.writlog("CLIENT WRITED "+ envoie, LogLevel.NOTICE);
         serveroutput.writeObject(envoie);
         serveroutput.reset();
     }

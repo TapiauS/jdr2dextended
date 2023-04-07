@@ -41,7 +41,7 @@ public class CharSelectionAction extends AbstractAction {
             this.fenetre.getToplabel().setText("Aucun personnage pour ce compte, veuillez creer un personnage");
             this.fenetre.getToptextfield().setVisible(false);
         }
-        this.fenetre.getBottomtextfield().setVisible(false);
+        this.fenetre.getBottommidlecomponent().setVisible(false);
         this.fenetre.getBottomlabel().setVisible(false);
         this.fenetre.setBottom(new JButton(new CreateCharAction("Creer un personnage",this.fenetre,util,refperso)));
         this.fenetre.refresh();

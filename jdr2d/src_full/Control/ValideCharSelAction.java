@@ -45,7 +45,7 @@ public class ValideCharSelAction extends AbstractAction {
         JList list=(JList) this.fenetre.getToptextfield();
         String charname= (String) list.getSelectedValue();
         Personnage perso;
-        if(list.getSelectedIndex()>-1) {
+        if (list.getSelectedIndex() > -1) {
             try {
                 ClientPart.write(ConnexionOutput.PICKCHAR);
                 ClientPart.write(charname);

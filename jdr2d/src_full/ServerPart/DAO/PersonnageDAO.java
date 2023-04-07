@@ -277,4 +277,13 @@ public abstract class PersonnageDAO extends DAOObject {
             throw new DAOException(e,ErrorType.GENERALSEVERE);
         }
     }
+
+    public static void delete(String personame) throws DAOException {
+        try {
+            queryUDC("DELETE FROM personnage WHERE nom_personnage=?",new ArrayList<>(List.of(personame)));
+        } catch (SQLException e) {
+            LOGGER.severe(e.getMessage());
+            throw new DAOException(e,ErrorType.SQLSEVERE);
+        }
+    }
 }

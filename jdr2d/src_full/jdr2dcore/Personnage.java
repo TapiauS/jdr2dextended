@@ -409,6 +409,19 @@ public class Personnage extends Point implements EventListenerQuete {
         ef.update();
     }
 
+    public int getPoid(){
+        int retour=0;
+
+        for (Objet o:armes) {
+            retour+=o.getPoid();
+        }
+        for (Objet o:armure) {
+            retour+=o.getPoid();
+        }
+        retour+=inventaire.getPoid();
+        return retour;
+    }
+
     @Override
     public void update(Quete q) {
         this.removesQuete(q);

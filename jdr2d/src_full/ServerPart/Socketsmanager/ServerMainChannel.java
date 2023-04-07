@@ -287,11 +287,14 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
                 case CONNEXION -> connect();
                 case CREATION -> create();
             }
-
             connect = (ConnexionOutput) input.readObject();
             switch (connect) {
                 case PICKCHAR -> pick();
                 case CREATECHAR -> createchar();
+                case DELETECHAR -> {
+                    String charname=read();
+                    PersonnageDAO.delete(charname);
+                }
             }
             System.out.println(avatar.getLieux().getId());
             MapPool.addClient(this);

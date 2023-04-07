@@ -30,3 +30,33 @@ avr. 04, 2023 9:29:48 PM ServerPart.Socketsmanager.ServerMainChannel run
 GRAVE: ERREUR TRES IMPREVISIBLE org.postgresql.util.PSQLException: ERROR: column "id_objet" does not exist
   Indice : There is a column named "id_objet" in table "affecte", but it cannot be referenced from this part of the query.
   Où : PL/pgSQL function getrecomp() line 38 at SQL statement
+avr. 07, 2023 10:09:32 AM ServerPart.DAO.ObjectifsDAO setobj
+GRAVE: ERROR: column "id_objet" does not exist
+  Indice : There is a column named "id_objet" in table "affecte", but it cannot be referenced from this part of the query.
+  Où : PL/pgSQL function getrecomp() line 38 at SQL statement
+avr. 07, 2023 10:09:32 AM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE org.postgresql.util.PSQLException: ERROR: column "id_objet" does not exist
+  Indice : There is a column named "id_objet" in table "affecte", but it cannot be referenced from this part of the query.
+  Où : PL/pgSQL function getrecomp() line 38 at SQL statement
+avr. 07, 2023 11:10:51 AM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE Cannot invoke "jdr2dcore.Personnage.getLieux()" because "this.avatar" is null
+avr. 07, 2023 11:16:46 AM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE Cannot invoke "jdr2dcore.Personnage.getLieux()" because "this.avatar" is null
+avr. 07, 2023 11:19:07 AM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE Cannot invoke "jdr2dcore.Personnage.getLieux()" because "this.avatar" is null
+avr. 07, 2023 11:25:42 AM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE Cannot invoke "jdr2dcore.Personnage.getLieux()" because "this.avatar" is null
+avr. 07, 2023 11:26:44 AM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE Cannot invoke "jdr2dcore.Personnage.getLieux()" because "this.avatar" is null
+avr. 07, 2023 11:42:24 AM ServerPart.DAO.PersonnageDAO delete
+GRAVE: ERROR: update or delete on table "personnage" violates foreign key constraint "relation_id_demandeur_fkey" on table "relation"
+  Détail : Key (id_personnage)=(33) is still referenced from table "relation".
+avr. 07, 2023 11:42:24 AM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE org.postgresql.util.PSQLException: ERROR: update or delete on table "personnage" violates foreign key constraint "relation_id_demandeur_fkey" on table "relation"
+  Détail : Key (id_personnage)=(33) is still referenced from table "relation".
+avr. 07, 2023 12:01:06 PM ServerPart.DAO.PersonnageDAO delete
+GRAVE: ERROR: update or delete on table "personnage" violates foreign key constraint "relation_id_demandeur_fkey" on table "relation"
+  Détail : Key (id_personnage)=(33) is still referenced from table "relation".
+avr. 07, 2023 12:01:06 PM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE org.postgresql.util.PSQLException: ERROR: update or delete on table "personnage" violates foreign key constraint "relation_id_demandeur_fkey" on table "relation"
+  Détail : Key (id_personnage)=(33) is still referenced from table "relation".

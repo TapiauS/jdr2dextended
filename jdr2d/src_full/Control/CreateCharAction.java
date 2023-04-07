@@ -27,17 +27,22 @@ public class CreateCharAction extends AbstractAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        this.fenetre.getToplabel().setText("Entrer un nom pour votre personnage");
-        try {
-            ClientPart.getServeroutput().writeObject(ConnexionOutput.CREATECHAR);
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
+        if(fenetre.getToptextfield() instanceof JList && ((JList) fenetre.getToptextfield()).getModel().getSize()<4) {
+            this.fenetre.getToplabel().setText("Entrer un nom pour votre personnage");
+            try {
+                ClientPart.getServeroutput().writeObject(ConnexionOutput.CREATECHAR);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            this.fenetre.setToptextfield(new JTextField(10));
+            this.fenetre.setTop(new JButton(new FirstCharAction(this.fenetre, "Valider", this.util)));
+            this.fenetre.getBottomlabel().setVisible(false);
+            this.fenetre.setBottom(new JButton(new CharSelectionAction("Choisir un personnage", this.util, this.fenetre, this.refperso)));
+            this.fenetre.getBottommidlecomponent().setVisible(false);
+            this.fenetre.refresh();
         }
-        this.fenetre.setToptextfield(new JTextField(10));
-        this.fenetre.setTop(new JButton(new FirstCharAction(this.fenetre,"Valider",this.util)));
-        this.fenetre.getBottomlabel().setVisible(false);
-        this.fenetre.setBottom(new JButton(new CharSelectionAction("Choisir un personnage",this.util,this.fenetre,this.refperso)));
-        this.fenetre.getBottomtextfield().setVisible(false);
-        this.fenetre.refresh();
+        else {
+            JOptionPane.showMessageDialog(null, "Vous ne pouvez pas avoir plus de 4 personnages");
+        }
     }
 }

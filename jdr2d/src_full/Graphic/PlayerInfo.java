@@ -18,7 +18,7 @@ public class PlayerInfo extends JPanel {
 
     private String equip;
 
-    private final static String[] refs={"Nom: ","pV: ","pVmax: ","degats: ","redudegats: "};
+    private final static String[] refs={"Nom: ","pV: ","pVmax: ","degats: ","redudegats: ","Poid: "};
 
     private final static String[] equipref={"Armes: ","Tête: ","Torse: ","Mains: ","Jambes: ","Botte: "};
 
@@ -51,7 +51,6 @@ public class PlayerInfo extends JPanel {
         equipement.setBackground(Color.white);
         equipement.setEditable(false);
         equipement.setRequestFocusEnabled(false);
-        //equipement.setPreferredSize(new Dimension(PLAYERINFO_WIDTH/2,PLAYERINFO_HEIGH));
         equipement.setVisible(true);
         equipement.setFont(new Font("Segoe Script", Font.BOLD, 15));
         equipement.setForeground(Color.red);
@@ -145,7 +144,8 @@ public class PlayerInfo extends JPanel {
                 .append('\n').append(refs[1]).append(player.getpV())
                 .append('\n').append(refs[2]).append(player.getpVmax())
                 .append('\n').append(refs[3]).append(deg)
-                .append('\n').append(refs[4]).append(redudeg);
+                .append('\n').append(refs[4]).append(redudeg)
+                .append('\n').append(refs[5]).append(player.getPoid());
         this.setInfos(info.toString());
     }
 }

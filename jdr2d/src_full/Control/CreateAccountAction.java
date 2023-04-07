@@ -29,7 +29,7 @@ public class CreateAccountAction extends AbstractAction {
         this.fenetre.setToplabel(new JLabel("Entrer un pseudo"));
         this.fenetre.setBottom(new JButton(new ConnexionAction(this.fenetre,"Se connecter")));
         this.fenetre.getBottomlabel().setVisible(false);
-        this.fenetre.getBottomtextfield().setVisible(false);
+        this.fenetre.getBottommidlecomponent().setVisible(false);
         this.fenetre.refresh();
     }
 }
