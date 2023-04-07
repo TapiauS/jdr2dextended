@@ -22,3 +22,11 @@ avr. 03, 2023 4:07:39 PM Graphic.DialogueInterface setPresentechange
 GRAVE: Index 0 out of bounds for length 0
 avr. 03, 2023 4:11:01 PM Graphic.DialogueInterface setPresentechange
 GRAVE: Index 0 out of bounds for length 0
+avr. 04, 2023 9:29:48 PM ServerPart.DAO.ObjectifsDAO setobj
+GRAVE: ERROR: column "id_objet" does not exist
+  Indice : There is a column named "id_objet" in table "affecte", but it cannot be referenced from this part of the query.
+  Où : PL/pgSQL function getrecomp() line 38 at SQL statement
+avr. 04, 2023 9:29:48 PM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE org.postgresql.util.PSQLException: ERROR: column "id_objet" does not exist
+  Indice : There is a column named "id_objet" in table "affecte", but it cannot be referenced from this part of the query.
+  Où : PL/pgSQL function getrecomp() line 38 at SQL statement

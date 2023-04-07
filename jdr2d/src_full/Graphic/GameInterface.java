@@ -421,6 +421,16 @@ public class GameInterface extends JFrame  implements KeyListener {
                         player.setpV(ClientPart.read());
                         if (player.getpV() <= 0)
                             PersoThread.respawn(player);
+                        else  {
+                            for (int j=0;j<player.getQueteSuivie().size();j++) {
+                                Quete q=player.getQueteSuivie().get(j);
+                                for (int i = 0; i <q.getObjectifs().size() ; i++) {
+                                    Objectifs obj=q.getObjectifs().get(j);
+                                    if(obj instanceof ObjectifK && ((ObjectifK) obj).getTarget().getId()==p.getId())
+                                        obj.update();
+                                }
+                            }
+                        }
                     }
                     interaction = false;
                     thisInfo.update();
