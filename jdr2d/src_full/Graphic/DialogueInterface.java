@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 import static Logging.Jdr2dLogger.LOGGER;
-
+@SuppressWarnings("notice")
 public class DialogueInterface extends InteractionInterface {
     private Echange presentechange;
 
@@ -100,9 +100,6 @@ public class DialogueInterface extends InteractionInterface {
             } else {
                 this.presentechange = presentechange;
                 fenetre.getEventHistory().addLine(presentechange.getParleur().getNomPersonnage() + ":" + presentechange.getReponse());
-                Quete q;
-                if(!quetesdonnees.isEmpty())
-                    q = quetesdonnees.get(0);
                 ClientPart.write(quetesdonnees);
                 ClientPart.write(objectifrealisesisid);
                 this.setVisible(false);
