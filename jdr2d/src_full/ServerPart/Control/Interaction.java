@@ -18,11 +18,14 @@ public class Interaction implements Serializable {
     protected Personnage joueur;
     protected PNJ opposant;
 
+    protected Personnage humanOpponent;
     protected Echange dialogue;
 
     protected boolean agressif;
 
     protected JDRDSocket fenetre;
+
+    protected JDRDSocket fenetre1;
     protected ArrayList<EventListenerK> observerK;
 
     protected ArrayList<EventListenerTalk> observerT;
@@ -147,6 +150,12 @@ public class Interaction implements Serializable {
         this.winner=null;
     }
 
+    public Interaction(Personnage joueur,Personnage humanOpponent,JDRDSocket fenetre,JDRDSocket fenetre1){
+        this.setJoueur(joueur);
+        this.humanOpponent=humanOpponent;
+        this.fenetre=fenetre;
+        this.fenetre1=fenetre1;
+    }
 
 
     //methode
@@ -181,7 +190,7 @@ public class Interaction implements Serializable {
         ev.update();
     }
 
-    public void combat() throws DAOException {
+    public void combatPNJ() throws DAOException {
         while (getJoueur().getpV() > 0 && getOpposant().getpV() > 0) {
             getOpposant().setpV(getOpposant().getpV() - getJoueur().bagarre(getOpposant()));
             try {
@@ -219,7 +228,9 @@ public class Interaction implements Serializable {
         }
     }
 
+    public void combat(){
 
+    }
 
 
     public void dialogue() throws SQLException, DAOException {

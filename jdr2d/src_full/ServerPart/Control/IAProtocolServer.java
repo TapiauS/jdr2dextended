@@ -66,7 +66,7 @@ public class IAProtocolServer  implements JDRDSocket {
                     write(adversaire.getId());
                     write(adversaire.getNomPersonnage());
                     Interaction inter = new Interaction(joueur, adversaire, me);
-                    inter.combat();
+                    inter.combatPNJ();
                     if (joueur.getpV() < 0)
                         PersoThread.respawn(joueur,zone.getClient(joueur));
                     if (joueur.getpV() > 0)

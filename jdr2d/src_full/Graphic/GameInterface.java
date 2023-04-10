@@ -437,6 +437,42 @@ public class GameInterface extends JFrame  implements KeyListener {
                 }
             }
         }
+        if(e.getKeyCode()==readtable("FIGTHPLAYER")&&!interaction){
+            boolean closenough=false;
+            Personnage opponent = null;
+            for (Personnage perso:players) {
+                if(perso.distance(player)<1){
+                    closenough=true;
+                    ClientPart.write(OutputType.FIGTHHUMAN);
+                    opponent=perso;
+                    break;
+                }
+            }
+            if(closenough){
+                eventHistory.addLine("Vous defiez"+opponent.getNomPersonnage());
+                ClientPart.write(opponent);
+                boolean accept=ClientPart.read();
+                if(accept){
+                    eventHistory.addLine(opponent.getNomPersonnage()+" a accepté le défi");
+                    boolean stillfigthing = true;
+                    while (stillfigthing) {
+                        stillfigthing = ClientPart.read();
+                        if (stillfigthing) {
+                            eventHistory.addLine(ClientPart.read());
+                            eventHistory.addLine(ClientPart.read());
+                            getFenetreInfo().update();
+                        }
+                    }
+                    player.setpV(ClientPart.read());
+                    if (player.getpV() <= 0)
+                        PersoThread.respawn(player);
+
+                }
+                else {
+                    eventHistory.addLine(opponent.getNomPersonnage()+" a refusé le défi.");
+                }
+            }
+        }
     }
     catch (UnsupportedAudioFileException ex) {
         JOptionPane.showMessageDialog(null, "Erreur lors du chargement de la musique du jeu");

@@ -14,7 +14,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.Socket;
-import java.sql.SQLDataException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -364,7 +363,7 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
                                 write(perso.isInteract());
                                 if (!perso.isInteract()) {
                                     Interaction inter = new Interaction(avatar, perso, this);
-                                    inter.combat();
+                                    inter.combatPNJ();
                                     if (avatar.getpV() < 0)
                                         PersoThread.respawn(avatar);
                                     if (perso.getpV() > 0)
@@ -391,6 +390,20 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
                         assert map != null;
                         map.addClient(this);
                         System.out.println("mapname= "+avatar.getLieux().getNomLieu());
+                    }
+                    case FIGTHHUMAN -> {
+                        Personnage opponent=read();
+                        ServerMainChannel oppclient=map.getClient(opponent);
+                        if(!oppclient.interagit){
+                            oppclient.write(OutputType.FIGTHHUMAN);
+                            oppclient.write(avatar);
+                            boolean accept=oppclient.read();
+                            write(accept);
+                            if(accept){
+                                Interaction inter=new Interaction();
+                                inter.
+                            }
+                        }
                     }
                 }
             } while (connected);

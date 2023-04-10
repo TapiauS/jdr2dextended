@@ -18,5 +18,6 @@ public enum OutputType implements Serializable {
     RESPAWN,
     QUIT,
     GOBACK,
-    DOOR
+    DOOR,
+    FIGTHHUMAN
 }

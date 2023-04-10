@@ -165,7 +165,7 @@ public class SettingsDisplayer extends JFrame {
         constraints.gridx=3;
         panel.add(dialkey,constraints);
 
-        figth=new JLabel("Commencer un combat");
+        figth=new JLabel("Commencer un combatPNJ");
         figthkey=new JTextField();
 
 

@@ -6,6 +6,8 @@ import java.util.Properties;
 
 import Control.ClientPart;
 
+import javax.swing.*;
+
 import static Logging.Jdr2dLogger.LOGGER;
 
 public class ClientStarter {
@@ -16,6 +18,7 @@ public class ClientStarter {
             connexionprop.load(fis);
         } catch (IOException e) {
             LOGGER.severe(e.getMessage());
+            JOptionPane.showMessageDialog(null,"Le fichier de connexion au serveur semble être manquant");
             System.exit(-1);
         }
     }
