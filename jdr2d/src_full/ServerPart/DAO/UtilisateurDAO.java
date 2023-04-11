@@ -1,12 +1,20 @@
 package ServerPart.DAO;
 import jdr2dcore.Utilisateur;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Hashtable;
 import java.util.List;
 import static Logging.Jdr2dLogger.LOGGER;
-
+import static ServerPart.ServerLauncher.connexionprop;
 public abstract class UtilisateurDAO extends DAOObject {
 
     public static Utilisateur connectcompte(String nom, String mdp) throws DAOException {
@@ -96,6 +104,12 @@ public abstract class UtilisateurDAO extends DAOObject {
 
     public static Utilisateur createcompte(String nom, String mdp,String mail) throws  DAOException {
         try {
+                SecretKeySpec secretKey = new SecretKeySpec(connexionprop.getProperty("key").getBytes(), connexionprop.getProperty("algo"));
+                Cipher cipher = Cipher.getInstance(connexionprop.getProperty("algo"));
+                cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+                byte[] encryptedBytes = cipher.doFinal(password.getBytes());
+                return Base64.getEncoder().encodeToString(encryptedBytes);
+
             ArrayList<Object> args = new ArrayList<>(List.of(mail, nom, mdp));
             ResultSet rs = query("INSERT INTO compte_utilisateur(couriel_compte,pseudo_compte,mdp_compte,active) VALUES (?,?,?,true) RETURNING *;", args);
             rs.next();
@@ -113,6 +127,16 @@ public abstract class UtilisateurDAO extends DAOObject {
                 LOGGER.severe(sqe.getMessage());
                 throw new DAOException(sqe,ErrorType.SQLSEVERE);
             }
+        } catch (NoSuchPaddingException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalBlockSizeException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } catch (BadPaddingException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidKeyException e) {
+            throw new RuntimeException(e);
         }
     }
 
