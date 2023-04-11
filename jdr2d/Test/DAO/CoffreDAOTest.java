@@ -1,7 +1,7 @@
 package DAO;
 
 import ServerPart.DAO.CoffreDAO;
-import jdr2dcore.Coffre;
+import Entity.Coffre;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;

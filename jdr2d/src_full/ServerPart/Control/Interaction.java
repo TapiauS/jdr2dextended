@@ -4,12 +4,13 @@ import ServerPart.DAO.DAOException;
 import ServerPart.DAO.ObjectifsDAO;
 import ServerPart.DAO.QueteDAO;
 import ServerPart.Socketsmanager.JDRDSocket;
-import jdr2dcore.*;
+import Entity.*;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 import static java.lang.Thread.sleep;
@@ -228,8 +229,61 @@ public class Interaction implements Serializable {
         }
     }
 
-    public void combat(){
-
+    public void combat() throws DAOException {
+        while (joueur.getpV() > 0 && humanOpponent.getpV() > 0) {
+            Random random = new Random();
+            int start = random.nextInt(2);
+            if (start == 0) {
+                humanOpponent.setpV(humanOpponent.getpV() - getJoueur().bagarre(humanOpponent));
+                try {
+                    fenetre.write(true);
+                    fenetre.write(joueur.getNomPersonnage() + " à infligé a " + humanOpponent.getNomPersonnage() + " " + joueur.bagarre(humanOpponent) + " degats");
+                    fenetre.write(humanOpponent.getNomPersonnage() + " à infligé a " + joueur.getNomPersonnage() + " " + humanOpponent.bagarre(getJoueur()) + " degats");
+                    fenetre1.write(true);
+                    fenetre1.write(joueur.getNomPersonnage() + " à infligé a " + humanOpponent.getNomPersonnage() + " " + getJoueur().bagarre(humanOpponent) + " degats");
+                    fenetre1.write(humanOpponent.getNomPersonnage() + " à infligé a " + joueur.getNomPersonnage() + " " + humanOpponent.bagarre(getJoueur()) + " degats");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                getJoueur().setpV(getJoueur().getpV() - humanOpponent.bagarre(getJoueur()));
+                try {
+                    sleep(200);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            if (start == 1) {
+                joueur.setpV(joueur.getpV() - humanOpponent.bagarre(joueur));
+                try {
+                    fenetre.write(true);
+                    fenetre.write(humanOpponent.getNomPersonnage() + " à infligé a " + joueur.getNomPersonnage() + " " + humanOpponent.bagarre(getJoueur()) + " degats");
+                    fenetre.write(joueur.getNomPersonnage() + " à infligé a " + humanOpponent.getNomPersonnage() + " " + joueur.bagarre(humanOpponent) + " degats");
+                    fenetre1.write(true);
+                    fenetre1.write(humanOpponent.getNomPersonnage() + " à infligé a " + joueur.getNomPersonnage() + " " + humanOpponent.bagarre(joueur) + " degats");
+                    fenetre1.write(joueur.getNomPersonnage() + " à infligé a " + humanOpponent.getNomPersonnage() + " " + getJoueur().bagarre(humanOpponent) + " degats");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                humanOpponent.setpV(humanOpponent.getpV() - joueur.bagarre(humanOpponent));
+                try {
+                    sleep(200);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            try {
+                fenetre.write(false);
+                fenetre.write(joueur.getpV());
+                fenetre1.write(false);
+                fenetre1.write(humanOpponent.getpV());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            if (joueur.getpV() < 0)
+                PersoThread.respawn(joueur);
+            else
+                PersoThread.respawn(humanOpponent);
+        }
     }
 
 

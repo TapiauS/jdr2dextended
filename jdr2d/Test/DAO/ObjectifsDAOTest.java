@@ -1,6 +1,6 @@
 package DAO;
 import ServerPart.DAO.ObjectifsDAO;
-import jdr2dcore.ObjectifK;
+import Entity.ObjectifK;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;

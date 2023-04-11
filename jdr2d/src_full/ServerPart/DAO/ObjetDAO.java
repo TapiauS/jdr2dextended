@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import static Logging.Jdr2dLogger.LOGGER;
-import jdr2dcore.*;
+import Entity.*;
 
 public abstract class ObjetDAO extends DAOObject {
     public static void create(Objet o) throws DAOException {

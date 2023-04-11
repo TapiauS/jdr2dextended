@@ -1,14 +1,11 @@
 package Graphic;
 
 
-import jdr2dcore.*;
-import jdr2dcore.Point;
+import Entity.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;

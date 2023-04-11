@@ -1,7 +1,7 @@
 package ServerPart.DAO;
-import jdr2dcore.Map;
-import jdr2dcore.Personnage;
-import jdr2dcore.*;
+import Entity.Map;
+import Entity.Personnage;
+import Entity.*;
 import static Logging.Jdr2dLogger.LOGGER;
 import java.sql.ResultSet;
 import java.sql.SQLException;

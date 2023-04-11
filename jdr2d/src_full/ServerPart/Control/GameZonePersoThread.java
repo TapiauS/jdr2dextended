@@ -2,9 +2,9 @@ package ServerPart.Control;
 
 import ServerPart.Socketsmanager.ServerMainChannel;
 import ServerPart.DAO.*;
-import jdr2dcore.Direction;
-import jdr2dcore.PNJ;
-import jdr2dcore.Personnage;
+import Entity.Direction;
+import Entity.PNJ;
+import Entity.Personnage;
 
 import java.io.IOException;
 import java.sql.SQLException;

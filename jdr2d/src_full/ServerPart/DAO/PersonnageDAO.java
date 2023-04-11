@@ -8,7 +8,7 @@ import java.util.List;
 import static Logging.Jdr2dLogger.LOGGER;
 
 import ServerPart.Control.Drones;
-import jdr2dcore.*;
+import Entity.*;
 
 public abstract class PersonnageDAO extends DAOObject {
 

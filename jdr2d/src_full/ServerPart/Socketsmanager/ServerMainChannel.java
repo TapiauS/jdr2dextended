@@ -8,7 +8,7 @@ import ServerPart.Control.Interaction;
 import ServerPart.Control.PersoThread;
 import ServerPart.DAO.*;
 import ServerPart.Control.GameZone;
-import jdr2dcore.*;
+import Entity.*;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Objects;
 import static Logging.Jdr2dLogger.LOGGER;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked"})
 
 public class ServerMainChannel extends Thread implements Serializable, JDRDSocket {
     private final Socket socket;
@@ -286,15 +286,19 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
                 case CONNEXION -> connect();
                 case CREATION -> create();
             }
-            connect = (ConnexionOutput) input.readObject();
-            switch (connect) {
-                case PICKCHAR -> pick();
-                case CREATECHAR -> createchar();
-                case DELETECHAR -> {
-                    String charname=read();
-                    PersonnageDAO.delete(charname);
+            while (avatar==null){
+                System.out.println("Je n'ai pas encore défini de personnage");
+                connect = read();
+                switch (connect) {
+                    case PICKCHAR -> pick();
+                    case CREATECHAR -> createchar();
+                    case DELETECHAR -> {
+                        String charname = read();
+                        System.out.println(charname);
+                        PersonnageDAO.delete(charname);
+                    }
                 }
-            }
+                }
             System.out.println(avatar.getLieux().getId());
             MapPool.addClient(this);
             sendMap();
@@ -309,7 +313,6 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
                 switch (outputType) {
                     case MOUVNORD -> {
                         avatar.depl(Direction.NORD);
-                        System.out.println("x="+avatar.getX()+" y="+avatar.getY());
                     }
                     case MOUVWEST -> {
                         avatar.depl(Direction.OUEST);
@@ -401,7 +404,7 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
                             write(accept);
                             if(accept){
                                 Interaction inter=new Interaction();
-                                inter.
+                                inter.combat();
                             }
                         }
                     }

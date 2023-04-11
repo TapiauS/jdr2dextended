@@ -2,7 +2,7 @@ package ServerPart.Socketsmanager;
 
 import ServerPart.Control.GameZone;
 import ServerPart.ServerLauncher;
-import jdr2dcore.Personnage;
+import Entity.Personnage;
 
 import java.io.IOException;
 import java.net.ServerSocket;

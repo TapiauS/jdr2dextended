@@ -1,6 +1,6 @@
 package Graphic;
 
-import jdr2dcore.*;
+import Entity.*;
 
 
 import javax.swing.*;

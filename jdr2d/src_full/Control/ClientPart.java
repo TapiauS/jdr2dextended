@@ -1,14 +1,11 @@
 package Control;
 
 import  Log.*;
-import ServerPart.ServerLauncher;
-import com.sun.tools.javac.Main;
-import jdr2dcore.Quete;
 
 import java.io.*;
 import java.net.Socket;
 
-
+@SuppressWarnings({"unchecked"})
 public abstract class ClientPart {
 
     private static final String hostName= ClientStarter.connexionprop.getProperty("ipadress");
@@ -60,10 +57,6 @@ public abstract class ClientPart {
         return in;
     }
 
-    /*public static ImageInputStream getImginput() {
-        return imginput;
-    }
-*/
     public static void write(Object envoie) throws IOException {
         try {
             serveroutput.writeObject(envoie);

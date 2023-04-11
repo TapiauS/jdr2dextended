@@ -22,24 +22,31 @@ public class DeleteCharAction extends AbstractAction {
     public void actionPerformed(ActionEvent e) {
         JList<String> list = (JList<String>) this.fenetre.getToptextfield();
         System.out.println(list.getModel().getClass());
+        for (int i=0;i<list.getModel().getSize();i++ ) {
+            System.out.println(list.getModel().getElementAt(i));
+        }
         String charname =list.getSelectedValue();
         if (list.getSelectedIndex() > -1){
             try {
                 String[] updateddata=new String[list.getModel().getSize()-1];
                 boolean found=false;
                 for (int i = 0; i < list.getModel().getSize(); i++) {
+                    System.out.println(i);
                     if(i==list.getSelectedIndex()){
-                        i++;
                         found=true;
                     }
                     else {
-                        if (!found)
-                            updateddata[i]= list.getModel().getElementAt(i);
-                        else
-                            updateddata[i-1]=list.getModel().getElementAt(i);
+                        if (!found) {
+                            updateddata[i] = list.getModel().getElementAt(i);
+                            System.out.println(list.getModel().getElementAt(i));
+                        }
+                        else {
+                            updateddata[i - 1] = list.getModel().getElementAt(i);
+                            System.out.println(list.getModel().getElementAt(i));
+                        }
                     }
-                    list.setListData(updateddata);
                 }
+                list.setListData(updateddata);
                 ClientPart.write(ConnexionOutput.DELETECHAR);
                 ClientPart.write(charname);
                 fenetre.refresh();

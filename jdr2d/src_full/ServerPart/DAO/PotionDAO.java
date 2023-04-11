@@ -1,11 +1,11 @@
 package ServerPart.DAO;
-import jdr2dcore.*;
+import Entity.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.util.logging.Logger;
+
 import static Logging.Jdr2dLogger.LOGGER;
 public abstract class PotionDAO extends DAOObject{
     public static Potion getpotion(ResultSet rs) throws DAOException {

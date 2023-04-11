@@ -1,6 +1,6 @@
 package Graphic;
 
-import jdr2dcore.Personnage;
+import Entity.Personnage;
 
 import javax.swing.*;
 import java.awt.*;

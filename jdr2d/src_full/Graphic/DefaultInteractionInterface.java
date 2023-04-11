@@ -2,9 +2,7 @@ package Graphic;
 
 import Control.ClientPart;
 import Control.OutputType;
-import Log.LogLevel;
-import Log.Loggy;
-import jdr2dcore.*;
+import Entity.*;
 
 
 import javax.swing.*;
@@ -12,7 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.sql.SQLException;
+
 import static Logging.Jdr2dLogger.LOGGER;
 public class DefaultInteractionInterface extends InteractionInterface{
 

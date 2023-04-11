@@ -1,11 +1,10 @@
 package ServerPart.DAO;
-import jdr2dcore.Echange;
-import jdr2dcore.ObjectifT;
-import jdr2dcore.PNJ;
-import jdr2dcore.Quete;
+import Entity.Echange;
+import Entity.ObjectifT;
+import Entity.PNJ;
+import Entity.Quete;
 import static Logging.Jdr2dLogger.LOGGER;
 
-import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;

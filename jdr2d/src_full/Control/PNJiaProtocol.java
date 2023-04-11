@@ -5,8 +5,8 @@ import Log.LogLevel;
 import Log.Loggy;
 import ServerPart.Control.PersoThread;
 import ServerPart.Socketsmanager.ServerGameOutputType;
-import jdr2dcore.ObjectifK;
-import jdr2dcore.Personnage;
+import Entity.ObjectifK;
+import Entity.Personnage;
 
 import java.io.IOException;
 
@@ -35,11 +35,7 @@ public class PNJiaProtocol extends Thread{
             int idaversaire = -1;
             try {
                 ServerGameOutputType action = null;
-                try {
-                    action = PNJIASocket.read();
-                } catch (IOException | ClassNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
+                action = PNJIASocket.read();
                 if (action == ServerGameOutputType.PNJATK) {
                     PNJIASocket.write(fenetre.isInteraction());
                     if (!fenetre.isInteraction()) {
@@ -56,14 +52,10 @@ public class PNJiaProtocol extends Thread{
                                 throw new RuntimeException(e);
                             }
                             if (stillfigthing) {
-                                try {
-                                    String newline=PNJIASocket.read();
-                                    System.out.println(newline);
-                                    fenetre.getEventHistory().addLine(newline);
-                                    fenetre.getEventHistory().addLine(PNJIASocket.read());
-                                } catch (IOException | ClassNotFoundException e) {
-                                    throw new RuntimeException(e);
-                                }
+                                String newline=PNJIASocket.read();
+                                System.out.println(newline);
+                                fenetre.getEventHistory().addLine(newline);
+                                fenetre.getEventHistory().addLine(PNJIASocket.read());
                                 fenetre.getFenetreInfo().update();
                             }
                         }

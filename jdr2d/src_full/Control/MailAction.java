@@ -1,7 +1,7 @@
 package Control;
 
 import Graphic.FullLogInterface;
-import jdr2dcore.Utilisateur;
+import Entity.Utilisateur;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

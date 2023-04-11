@@ -1,7 +1,7 @@
 package DAO;
 
 import ServerPart.DAO.EchangeDAO;
-import jdr2dcore.PNJ;
+import Entity.PNJ;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;

@@ -2,11 +2,10 @@ package Control;
 
 import Graphic.FullLogInterface;
 import Graphic.GameInterface;
-import jdr2dcore.Personnage;
-import jdr2dcore.Utilisateur;
+import Entity.Personnage;
+import Entity.Utilisateur;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class ThreadDealer implements EventListenerWindow{
 

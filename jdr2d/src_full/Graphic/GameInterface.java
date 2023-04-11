@@ -3,13 +3,10 @@ package Graphic;
 import Control.*;
 import Log.LogLevel;
 import Log.Loggy;
-import Logging.Jdr2dLogger;
 import ServerPart.Control.PersoThread;
-import ServerPart.DAO.*;
 import ServerPart.Socketsmanager.MapState;
-import jdr2dcore.*;
+import Entity.*;
 
-import jdr2dcore.*;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -23,7 +20,6 @@ import java.sql.SQLException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Properties;
 import static Logging.Jdr2dLogger.LOGGER;
 public class GameInterface extends JFrame  implements KeyListener {
@@ -31,6 +27,7 @@ public class GameInterface extends JFrame  implements KeyListener {
     private FullLogInterface log;
     private PlayerInfo thisInfo;
 
+    private Thread defiereceiver;
     private InventaireInterface inventdealer;
 
     private DefaultInteractionInterface defaultInteractionInterface;
@@ -138,6 +135,48 @@ public class GameInterface extends JFrame  implements KeyListener {
             this.setLocationRelativeTo(null);
             mapload();
             ia = new PersoThread(pnjs, this);
+            defiereceiver= new Thread(() -> {
+                try {
+                    while (isActive()) {
+                        Personnage potentialopponent = ClientPart.read();
+                        interaction=true;
+                        int confirm=JOptionPane.showConfirmDialog(null,
+                                potentialopponent.getNomPersonnage()+" vous défie en duel, acceptez vous ?","Duel",JOptionPane.YES_NO_OPTION);
+                        switch (confirm){
+                            case JOptionPane.YES_OPTION -> {
+                                ClientPart.write(true);
+                                boolean stillfigthing=true;
+                                while (stillfigthing){
+                                    stillfigthing=ClientPart.read();
+                                    if(stillfigthing){
+                                        eventHistory.addLine(ClientPart.read());
+                                        eventHistory.addLine(ClientPart.read());
+                                    }
+                                }
+                                player.setpV(ClientPart.read());
+                                if(player.getpV()<0) {
+                                    eventHistory.addLine("Vous avez été vaincu");
+                                    PersoThread.respawn(player);
+                                }
+                                interaction=false;
+                            }
+                            case JOptionPane.NO_OPTION -> {
+                                ClientPart.write(false);
+                                interaction=false;
+                            }
+                        }
+                    }
+                }
+                catch (ClassNotFoundException cne){
+                    JOptionPane.showMessageDialog(null,"Erreur FATALE");
+                    System.exit(-1);
+                }
+                catch (IOException ioe){
+                    JOptionPane.showMessageDialog(null,"Erreur FATALE");
+                    System.exit(-2);
+                }
+            });
+            defiereceiver.start();
             //on definit tout les élements
             thisInfo = new PlayerInfo(this.player, this);
             mapPanel = new MapPanel(this.player, this.pnjs, this);
@@ -175,7 +214,6 @@ public class GameInterface extends JFrame  implements KeyListener {
             catch (Exception e){
                 JOptionPane.showMessageDialog(null,"Erreur lors de la définition du portrait");
             }
-            System.out.println("je depasse?");
             portrait.setVisible(true);
             /* on définit la fenétre globale et lui donne tout les élements */
 
@@ -438,6 +476,7 @@ public class GameInterface extends JFrame  implements KeyListener {
             }
         }
         if(e.getKeyCode()==readtable("FIGTHPLAYER")&&!interaction){
+            interaction=true;
             boolean closenough=false;
             Personnage opponent = null;
             for (Personnage perso:players) {
@@ -464,14 +503,17 @@ public class GameInterface extends JFrame  implements KeyListener {
                         }
                     }
                     player.setpV(ClientPart.read());
-                    if (player.getpV() <= 0)
+                    if (player.getpV() <= 0) {
+                        eventHistory.addLine("Victoire contre "+opponent.getNomPersonnage());
                         PersoThread.respawn(player);
+                    }
 
                 }
                 else {
                     eventHistory.addLine(opponent.getNomPersonnage()+" a refusé le défi.");
                 }
             }
+            interaction=false;
         }
     }
     catch (UnsupportedAudioFileException ex) {

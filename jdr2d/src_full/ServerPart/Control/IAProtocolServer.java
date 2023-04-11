@@ -6,8 +6,8 @@ import ServerPart.DAO.DAOException;
 import ServerPart.Socketsmanager.JDRDSocket;
 import ServerPart.Socketsmanager.MapPool;
 import ServerPart.Socketsmanager.ServerGameOutputType;
-import jdr2dcore.PNJ;
-import jdr2dcore.Personnage;
+import Entity.PNJ;
+import Entity.Personnage;
 
 import java.io.*;
 import java.net.Socket;

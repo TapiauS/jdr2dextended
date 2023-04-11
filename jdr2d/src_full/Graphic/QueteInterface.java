@@ -1,7 +1,6 @@
 package Graphic;
 
-import ServerPart.DAO.EchangeDAO;
-import jdr2dcore.*;
+import Entity.*;
 
 import javax.swing.*;
 import java.awt.*;

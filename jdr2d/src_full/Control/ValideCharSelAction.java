@@ -1,8 +1,8 @@
 package Control;
 
 import Graphic.FullLogInterface;
-import jdr2dcore.Personnage;
-import jdr2dcore.Utilisateur;
+import Entity.Personnage;
+import Entity.Utilisateur;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

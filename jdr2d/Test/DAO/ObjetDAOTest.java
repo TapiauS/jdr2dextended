@@ -1,9 +1,9 @@
 package DAO;
 
 import ServerPart.DAO.ObjetDAO;
-import jdr2dcore.Arme;
-import jdr2dcore.Map;
-import jdr2dcore.Objet;
+import Entity.Arme;
+import Entity.Map;
+import Entity.Objet;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;

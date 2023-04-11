@@ -1,7 +1,7 @@
 package ServerPart.Socketsmanager;
 
 import ServerPart.Control.GameZone;
-import jdr2dcore.*;
+import Entity.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;

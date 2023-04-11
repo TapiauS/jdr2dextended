@@ -1,8 +1,8 @@
 package ServerPart.DAO;
-import jdr2dcore.Objectifs;
-import jdr2dcore.Objet;
-import jdr2dcore.Personnage;
-import jdr2dcore.Quete;
+import Entity.Objectifs;
+import Entity.Objet;
+import Entity.Personnage;
+import Entity.Quete;
 import static Logging.Jdr2dLogger.LOGGER;
 import java.sql.ResultSet;
 import java.sql.SQLException;

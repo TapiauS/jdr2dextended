@@ -2,14 +2,13 @@ package Graphic;
 
 import Control.ClientPart;
 import Control.OutputType;
-import jdr2dcore.*;
+import Entity.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static Logging.Jdr2dLogger.LOGGER;

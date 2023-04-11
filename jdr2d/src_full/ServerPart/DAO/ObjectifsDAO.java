@@ -1,9 +1,8 @@
 package ServerPart.DAO;
-import jdr2dcore.*;
+import Entity.*;
 
 import static Logging.Jdr2dLogger.LOGGER;
 import java.sql.ResultSet;
-import java.sql.SQLDataException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;

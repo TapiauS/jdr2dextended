@@ -2,8 +2,8 @@ package ServerPart.Control;
 
 import Graphic.GameInterface;
 import ServerPart.Socketsmanager.ServerMainChannel;
-import jdr2dcore.PNJ;
-import jdr2dcore.Personnage;
+import Entity.PNJ;
+import Entity.Personnage;
 
 import java.util.ArrayList;
 

@@ -1,7 +1,7 @@
 package Graphic;
 
 import Control.*;
-import jdr2dcore.*;
+import Entity.*;
 
 import javax.swing.*;
 import java.awt.*;

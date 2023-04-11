@@ -1,7 +1,7 @@
 mars 30, 2023 9:15:31 AM ServerPart.Socketsmanager.ServerMainChannel run
-GRAVE: ERREUR TRES IMPREVISIBLE class jdr2dcore.Quete cannot be cast to class Control.ConnexionOutput (jdr2dcore.Quete and Control.ConnexionOutput are in unnamed module of loader 'app')
+GRAVE: ERREUR TRES IMPREVISIBLE class Entity.Quete cannot be cast to class Control.ConnexionOutput (Entity.Quete and Control.ConnexionOutput are in unnamed module of loader 'app')
 mars 30, 2023 9:17:06 AM ServerPart.Socketsmanager.ServerMainChannel run
-GRAVE: ERREUR TRES IMPREVISIBLE class jdr2dcore.Quete cannot be cast to class Control.ConnexionOutput (jdr2dcore.Quete and Control.ConnexionOutput are in unnamed module of loader 'app')
+GRAVE: ERREUR TRES IMPREVISIBLE class Entity.Quete cannot be cast to class Control.ConnexionOutput (Entity.Quete and Control.ConnexionOutput are in unnamed module of loader 'app')
 avr. 02, 2023 6:14:51 PM ServerPart.Socketsmanager.ServerMainChannel connect
 GRAVE: org.postgresql.util.PSQLException: Pas de valeur spécifiée pour le paramètre 1.
 avr. 02, 2023 6:16:20 PM ServerPart.Socketsmanager.ServerMainChannel connect
@@ -39,15 +39,15 @@ GRAVE: ERREUR TRES IMPREVISIBLE org.postgresql.util.PSQLException: ERROR: column
   Indice : There is a column named "id_objet" in table "affecte", but it cannot be referenced from this part of the query.
   Où : PL/pgSQL function getrecomp() line 38 at SQL statement
 avr. 07, 2023 11:10:51 AM ServerPart.Socketsmanager.ServerMainChannel run
-GRAVE: ERREUR TRES IMPREVISIBLE Cannot invoke "jdr2dcore.Personnage.getLieux()" because "this.avatar" is null
+GRAVE: ERREUR TRES IMPREVISIBLE Cannot invoke "Entity.Personnage.getLieux()" because "this.avatar" is null
 avr. 07, 2023 11:16:46 AM ServerPart.Socketsmanager.ServerMainChannel run
-GRAVE: ERREUR TRES IMPREVISIBLE Cannot invoke "jdr2dcore.Personnage.getLieux()" because "this.avatar" is null
+GRAVE: ERREUR TRES IMPREVISIBLE Cannot invoke "Entity.Personnage.getLieux()" because "this.avatar" is null
 avr. 07, 2023 11:19:07 AM ServerPart.Socketsmanager.ServerMainChannel run
-GRAVE: ERREUR TRES IMPREVISIBLE Cannot invoke "jdr2dcore.Personnage.getLieux()" because "this.avatar" is null
+GRAVE: ERREUR TRES IMPREVISIBLE Cannot invoke "Entity.Personnage.getLieux()" because "this.avatar" is null
 avr. 07, 2023 11:25:42 AM ServerPart.Socketsmanager.ServerMainChannel run
-GRAVE: ERREUR TRES IMPREVISIBLE Cannot invoke "jdr2dcore.Personnage.getLieux()" because "this.avatar" is null
+GRAVE: ERREUR TRES IMPREVISIBLE Cannot invoke "Entity.Personnage.getLieux()" because "this.avatar" is null
 avr. 07, 2023 11:26:44 AM ServerPart.Socketsmanager.ServerMainChannel run
-GRAVE: ERREUR TRES IMPREVISIBLE Cannot invoke "jdr2dcore.Personnage.getLieux()" because "this.avatar" is null
+GRAVE: ERREUR TRES IMPREVISIBLE Cannot invoke "Entity.Personnage.getLieux()" because "this.avatar" is null
 avr. 07, 2023 11:42:24 AM ServerPart.DAO.PersonnageDAO delete
 GRAVE: ERROR: update or delete on table "personnage" violates foreign key constraint "relation_id_demandeur_fkey" on table "relation"
   Détail : Key (id_personnage)=(33) is still referenced from table "relation".
@@ -60,3 +60,47 @@ GRAVE: ERROR: update or delete on table "personnage" violates foreign key constr
 avr. 07, 2023 12:01:06 PM ServerPart.Socketsmanager.ServerMainChannel run
 GRAVE: ERREUR TRES IMPREVISIBLE org.postgresql.util.PSQLException: ERROR: update or delete on table "personnage" violates foreign key constraint "relation_id_demandeur_fkey" on table "relation"
   Détail : Key (id_personnage)=(33) is still referenced from table "relation".
+avr. 11, 2023 1:46:35 PM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE Cannot invoke "Entity.Personnage.getLieux()" because "this.avatar" is null
+avr. 11, 2023 1:51:21 PM ServerPart.DAO.PersonnageDAO delete
+GRAVE: ERROR: update or delete on table "personnage" violates foreign key constraint "relation_id_demandeur_fkey" on table "relation"
+  Détail : Key (id_personnage)=(33) is still referenced from table "relation".
+avr. 11, 2023 1:51:21 PM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE org.postgresql.util.PSQLException: ERROR: update or delete on table "personnage" violates foreign key constraint "relation_id_demandeur_fkey" on table "relation"
+  Détail : Key (id_personnage)=(33) is still referenced from table "relation".
+avr. 11, 2023 1:54:07 PM ServerPart.DAO.PersonnageDAO delete
+GRAVE: ERROR: update or delete on table "personnage" violates foreign key constraint "relation_id_demandeur_fkey" on table "relation"
+  Détail : Key (id_personnage)=(33) is still referenced from table "relation".
+avr. 11, 2023 1:54:07 PM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE org.postgresql.util.PSQLException: ERROR: update or delete on table "personnage" violates foreign key constraint "relation_id_demandeur_fkey" on table "relation"
+  Détail : Key (id_personnage)=(33) is still referenced from table "relation".
+avr. 11, 2023 3:32:13 PM ServerPart.DAO.PersonnageDAO delete
+GRAVE: ERROR: update or delete on table "personnage" violates foreign key constraint "relation_id_demandeur_fkey" on table "relation"
+  Détail : Key (id_personnage)=(33) is still referenced from table "relation".
+avr. 11, 2023 3:32:13 PM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE org.postgresql.util.PSQLException: ERROR: update or delete on table "personnage" violates foreign key constraint "relation_id_demandeur_fkey" on table "relation"
+  Détail : Key (id_personnage)=(33) is still referenced from table "relation".
+avr. 11, 2023 3:35:25 PM ServerPart.DAO.PersonnageDAO delete
+GRAVE: ERROR: update or delete on table "personnage" violates foreign key constraint "relation_id_demandeur_fkey" on table "relation"
+  Détail : Key (id_personnage)=(33) is still referenced from table "relation".
+avr. 11, 2023 3:35:25 PM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE org.postgresql.util.PSQLException: ERROR: update or delete on table "personnage" violates foreign key constraint "relation_id_demandeur_fkey" on table "relation"
+  Détail : Key (id_personnage)=(33) is still referenced from table "relation".
+avr. 11, 2023 3:40:13 PM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE image == null!
+avr. 11, 2023 3:42:13 PM ServerPart.DAO.PersonnageDAO delete
+GRAVE: ERROR: update or delete on table "personnage" violates foreign key constraint "relation_id_demandeur_fkey" on table "relation"
+  Détail : Key (id_personnage)=(33) is still referenced from table "relation".
+avr. 11, 2023 3:42:13 PM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE org.postgresql.util.PSQLException: ERROR: update or delete on table "personnage" violates foreign key constraint "relation_id_demandeur_fkey" on table "relation"
+  Détail : Key (id_personnage)=(33) is still referenced from table "relation".
+avr. 11, 2023 3:44:17 PM Graphic.GameInterface keyPressed
+GRAVE: Cannot parse null string
+avr. 11, 2023 3:47:27 PM ServerPart.DAO.PersonnageDAO delete
+GRAVE: ERROR: update or delete on table "personnage" violates foreign key constraint "relation_id_demandeur_fkey" on table "relation"
+  Détail : Key (id_personnage)=(33) is still referenced from table "relation".
+avr. 11, 2023 3:47:27 PM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE org.postgresql.util.PSQLException: ERROR: update or delete on table "personnage" violates foreign key constraint "relation_id_demandeur_fkey" on table "relation"
+  Détail : Key (id_personnage)=(33) is still referenced from table "relation".
+avr. 11, 2023 3:55:47 PM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE image == null!

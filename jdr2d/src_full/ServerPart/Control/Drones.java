@@ -1,9 +1,8 @@
 package ServerPart.Control;
 
-import Graphic.GameInterface;
-import jdr2dcore.Coffre;
-import jdr2dcore.PNJ;
-import jdr2dcore.Point;
+import Entity.Coffre;
+import Entity.PNJ;
+import Entity.Point;
 
 import java.util.ArrayList;
 import java.util.Random;

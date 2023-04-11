@@ -1,9 +1,9 @@
 package ServerPart.DAO;
 
 
-import jdr2dcore.*;
-import jdr2dcore.Map;
-import gamegenerator.*;
+import Entity.*;
+import Entity.Map;
+import Gamegenerator.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

@@ -5,6 +5,7 @@ import Graphic.FullLogInterface;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 public class MdpValidationAction extends AbstractAction {
 
@@ -37,29 +38,32 @@ public class MdpValidationAction extends AbstractAction {
         JTextField textField= (JTextField) fenetre.getToptextfield();
         String mdp = textField.getText();
         boolean val;
-        try {
-            (ClientPart.getServeroutput()).writeObject(ConnexionOutput.VALIDCHOICE);
-            (ClientPart.getServeroutput()).writeObject(mdp);
-            val= (boolean) ClientPart.getServerinput().readObject();
-        } catch (IOException | ClassNotFoundException ex) {
-            throw new RuntimeException(ex);
-        }
-        if(val){
-            JLabel mail =new JLabel("Rentrer votre adresse mail");
-            this.fenetre.setToplabel(mail);
-            JTextField zone=new JTextField();
-            zone.setColumns(10);
-            this.fenetre.setToptextfield(zone);
-            this.fenetre.setTop(new JButton(new MailAction(this.fenetre,"Validation",this.pseudo,mdp)));
-            this.fenetre.setToptextfield(zone);
-            this.fenetre.refresh();
+        if(Pattern.matches("^(?=.*[a-zA-Z])(?=.*\\\\d)(?=.*[!@#$%^&*()_+\\\\-=[\\\\]{};':\\\"\\\\\\\\|,.<>\\\\/?]).+$",mdp)) {
+            try {
+                (ClientPart.getServeroutput()).writeObject(ConnexionOutput.VALIDCHOICE);
+                (ClientPart.getServeroutput()).writeObject(mdp);
+                val = (boolean) ClientPart.getServerinput().readObject();
+            } catch (IOException | ClassNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+            if (val) {
+                JLabel mail = new JLabel("Rentrer votre adresse mail");
+                this.fenetre.setToplabel(mail);
+                JTextField zone = new JTextField();
+                zone.setColumns(10);
+                this.fenetre.setToptextfield(zone);
+                this.fenetre.setTop(new JButton(new MailAction(this.fenetre, "Validation", this.pseudo, mdp)));
+                this.fenetre.setToptextfield(zone);
+                this.fenetre.refresh();
+            } else {
+                JButton c = (JButton) e.getSource();
+                this.fenetre.add(c);
+                this.fenetre.setToplabel(new JLabel("Mot de passe non disponible, veuillez re essayer"));
+                this.fenetre.refresh();
+            }
         }
         else {
-            JButton c= (JButton) e.getSource();
-            this.fenetre.add(c);
-            this.fenetre.setToplabel(new JLabel("Mot de passe non disponible, veuillez re essayer"));
-            this.fenetre.refresh();
+            JOptionPane.showMessageDialog(null,"MDP invalide, le mote de passe doit contenir au moin une lettre, un chiffre et un caractére spécial");
         }
-
     }
 }

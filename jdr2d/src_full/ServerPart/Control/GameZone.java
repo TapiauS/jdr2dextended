@@ -6,7 +6,7 @@ import ServerPart.DAO.*;
 import ServerPart.DAO.PorteDAO;
 import ServerPart.Socketsmanager.MapState;
 import ServerPart.Socketsmanager.ServerMainChannel;
-import jdr2dcore.*;
+import Entity.*;
 
 import java.io.IOException;
 import java.sql.SQLException;

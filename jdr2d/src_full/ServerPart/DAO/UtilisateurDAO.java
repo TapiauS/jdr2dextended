@@ -1,5 +1,5 @@
 package ServerPart.DAO;
-import jdr2dcore.Utilisateur;
+import Entity.Utilisateur;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -138,7 +138,7 @@ public abstract class UtilisateurDAO extends DAOObject {
     public static void update(int id) throws DAOException {
         try {
             System.out.println(id);
-            ResultSet rs=query("UPDATE compte_utilisateur SET active=false WHERE id_compte_utilisateur=?;",new ArrayList<>(List.of(id)));
+            queryUDC("UPDATE compte_utilisateur SET active=false WHERE id_compte_utilisateur=?;",new ArrayList<>(List.of(id)));
         } catch (SQLException e) {
             throw new DAOException(e,ErrorType.SQLSEVERE);
         }

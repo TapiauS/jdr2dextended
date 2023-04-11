@@ -1,15 +1,14 @@
 package ServerPart.DAO;
 
-import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import jdr2dcore.Arme;
-import jdr2dcore.Armure;
-import jdr2dcore.Coffre;
-import jdr2dcore.Objet;
+import Entity.Arme;
+import Entity.Armure;
+import Entity.Coffre;
+import Entity.Objet;
 
 import static Logging.Jdr2dLogger.LOGGER;
 

@@ -1,6 +1,6 @@
 package DAO;
 
-import jdr2dcore.Map;
+import Entity.Map;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
