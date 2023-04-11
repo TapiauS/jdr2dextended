@@ -401,7 +401,7 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
                             write(accept);
                             if(accept){
                                 Interaction inter=new Interaction();
-                                inter.
+                                inter.combat();
                             }
                         }
                     }
