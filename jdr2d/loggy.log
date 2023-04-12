@@ -19,6 +19,7 @@
 [ERROR]Check ServerMainChannel 2023/04/07 11:44:53
 [ERROR]Check ServerMainChannel 2023/04/07 11:45:42
 [ERROR]Check ServerMainChannel 2023/04/07 12:00:50
+<<<<<<< HEAD
 [ERROR]Check ServerMainChannel 2023/04/11 13:46:26
 [ERROR]Check ServerMainChannel 2023/04/11 13:50:52
 [ERROR]Check ServerMainChannel 2023/04/11 13:51:04
@@ -1703,3 +1704,9 @@
 [DEBUG]ERREUR DE DECONNEXION SERVERSocket closed 2023/04/11 17:01:36
 [NOTICE]IAPROTOCOLSERVER WRITEDPNJATK 2023/04/11 17:01:38
 [DEBUG]ERREUR DE DECONNEXION SERVERSocket closed 2023/04/11 17:01:38
+=======
+[ERROR]Check ServerMainChannel 2023/04/11 18:33:59
+[ERROR]Check ServerMainChannel 2023/04/11 18:35:44
+[ERROR]Check ServerMainChannel 2023/04/11 18:43:49
+[ERROR]Check ServerMainChannel 2023/04/11 18:45:31
+>>>>>>> 4cfeadb82d958e26e8360f66629a1a6d4fbe94ca

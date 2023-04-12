@@ -6,6 +6,7 @@ import Entity.Utilisateur;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 public class MailAction extends AbstractAction {
 
@@ -46,6 +47,7 @@ public class MailAction extends AbstractAction {
         JTextField textField= (JTextField) fenetre.getToptextfield();
         String mail=textField.getText();
 
+        if(Pattern.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",mail)){
         boolean val;
         try {
             (ClientPart.getServeroutput()).writeObject(ConnexionOutput.VALIDCHOICE);
@@ -75,4 +77,9 @@ public class MailAction extends AbstractAction {
             this.fenetre.refresh();
         }
     }
+    else{
+        JOptionPane.showMessageDialog(null,"Adresse mail invalide");
+        }
+    }
+
 }
