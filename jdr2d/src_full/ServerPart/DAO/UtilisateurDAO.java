@@ -19,7 +19,14 @@ public abstract class UtilisateurDAO extends DAOObject {
 
     public static Utilisateur connectcompte(String nom, String mdp) throws DAOException {
         try {
-            ArrayList<Object> args = new ArrayList<>(List.of(nom, mdp));
+            SecretKeySpec secretKey = new SecretKeySpec(config.getProperty("key").getBytes(), config.getProperty("algo"));
+            Cipher cipher = Cipher.getInstance(config.getProperty("algo"));
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            byte[] encryptedBytes = cipher.doFinal(mdp.getBytes());
+            String encryptedmdp=Base64.getEncoder().encodeToString(encryptedBytes);
+
+
+            ArrayList<Object> args = new ArrayList<>(List.of(nom, encryptedmdp));
             ResultSet rs = query("SELECT * FROM compte_utilisateur WHERE pseudo_compte=? AND mdp_compte=?;", args);
             Utilisateur retour = new Utilisateur();
             if (rs.next()) {
@@ -37,6 +44,16 @@ public abstract class UtilisateurDAO extends DAOObject {
             }
         } catch (SQLException sqe) {
             throw new DAOException(sqe,ErrorType.SQLSEVERE);
+        } catch (NoSuchPaddingException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalBlockSizeException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } catch (BadPaddingException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidKeyException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -45,7 +62,16 @@ public abstract class UtilisateurDAO extends DAOObject {
 
     public static boolean checkmdp(String mdp) throws SQLException, DAOException {
         try {
-            ArrayList<Object> args = new ArrayList<>(List.of(mdp));
+            SecretKeySpec secretKey = new SecretKeySpec(config.getProperty("key").getBytes(), config.getProperty("algo"));
+            Cipher cipher = Cipher.getInstance(config.getProperty("algo"));
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            byte[] encryptedBytes = cipher.doFinal(mdp.getBytes());
+            String encryptedmdp=Base64.getEncoder().encodeToString(encryptedBytes);
+
+
+
+
+            ArrayList<Object> args = new ArrayList<>(List.of(encryptedmdp));
             ResultSet rs = query("SELECT * FROM compte_utilisateur WHERE mdp_compte=?", args);
             if (rs.next()) {
                 rs.getStatement().close();
@@ -59,6 +85,16 @@ public abstract class UtilisateurDAO extends DAOObject {
         catch (SQLException sqe){
             LOGGER.severe(sqe.getMessage());
             throw new DAOException(sqe,ErrorType.SQLSEVERE);
+        } catch (NoSuchPaddingException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalBlockSizeException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } catch (BadPaddingException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidKeyException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -104,13 +140,22 @@ public abstract class UtilisateurDAO extends DAOObject {
 
     public static Utilisateur createcompte(String nom, String mdp,String mail) throws  DAOException {
         try {
-                SecretKeySpec secretKey = new SecretKeySpec(connexionprop.getProperty("key").getBytes(), connexionprop.getProperty("algo"));
-                Cipher cipher = Cipher.getInstance(connexionprop.getProperty("algo"));
-                cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-                byte[] encryptedBytes = cipher.doFinal(password.getBytes());
-                return Base64.getEncoder().encodeToString(encryptedBytes);
+            SecretKeySpec secretKey = new SecretKeySpec(config.getProperty("key").getBytes(), config.getProperty("algo"));
+            Cipher cipher = Cipher.getInstance(config.getProperty("algo"));
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            byte[] encryptedBytes = cipher.doFinal(mdp.getBytes());
+            String encryptedmdp=Base64.getEncoder().encodeToString(encryptedBytes);
 
-            ArrayList<Object> args = new ArrayList<>(List.of(mail, nom, mdp));
+
+/*
+            Cipher cipherdecrypt = Cipher.getInstance(config.getProperty("algo"));
+            cipher.init(Cipher.DECRYPT_MODE, secretKey);
+            byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedmdp));
+            System.out.println(new String(decryptedBytes));
+*/
+
+
+            ArrayList<Object> args = new ArrayList<>(List.of(mail, nom, encryptedmdp));
             ResultSet rs = query("INSERT INTO compte_utilisateur(couriel_compte,pseudo_compte,mdp_compte,active) VALUES (?,?,?,true) RETURNING *;", args);
             rs.next();
             Utilisateur retour = new Utilisateur(rs.getString("couriel_compte"), rs.getString("mdp_compte"), rs.getString("pseudo_compte"), true, rs.getInt("id_compte_utilisateur"));
@@ -128,15 +173,20 @@ public abstract class UtilisateurDAO extends DAOObject {
                 throw new DAOException(sqe,ErrorType.SQLSEVERE);
             }
         } catch (NoSuchPaddingException e) {
-            throw new RuntimeException(e);
+            LOGGER.warning(e.getMessage());
+            throw new DAOException(e,ErrorType.GENERALSEVERE);
         } catch (IllegalBlockSizeException e) {
-            throw new RuntimeException(e);
+            LOGGER.warning(e.getMessage());
+            throw new DAOException(e,ErrorType.GENERALSEVERE);
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            LOGGER.warning(e.getMessage());
+            throw new DAOException(e,ErrorType.GENERALSEVERE);
         } catch (BadPaddingException e) {
-            throw new RuntimeException(e);
+            LOGGER.warning(e.getMessage());
+            throw new DAOException(e,ErrorType.GENERALSEVERE);
         } catch (InvalidKeyException e) {
-            throw new RuntimeException(e);
+            LOGGER.warning(e.getMessage());
+            throw new DAOException(e,ErrorType.GENERALSEVERE);
         }
     }
 

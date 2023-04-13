@@ -1,0 +1,8 @@
+avr. 12, 2023 9:54:17 AM ServerPart.DAO.UtilisateurDAO checkpseudo
+GRAVE: Une erreur d'entrée/sortie a eu lieu lors d'envoi vers le serveur.
+avr. 12, 2023 9:54:17 AM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE org.postgresql.util.PSQLException: Une erreur d'entrée/sortie a eu lieu lors d'envoi vers le serveur.
+avr. 12, 2023 9:55:18 AM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE java.security.InvalidKeyException: Invalid AES key length: 44 bytes
+avr. 12, 2023 9:58:49 AM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE java.security.InvalidKeyException: Invalid AES key length: 8 bytes

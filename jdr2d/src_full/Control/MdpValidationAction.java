@@ -38,11 +38,8 @@ public class MdpValidationAction extends AbstractAction {
         JTextField textField= (JTextField) fenetre.getToptextfield();
         String mdp = textField.getText();
         boolean val;
-<<<<<<< HEAD
-        if(Pattern.matches("^(?=.*[a-zA-Z])(?=.*\\\\d)(?=.*[!@#$%^&*()_+\\\\-=[\\\\]{};':\\\"\\\\\\\\|,.<>\\\\/?]).+$",mdp)) {
-=======
         if(Pattern.matches("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[,;:*]).+$",mdp)) {
->>>>>>> 4cfeadb82d958e26e8360f66629a1a6d4fbe94ca
+
             try {
                 (ClientPart.getServeroutput()).writeObject(ConnexionOutput.VALIDCHOICE);
                 (ClientPart.getServeroutput()).writeObject(mdp);
@@ -65,16 +62,12 @@ public class MdpValidationAction extends AbstractAction {
                 this.fenetre.setToplabel(new JLabel("Mot de passe non disponible, veuillez re essayer"));
                 this.fenetre.refresh();
             }
-<<<<<<< HEAD
+
         }
         else {
             JOptionPane.showMessageDialog(null,"MDP invalide, le mote de passe doit contenir au moin une lettre, un chiffre et un caractére spécial");
         }
-=======
+
         }
-        else{
-            JOptionPane.showMessageDialog(null,"Mot de passe invalide");
-        }
->>>>>>> 4cfeadb82d958e26e8360f66629a1a6d4fbe94ca
     }
-}
+

@@ -403,7 +403,7 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
                             boolean accept=oppclient.read();
                             write(accept);
                             if(accept){
-                                Interaction inter=new Interaction();
+                                Interaction inter=new Interaction(avatar,opponent,this,oppclient);
                                 inter.combat();
                             }
                         }
