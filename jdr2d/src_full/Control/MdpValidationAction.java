@@ -41,9 +41,9 @@ public class MdpValidationAction extends AbstractAction {
         if(Pattern.matches("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[,;:*]).+$",mdp)) {
 
             try {
-                (ClientPart.getServeroutput()).writeObject(ConnexionOutput.VALIDCHOICE);
-                (ClientPart.getServeroutput()).writeObject(mdp);
-                val = (boolean) ClientPart.getServerinput().readObject();
+                ClientPart.write(ConnexionOutput.VALIDCHOICE);
+                ClientPart.write(mdp);
+                val = ClientPart.read();
             } catch (IOException | ClassNotFoundException ex) {
                 throw new RuntimeException(ex);
             }

@@ -50,13 +50,18 @@ public class MailAction extends AbstractAction {
         if(Pattern.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",mail)){
         boolean val;
         try {
-            (ClientPart.getServeroutput()).writeObject(ConnexionOutput.VALIDCHOICE);
-            (ClientPart.getServeroutput()).writeObject(mail);
-            val= (boolean) ClientPart.getServerinput().readObject();
+            ClientPart.write(ConnexionOutput.VALIDCHOICE);
+            ClientPart.write(mail);
+            val=ClientPart.read();
         } catch (IOException | ClassNotFoundException ex) {
             throw new RuntimeException(ex);
         }
         if(val){
+            try {
+                ClientPart.write(ConnexionOutput.CREATECHAR);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
             JLabel perso =new JLabel("Choisir un nom pour votre personnage");
             this.fenetre.setToplabel(perso);
             JTextField zone=new JTextField();

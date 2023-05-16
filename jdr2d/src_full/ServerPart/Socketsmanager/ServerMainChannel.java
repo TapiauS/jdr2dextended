@@ -97,7 +97,6 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
         String mdp;
         ConnexionOutput conn=null;
         while (util==null&&conn!= ConnexionOutput.QUIT) {
-
             conn=read();
             switch (conn) {
                 case CONNEXION -> {
@@ -108,9 +107,10 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
                         output.writeObject(true);
                         output.writeObject(util);
                     } catch (DAOException daoe) {
-                        if (daoe.getErrortype()==ErrorType.IDENTIFICATIONERROR) {
+                        if (daoe.getErrortype()==ErrorType.SQLENTRY) {
                             write(false);
                             write(ErrorType.IDENTIFICATIONERROR);
+                            System.out.println("erreur");
                             break;
                         }
                         if (daoe.getErrortype()==ErrorType.NOTAVAILABLE){
@@ -287,8 +287,9 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
                 case CREATION -> create();
             }
             while (avatar==null){
-                System.out.println("Je n'ai pas encore défini de personnage");
                 connect = read();
+                System.out.println("Je passe ici");
+                System.out.println(connect);
                 switch (connect) {
                     case PICKCHAR -> pick();
                     case CREATECHAR -> createchar();
@@ -438,7 +439,7 @@ public class ServerMainChannel extends Thread implements Serializable, JDRDSocke
                     UtilisateurDAO.update(util.getId());
                 if (avatar!=null)
                     PersonnageDAO.updatedatabase(avatar);
-                if(map==null)
+                if(map!=null)
                     map.removeClient(this);
                 input.close();
                 output.close();

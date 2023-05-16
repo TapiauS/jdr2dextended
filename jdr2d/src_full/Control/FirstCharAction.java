@@ -43,8 +43,8 @@ public class FirstCharAction extends AbstractAction {
             boolean validation;
             Personnage perso;
             try {
-                ClientPart.getServeroutput().writeObject(ConnexionOutput.VALIDCHOICE);
-                ClientPart.getServeroutput().writeObject(charname);
+                ClientPart.write(ConnexionOutput.VALIDCHOICE);
+                ClientPart.write(charname);
                 validation= ClientPart.read();
             } catch (IOException | ClassNotFoundException ex) {
                 throw new RuntimeException(ex);

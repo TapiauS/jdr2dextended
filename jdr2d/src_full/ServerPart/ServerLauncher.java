@@ -5,10 +5,8 @@ import ServerPart.DAO.*;
 import ServerPart.Socketsmanager.*;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
-import java.util.logging.LogManager;
 import static Logging.Jdr2dLogger.LOGGER;
 public class ServerLauncher {
 

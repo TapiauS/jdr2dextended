@@ -6,3 +6,25 @@ avr. 12, 2023 9:55:18 AM ServerPart.Socketsmanager.ServerMainChannel run
 GRAVE: ERREUR TRES IMPREVISIBLE java.security.InvalidKeyException: Invalid AES key length: 44 bytes
 avr. 12, 2023 9:58:49 AM ServerPart.Socketsmanager.ServerMainChannel run
 GRAVE: ERREUR TRES IMPREVISIBLE java.security.InvalidKeyException: Invalid AES key length: 8 bytes
+mai 16, 2023 3:03:23 PM ServerPart.Socketsmanager.ServerMainChannel connect
+GRAVE: AUTHENTIFICATION ERROR
+mai 16, 2023 3:04:47 PM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE class java.lang.String cannot be cast to class Control.ConnexionOutput (java.lang.String is in module java.base of loader 'bootstrap'; Control.ConnexionOutput is in unnamed module of loader 'app')
+mai 16, 2023 3:10:57 PM ServerPart.Socketsmanager.ServerMainChannel connect
+GRAVE: AUTHENTIFICATION ERROR
+mai 16, 2023 3:14:15 PM ServerPart.Socketsmanager.ServerMainChannel connect
+GRAVE: AUTHENTIFICATION ERROR
+mai 16, 2023 3:24:01 PM ServerPart.Socketsmanager.ServerMainChannel connect
+GRAVE: AUTHENTIFICATION ERROR
+mai 16, 2023 3:33:18 PM ServerPart.Socketsmanager.ServerMainChannel connect
+GRAVE: AUTHENTIFICATION ERROR
+mai 16, 2023 3:35:16 PM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE class java.lang.String cannot be cast to class Control.ConnexionOutput (java.lang.String is in module java.base of loader 'bootstrap'; Control.ConnexionOutput is in unnamed module of loader 'app')
+mai 16, 2023 3:50:13 PM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE class java.lang.String cannot be cast to class Control.ConnexionOutput (java.lang.String is in module java.base of loader 'bootstrap'; Control.ConnexionOutput is in unnamed module of loader 'app')
+mai 16, 2023 3:59:00 PM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE class java.lang.String cannot be cast to class Control.ConnexionOutput (java.lang.String is in module java.base of loader 'bootstrap'; Control.ConnexionOutput is in unnamed module of loader 'app')
+mai 16, 2023 4:04:38 PM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE class java.lang.String cannot be cast to class Control.ConnexionOutput (java.lang.String is in module java.base of loader 'bootstrap'; Control.ConnexionOutput is in unnamed module of loader 'app')
+mai 16, 2023 4:05:57 PM ServerPart.Socketsmanager.ServerMainChannel run
+GRAVE: ERREUR TRES IMPREVISIBLE class java.lang.String cannot be cast to class Control.ConnexionOutput (java.lang.String is in module java.base of loader 'bootstrap'; Control.ConnexionOutput is in unnamed module of loader 'app')
